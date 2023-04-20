@@ -1,6 +1,5 @@
-import { signIn } from "@solid-auth/next/client"
 import Icon from "~/components/Icon"
-import { GithubClient, GoogleClient } from "~/lib/auth"
+import { GoogleClient } from "~/lib/auth"
 
 export default function Auth() {
   return (
@@ -36,7 +35,8 @@ export default function Auth() {
               filter: "drop-shadow(1.5px 4.5px 3px #151515)",
             }}
             onClick={() => {
-              GoogleClient.signinRedirect()
+              console.log(import.meta.env, "env")
+              // GoogleClient.signinRedirect()
             }}
           >
             <Icon name="Google" />
