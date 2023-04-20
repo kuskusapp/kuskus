@@ -1,0 +1,66 @@
+import { useKeyDownList } from "@solid-primitives/keyboard"
+import {
+  Accessor,
+  Setter,
+  createEffect,
+  createSignal,
+  onMount,
+  untrack,
+} from "solid-js"
+import { TodoType, useGlobalContext } from "../GlobalContext/store"
+import Icon from "./Icon"
+import { autofocus, createAutofocus } from "@solid-primitives/autofocus"
+
+interface Props {
+  todo: TodoType
+  setChangeFocus: Setter<boolean>
+  currentlyFocusedTodo: number
+  // orderedTodos: Accessor<TodoType[]>
+  // setOrderedTodos: Setter<TodoType[]>
+  // setCurrentlyFocusedTodo: Setter<number>
+}
+
+export default function TodoEdit(props: Props) {
+  const { todos, setTodos, editingTodo } = useGlobalContext()
+  const [input, setInput] = createSignal("")
+  const [keys, { event }] = useKeyDownList()
+  const [ref, setRef] = createSignal<HTMLInputElement>()
+  createAutofocus(ref)
+
+  onMount(() => {
+    setInput(props.todo.title)
+  })
+
+  createEffect(() => {
+    if (editingTodo() && event()?.key === "Enter") {
+      let indexOfTodoToEdit = todos().findIndex(
+        (todo) => todo.id === props.todo.id
+      )
+      let newTodos = todos()
+      newTodos[indexOfTodoToEdit].title = input()
+      setTodos(newTodos)
+    }
+  })
+
+  return (
+    <>
+      <div class="flex cursor-default pl-1.5 mb-0.5 dark:bg-neutral-700 bg-red-600 rounded py-1">
+        <div style={{ "padding-top": "0.2rem" }}>
+          <Icon name={"Square"} />
+        </div>
+        <input
+          autofocus
+          value={input()}
+          ref={autofocus}
+          oninput={(e) => {
+            setInput(e.target.value)
+          }}
+          style={{
+            outline: "none",
+          }}
+          class="pl-1.5 bg-inherit"
+        ></input>
+      </div>
+    </>
+  )
+}

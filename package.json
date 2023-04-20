@@ -1,0 +1,57 @@
+{
+  "name": "kuskus",
+  "scripts": {
+    "dev": "solid-start dev --https",
+    "build": "solid-start build",
+    "start": "solid-start start",
+    "graphql": "graphql-codegen --config ./src/graphql/codegen.yml -r dotenv/config",
+    "tauri": "tauri"
+  },
+  "type": "module",
+  "devDependencies": {
+    "@tauri-apps/cli": "^1.2.3",
+    "autoprefixer": "^10.4.14",
+    "postcss": "^8.4.21",
+    "solid-devtools": "^0.26.0",
+    "solid-start-node": "^0.2.26",
+    "tailwindcss": "^3.3.1",
+    "typescript": "^5.0.4",
+    "vite": "^4.2.1"
+  },
+  "dependencies": {
+    "@auth/core": "^0.5.1",
+    "@graphql-codegen/cli": "^3.3.0",
+    "@graphql-codegen/typed-document-node": "^4.0.0",
+    "@graphql-codegen/typescript": "^3.0.3",
+    "@graphql-codegen/typescript-operations": "^3.0.3",
+    "@neo4j/graphql": "^3.18.1",
+    "@neo4j/graphql-plugin-auth": "^2.2.0",
+    "@solid-auth/next": "^0.0.23",
+    "@solid-primitives/autofocus": "^0.0.105",
+    "@solid-primitives/keyboard": "^1.1.0",
+    "@solidjs/meta": "^0.28.4",
+    "@solidjs/router": "^0.8.2",
+    "@tauri-apps/api": "^1.2.0",
+    "@types/node": "^18.15.11",
+    "apollo-server": "^3.12.0",
+    "class-variance-authority": "^0.5.2",
+    "clsx": "^1.2.1",
+    "dotenv": "^16.0.3",
+    "graphql": "^16.6.0",
+    "neo4j-driver": "^5.7.0",
+    "oidc-client-ts": "^2.2.2",
+    "solid-headless": "^0.13.1",
+    "solid-js": "^1.7.3",
+    "solid-start": "^0.2.26",
+    "split.js": "^1.6.5",
+    "undici": "^5.21.2",
+    "vite-plugin-mkcert": "^1.14.0",
+    "zod": "^3.21.4"
+  },
+  "prettier": {
+    "semi": false
+  },
+  "engines": {
+    "node": ">=16"
+  }
+}

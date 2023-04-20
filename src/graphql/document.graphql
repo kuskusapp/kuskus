@@ -1,0 +1,13 @@
+mutation CreateTodo($todo: TodoCreateInput!) {
+  todoCreate(input: $todo) {
+    todo {
+      id
+      title
+      done
+      starred
+      priority
+      description
+      dueDate
+    }
+  }
+}

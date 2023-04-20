@@ -1,0 +1,25 @@
+schema
+  @auth(
+    providers: [{ type: oidc, issuer: "https://accounts.google.com" }]
+    rules: [{ allow: private }]
+  ) {
+  query: Query
+}
+
+type User @model {
+  username: String! @unique
+  email: Email! @unique
+  todos: [Todo]
+}
+
+type Todo @model {
+  title: String!
+  done: Boolean!
+  starred: Boolean!
+  priority: Int!
+  description: String
+  """
+  TODO: should be a date type I think
+  """
+  dueDate: String
+}
