@@ -35,8 +35,7 @@ export default function Auth() {
               filter: "drop-shadow(1.5px 4.5px 3px #151515)",
             }}
             onClick={() => {
-              console.log(import.meta.env, "env")
-              // GoogleClient.signinRedirect()
+              GoogleClient.signinRedirect()
             }}
           >
             <Icon name="Google" />

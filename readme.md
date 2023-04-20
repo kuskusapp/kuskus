@@ -10,7 +10,7 @@ Fast todo app. Will support:
 - Editor embedded ala [Obsidian](https://obsidian.md/)
 - Clean design ala [Things](https://culturedcode.com/things/)
 - Project support ala [Height](https://height.app/), [Linear](https://linear.app/)
-- Public todos/projects with user profiles.
+- Public todos/projects with user profiles
 
 ## Run web
 
