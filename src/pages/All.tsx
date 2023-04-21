@@ -69,14 +69,21 @@ export default function All() {
         setLocalSearch(true)
       })
     }
-    if (focusedTodo() !== 0 && event()?.key === "Enter") {
+  })
+
+  createEffect(() => {
+    if (event()?.key === "Enter") {
       untrack(() => {
-        if (editingTodo()) {
-          setEditingTodo(false)
-        } else {
-          setEditingTodo(true)
+        if (focusedTodo() !== 0) {
+          untrack(() => {
+            if (editingTodo()) {
+              setEditingTodo(false)
+            } else {
+              setEditingTodo(true)
+            }
+            setTodoToEdit(focusedTodo())
+          })
         }
-        setTodoToEdit(focusedTodo())
       })
     }
   })
