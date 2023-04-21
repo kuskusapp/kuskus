@@ -66,7 +66,7 @@ export default function All() {
         setLocalSearch(true)
       })
     }
-    if (focusedTodo() !== 0 && !editingTodo() && event()?.key === "Enter") {
+    if (focusedTodo() !== 0 && event()?.key === "Enter") {
       untrack(() => {
         setTodoToEdit(focusedTodo())
         setEditingTodo(!editingTodo())
