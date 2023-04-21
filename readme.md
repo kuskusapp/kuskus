@@ -23,9 +23,7 @@ pnpm dev
 
 Then go to http://localhost:3000/ and it will go straight to the app.
 
-This app uses signals to hold the state, check [src/GlobalContext
-/store.tsx](src/GlobalContext
-/store.tsx).
+This app uses signals to hold the state, check [src/GlobalContext/store.tsx](src/GlobalContext/store.tsx).
 
 ### Run with auth working
 
