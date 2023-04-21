@@ -57,7 +57,7 @@ export default function NewTodo(props: Props) {
       setEditingTodo(false)
       setNewTodoType("")
       props.setChangeFocus(true)
-      // setFocusedTodo(props.orderedTodos()[props.orderedTodos().length - 1].id)
+      setFocusedTodo(props.orderedTodos()[props.orderedTodos().length - 1].id)
       props.setCurrentlyFocusedTodo(props.orderedTodos().length - 1)
     }
   })

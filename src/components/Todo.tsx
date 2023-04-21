@@ -16,7 +16,7 @@ interface Props {
 }
 
 export default function Todo(props: Props) {
-  const { focusedTodo, setFocusedTodo, todoToEdit, editingTodo, newTodo } =
+  const { focusedTodo, setFocusedTodo, todoToEdit, setEditingTodo } =
     useGlobalContext()
   const [triggerAnimation, setTriggerAnimation] = createSignal(false)
 
@@ -56,6 +56,7 @@ export default function Todo(props: Props) {
           onClick={() => {
             if (props.todo.id !== focusedTodo()) {
               let array = props.orderedTodos()
+              setEditingTodo(true)
               setFocusedTodo(props.todo.id)
 
               props.setCurrentlyFocusedTodo(
