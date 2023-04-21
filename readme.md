@@ -64,3 +64,7 @@ DEBUG=@neo4j/graphql-plugin-auth ts-node index.ts
 ```
 
 Open http://localhost:4000 for Apollo GraphQL playground.
+
+## Discuss / help
+
+Join [Discord](https://discord.gg/f8YHjyrX3h) for discussions.
