@@ -7,7 +7,14 @@ import LandingPage from "~/pages/LandingPage"
 export default function Home() {
   const [user, setUser] = createSignal()
   onMount(async () => {
-    setUser(await getUser())
+    const user = await getUser()
+    if (!user) {
+      // still set it to true for local dev
+      // change later
+      setUser(true)
+      return
+    }
+    setUser(user)
     // console.log(user(), "user")
     // const todos = await gql(`{
     //   todos {

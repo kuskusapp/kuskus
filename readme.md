@@ -1,6 +1,8 @@
 # KusKus
 
-Fast todo app. Will support:
+> Fast todo app
+
+## Features
 
 - Fully keyboard driven (onscreen keys ala [2Do](https://www.2doapp.com/))
 - GitHub issues integrated ala [Ship](https://www.realartists.com/blog/ship-20.html)
@@ -12,23 +14,31 @@ Fast todo app. Will support:
 - Project support ala [Height](https://height.app/), [Linear](https://linear.app/)
 - Public todos/projects with user profiles
 
-## Run web
-
-Need `.env` with these variables inside `.env` at root of project. Get them from creating a new google oauth app [here](https://console.cloud.google.com/welcome).
-
-```
-VITE_GOOGLE_CLIENT_ID=
-VITE_GOOGLE_SECRET=
-```
+## Run web (SolidJS)
 
 ```bash
 pnpm i
 pnpm dev
 ```
 
+Then go to http://localhost:3000/ and it will go straight to the app.
+
+This app uses signals to hold the state, check [src/GlobalContext
+/store.tsx](src/GlobalContext
+/store.tsx).
+
+### Run with auth working
+
+For auth to work, you will need to add `.env` with these variables inside `.env` at root of project. Get them from creating a new google oauth app [here](https://console.cloud.google.com/welcome).
+
+```
+VITE_GOOGLE_CLIENT_ID=
+VITE_GOOGLE_SECRET=
+```
+
 ## Run server (GraphQL)
 
-Would love to use [Grafbase](https://grafbase.com/) but get auth issues with it.
+Would love to use [Grafbase](https://grafbase.com/) but get auth issues with it, hopefully to be resolved soon.
 
 So currently using [Neo4j GraphQL Library](https://neo4j.com/docs/graphql-manual/current/).
 

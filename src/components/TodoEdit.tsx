@@ -4,6 +4,7 @@ import {
   Setter,
   createEffect,
   createSignal,
+  on,
   onMount,
   untrack,
 } from "solid-js"
@@ -32,14 +33,16 @@ export default function TodoEdit(props: Props) {
   })
 
   createEffect(() => {
-    if (editingTodo() && event()?.key === "Enter") {
-      let indexOfTodoToEdit = todos().findIndex(
-        (todo) => todo.id === props.todo.id
-      )
-      let newTodos = todos()
-      newTodos[indexOfTodoToEdit].title = input()
-      setTodos(newTodos)
-    }
+    on(editingTodo, () => {
+      if (!editingTodo() && event()?.key === "Enter") {
+        let indexOfTodoToEdit = todos().findIndex(
+          (todo) => todo.id === props.todo.id
+        )
+        let newTodos = todos()
+        newTodos[indexOfTodoToEdit].title = input()
+        setTodos(newTodos)
+      }
+    })
   })
 
   return (

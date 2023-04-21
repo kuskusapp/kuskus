@@ -23,6 +23,7 @@ export const GoogleClient = new UserManager({
   scope: "openid profile",
 })
 
+// TODO: change later, for local dev, keep this
 export async function getUser() {
   return await GoogleClient.getUser()
 }
