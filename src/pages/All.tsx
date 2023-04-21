@@ -37,11 +37,16 @@ export default function All() {
         setGuard(true)
       })
     }
-    if ((newTodo() || localSearch()) && event()?.key === "Escape") {
+    if (
+      (newTodo() || localSearch() || editingTodo()) &&
+      event()?.key === "Escape"
+    ) {
       untrack(() => {
+        console.log("hill")
         setNewTodo(false)
         setLocalSearch(false)
         setChangeFocus(true)
+        setEditingTodo(false)
       })
     }
     if (changeFocus() && orderedTodos().length > 0) {
