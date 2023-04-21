@@ -36,6 +36,7 @@ export default function NewTodo(props: Props) {
   createAutofocus(ref)
 
   // TODO: don't use Math.random() for id, find better way
+  // id will most likely coming from grafbase so no worries
   createEffect(() => {
     if (!editingTodo() && event()?.key === "Enter") {
       setTodos([
