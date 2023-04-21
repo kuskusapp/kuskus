@@ -1,9 +1,7 @@
-import { createSignal } from "solid-js"
 import { useGlobalContext } from "~/GlobalContext/store"
 
 export default function LocalSearch() {
-  const { todos, setTodos, setFocusedTodoFromSearch } = useGlobalContext()
-  const [search, setSearch] = createSignal("")
+  const { setLocalSearchInput } = useGlobalContext()
 
   return (
     <input
@@ -11,14 +9,15 @@ export default function LocalSearch() {
       class="w-full"
       // value={search()}
       oninput={(e) => {
+        setLocalSearchInput(e.target.value)
         // setSearch(e.target.value)
-        let foundTodoId = 0
-        todos().map((todo) => {
-          if (todo.title.includes(e.target.value)) {
-            foundTodoId = todo.id
-          }
-        })
-        setFocusedTodoFromSearch(foundTodoId)
+        // let foundTodoId = 0
+        // todos().map((todo) => {
+        //   if (todo.title.includes(e.target.value)) {
+        //     foundTodoId = todo.id
+        //   }
+        // })
+        // setFocusedTodoFromSearch(foundTodoId)
         // todos.filter(todo => todo.title.includes(search())
         // setTodos()
       }}

@@ -3,6 +3,7 @@ import { Accessor, Setter, Show, createSignal, onMount } from "solid-js"
 import { TodoType, useGlobalContext } from "../GlobalContext/store"
 import Icon from "./Icon"
 import TodoEdit from "./TodoEdit"
+import { turnHighlightsIntoSpans } from "~/lib/lib"
 
 interface Props {
   todo: TodoType
@@ -21,7 +22,8 @@ export default function Todo(props: Props) {
     setFocusedTodo,
     todoToEdit,
     setEditingTodo,
-    focusedTodoFromSearch,
+    localSearch,
+    localSearchInput,
   } = useGlobalContext()
   const [triggerAnimation, setTriggerAnimation] = createSignal(false)
 
@@ -56,8 +58,8 @@ export default function Todo(props: Props) {
           class={clsx(
             "flex cursor-default pl-1.5 mb-0.5 justify-between pb-0.5",
             props.todo.id === focusedTodo() &&
-              "dark:bg-neutral-700 bg-zinc-200 rounded",
-            focusedTodoFromSearch() === props.todo.id && "bg-red-200"
+              "dark:bg-neutral-700 bg-zinc-200 rounded"
+            // focusedTodoFromSearch() === props.todo.id && "bg-red-200"
           )}
           onClick={() => {
             if (props.todo.id !== focusedTodo()) {
@@ -94,7 +96,11 @@ export default function Todo(props: Props) {
             >
               <Icon name={props.todo.done ? "SquareCheck" : "Square"} />
             </div>
-            <div class="pl-1.5">{props.todo.title}</div>
+            <div class="pl-1.5">
+              {localSearch()
+                ? turnHighlightsIntoSpans(props.todo.title, localSearchInput())
+                : props.todo.title}
+            </div>
           </div>
           <div
             style={{ "padding-top": "0.25rem", "padding-right": "0.375rem" }}

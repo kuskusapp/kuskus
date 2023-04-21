@@ -41,6 +41,7 @@
     "flexsearch": "^0.7.31",
     "fuse.js": "^6.6.2",
     "graphql": "^16.6.0",
+    "mark.js": "^8.11.1",
     "neo4j-driver": "^5.7.0",
     "oidc-client-ts": "^2.2.2",
     "solid-headless": "^0.13.1",
