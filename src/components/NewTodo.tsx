@@ -1,12 +1,5 @@
 import { useKeyDownList } from "@solid-primitives/keyboard"
-import {
-  Accessor,
-  Setter,
-  createEffect,
-  createSignal,
-  onMount,
-  untrack,
-} from "solid-js"
+import { Accessor, Setter, createEffect, createSignal } from "solid-js"
 import { TodoType, useGlobalContext } from "../GlobalContext/store"
 import Icon from "./Icon"
 import { autofocus, createAutofocus } from "@solid-primitives/autofocus"
@@ -22,7 +15,6 @@ export default function NewTodo(props: Props) {
   const {
     todos,
     setTodos,
-    setGuard,
     setNewTodo,
     newTodoType,
     setNewTodoType,

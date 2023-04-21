@@ -31,8 +31,8 @@ interface ContextProps {
   setFocusedTodoFromSearch: Setter<number>
   highlitedTodosFromSearch: Accessor<number[]>
   setHighlightedTodosFromSearch: Setter<number[]>
-  localSearchInput: Accessor<string>
-  setLocalSearchInput: Setter<string>
+  localSearchResultIds: Accessor<number[]>
+  setLocalSearchResultIds: Setter<number[]>
 }
 
 const GlobalContext = createContext<ContextProps>()
@@ -91,7 +91,7 @@ export function GlobalContextProvider(props: any) {
   const [newTodoType, setNewTodoType] = createSignal<string>("")
   const [todoEditInput, setTodoEditInput] = createSignal("")
   const [guard, setGuard] = createSignal(false)
-  const [localSearchInput, setLocalSearchInput] = createSignal("")
+  const [localSearchResultIds, setLocalSearchResultIds] = createSignal([])
 
   return (
     <GlobalContext.Provider
@@ -120,8 +120,8 @@ export function GlobalContextProvider(props: any) {
         setFocusedTodoFromSearch,
         highlitedTodosFromSearch,
         setHighlightedTodosFromSearch,
-        localSearchInput,
-        setLocalSearchInput,
+        localSearchResultIds,
+        setLocalSearchResultIds,
       }}
     >
       {props.children}

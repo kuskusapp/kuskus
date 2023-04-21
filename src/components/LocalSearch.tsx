@@ -1,13 +1,28 @@
+import { autofocus, createAutofocus } from "@solid-primitives/autofocus"
+import { createSignal, onMount } from "solid-js"
 import { useGlobalContext } from "~/GlobalContext/store"
+import Fuse from "fuse.js"
 
 export default function LocalSearch() {
   const {
-    setLocalSearchInput,
     setFocusedTodo,
     todos,
-    localSearchInput,
     setLocalSearch,
+    setLocalSearchResultIds,
+    localSearchResultIds,
   } = useGlobalContext()
+  const [ref, setRef] = createSignal<HTMLInputElement>()
+  const [index, setIndex] = createSignal<any>()
+  createAutofocus(ref)
+
+  // TODO: probably not the best place for this
+  onMount(() => {
+    setIndex(
+      new Fuse(todos(), {
+        keys: ["title"],
+      })
+    )
+  })
 
   return (
     <input
@@ -15,28 +30,21 @@ export default function LocalSearch() {
       class="w-full"
       onKeyPress={(e) => {
         if (e.key === "Enter") {
-          todos().find((todo) => {
-            if (todo.title.includes(localSearchInput())) {
-              setFocusedTodo(todo.id)
-              setLocalSearch(false)
-            }
-          })
+          if (localSearchResultIds().length > 0) {
+            setFocusedTodo(localSearchResultIds()[0])
+            setLocalSearch(false)
+            setLocalSearchResultIds([])
+          }
         }
       }}
+      // TODO: for highliting matches like in 2Do, need this
+      // https://github.com/krisk/Fuse/issues/719
       oninput={(e) => {
-        setLocalSearchInput(e.target.value)
-        // setSearch(e.target.value)
-        // let foundTodoId = 0
-        // todos().map((todo) => {
-        //   if (todo.title.includes(e.target.value)) {
-        //     foundTodoId = todo.id
-        //   }
-        // })
-        // setFocusedTodoFromSearch(foundTodoId)
-        // todos.filter(todo => todo.title.includes(search())
-        // setTodos()
+        const matches = index().search(e.target.value)
+        setLocalSearchResultIds(matches.map((m: any) => m.item.id))
       }}
       autofocus
+      ref={autofocus}
       type="text"
       placeholder="Go to..."
     />
