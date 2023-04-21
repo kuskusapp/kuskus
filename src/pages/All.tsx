@@ -42,7 +42,6 @@ export default function All() {
       event()?.key === "Escape"
     ) {
       untrack(() => {
-        console.log("hill")
         setNewTodo(false)
         setLocalSearch(false)
         setChangeFocus(true)
