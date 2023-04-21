@@ -70,7 +70,9 @@ export default function All() {
     }
     if (event()?.key === "f") {
       untrack(() => {
-        setLocalSearch(true)
+        if (!editingTodo()) {
+          setLocalSearch(true)
+        }
       })
     }
   })

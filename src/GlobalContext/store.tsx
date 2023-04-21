@@ -27,6 +27,10 @@ interface ContextProps {
   setTodoEditInput: Setter<string>
   guard: Accessor<boolean>
   setGuard: Setter<boolean>
+  focusedTodoFromSearch: Accessor<number>
+  setFocusedTodoFromSearch: Setter<number>
+  highlitedTodosFromSearch: Accessor<number[]>
+  setHighlightedTodosFromSearch: Setter<number[]>
 }
 
 const GlobalContext = createContext<ContextProps>()
@@ -76,6 +80,10 @@ export function GlobalContextProvider(props: any) {
       priority: 0,
     },
   ])
+  const [focusedTodoFromSearch, setFocusedTodoFromSearch] = createSignal(0)
+  const [highlitedTodosFromSearch, setHighlightedTodosFromSearch] =
+    createSignal([])
+
   const [focusedTodo, setFocusedTodo] = createSignal<number>(0) // id of todo
   const [todoToEdit, setTodoToEdit] = createSignal<number>(0)
   const [editingTodo, setEditingTodo] = createSignal<boolean>(false)
@@ -107,6 +115,10 @@ export function GlobalContextProvider(props: any) {
         setTodoEditInput,
         guard,
         setGuard,
+        focusedTodoFromSearch,
+        setFocusedTodoFromSearch,
+        highlitedTodosFromSearch,
+        setHighlightedTodosFromSearch,
       }}
     >
       {props.children}

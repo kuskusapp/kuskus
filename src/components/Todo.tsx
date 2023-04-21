@@ -16,8 +16,13 @@ interface Props {
 }
 
 export default function Todo(props: Props) {
-  const { focusedTodo, setFocusedTodo, todoToEdit, setEditingTodo } =
-    useGlobalContext()
+  const {
+    focusedTodo,
+    setFocusedTodo,
+    todoToEdit,
+    setEditingTodo,
+    focusedTodoFromSearch,
+  } = useGlobalContext()
   const [triggerAnimation, setTriggerAnimation] = createSignal(false)
 
   return (
@@ -51,7 +56,8 @@ export default function Todo(props: Props) {
           class={clsx(
             "flex cursor-default pl-1.5 mb-0.5 justify-between pb-0.5",
             props.todo.id === focusedTodo() &&
-              "dark:bg-neutral-700 bg-zinc-200 rounded"
+              "dark:bg-neutral-700 bg-zinc-200 rounded",
+            focusedTodoFromSearch() === props.todo.id && "bg-red-200"
           )}
           onClick={() => {
             if (props.todo.id !== focusedTodo()) {
