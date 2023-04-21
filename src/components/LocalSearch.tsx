@@ -7,7 +7,6 @@ export default function LocalSearch() {
     <input
       style={{ outline: "none" }}
       class="w-full"
-      // value={search()}
       oninput={(e) => {
         setLocalSearchInput(e.target.value)
         // setSearch(e.target.value)

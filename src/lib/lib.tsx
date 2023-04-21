@@ -1,4 +1,3 @@
-import { renderToString } from "solid-js/web"
 import { TodoType } from "~/GlobalContext/store"
 
 export function isToday(date: Date) {
