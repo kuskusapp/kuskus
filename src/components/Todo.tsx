@@ -38,7 +38,7 @@ export default function Todo(props: Props) {
       `}
       </style>
       <Show
-        when={todoToEdit() !== props.todo.id || !editingTodo()}
+        when={todoToEdit() !== props.todo.id}
         fallback={
           <TodoEdit
             todo={props.todo}

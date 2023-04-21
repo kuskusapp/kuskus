@@ -22,7 +22,7 @@ interface Props {
 }
 
 export default function TodoEdit(props: Props) {
-  const { todos, setTodos, editingTodo } = useGlobalContext()
+  const { todos, setTodos, editingTodo, setTodoToEdit } = useGlobalContext()
   const [input, setInput] = createSignal("")
   const [keys, { event }] = useKeyDownList()
   const [ref, setRef] = createSignal<HTMLInputElement>()
@@ -33,16 +33,15 @@ export default function TodoEdit(props: Props) {
   })
 
   createEffect(() => {
-    on(editingTodo, () => {
-      if (!editingTodo() && event()?.key === "Enter") {
-        let indexOfTodoToEdit = todos().findIndex(
-          (todo) => todo.id === props.todo.id
-        )
-        let newTodos = todos()
-        newTodos[indexOfTodoToEdit].title = input()
-        setTodos(newTodos)
-      }
-    })
+    if (!editingTodo()) {
+      let indexOfTodoToEdit = todos().findIndex(
+        (todo) => todo.id === props.todo.id
+      )
+      let newTodos = todos()
+      newTodos[indexOfTodoToEdit].title = input()
+      setTodos(newTodos)
+      setTodoToEdit(0)
+    }
   })
 
   return (

@@ -19,6 +19,8 @@ export default function All() {
     setTodoToEdit,
     setEditingTodo,
     editingTodo,
+    guard,
+    setGuard,
   } = useGlobalContext()
   const [keys, { event }] = useKeyDownList()
   const [orderedTodos, setOrderedTodos] = createSignal<TodoType[]>([])
@@ -32,6 +34,7 @@ export default function All() {
         setNewTodoType("all")
         setNewTodo(true)
         setChangeFocus(false)
+        setGuard(true)
       })
     }
     if ((newTodo() || localSearch()) && event()?.key === "Escape") {
@@ -68,8 +71,12 @@ export default function All() {
     }
     if (focusedTodo() !== 0 && event()?.key === "Enter") {
       untrack(() => {
+        if (editingTodo()) {
+          setEditingTodo(false)
+        } else {
+          setEditingTodo(true)
+        }
         setTodoToEdit(focusedTodo())
-        setEditingTodo(!editingTodo())
       })
     }
   })

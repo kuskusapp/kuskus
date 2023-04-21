@@ -23,6 +23,10 @@ interface ContextProps {
   setLocalSearch: Setter<boolean>
   editingTodo: Accessor<boolean>
   setEditingTodo: Setter<boolean>
+  todoEditInput: Accessor<string>
+  setTodoEditInput: Setter<string>
+  guard: Accessor<boolean>
+  setGuard: Setter<boolean>
 }
 
 const GlobalContext = createContext<ContextProps>()
@@ -77,6 +81,8 @@ export function GlobalContextProvider(props: any) {
   const [editingTodo, setEditingTodo] = createSignal<boolean>(false)
   const [newTodo, setNewTodo] = createSignal<boolean>(false)
   const [newTodoType, setNewTodoType] = createSignal<string>("")
+  const [todoEditInput, setTodoEditInput] = createSignal("")
+  const [guard, setGuard] = createSignal(false)
 
   return (
     <GlobalContext.Provider
@@ -97,6 +103,10 @@ export function GlobalContextProvider(props: any) {
         setLocalSearch,
         editingTodo,
         setEditingTodo,
+        todoEditInput,
+        setTodoEditInput,
+        guard,
+        setGuard,
       }}
     >
       {props.children}

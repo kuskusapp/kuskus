@@ -22,7 +22,7 @@ export default function NewTodo(props: Props) {
   const {
     todos,
     setTodos,
-    newTodo,
+    setGuard,
     setNewTodo,
     newTodoType,
     setNewTodoType,
@@ -55,10 +55,9 @@ export default function NewTodo(props: Props) {
       )
       setNewTodo(false)
       setEditingTodo(false)
-
       setNewTodoType("")
       props.setChangeFocus(true)
-      setFocusedTodo(props.orderedTodos()[props.orderedTodos().length - 1].id)
+      // setFocusedTodo(props.orderedTodos()[props.orderedTodos().length - 1].id)
       props.setCurrentlyFocusedTodo(props.orderedTodos().length - 1)
     }
   })
