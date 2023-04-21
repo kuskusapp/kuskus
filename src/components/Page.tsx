@@ -19,12 +19,6 @@ export default function Page() {
         setTodos(todos().filter((todo) => todo.id !== focusedTodo()))
       )
     }
-    // if (event()?.key === "ArrowDown") {
-    //   untrack(() => {
-    //     // setFocusedTodo()
-    //     // setTodos(todos().filter((todo) => todo.id !== focusedTodo()))
-    //   })
-    // }
   })
 
   return (

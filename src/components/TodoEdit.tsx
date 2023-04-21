@@ -34,6 +34,10 @@ export default function TodoEdit(props: Props) {
 
   createEffect(() => {
     if (!editingTodo()) {
+      if (input() === "") {
+        setTodos(todos().filter((todo) => todo.id !== props.todo.id))
+        return
+      }
       let indexOfTodoToEdit = todos().findIndex(
         (todo) => todo.id === props.todo.id
       )
@@ -46,7 +50,7 @@ export default function TodoEdit(props: Props) {
 
   return (
     <>
-      <div class="flex cursor-default pl-1.5 mb-0.5 dark:bg-neutral-700 bg-red-600 rounded py-1">
+      <div class="flex cursor-default pl-1.5 mb-0.5 dark:bg-neutral-700 bg-zinc-200 rounded py-1">
         <div style={{ "padding-top": "0.2rem" }}>
           <Icon name={"Square"} />
         </div>

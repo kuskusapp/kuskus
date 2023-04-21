@@ -45,7 +45,7 @@ export default function All() {
       })
     }
     if (changeFocus() && orderedTodos().length > 0) {
-      if (event()?.key === "ArrowDown") {
+      if (!editingTodo() && event()?.key === "ArrowDown") {
         untrack(() => {
           if (orderedTodos().length - 1 === currentlyFocusedTodo()) {
             setCurrentlyFocusedTodo(-1)
@@ -54,7 +54,7 @@ export default function All() {
           setCurrentlyFocusedTodo(currentlyFocusedTodo() + 1)
         })
       }
-      if (event()?.key === "ArrowUp") {
+      if (!editingTodo() && event()?.key === "ArrowUp") {
         untrack(() => {
           if (0 === currentlyFocusedTodo() || -1 === currentlyFocusedTodo()) {
             setCurrentlyFocusedTodo(orderedTodos().length)
