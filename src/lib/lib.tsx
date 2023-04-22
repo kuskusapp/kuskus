@@ -21,3 +21,7 @@ export function turnHighlightsIntoSpans(str: string, match: string) {
   })
   return <div>{result}</div>
 }
+
+export function findIndexOfId(todos: TodoType[], todoId: number) {
+  return todos.findIndex((t) => t.id === todoId)
+}

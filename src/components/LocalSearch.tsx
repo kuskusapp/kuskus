@@ -2,6 +2,7 @@ import { autofocus, createAutofocus } from "@solid-primitives/autofocus"
 import { createSignal, onMount } from "solid-js"
 import { useGlobalContext } from "~/GlobalContext/store"
 import Fuse from "fuse.js"
+import { findIndexOfId } from "~/lib/lib"
 
 export default function LocalSearch() {
   const {
@@ -12,6 +13,8 @@ export default function LocalSearch() {
     setLocalSearchResultId,
     orderedTodos,
     localSearchResultId,
+    setCurrentlyFocusedTodo,
+    focusedTodo,
   } = useGlobalContext()
   const [ref, setRef] = createSignal<HTMLInputElement>()
   const [index, setIndex] = createSignal<any>()
@@ -38,6 +41,9 @@ export default function LocalSearch() {
             setLocalSearch(false)
             setLocalSearchResultIds([])
             setLocalSearchResultId(0)
+            setCurrentlyFocusedTodo(
+              findIndexOfId(orderedTodos(), focusedTodo())
+            )
           }
         }
       }}
