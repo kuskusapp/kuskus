@@ -1,9 +1,8 @@
 import { useKeyDownList } from "@solid-primitives/keyboard"
 import { Show, createEffect, createSignal, onMount, untrack } from "solid-js"
-import { TodoType, useGlobalContext } from "~/GlobalContext/store"
+import { useGlobalContext } from "~/GlobalContext/store"
 import NewTodo from "~/components/NewTodo"
 import Todo from "~/components/Todo"
-import { sortTodosByPriority } from "~/lib/lib"
 
 export default function All() {
   const {
@@ -19,11 +18,14 @@ export default function All() {
     setTodoToEdit,
     setEditingTodo,
     editingTodo,
-    guard,
     setGuard,
+    setLocalSearchResultId,
+    localSearchResultIds,
+    orderedTodos,
+    setOrderedTodos,
+    localSearchResultId,
   } = useGlobalContext()
   const [keys, { event }] = useKeyDownList()
-  const [orderedTodos, setOrderedTodos] = createSignal<TodoType[]>([])
   const [currentlyFocusedTodo, setCurrentlyFocusedTodo] = createSignal(0)
   const [changeFocus, setChangeFocus] = createSignal(true)
 
@@ -51,6 +53,16 @@ export default function All() {
     if (changeFocus() && orderedTodos().length > 0) {
       if (!editingTodo() && event()?.key === "ArrowDown") {
         untrack(() => {
+          if (localSearch() && localSearchResultIds().length > 0) {
+            let index = localSearchResultIds().findIndex(
+              (id) => id === localSearchResultId()
+            )
+            if (index === localSearchResultIds().length - 1) {
+              index = -1
+            }
+            setLocalSearchResultId(localSearchResultIds()[index + 1])
+            return
+          }
           if (orderedTodos().length - 1 === currentlyFocusedTodo()) {
             setCurrentlyFocusedTodo(-1)
           }
@@ -60,6 +72,16 @@ export default function All() {
       }
       if (!editingTodo() && event()?.key === "ArrowUp") {
         untrack(() => {
+          if (localSearch() && localSearchResultIds().length > 0) {
+            let index = localSearchResultIds().findIndex(
+              (id) => id === localSearchResultId()
+            )
+            if (index === 0) {
+              index = localSearchResultIds().length
+            }
+            setLocalSearchResultId(localSearchResultIds()[index - 1])
+            return
+          }
           if (0 === currentlyFocusedTodo() || -1 === currentlyFocusedTodo()) {
             setCurrentlyFocusedTodo(orderedTodos().length)
           }

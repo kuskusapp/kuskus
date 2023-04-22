@@ -3,7 +3,6 @@ import { Accessor, Setter, Show, createSignal, onMount } from "solid-js"
 import { TodoType, useGlobalContext } from "../GlobalContext/store"
 import Icon from "./Icon"
 import TodoEdit from "./TodoEdit"
-import { turnHighlightsIntoSpans } from "~/lib/lib"
 
 interface Props {
   todo: TodoType
@@ -23,7 +22,7 @@ export default function Todo(props: Props) {
     todoToEdit,
     setEditingTodo,
     localSearchResultIds,
-    setLocalSearchResultIds,
+    localSearchResultId,
   } = useGlobalContext()
   const [triggerAnimation, setTriggerAnimation] = createSignal(false)
 
@@ -60,7 +59,8 @@ export default function Todo(props: Props) {
             props.todo.id === focusedTodo() &&
               "dark:bg-neutral-700 bg-zinc-200 rounded",
             localSearchResultIds().includes(props.todo.id) &&
-              "border rounded border-blue-500"
+              "border rounded border-blue-500",
+            localSearchResultId() === props.todo.id && "bg-red-200"
           )}
           onClick={() => {
             if (props.todo.id !== focusedTodo()) {
