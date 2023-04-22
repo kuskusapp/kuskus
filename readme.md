@@ -23,47 +23,52 @@ pnpm dev
 
 Then go to http://localhost:3000/ and it will go straight to the app.
 
-This app uses signals to hold the state, check [src/GlobalContext/store.tsx](src/GlobalContext/store.tsx).
+For now this app uses signals to hold the state, check [src/GlobalContext/store.tsx](src/GlobalContext/store.tsx).
 
-### Run with auth working
+## Setup Auth (Google)
 
-For auth to work, you will need to add `.env` with these variables inside `.env` at root of project. Get them from creating a new google oauth app [here](https://console.cloud.google.com/welcome).
+For auth to work, first [create a new Google OAuth client ID](https://console.cloud.google.com/apis/credentials/oauthclient).
+
+Can [read this](https://developers.google.com/identity/protocols/oauth2) for how Google OAuth works.
+
+Authorized JS origin and redirect URIs + where you can see google client id and secret are shown below.
+
+![](https://images.nikiv.dev/kuskus-oauth-settings.png)
+
+Add these values to `.env` file.
 
 ```
 VITE_GOOGLE_CLIENT_ID=
 VITE_GOOGLE_SECRET=
+
+VITE_GRAFBASE_API_URL=http://127.0.0.1:4000/graphql
 ```
 
-## Run server (GraphQL)
+## Run server (GraphQL/Grafbase)
 
-Would love to use [Grafbase](https://grafbase.com/) but get auth issues with it, hopefully to be resolved soon.
+Using [Grafbase](https://grafbase.com/).
 
-So currently using [Neo4j GraphQL Library](https://neo4j.com/docs/graphql-manual/current/).
-
-Need `.env` with these variables inside `graphql/.env`. Get them from creating a Neo4j project [here](https://console.neo4j.io).
+Create new file at `grafbase/.env` with this content:
 
 ```
-NEO4J_URL=
-NEO4J_USERNAME=
-NEO4J_PASSWORD=
+GOOGLE_CLIENT_ID=
 ```
 
-Then inside [graphql](graphql) folder, run:
+Google Client ID is same as in above case.
+
+Then run:
 
 ```
-pnpm i
-ts-node index.ts
+npx grafbase@latest dev
 ```
 
-To debug:
+Open http://localhost:4000 for GraphQL playground.
 
-```
-DEBUG=* ts-node index.ts
-# or can include specific package to get debug logs for it
-DEBUG=@neo4j/graphql-plugin-auth ts-node index.ts
-```
+## Deploy
 
-Open http://localhost:4000 for Apollo GraphQL playground.
+TODO: see how Tauri apps get built.
+
+TODO: deploy website + assets on cloud provider
 
 ## Discuss / help
 

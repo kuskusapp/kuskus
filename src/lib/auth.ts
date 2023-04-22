@@ -19,6 +19,7 @@ export const GoogleClient = new UserManager({
   redirect_uri: "http://localhost:3000/login/google",
   metadataSeed: {
     end_session_endpoint: "https://www.google.com/accounts/logout",
+    issuer: "https://accounts.google.com",
   },
   scope: "openid profile",
 })

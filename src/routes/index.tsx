@@ -1,6 +1,7 @@
 import { Show, createSignal, onMount } from "solid-js"
 import { GlobalContextProvider } from "~/GlobalContext/store"
 import { getUser } from "~/lib/auth"
+import { gql } from "~/lib/graphql"
 import App from "~/pages/App"
 import LandingPage from "~/pages/LandingPage"
 
@@ -8,20 +9,41 @@ export default function Home() {
   const [user, setUser] = createSignal()
   onMount(async () => {
     const user = await getUser()
+    // TODO: doing this briefly so other users can easily test app, will remove
     if (!user) {
-      // still set it to true for local dev
-      // change later
       setUser(true)
       return
     }
     setUser(user)
-    // console.log(user(), "user")
-    // const todos = await gql(`{
-    //   todos {
-    //     title
-    //   }
-    // }`)
-    // console.log(todos)
+    const createTodo = await gql(`
+    mutation {
+      todoCreate(
+        input: {
+          title: "Make KusKus"
+          done: false
+          starred: true
+          priority: 3
+        }
+      ) {
+        todo {
+          id
+        }
+      }
+    }
+    `)
+    console.log(createTodo)
+    const todos = await gql(`
+    {
+      todoCollection(first: 5) {
+        edges {
+          node {
+            title
+          }
+        }
+      }
+    }
+  `)
+    console.log(todos)
   })
 
   return (
