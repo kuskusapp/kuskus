@@ -7,6 +7,7 @@ import Starred from "~/pages/Starred"
 import ActionBar from "./ActionBar"
 import { useKeyDownList } from "@solid-primitives/keyboard"
 import LocalSearch from "./LocalSearch"
+import { findIndexOfId } from "~/lib/lib"
 
 export default function Page() {
   const {
@@ -18,6 +19,7 @@ export default function Page() {
     editingTodo,
     setFocusedTodo,
     orderedTodos,
+    setCurrentlyFocusedTodo,
   } = useGlobalContext()
   const [keys, { event }] = useKeyDownList()
 
@@ -34,6 +36,9 @@ export default function Page() {
         } else {
           setFocusedTodo(orderedTodos()[todoIdToFocus].id)
         }
+        setCurrentlyFocusedTodo(
+          findIndexOfId(orderedTodos(), focusedTodo()) - 1
+        )
       })
     }
   })
