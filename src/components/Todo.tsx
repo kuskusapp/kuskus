@@ -64,7 +64,7 @@ export default function Todo(props: Props) {
           onClick={() => {
             if (props.todo.id !== focusedTodo()) {
               let array = props.orderedTodos()
-              setEditingTodo(true)
+              setEditingTodo(false)
               setFocusedTodo(props.todo.id)
 
               props.setCurrentlyFocusedTodo(

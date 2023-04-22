@@ -14,7 +14,7 @@ export default function Page() {
   const [keys, { event }] = useKeyDownList()
 
   createEffect(() => {
-    if (!editingTodo() && event()?.key === "Backspace") {
+    if (!localSearch() && !editingTodo() && event()?.key === "Backspace") {
       untrack(() =>
         setTodos(todos().filter((todo) => todo.id !== focusedTodo()))
       )

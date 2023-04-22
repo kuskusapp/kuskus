@@ -80,7 +80,7 @@ export default function All() {
   createEffect(() => {
     if (event()?.key === "Enter") {
       untrack(() => {
-        if (focusedTodo() !== 0) {
+        if (focusedTodo() !== 0 && !localSearch()) {
           untrack(() => {
             if (editingTodo()) {
               setEditingTodo(false)
