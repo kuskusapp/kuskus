@@ -72,6 +72,7 @@ export default function All() {
       untrack(() => {
         if (!editingTodo()) {
           setLocalSearch(true)
+          setFocusedTodo(0)
         }
       })
     }

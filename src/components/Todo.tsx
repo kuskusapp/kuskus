@@ -59,7 +59,8 @@ export default function Todo(props: Props) {
             "flex cursor-default pl-1.5 mb-0.5 justify-between pb-0.5",
             props.todo.id === focusedTodo() &&
               "dark:bg-neutral-700 bg-zinc-200 rounded",
-            localSearchResultIds().includes(props.todo.id) && "bg-amber-700"
+            localSearchResultIds().includes(props.todo.id) &&
+              "border rounded border-blue-500"
           )}
           onClick={() => {
             if (props.todo.id !== focusedTodo()) {
