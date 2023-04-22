@@ -158,6 +158,20 @@ export default function All() {
         }
       })
     }
+    if (event()?.key === "4") {
+      untrack(() => {
+        if (focusedTodo() !== 0) {
+          setTodos(
+            todos().map((t) => {
+              if (t.id === focusedTodo()) {
+                t.starred = !t.starred
+              }
+              return t
+            })
+          )
+        }
+      })
+    }
   })
 
   createEffect(() => {
