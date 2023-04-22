@@ -35,7 +35,7 @@ Authorized JS origin and redirect URIs + where you can see google client id and 
 
 ![](https://images.nikiv.dev/kuskus-oauth-settings.png)
 
-Add these values to `.env` file.
+Add these values to `.env` file at root of the project.
 
 ```
 VITE_GOOGLE_CLIENT_ID=
@@ -66,7 +66,7 @@ Open http://localhost:4000 for GraphQL playground.
 
 ## Deploy
 
-TODO: see how Tauri apps get built.
+TODO: see how Tauri apps get built
 
 TODO: deploy website + assets on cloud provider
 

@@ -10,10 +10,10 @@ export default function Home() {
   onMount(async () => {
     const user = await getUser()
     // TODO: doing this briefly so other users can easily test app, will remove
-    if (!user) {
-      setUser(true)
-      return
-    }
+    // if (!user) {
+    //   setUser(true)
+    //   return
+    // }
     setUser(user)
     const createTodo = await gql(`
     mutation {

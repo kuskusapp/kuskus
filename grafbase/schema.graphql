@@ -1,6 +1,12 @@
 schema
   @auth(
-    providers: [{ type: oidc, issuer: "https://accounts.google.com" }]
+    providers: [
+      {
+        type: oidc
+        issuer: "https://accounts.google.com"
+        clientId: "{{ env.GOOGLE_CLIENT_ID }}"
+      }
+    ]
     rules: [{ allow: owner }]
   ) {
   query: Query
