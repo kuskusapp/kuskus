@@ -103,14 +103,14 @@ export default function Todo(props: Props) {
             style={{ "padding-top": "0.25rem", "padding-right": "0.375rem" }}
             class="flex"
           >
-            <div class="bg-white rounded z-10">
+            <div class="">
               {props.todo.priority === 3 ? <Icon name={"Priority 3"} /> : <></>}
               {props.todo.priority === 2 ? <Icon name={"Priority 2"} /> : <></>}
               {props.todo.priority === 1 ? <Icon name={"Priority 1"} /> : <></>}
             </div>
             <Show when={props.todo.starred} fallback={<></>}>
-              <div style={{ "margin-left": "-9.08px" }}>
-                <Icon name={"Star"} />
+              <div>
+                <Icon name={"StarWithPriority1"} />
               </div>
             </Show>
           </div>

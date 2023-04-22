@@ -10,6 +10,9 @@ interface Props {
     | "Priority 3"
     | "Priority 2"
     | "Priority 1"
+    | "StarWithPriority1"
+    | "StarWithPriority2"
+    | "StarWithPriority3"
     | "GitHub"
     | "Google"
     | "Question"
@@ -316,6 +319,84 @@ export default function Icon(props: Props) {
             stroke-width="1.5"
             stroke-linecap="round"
             stroke-linejoin="round"
+          ></path>
+        </svg>
+      )
+    case "StarWithPriority3":
+      return (
+        <svg width="18" height="18" fill="none" viewBox="0 0 24 24">
+          <path
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.5"
+            d="M13 4.75L14.75 10.25H20.25L15.75 13.75L17.25 19.25L13 15.75"
+          ></path>
+          <path
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.5"
+            d="M3.75 6.5H11"
+          ></path>
+          <path
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.5"
+            d="M3.75 15.5H11"
+          ></path>
+          <path
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.5"
+            d="M3.75 11H11"
+          ></path>
+        </svg>
+      )
+    case "StarWithPriority2":
+      return (
+        <svg width="18" height="18" fill="none" viewBox="0 0 24 24">
+          <path
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.5"
+            d="M13 4.75L14.75 10.25H20.25L15.75 13.75L17.25 19.25L13 15.75"
+          ></path>
+          <path
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.5"
+            d="M3.75 6.5H11"
+          ></path>
+          <path
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.5"
+            d="M3.75 11H11"
+          ></path>
+        </svg>
+      )
+    case "StarWithPriority1":
+      return (
+        <svg width="18" height="18" fill="none" viewBox="0 0 24 24">
+          <path
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.5"
+            d="M13 4.75L14.75 10.25H20.25L15.75 13.75L17.25 19.25L13 15.75"
+          ></path>
+          <path
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.5"
+            d="M3.75 6.5H11"
           ></path>
         </svg>
       )
