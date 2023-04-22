@@ -24,9 +24,10 @@ export default function All() {
     orderedTodos,
     setOrderedTodos,
     localSearchResultId,
+    currentlyFocusedTodo,
+    setCurrentlyFocusedTodo,
   } = useGlobalContext()
   const [keys, { event }] = useKeyDownList()
-  const [currentlyFocusedTodo, setCurrentlyFocusedTodo] = createSignal(0)
   const [changeFocus, setChangeFocus] = createSignal(true)
 
   createEffect(() => {
@@ -95,6 +96,65 @@ export default function All() {
         if (!editingTodo()) {
           setLocalSearch(true)
           setFocusedTodo(0)
+        }
+      })
+    }
+  })
+
+  createEffect(() => {
+    if (event()?.key === "0") {
+      untrack(() => {
+        if (focusedTodo() !== 0) {
+          setTodos(
+            todos().map((t) => {
+              if (t.id === focusedTodo()) {
+                t.priority = 0
+              }
+              return t
+            })
+          )
+        }
+      })
+    }
+    if (event()?.key === "1") {
+      untrack(() => {
+        if (focusedTodo() !== 0) {
+          setTodos(
+            todos().map((t) => {
+              if (t.id === focusedTodo()) {
+                t.priority = 1
+              }
+              return t
+            })
+          )
+        }
+      })
+    }
+    if (event()?.key === "2") {
+      untrack(() => {
+        if (focusedTodo() !== 0) {
+          setTodos(
+            todos().map((t) => {
+              if (t.id === focusedTodo()) {
+                t.priority = 2
+              }
+              return t
+            })
+          )
+        }
+      })
+    }
+    if (event()?.key === "3") {
+      untrack(() => {
+        if (focusedTodo() !== 0) {
+          setTodos(
+            todos().map((t) => {
+              if (t.id === focusedTodo()) {
+                t.priority = 3
+              }
+              return t
+            })
+          )
         }
       })
     }

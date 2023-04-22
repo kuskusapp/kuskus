@@ -37,6 +37,8 @@ interface ContextProps {
   setLocalSearchResultIds: Setter<number[]>
   localSearchResultId: Accessor<number>
   setLocalSearchResultId: Setter<number>
+  currentlyFocusedTodo: Accessor<number>
+  setCurrentlyFocusedTodo: Setter<number>
 }
 
 const GlobalContext = createContext<ContextProps>()
@@ -98,6 +100,7 @@ export function GlobalContextProvider(props: any) {
   const [guard, setGuard] = createSignal(false)
   const [localSearchResultIds, setLocalSearchResultIds] = createSignal([])
   const [localSearchResultId, setLocalSearchResultId] = createSignal(0)
+  const [currentlyFocusedTodo, setCurrentlyFocusedTodo] = createSignal(0)
 
   return (
     <GlobalContext.Provider
@@ -132,6 +135,8 @@ export function GlobalContextProvider(props: any) {
         setLocalSearchResultId,
         orderedTodos,
         setOrderedTodos,
+        currentlyFocusedTodo,
+        setCurrentlyFocusedTodo,
       }}
     >
       {props.children}

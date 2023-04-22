@@ -9,15 +9,32 @@ import { useKeyDownList } from "@solid-primitives/keyboard"
 import LocalSearch from "./LocalSearch"
 
 export default function Page() {
-  const { activePage, setTodos, todos, focusedTodo, localSearch, editingTodo } =
-    useGlobalContext()
+  const {
+    activePage,
+    setTodos,
+    todos,
+    focusedTodo,
+    localSearch,
+    editingTodo,
+    setFocusedTodo,
+    orderedTodos,
+  } = useGlobalContext()
   const [keys, { event }] = useKeyDownList()
 
   createEffect(() => {
     if (!localSearch() && !editingTodo() && event()?.key === "Backspace") {
-      untrack(() =>
+      untrack(() => {
         setTodos(todos().filter((todo) => todo.id !== focusedTodo()))
-      )
+
+        let todoIdToFocus =
+          orderedTodos().findIndex((todo) => todo.id === focusedTodo()) + 1
+
+        if (orderedTodos().length === todoIdToFocus) {
+          setFocusedTodo(orderedTodos()[0].id)
+        } else {
+          setFocusedTodo(orderedTodos()[todoIdToFocus].id)
+        }
+      })
     }
   })
 

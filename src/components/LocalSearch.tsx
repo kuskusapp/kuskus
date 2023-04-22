@@ -6,13 +6,11 @@ import Fuse from "fuse.js"
 export default function LocalSearch() {
   const {
     setFocusedTodo,
-    todos,
     setLocalSearch,
     setLocalSearchResultIds,
     localSearchResultIds,
     setLocalSearchResultId,
     orderedTodos,
-    setOrderedTodos,
     localSearchResultId,
   } = useGlobalContext()
   const [ref, setRef] = createSignal<HTMLInputElement>()
@@ -21,7 +19,6 @@ export default function LocalSearch() {
 
   // TODO: probably not the best place for this
   onMount(() => {
-    console.log(orderedTodos(), "ordered todos")
     setIndex(
       new Fuse(orderedTodos(), {
         keys: ["title"],
@@ -37,7 +34,6 @@ export default function LocalSearch() {
       onKeyPress={(e) => {
         if (e.key === "Enter") {
           if (localSearchResultIds().length > 0) {
-            console.log(localSearchResultId(), "id")
             setFocusedTodo(localSearchResultId())
             setLocalSearch(false)
             setLocalSearchResultIds([])
@@ -49,7 +45,6 @@ export default function LocalSearch() {
       // use includeMatches: true
       oninput={(e) => {
         const matches = index().search(e.target.value)
-        console.log(matches)
         if (matches.length > 0) {
           setLocalSearchResultIds(matches.map((m: any) => m.item.id))
           setLocalSearchResultId(matches[0].item.id)
