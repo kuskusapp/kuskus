@@ -105,41 +105,23 @@ export default function Todo(props: Props) {
           >
             <Show when={!props.todo.starred}>
               <div class="">
-                {props.todo.priority === 3 ? (
-                  <Icon name={"Priority 3"} />
-                ) : (
-                  <></>
-                )}
-                {props.todo.priority === 2 ? (
-                  <Icon name={"Priority 2"} />
-                ) : (
-                  <></>
-                )}
-                {props.todo.priority === 1 ? (
-                  <Icon name={"Priority 1"} />
-                ) : (
-                  <></>
-                )}
+                {props.todo.priority === 3 && <Icon name={"Priority 3"} />}
+                {props.todo.priority === 2 && <Icon name={"Priority 2"} />}
+                {props.todo.priority === 1 && <Icon name={"Priority 1"} />}
               </div>
             </Show>
             <Show when={props.todo.starred}>
               <div>
-                {props.todo.priority === 3 ? (
+                {props.todo.priority === 3 && (
                   <Icon name={"StarWithPriority3"} />
-                ) : (
-                  <></>
                 )}
-                {props.todo.priority === 2 ? (
+                {props.todo.priority === 2 && (
                   <Icon name={"StarWithPriority2"} />
-                ) : (
-                  <></>
                 )}
-                {props.todo.priority === 1 ? (
+                {props.todo.priority === 1 && (
                   <Icon name={"StarWithPriority1"} />
-                ) : (
-                  <></>
                 )}
-                {props.todo.priority === 0 ? <Icon name={"Star"} /> : <></>}
+                {props.todo.priority === 0 && <Icon name={"Star"} />}
               </div>
             </Show>
           </div>
