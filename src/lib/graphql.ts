@@ -1,3 +1,4 @@
+import { TodoType } from "~/GlobalContext/store"
 import { GoogleClient } from "./auth"
 
 export async function gql(
@@ -16,4 +17,44 @@ export async function gql(
     }),
   })
   return res.json()
+}
+
+export async function getTodos() {
+  const res = await gql(`
+    {
+      todoCollection(first: 20) {
+        edges {
+          node {
+            id
+            title
+            done
+            dueDate
+            starred
+            priority
+          }
+        }
+      }
+    }
+  `)
+  return res
+}
+
+export async function createTodo() {
+  const res = await gql(`
+      mutation {
+      todoCreate(
+        input: {
+          title: "Make KusKus"
+          done: false
+          starred: true
+          priority: 3
+        }
+      ) {
+        todo {
+          id
+        }
+      }
+    }
+  `)
+  console.log(res)
 }

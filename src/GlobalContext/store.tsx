@@ -5,6 +5,7 @@ import {
   createSignal,
   useContext,
 } from "solid-js"
+import { getTodos } from "~/lib/graphql"
 
 interface ContextProps {
   activePage: Accessor<string>
@@ -54,39 +55,9 @@ export type TodoType = {
 }
 
 export function GlobalContextProvider(props: any) {
+  const [todos, setTodos] = createSignal<TodoType[]>([])
   const [activePage, setActivePage] = createSignal("All")
   const [localSearch, setLocalSearch] = createSignal(false)
-  const [todos, setTodos] = createSignal<TodoType[]>([
-    {
-      id: 1,
-      title: "Make KusKus",
-      done: false,
-      dueDate: new Date(),
-      starred: false,
-      priority: 2,
-    },
-    {
-      id: 2,
-      title: "Release KusKus",
-      done: false,
-      starred: true,
-      priority: 1,
-    },
-    {
-      id: 3,
-      title: "Fix all bugs",
-      done: false,
-      starred: true,
-      priority: 3,
-    },
-    {
-      id: 4,
-      title: "Polish",
-      done: false,
-      starred: true,
-      priority: 0,
-    },
-  ])
   const [orderedTodos, setOrderedTodos] = createSignal<TodoType[]>([])
   const [focusedTodoFromSearch, setFocusedTodoFromSearch] = createSignal(0)
   const [highlitedTodosFromSearch, setHighlightedTodosFromSearch] =
