@@ -1,5 +1,5 @@
-import { useKeyDownList } from "@solid-primitives/keyboard"
-import { Show, createEffect, createSignal, onMount, untrack } from "solid-js"
+import { createShortcut } from "@solid-primitives/keyboard"
+import { Show, batch, createEffect, createSignal, onMount } from "solid-js"
 import { useGlobalContext } from "~/GlobalContext/store"
 import NewTodo from "~/components/NewTodo"
 import Todo from "~/components/Todo"
@@ -27,167 +27,110 @@ export default function All() {
     currentlyFocusedTodo,
     setCurrentlyFocusedTodo,
   } = useGlobalContext()
-  const [keys, { event }] = useKeyDownList()
+  // const [keys, { event }] = useKeyDownList()
   const [changeFocus, setChangeFocus] = createSignal(true)
 
-  createEffect(() => {
-    if (!newTodo() && event()?.key === "n") {
-      untrack(() => {
+  createShortcut(["N"], () => {
+    if (newTodo()) return
+
+    batch(() => {
+      setFocusedTodo(0)
+      setNewTodoType("all")
+      setNewTodo(true)
+      setChangeFocus(false)
+      setGuard(true)
+    })
+  })
+
+  createShortcut(["Escape"], () => {
+    if (!newTodo() && !localSearch() && !editingTodo()) return
+
+    batch(() => {
+      setNewTodo(false)
+      setLocalSearch(false)
+      setChangeFocus(true)
+      setEditingTodo(false)
+    })
+  })
+
+  createShortcut(["ArrowDown"], () => {
+    if (!changeFocus() || orderedTodos().length === 0 || editingTodo()) return
+
+    if (localSearch() && localSearchResultIds().length > 0) {
+      let index = localSearchResultIds().findIndex(
+        (id) => id === localSearchResultId()
+      )
+      if (index === localSearchResultIds().length - 1) {
+        setLocalSearchResultId(localSearchResultIds()[0])
+      } else {
+        setLocalSearchResultId(localSearchResultIds()[index + 1])
+      }
+    } else {
+      if (focusedTodo() === orderedTodos().length - 1) {
         setFocusedTodo(0)
-        setNewTodoType("all")
-        setNewTodo(true)
-        setChangeFocus(false)
-        setGuard(true)
-      })
-    }
-    if (
-      (newTodo() || localSearch() || editingTodo()) &&
-      event()?.key === "Escape"
-    ) {
-      untrack(() => {
-        setNewTodo(false)
-        setLocalSearch(false)
-        setChangeFocus(true)
-        setEditingTodo(false)
-      })
-    }
-    if (changeFocus() && orderedTodos().length > 0) {
-      if (!editingTodo() && event()?.key === "ArrowDown") {
-        untrack(() => {
-          if (localSearch() && localSearchResultIds().length > 0) {
-            let index = localSearchResultIds().findIndex(
-              (id) => id === localSearchResultId()
-            )
-            if (index === localSearchResultIds().length - 1) {
-              index = -1
-            }
-            setLocalSearchResultId(localSearchResultIds()[index + 1])
-            return
-          }
-          if (orderedTodos().length - 1 === currentlyFocusedTodo()) {
-            setCurrentlyFocusedTodo(-1)
-          }
-          setFocusedTodo(orderedTodos()[currentlyFocusedTodo() + 1].id)
-          setCurrentlyFocusedTodo(currentlyFocusedTodo() + 1)
-        })
+      } else {
+        setFocusedTodo(focusedTodo() + 1)
       }
-      if (!editingTodo() && event()?.key === "ArrowUp") {
-        untrack(() => {
-          if (localSearch() && localSearchResultIds().length > 0) {
-            let index = localSearchResultIds().findIndex(
-              (id) => id === localSearchResultId()
-            )
-            if (index === 0) {
-              index = localSearchResultIds().length
-            }
-            setLocalSearchResultId(localSearchResultIds()[index - 1])
-            return
-          }
-          if (0 === currentlyFocusedTodo() || -1 === currentlyFocusedTodo()) {
-            setCurrentlyFocusedTodo(orderedTodos().length)
-          }
-          setFocusedTodo(orderedTodos()[currentlyFocusedTodo() - 1].id)
-          setCurrentlyFocusedTodo(currentlyFocusedTodo() - 1)
-        })
-      }
-    }
-    if (event()?.key === "f") {
-      untrack(() => {
-        if (!editingTodo()) {
-          setLocalSearch(true)
-          setFocusedTodo(0)
-        }
-      })
     }
   })
 
-  createEffect(() => {
-    if (event()?.key === "0") {
-      untrack(() => {
-        if (focusedTodo() !== 0) {
-          setTodos(
-            todos().map((t) => {
-              if (t.id === focusedTodo()) {
-                t.priority = 0
-              }
-              return t
-            })
-          )
-        }
-      })
-    }
-    if (event()?.key === "1") {
-      untrack(() => {
-        if (focusedTodo() !== 0) {
-          setTodos(
-            todos().map((t) => {
-              if (t.id === focusedTodo()) {
-                t.priority = 1
-              }
-              return t
-            })
-          )
-        }
-      })
-    }
-    if (event()?.key === "2") {
-      untrack(() => {
-        if (focusedTodo() !== 0) {
-          setTodos(
-            todos().map((t) => {
-              if (t.id === focusedTodo()) {
-                t.priority = 2
-              }
-              return t
-            })
-          )
-        }
-      })
-    }
-    if (event()?.key === "3") {
-      untrack(() => {
-        if (focusedTodo() !== 0) {
-          setTodos(
-            todos().map((t) => {
-              if (t.id === focusedTodo()) {
-                t.priority = 3
-              }
-              return t
-            })
-          )
-        }
-      })
-    }
-    if (event()?.key === "4") {
-      untrack(() => {
-        if (focusedTodo() !== 0) {
-          setTodos(
-            todos().map((t) => {
-              if (t.id === focusedTodo()) {
-                t.starred = !t.starred
-              }
-              return t
-            })
-          )
-        }
-      })
+  createShortcut(["ArrowUp"], () => {
+    if (!changeFocus() || orderedTodos().length === 0 || editingTodo()) return
+
+    if (localSearch() && localSearchResultIds().length > 0) {
+      let index = localSearchResultIds().findIndex(
+        (id) => id === localSearchResultId()
+      )
+      if (index === 0) {
+        setLocalSearchResultId(
+          localSearchResultIds()[localSearchResultIds().length - 1]
+        )
+      } else {
+        setLocalSearchResultId(localSearchResultIds()[index - 1])
+      }
+    } else {
+      if (focusedTodo() === 0) {
+        setFocusedTodo(orderedTodos().length - 1)
+      } else {
+        setFocusedTodo(focusedTodo() - 1)
+      }
     }
   })
 
-  createEffect(() => {
-    if (event()?.key === "Enter") {
-      untrack(() => {
-        if (focusedTodo() !== 0 && !localSearch()) {
-          untrack(() => {
-            if (editingTodo()) {
-              setEditingTodo(false)
-            } else {
-              setEditingTodo(true)
+  createShortcut(["F"], () => {
+    if (editingTodo()) return
+
+    batch(() => {
+      setLocalSearch(true)
+      setFocusedTodo(0)
+    })
+  })
+
+  for (const i of [0, 1, 2, 3] as const) {
+    createShortcut([`${i}`], () => {
+      if (focusedTodo() !== 0) {
+        setTodos((todos) =>
+          todos.map((t) => {
+            if (t.id === focusedTodo()) {
+              t.priority = i
             }
-            setTodoToEdit(focusedTodo())
+            return t
           })
-        }
-      })
+        )
+      }
+    })
+  }
+
+  createShortcut(["4"], () => {
+    if (focusedTodo() !== 0) {
+      setTodos(
+        todos().map((t) => {
+          if (t.id === focusedTodo()) {
+            t.starred = !t.starred
+          }
+          return t
+        })
+      )
     }
   })
 

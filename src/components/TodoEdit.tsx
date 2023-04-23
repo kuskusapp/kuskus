@@ -10,7 +10,7 @@ import {
 } from "solid-js"
 import { TodoType, useGlobalContext } from "../GlobalContext/store"
 import Icon from "./Icon"
-import { autofocus, createAutofocus } from "@solid-primitives/autofocus"
+import { autofocus } from "@solid-primitives/autofocus"
 
 interface Props {
   todo: TodoType
@@ -24,9 +24,6 @@ interface Props {
 export default function TodoEdit(props: Props) {
   const { todos, setTodos, editingTodo, setTodoToEdit } = useGlobalContext()
   const [input, setInput] = createSignal("")
-  const [keys, { event }] = useKeyDownList()
-  const [ref, setRef] = createSignal<HTMLInputElement>()
-  createAutofocus(ref)
 
   onMount(() => {
     setInput(props.todo.title)
