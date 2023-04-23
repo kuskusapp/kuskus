@@ -55,13 +55,15 @@ export default function Todo(props: Props) {
       >
         <div
           class={clsx(
-            "flex cursor-default pl-1.5 mb-0.5 justify-between pb-0.5",
+            "flex cursor-default pl-1.5 justify-between p-1",
+            props.todo.note && "min-h-min",
             props.todo.id === focusedTodo() &&
               "dark:bg-neutral-700 bg-zinc-200 rounded",
             localSearchResultIds().includes(props.todo.id) &&
               "border rounded border-blue-500",
             localSearchResultId() === props.todo.id && "bg-red-200"
           )}
+          style={{ "border-bottom-width": "1px" }}
           onClick={() => {
             if (props.todo.id !== focusedTodo()) {
               let array = props.orderedTodos()
@@ -97,7 +99,10 @@ export default function Todo(props: Props) {
             >
               <Icon name={props.todo.done ? "SquareCheck" : "Square"} />
             </div>
-            <div class="pl-1.5">{props.todo.title}</div>
+            <div>
+              <div class="pl-1.5">{props.todo.title}</div>
+              <div class="opacity-60 text-sm pl-1.5">{props.todo.note}</div>
+            </div>
           </div>
           <div
             style={{ "padding-top": "0.25rem", "padding-right": "0.375rem" }}

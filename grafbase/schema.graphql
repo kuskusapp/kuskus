@@ -21,7 +21,7 @@ type Todo @model {
   done: Boolean!
   starred: Boolean!
   priority: Int!
-  description: String
+  note: String
   """
   TODO: should be a date type I think
   """

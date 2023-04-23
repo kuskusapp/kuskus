@@ -31,17 +31,21 @@ export default function All() {
   // const [keys, { event }] = useKeyDownList()
   const [changeFocus, setChangeFocus] = createSignal(true)
 
-  createShortcut(["N"], () => {
-    if (newTodo()) return
+  createShortcut(
+    ["N"],
+    () => {
+      if (newTodo()) return
 
-    batch(() => {
-      setFocusedTodo(0)
-      setNewTodoType("all")
-      setNewTodo(true)
-      setChangeFocus(false)
-      setGuard(true)
-    })
-  })
+      batch(() => {
+        setFocusedTodo(0)
+        setNewTodoType("all")
+        setNewTodo(true)
+        setChangeFocus(false)
+        setGuard(true)
+      })
+    },
+    { preventDefault: false }
+  )
 
   createShortcut(["Escape"], () => {
     if (!newTodo() && !localSearch() && !editingTodo()) return

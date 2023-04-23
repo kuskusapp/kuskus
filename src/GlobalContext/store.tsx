@@ -7,7 +7,7 @@ export type TodoType = {
   done: boolean
   starred: boolean
   priority: 0 | 1 | 2 | 3
-  description?: string
+  note?: string
   dueDate?: Date
 }
 
@@ -19,7 +19,8 @@ export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
         title: "Make KusKus",
         done: false,
         dueDate: new Date(),
-        starred: false,
+        note: "cover all use important use cases",
+        starred: true,
         priority: 2,
       },
       {
@@ -57,7 +58,9 @@ export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
     const [newTodoType, setNewTodoType] = createSignal<string>("")
     const [todoEditInput, setTodoEditInput] = createSignal("")
     const [guard, setGuard] = createSignal(false)
-    const [localSearchResultIds, setLocalSearchResultIds] = createSignal([])
+    const [localSearchResultIds, setLocalSearchResultIds] = createSignal<
+      number[]
+    >([])
     const [localSearchResultId, setLocalSearchResultId] = createSignal(0)
     const [currentlyFocusedTodo, setCurrentlyFocusedTodo] = createSignal(0)
 

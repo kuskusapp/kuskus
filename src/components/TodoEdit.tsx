@@ -1,13 +1,4 @@
-import { useKeyDownList } from "@solid-primitives/keyboard"
-import {
-  Accessor,
-  Setter,
-  createEffect,
-  createSignal,
-  on,
-  onMount,
-  untrack,
-} from "solid-js"
+import { Setter, createEffect, createSignal, onMount } from "solid-js"
 import { TodoType, useGlobalContext } from "../GlobalContext/store"
 import Icon from "./Icon"
 import { autofocus } from "@solid-primitives/autofocus"
@@ -16,9 +7,6 @@ interface Props {
   todo: TodoType
   setChangeFocus: Setter<boolean>
   currentlyFocusedTodo: number
-  // orderedTodos: Accessor<TodoType[]>
-  // setOrderedTodos: Setter<TodoType[]>
-  // setCurrentlyFocusedTodo: Setter<number>
 }
 
 export default function TodoEdit(props: Props) {
