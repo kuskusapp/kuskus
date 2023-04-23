@@ -3,6 +3,7 @@ import { Show, batch, createEffect, createSignal, onMount } from "solid-js"
 import { useGlobalContext } from "~/GlobalContext/store"
 import NewTodo from "~/components/NewTodo"
 import Todo from "~/components/Todo"
+import { findIndexOfId } from "~/lib/lib"
 
 export default function All() {
   const {
@@ -66,10 +67,15 @@ export default function All() {
         setLocalSearchResultId(localSearchResultIds()[index + 1])
       }
     } else {
-      if (focusedTodo() === orderedTodos().length - 1) {
-        setFocusedTodo(0)
+      if (
+        findIndexOfId(orderedTodos(), focusedTodo()) ===
+        orderedTodos().length - 1
+      ) {
+        setFocusedTodo(findIndexOfId(orderedTodos(), focusedTodo()))
       } else {
-        setFocusedTodo(focusedTodo() + 1)
+        setFocusedTodo(
+          orderedTodos()[findIndexOfId(orderedTodos(), focusedTodo()) + 1].id
+        )
       }
     }
   })
@@ -89,10 +95,12 @@ export default function All() {
         setLocalSearchResultId(localSearchResultIds()[index - 1])
       }
     } else {
-      if (focusedTodo() === 0) {
-        setFocusedTodo(orderedTodos().length - 1)
+      if (findIndexOfId(orderedTodos(), focusedTodo()) === 0) {
+        setFocusedTodo(orderedTodos()[orderedTodos().length - 1].id)
       } else {
-        setFocusedTodo(focusedTodo() - 1)
+        setFocusedTodo(
+          orderedTodos()[findIndexOfId(orderedTodos(), focusedTodo()) - 1].id
+        )
       }
     }
   })
