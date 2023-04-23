@@ -28,6 +28,7 @@
     "@neo4j/graphql-plugin-auth": "^2.2.0",
     "@solid-auth/next": "^0.0.23",
     "@solid-primitives/autofocus": "^0.0.105",
+    "@solid-primitives/context": "^0.2.1",
     "@solid-primitives/keyboard": "^1.2.0",
     "@solidjs/meta": "^0.28.4",
     "@solidjs/router": "^0.8.2",

@@ -28,6 +28,9 @@ dependencies:
   '@solid-primitives/autofocus':
     specifier: ^0.0.105
     version: 0.0.105(solid-js@1.7.3)
+  '@solid-primitives/context':
+    specifier: ^0.2.1
+    version: 0.2.1(solid-js@1.7.3)
   '@solid-primitives/keyboard':
     specifier: ^1.2.0
     version: 1.2.0(solid-js@1.7.3)
@@ -2717,6 +2720,14 @@ packages:
       '@solid-primitives/utils': 5.5.2(solid-js@1.7.3)
       solid-js: 1.7.3
     dev: true
+
+  /@solid-primitives/context@0.2.1(solid-js@1.7.3):
+    resolution: {integrity: sha512-XIIwCOWpRKDersgkR9LNFXaJHIV8QlCFo/tq5bV0cAOZklcwOFcqi2bN+uWgEIQSWGjWXU2kc1H1/TzgYzVDlg==}
+    peerDependencies:
+      solid-js: ^1.6.12
+    dependencies:
+      solid-js: 1.7.3
+    dev: false
 
   /@solid-primitives/cursor@0.0.105(solid-js@1.7.3):
     resolution: {integrity: sha512-/DdttvMytHWvGOTr6e2BesOFg85I1+zPz3ffGw6uwSFrUcBcxSiG3i5Rn9rKgWXyEZ+Sl1Ov8HoYJBo6NAgqrQ==}
