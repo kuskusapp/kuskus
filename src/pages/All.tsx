@@ -165,7 +165,14 @@ export default function All() {
     setOrderedTodos(
       todos()
         .filter((t) => !t.done)
-        .sort((a, b) => b.priority - a.priority)
+        .sort((a, b) => {
+          if (b.starred && !a.starred) {
+            return 1
+          } else if (a.starred && !b.starred) {
+            return -1
+          }
+          return b.priority - a.priority
+        })
     )
   })
 
@@ -179,7 +186,14 @@ export default function All() {
       <h1 class="font-bold text-3xl mb-8">All</h1>
       {todos()
         .filter((t) => !t.done)
-        .sort((a, b) => b.priority - a.priority)
+        .sort((a, b) => {
+          if (b.starred && !a.starred) {
+            return 1
+          } else if (a.starred && !b.starred) {
+            return -1
+          }
+          return b.priority - a.priority
+        })
         .map((todo) => {
           return (
             <Todo
