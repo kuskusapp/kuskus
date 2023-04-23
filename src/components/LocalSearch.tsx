@@ -51,6 +51,9 @@ export default function LocalSearch() {
       // use includeMatches: true
       oninput={(e) => {
         const matches = index().search(e.target.value)
+        if (matches.length === 0) {
+          setLocalSearchResultIds([])
+        }
         if (matches.length > 0) {
           setLocalSearchResultIds(matches.map((m: any) => m.item.id))
           setLocalSearchResultId(matches[0].item.id)
