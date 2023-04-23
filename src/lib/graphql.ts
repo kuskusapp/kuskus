@@ -1,4 +1,3 @@
-import { TodoType } from "~/GlobalContext/store"
 import { GoogleClient } from "./auth"
 
 export async function gql(

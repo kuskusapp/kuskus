@@ -105,6 +105,17 @@ export default function All() {
     }
   })
 
+  createShortcut(["Enter"], () => {
+    if (focusedTodo() !== 0 && !localSearch()) {
+      if (editingTodo()) {
+        setEditingTodo(false)
+      } else {
+        setEditingTodo(true)
+      }
+      setTodoToEdit(focusedTodo())
+    }
+  })
+
   createShortcut(["F"], () => {
     if (editingTodo()) return
 
