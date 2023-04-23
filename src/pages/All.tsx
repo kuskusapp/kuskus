@@ -105,25 +105,33 @@ export default function All() {
     }
   })
 
-  createShortcut(["Enter"], () => {
-    if (focusedTodo() !== 0 && !localSearch()) {
-      if (editingTodo()) {
-        setEditingTodo(false)
-      } else {
-        setEditingTodo(true)
+  createShortcut(
+    ["Enter"],
+    () => {
+      if (focusedTodo() !== 0 && !localSearch()) {
+        if (editingTodo()) {
+          setEditingTodo(false)
+        } else {
+          setEditingTodo(true)
+        }
+        setTodoToEdit(focusedTodo())
       }
-      setTodoToEdit(focusedTodo())
-    }
-  })
+    },
+    { preventDefault: false }
+  )
 
-  createShortcut(["F"], () => {
-    if (editingTodo()) return
+  createShortcut(
+    ["F"],
+    () => {
+      if (editingTodo()) return
 
-    batch(() => {
-      setLocalSearch(true)
-      setFocusedTodo(0)
-    })
-  })
+      batch(() => {
+        setLocalSearch(true)
+        setFocusedTodo(0)
+      })
+    },
+    { preventDefault: false }
+  )
 
   for (const i of [0, 1, 2, 3] as const) {
     createShortcut([`${i}`], () => {

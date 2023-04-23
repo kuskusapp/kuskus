@@ -1,4 +1,4 @@
-import { autofocus, createAutofocus } from "@solid-primitives/autofocus"
+import { autofocus } from "@solid-primitives/autofocus"
 import { createSignal, onMount } from "solid-js"
 import { useGlobalContext } from "~/GlobalContext/store"
 import Fuse from "fuse.js"
@@ -18,7 +18,6 @@ export default function LocalSearch() {
   } = useGlobalContext()
   const [ref, setRef] = createSignal<HTMLInputElement>()
   const [index, setIndex] = createSignal<any>()
-  createAutofocus(ref)
 
   // TODO: probably not the best place for this
   onMount(() => {
