@@ -1,3 +1,4 @@
+import { createEventListener } from "@solid-primitives/event-listener"
 import { createShortcut } from "@solid-primitives/keyboard"
 import { Show, batch, createEffect, createSignal, onMount } from "solid-js"
 import { useGlobalContext } from "~/GlobalContext/store"
@@ -6,105 +7,115 @@ import Todo from "~/components/Todo"
 import { findIndexOfId } from "~/lib/lib"
 
 export default function All() {
-  const {
-    todos,
-    setTodos,
-    newTodo,
-    setNewTodo,
-    setNewTodoType,
-    setFocusedTodo,
-    setLocalSearch,
-    localSearch,
-    focusedTodo,
-    setTodoToEdit,
-    setEditingTodo,
-    editingTodo,
-    setGuard,
-    setLocalSearchResultId,
-    localSearchResultIds,
-    orderedTodos,
-    setOrderedTodos,
-    localSearchResultId,
-    currentlyFocusedTodo,
-    setCurrentlyFocusedTodo,
-    setEditNoteInTodo,
-  } = useGlobalContext()
-  // const [keys, { event }] = useKeyDownList()
+  const global = useGlobalContext()
   const [changeFocus, setChangeFocus] = createSignal(true)
+
+  let ref!: HTMLDivElement
+  createEventListener(
+    () => ref,
+    "click",
+    (e) => {
+      if (e.target === ref) {
+        global.setFocusedTodo(0)
+      }
+    },
+    { passive: true }
+  )
 
   createShortcut(
     ["N"],
     () => {
-      if (newTodo()) return
+      if (global.newTodo()) return
 
       batch(() => {
-        setFocusedTodo(0)
-        setNewTodoType("all")
-        setNewTodo(true)
+        global.setFocusedTodo(0)
+        global.setNewTodoType("all")
+        global.setNewTodo(true)
         setChangeFocus(false)
-        setGuard(true)
+        global.setGuard(true)
       })
     },
     { preventDefault: false }
   )
 
   createShortcut(["Escape"], () => {
-    if (!newTodo() && !localSearch() && !editingTodo()) return
+    if (!global.newTodo() && !global.localSearch() && !global.editingTodo())
+      return
 
     batch(() => {
-      setNewTodo(false)
-      setLocalSearch(false)
+      global.setNewTodo(false)
+      global.setLocalSearch(false)
       setChangeFocus(true)
-      setEditingTodo(false)
+      global.setEditingTodo(false)
     })
   })
 
   createShortcut(["ArrowDown"], () => {
-    if (!changeFocus() || orderedTodos().length === 0 || editingTodo()) return
+    if (
+      !changeFocus() ||
+      global.orderedTodos().length === 0 ||
+      global.editingTodo()
+    )
+      return
 
-    if (localSearch() && localSearchResultIds().length > 0) {
-      let index = localSearchResultIds().findIndex(
-        (id) => id === localSearchResultId()
-      )
-      if (index === localSearchResultIds().length - 1) {
-        setLocalSearchResultId(localSearchResultIds()[0])
+    if (global.localSearch() && global.localSearchResultIds().length > 0) {
+      let index = global
+        .localSearchResultIds()
+        .findIndex((id) => id === global.localSearchResultId())
+      if (index === global.localSearchResultIds().length - 1) {
+        global.setLocalSearchResultId(global.localSearchResultIds()[0])
       } else {
-        setLocalSearchResultId(localSearchResultIds()[index + 1])
+        global.setLocalSearchResultId(global.localSearchResultIds()[index + 1])
       }
     } else {
       if (
-        findIndexOfId(orderedTodos(), focusedTodo()) ===
-        orderedTodos().length - 1
+        findIndexOfId(global.orderedTodos(), global.focusedTodo()) ===
+        global.orderedTodos().length - 1
       ) {
-        setFocusedTodo(findIndexOfId(orderedTodos(), focusedTodo()))
+        global.setFocusedTodo(
+          findIndexOfId(global.orderedTodos(), global.focusedTodo())
+        )
       } else {
-        setFocusedTodo(
-          orderedTodos()[findIndexOfId(orderedTodos(), focusedTodo()) + 1].id
+        global.setFocusedTodo(
+          global.orderedTodos()[
+            findIndexOfId(global.orderedTodos(), global.focusedTodo()) + 1
+          ].id
         )
       }
     }
   })
 
   createShortcut(["ArrowUp"], () => {
-    if (!changeFocus() || orderedTodos().length === 0 || editingTodo()) return
+    if (
+      !changeFocus() ||
+      global.orderedTodos().length === 0 ||
+      global.editingTodo()
+    )
+      return
 
-    if (localSearch() && localSearchResultIds().length > 0) {
-      let index = localSearchResultIds().findIndex(
-        (id) => id === localSearchResultId()
-      )
+    if (global.localSearch() && global.localSearchResultIds().length > 0) {
+      let index = global
+        .localSearchResultIds()
+        .findIndex((id) => id === global.localSearchResultId())
       if (index === 0) {
-        setLocalSearchResultId(
-          localSearchResultIds()[localSearchResultIds().length - 1]
+        global.setLocalSearchResultId(
+          global.localSearchResultIds()[
+            global.localSearchResultIds().length - 1
+          ]
         )
       } else {
-        setLocalSearchResultId(localSearchResultIds()[index - 1])
+        global.setLocalSearchResultId(global.localSearchResultIds()[index - 1])
       }
     } else {
-      if (findIndexOfId(orderedTodos(), focusedTodo()) === 0) {
-        setFocusedTodo(orderedTodos()[orderedTodos().length - 1].id)
+      if (findIndexOfId(global.orderedTodos(), global.focusedTodo()) === 0) {
+        global.setFocusedTodo(
+          global.orderedTodos()[global.orderedTodos().length - 1].id
+        )
       } else {
-        setFocusedTodo(
-          orderedTodos()[findIndexOfId(orderedTodos(), focusedTodo()) - 1].id
+        global.setFocusedTodo(
+          global.orderedTodos()[
+            findIndexOfId(global.orderedTodos(), global.focusedTodo()) - 1
+          ].id
         )
       }
     }
@@ -113,14 +124,18 @@ export default function All() {
   createShortcut(
     ["Enter"],
     () => {
-      if (focusedTodo() !== 0 && !localSearch() && !newTodo()) {
-        if (editingTodo()) {
-          setEditingTodo(false)
-          setEditNoteInTodo(false)
+      if (
+        global.focusedTodo() !== 0 &&
+        !global.localSearch() &&
+        !global.newTodo()
+      ) {
+        if (global.editingTodo()) {
+          global.setEditingTodo(false)
+          global.setEditNoteInTodo(false)
         } else {
-          setEditingTodo(true)
+          global.setEditingTodo(true)
         }
-        setTodoToEdit(focusedTodo())
+        global.setTodoToEdit(global.focusedTodo())
       }
     },
     { preventDefault: false }
@@ -130,18 +145,18 @@ export default function All() {
     ["T"],
     () => {
       if (
-        focusedTodo() !== 0 &&
-        !localSearch() &&
-        !newTodo() &&
-        !editingTodo()
+        global.focusedTodo() !== 0 &&
+        !global.localSearch() &&
+        !global.newTodo() &&
+        !global.editingTodo()
       ) {
-        if (editingTodo()) {
-          setEditingTodo(false)
+        if (global.editingTodo()) {
+          global.setEditingTodo(false)
         } else {
-          setEditingTodo(true)
-          setEditNoteInTodo(true)
+          global.setEditingTodo(true)
+          global.setEditNoteInTodo(true)
         }
-        setTodoToEdit(focusedTodo())
+        global.setTodoToEdit(global.focusedTodo())
       }
     },
     { preventDefault: false }
@@ -150,11 +165,11 @@ export default function All() {
   createShortcut(
     ["F"],
     () => {
-      if (editingTodo()) return
+      if (global.editingTodo()) return
 
       batch(() => {
-        setLocalSearch(true)
-        setFocusedTodo(0)
+        global.setLocalSearch(true)
+        global.setFocusedTodo(0)
       })
     },
     { preventDefault: false }
@@ -162,10 +177,10 @@ export default function All() {
 
   for (const i of [0, 1, 2, 3] as const) {
     createShortcut([`${i}`], () => {
-      if (focusedTodo() !== 0) {
-        setTodos((todos) =>
+      if (global.focusedTodo() !== 0) {
+        global.setTodos((todos) =>
           todos.map((t) => {
-            if (t.id === focusedTodo()) {
+            if (t.id === global.focusedTodo()) {
               t.priority = i
             }
             return t
@@ -176,10 +191,10 @@ export default function All() {
   }
 
   createShortcut(["4"], () => {
-    if (focusedTodo() !== 0) {
-      setTodos(
-        todos().map((t) => {
-          if (t.id === focusedTodo()) {
+    if (global.focusedTodo() !== 0) {
+      global.setTodos(
+        global.todos().map((t) => {
+          if (t.id === global.focusedTodo()) {
             t.starred = !t.starred
           }
           return t
@@ -189,8 +204,9 @@ export default function All() {
   })
 
   createEffect(() => {
-    setOrderedTodos(
-      todos()
+    global.setOrderedTodos(
+      global
+        .todos()
         .filter((t) => !t.done)
         .sort((a, b) => {
           if (b.starred && !a.starred) {
@@ -205,13 +221,14 @@ export default function All() {
 
   // order by priority
   onMount(() => {
-    setCurrentlyFocusedTodo(-1)
+    global.setCurrentlyFocusedTodo(-1)
   })
 
   return (
     <div class="p-16 pt-6">
       <h1 class="font-bold text-3xl mb-8">All</h1>
-      {todos()
+      {global
+        .todos()
         .filter((t) => !t.done)
         .sort((a, b) => {
           if (b.starred && !a.starred) {
@@ -222,26 +239,10 @@ export default function All() {
           return b.priority - a.priority
         })
         .map((todo) => {
-          return (
-            <Todo
-              todo={todo}
-              setTodos={setTodos}
-              todos={todos}
-              setCurrentlyFocusedTodo={setCurrentlyFocusedTodo}
-              currentlyFocusedTodo={currentlyFocusedTodo()}
-              orderedTodos={orderedTodos}
-              setChangeFocus={setChangeFocus}
-              newTodo={newTodo}
-            />
-          )
+          return <Todo todo={todo} setChangeFocus={setChangeFocus} />
         })}
-      <Show when={newTodo() && !editingTodo()}>
-        <NewTodo
-          setChangeFocus={setChangeFocus}
-          orderedTodos={orderedTodos}
-          setOrderedTodos={setOrderedTodos}
-          setCurrentlyFocusedTodo={setCurrentlyFocusedTodo}
-        />
+      <Show when={global.newTodo() && !global.editingTodo()}>
+        <NewTodo setChangeFocus={setChangeFocus} />
       </Show>
     </div>
   )

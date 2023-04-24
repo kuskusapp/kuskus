@@ -6,9 +6,6 @@ import { autofocus } from "@solid-primitives/autofocus"
 
 interface Props {
   setChangeFocus: Setter<boolean>
-  orderedTodos: Accessor<TodoType[]>
-  setOrderedTodos: Setter<TodoType[]>
-  setCurrentlyFocusedTodo: Setter<number>
 }
 
 export default function NewTodo(props: Props) {
@@ -35,7 +32,7 @@ export default function NewTodo(props: Props) {
         priority: 0, // TODO: have way to set priority
       },
     ])
-    props.setOrderedTodos(
+    global.setOrderedTodos(
       global
         .todos()
         .filter((t) => !t.done)
@@ -46,9 +43,9 @@ export default function NewTodo(props: Props) {
     global.setNewTodoType("")
     props.setChangeFocus(true)
     global.setFocusedTodo(
-      props.orderedTodos()[props.orderedTodos().length - 1].id
+      global.orderedTodos()[global.orderedTodos().length - 1].id
     )
-    props.setCurrentlyFocusedTodo(props.orderedTodos().length - 1)
+    global.setCurrentlyFocusedTodo(global.orderedTodos().length - 1)
   })
 
   return (

@@ -6,13 +6,7 @@ import TodoEdit from "./TodoEdit"
 
 interface Props {
   todo: TodoType
-  todos: Accessor<TodoType[]>
-  setTodos: Setter<TodoType[]>
-  currentlyFocusedTodo: number
-  setCurrentlyFocusedTodo: Setter<number>
-  orderedTodos: Accessor<TodoType[]>
   setChangeFocus: Setter<boolean>
-  newTodo: Accessor<boolean>
 }
 
 export default function Todo(props: Props) {
@@ -39,11 +33,7 @@ export default function Todo(props: Props) {
       <Show
         when={global.todoToEdit() !== props.todo.id}
         fallback={
-          <TodoEdit
-            todo={props.todo}
-            setChangeFocus={props.setChangeFocus}
-            currentlyFocusedTodo={props.currentlyFocusedTodo}
-          />
+          <TodoEdit todo={props.todo} setChangeFocus={props.setChangeFocus} />
         }
       >
         <div
@@ -77,11 +67,11 @@ export default function Todo(props: Props) {
             }
 
             if (props.todo.id !== global.focusedTodo()) {
-              let array = props.orderedTodos()
+              let array = global.orderedTodos()
               global.setEditingTodo(false)
               global.setFocusedTodo(props.todo.id)
 
-              props.setCurrentlyFocusedTodo(
+              global.setCurrentlyFocusedTodo(
                 array.findIndex((i) => i.id === props.todo.id)
               )
             }
@@ -95,8 +85,8 @@ export default function Todo(props: Props) {
               onClick={() => {
                 setTriggerAnimation(true)
                 setTimeout(() => {
-                  props.setTodos(
-                    props.todos().map((t) => {
+                  global.setTodos(
+                    global.todos().map((t) => {
                       if (t.title === props.todo.title) {
                         return { ...t, done: !t.done }
                       }

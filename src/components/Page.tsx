@@ -18,8 +18,6 @@ export default function Page() {
     () => ref,
     "click",
     (e) => {
-      console.log(e.target)
-      console.log(ref)
       if (e.target === ref) {
         global.setFocusedTodo(0)
       }
