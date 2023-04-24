@@ -17,6 +17,7 @@ export default function All() {
     (e) => {
       if (e.target === ref) {
         global.setFocusedTodo(0)
+        global.setTodoToEdit(0)
       }
     },
     { passive: true }
@@ -225,7 +226,7 @@ export default function All() {
   })
 
   return (
-    <div class="p-16 pt-6">
+    <div class="p-16 pt-6" ref={ref}>
       <h1 class="font-bold text-3xl mb-8">All</h1>
       {global
         .todos()

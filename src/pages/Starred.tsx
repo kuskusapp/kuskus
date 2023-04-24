@@ -4,20 +4,24 @@ import NewTodo from "~/components/NewTodo"
 import Todo from "~/components/Todo"
 
 export default function Starred() {
-  const { todos, setTodos, newTodo } = useGlobalContext()
+  const global = useGlobalContext()
   return (
     <div class="p-16 pt-6">
       <h1 class="font-bold text-3xl mb-8">Starred</h1>
-      {todos()
-        .filter((t) => {
-          return t.starred && !t.done
+      {global
+        .todos()
+        .filter((t) => !t.done && t.starred)
+        .sort((a, b) => {
+          if (b.starred && !a.starred) {
+            return 1
+          } else if (a.starred && !b.starred) {
+            return -1
+          }
+          return b.priority - a.priority
         })
-        .map((todo) => (
-          <Todo todo={todo} setTodos={setTodos} todos={todos} />
-        ))}
-      <Show when={newTodo()}>
-        <NewTodo />
-      </Show>
+        .map((todo) => {
+          return <Todo todo={todo} setChangeFocus={setChangeFocus} />
+        })}
     </div>
   )
 }
