@@ -19,6 +19,7 @@ interface Props {
     | "Settings"
     | "SignOut"
     | "Note"
+    | "Cross"
 }
 
 export default function Icon(props: Props) {
@@ -417,6 +418,25 @@ export default function Icon(props: Props) {
             stroke-linejoin="round"
             stroke-width="1.5"
             d="M18 9.25H13.75V5"
+          ></path>
+        </svg>
+      )
+    case "Cross":
+      return (
+        <svg width="20" height="20" fill="none" viewBox="0 0 24 24">
+          <path
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.5"
+            d="M17.25 6.75L6.75 17.25"
+          ></path>
+          <path
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.5"
+            d="M6.75 6.75L17.25 17.25"
           ></path>
         </svg>
       )

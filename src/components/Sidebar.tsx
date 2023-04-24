@@ -125,15 +125,10 @@ export default function Sidebar() {
             <div
               class="has-tooltip cursor-pointer"
               onClick={() => {
-                // TODO: show modal with help
+                global.setShowHelpModal(true)
               }}
             >
-              <span
-                class="tooltip rounded shadow-lg p-1 bg-gray-100 -mt-8"
-                onClick={() => {
-                  global.setShowHelpModal(true)
-                }}
-              >
+              <span class="tooltip rounded shadow-lg p-1 bg-gray-100 -mt-8">
                 Learn KusKus
               </span>
               <Icon name="Question" />
