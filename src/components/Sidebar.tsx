@@ -5,6 +5,7 @@ import { useGlobalContext } from "~/GlobalContext/store"
 import Icon from "./Icon"
 import { isToday } from "~/lib/lib"
 import { GoogleClient } from "~/lib/auth"
+import { createEventListener } from "@solid-primitives/event-listener"
 
 export default function Sidebar() {
   const global = useGlobalContext()
@@ -15,6 +16,18 @@ export default function Sidebar() {
       sizes: [15, 85],
     })
   })
+
+  let ref!: HTMLDivElement
+  createEventListener(
+    () => ref,
+    "click",
+    (e) => {
+      if (e.target === ref) {
+        global.setFocusedTodo(0)
+      }
+    },
+    { passive: true }
+  )
 
   return (
     <>
@@ -38,7 +51,7 @@ export default function Sidebar() {
         class="sticky top-0 left-0 dark:bg-stone-900 bg-gray-50 p-2 text-xs"
         id="sidebar"
       >
-        <div class="flex flex-col gap-1 justify-between h-full">
+        <div class="flex flex-col gap-1 justify-between h-full" ref={ref}>
           <div class="flex flex-col gap-1">
             <div
               class={clsx(

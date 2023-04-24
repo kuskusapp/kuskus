@@ -1,24 +1,25 @@
 import { useGlobalContext } from "~/GlobalContext/store"
 import Icon from "./Icon"
-import { makeEventListener } from "@solid-primitives/event-listener"
+import {
+  createEventListener,
+  makeEventListener,
+} from "@solid-primitives/event-listener"
 import { onMount } from "solid-js"
 
 export default function Modal() {
   const global = useGlobalContext()
 
   let ref!: HTMLDivElement
-  onMount(() => {
-    makeEventListener(
-      ref,
-      "click",
-      (e) => {
-        if (e.target === ref) {
-          global.setShowHelpModal(false)
-        }
-      },
-      { passive: true }
-    )
-  })
+  createEventListener(
+    () => ref,
+    "click",
+    (e) => {
+      if (e.target === ref) {
+        global.setShowHelpModal(false)
+      }
+    },
+    { passive: true }
+  )
 
   return (
     <div

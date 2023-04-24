@@ -8,9 +8,24 @@ import ActionBar from "./ActionBar"
 import LocalSearch from "./LocalSearch"
 import { findIndexOfId } from "~/lib/lib"
 import { createShortcut } from "@solid-primitives/keyboard"
+import { createEventListener } from "@solid-primitives/event-listener"
 
 export default function Page() {
   const global = useGlobalContext()
+
+  let ref!: HTMLDivElement
+  createEventListener(
+    () => ref,
+    "click",
+    (e) => {
+      console.log(e.target)
+      console.log(ref)
+      if (e.target === ref) {
+        global.setFocusedTodo(0)
+      }
+    },
+    { passive: true }
+  )
 
   createShortcut(
     ["Backspace"],
@@ -39,7 +54,7 @@ export default function Page() {
   )
 
   return (
-    <div id="page" class="flex flex-col">
+    <div id="page" class="flex flex-col" ref={ref}>
       <Switch>
         <Match when={global.activePage() === "All"}>
           <All />
