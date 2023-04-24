@@ -1,5 +1,5 @@
 import clsx from "clsx"
-import { Accessor, Setter, Show, createSignal, onMount } from "solid-js"
+import { Accessor, Setter, Show, createSignal } from "solid-js"
 import { TodoType, useGlobalContext } from "../GlobalContext/store"
 import Icon from "./Icon"
 import TodoEdit from "./TodoEdit"

@@ -125,6 +125,14 @@ export default function All() {
   )
 
   createShortcut(
+    ["E"],
+    () => {
+      console.log("run")
+    },
+    { preventDefault: false }
+  )
+
+  createShortcut(
     ["F"],
     () => {
       if (editingTodo()) return

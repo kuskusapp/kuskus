@@ -35,22 +35,31 @@ export default function TodoEdit(props: Props) {
 
   return (
     <>
-      <div class="flex cursor-default pl-1.5 mb-0.5 dark:bg-neutral-700 bg-zinc-200 rounded py-1">
+      <div class="flex cursor-default pl-1.5 mb-0.5 dark:bg-neutral-700 bg-zinc-200 rounded py-2">
         <div style={{ "padding-top": "0.2rem" }}>
           <Icon name={"Square"} />
         </div>
-        <input
-          autofocus
-          value={input()}
-          ref={autofocus}
-          oninput={(e) => {
-            setInput(e.target.value)
-          }}
-          style={{
-            outline: "none",
-          }}
-          class="pl-1.5 bg-inherit"
-        ></input>
+        <div class="w-full">
+          <input
+            autofocus
+            value={input()}
+            ref={autofocus}
+            oninput={(e) => {
+              setInput(e.target.value)
+            }}
+            style={{
+              outline: "none",
+            }}
+            class="pl-1.5 bg-inherit w-full"
+          ></input>
+          <div class="pl-1.5">
+            <input
+              class="bg-transparent text-sm opacity-70 w-full"
+              type="text"
+              value={props.todo.note}
+            />
+          </div>
+        </div>
       </div>
     </>
   )
