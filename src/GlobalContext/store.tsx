@@ -64,7 +64,7 @@ export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
     const [localSearchResultId, setLocalSearchResultId] = createSignal(0)
     const [currentlyFocusedTodo, setCurrentlyFocusedTodo] = createSignal(0)
     const [editNoteInTodo, setEditNoteInTodo] = createSignal(false)
-    const [showHelpModal, setShowHelpModal] = createSignal(false)
+    const [showHelpModal, setShowHelpModal] = createSignal(true)
 
     return {
       activePage,

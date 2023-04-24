@@ -31,6 +31,9 @@ dependencies:
   '@solid-primitives/context':
     specifier: ^0.2.1
     version: 0.2.1(solid-js@1.7.3)
+  '@solid-primitives/event-listener':
+    specifier: ^2.2.10
+    version: 2.2.10(solid-js@1.7.3)
   '@solid-primitives/keyboard':
     specifier: ^1.2.0
     version: 1.2.0(solid-js@1.7.3)

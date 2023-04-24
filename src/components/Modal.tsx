@@ -1,8 +1,25 @@
 import { useGlobalContext } from "~/GlobalContext/store"
 import Icon from "./Icon"
+import { makeEventListener } from "@solid-primitives/event-listener"
+import { onMount } from "solid-js"
 
 export default function Modal() {
   const global = useGlobalContext()
+
+  let ref!: HTMLDivElement
+  onMount(() => {
+    makeEventListener(
+      ref,
+      "click",
+      (e) => {
+        if (e.target === ref) {
+          global.setShowHelpModal(false)
+        }
+      },
+      { passive: true }
+    )
+  })
+
   return (
     <div
       style={{
@@ -10,11 +27,11 @@ export default function Modal() {
         "backdrop-filter": "blur(2px)",
       }}
       class="fixed h-screen w-screen"
-      onclick={() => global.setShowHelpModal(false)}
     >
       <div
         class="items-center h-full w-full flex justify-center"
-        onclick={() => global.setShowHelpModal(true)}
+        id="parent"
+        ref={ref}
       >
         <div
           style={{
@@ -36,7 +53,7 @@ export default function Modal() {
                 <Icon name="Cross" />
               </div>
             </nav>
-            <div class="">words</div>
+            <div class=""></div>
           </div>
         </div>
       </div>
