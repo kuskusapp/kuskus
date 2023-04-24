@@ -125,7 +125,7 @@ export default function All() {
   )
 
   createShortcut(
-    ["E"],
+    ["T"],
     () => {
       console.log("run")
     },

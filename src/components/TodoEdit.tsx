@@ -54,7 +54,7 @@ export default function TodoEdit(props: Props) {
           ></input>
           <div class="pl-1.5">
             <input
-              class="bg-transparent text-sm opacity-70 w-full"
+              class="bg-transparent text-sm opacity-70 w-full outline-none"
               type="text"
               value={props.todo.note}
             />
