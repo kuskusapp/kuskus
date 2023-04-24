@@ -28,11 +28,7 @@ export default function Modal() {
       }}
       class="fixed h-screen w-screen"
     >
-      <div
-        class="items-center h-full w-full flex justify-center"
-        id="parent"
-        ref={ref}
-      >
+      <div class="items-center h-full w-full flex justify-center" ref={ref}>
         <div
           style={{
             "border-radius": "10px",

@@ -17,6 +17,7 @@ export default function TodoEdit(props: Props) {
 
   onMount(() => {
     setTitle(props.todo.title)
+    global.setClickTimeStamp(0)
   })
 
   createEffect(() => {

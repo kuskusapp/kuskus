@@ -16,14 +16,7 @@ interface Props {
 }
 
 export default function Todo(props: Props) {
-  const {
-    focusedTodo,
-    setFocusedTodo,
-    todoToEdit,
-    setEditingTodo,
-    localSearchResultIds,
-    localSearchResultId,
-  } = useGlobalContext()
+  const global = useGlobalContext()
   const [triggerAnimation, setTriggerAnimation] = createSignal(false)
 
   return (
@@ -44,7 +37,7 @@ export default function Todo(props: Props) {
       `}
       </style>
       <Show
-        when={todoToEdit() !== props.todo.id}
+        when={global.todoToEdit() !== props.todo.id}
         fallback={
           <TodoEdit
             todo={props.todo}
@@ -57,18 +50,36 @@ export default function Todo(props: Props) {
           class={clsx(
             "flex cursor-default pl-1.5 justify-between p-1 dark:border-neutral-700",
             props.todo.note && "min-h-min",
-            props.todo.id === focusedTodo() &&
+            props.todo.id === global.focusedTodo() &&
               "dark:bg-neutral-700 bg-zinc-200 rounded",
-            localSearchResultIds().includes(props.todo.id) &&
+            global.localSearchResultIds().includes(props.todo.id) &&
               "border rounded border-blue-500",
-            localSearchResultId() === props.todo.id && "bg-red-200"
+            global.localSearchResultId() === props.todo.id && "bg-red-200"
           )}
-          style={{ "border-bottom-width": "1px" }}
-          onClick={() => {
-            if (props.todo.id !== focusedTodo()) {
+          style={{
+            "border-bottom-width": "1px",
+            "-webkit-user-select": "none",
+            "user-select": "none",
+          }}
+          onClick={(e) => {
+            if (e.timeStamp - global.clickTimeStamp() > 200) {
+              global.setClickTimeStamp(0)
+            }
+
+            if (global.clickTimeStamp() === 0) {
+              global.setClickTimeStamp(e.timeStamp)
+            } else {
+              if (e.timeStamp - global.clickTimeStamp() < 200) {
+                global.setEditingTodo(true)
+                global.setTodoToEdit(props.todo.id)
+                return
+              }
+            }
+
+            if (props.todo.id !== global.focusedTodo()) {
               let array = props.orderedTodos()
-              setEditingTodo(false)
-              setFocusedTodo(props.todo.id)
+              global.setEditingTodo(false)
+              global.setFocusedTodo(props.todo.id)
 
               props.setCurrentlyFocusedTodo(
                 array.findIndex((i) => i.id === props.todo.id)
