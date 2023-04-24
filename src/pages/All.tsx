@@ -27,6 +27,7 @@ export default function All() {
     localSearchResultId,
     currentlyFocusedTodo,
     setCurrentlyFocusedTodo,
+    setEditNoteInTodo,
   } = useGlobalContext()
   // const [keys, { event }] = useKeyDownList()
   const [changeFocus, setChangeFocus] = createSignal(true)
@@ -115,6 +116,7 @@ export default function All() {
       if (focusedTodo() !== 0 && !localSearch() && !newTodo()) {
         if (editingTodo()) {
           setEditingTodo(false)
+          setEditNoteInTodo(false)
         } else {
           setEditingTodo(true)
         }
@@ -127,7 +129,20 @@ export default function All() {
   createShortcut(
     ["T"],
     () => {
-      console.log("run")
+      if (
+        focusedTodo() !== 0 &&
+        !localSearch() &&
+        !newTodo() &&
+        !editingTodo()
+      ) {
+        if (editingTodo()) {
+          setEditingTodo(false)
+        } else {
+          setEditingTodo(true)
+          setEditNoteInTodo(true)
+        }
+        setTodoToEdit(focusedTodo())
+      }
     },
     { preventDefault: false }
   )

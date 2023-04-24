@@ -55,7 +55,7 @@ export default function Todo(props: Props) {
       >
         <div
           class={clsx(
-            "flex cursor-default pl-1.5 justify-between p-1",
+            "flex cursor-default pl-1.5 justify-between p-1 dark:border-neutral-700",
             props.todo.note && "min-h-min",
             props.todo.id === focusedTodo() &&
               "dark:bg-neutral-700 bg-zinc-200 rounded",

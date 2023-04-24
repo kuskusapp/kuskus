@@ -2,6 +2,7 @@ import { Setter, createEffect, createSignal, onMount } from "solid-js"
 import { TodoType, useGlobalContext } from "../GlobalContext/store"
 import Icon from "./Icon"
 import { autofocus } from "@solid-primitives/autofocus"
+import { createShortcut } from "@solid-primitives/keyboard"
 
 interface Props {
   todo: TodoType
@@ -10,26 +11,48 @@ interface Props {
 }
 
 export default function TodoEdit(props: Props) {
-  const { todos, setTodos, editingTodo, setTodoToEdit } = useGlobalContext()
-  const [input, setInput] = createSignal("")
+  const global = useGlobalContext()
+  const [title, setTitle] = createSignal("")
+  const [note, setNote] = createSignal(props.todo.note)
 
   onMount(() => {
-    setInput(props.todo.title)
+    setTitle(props.todo.title)
   })
 
   createEffect(() => {
-    if (!editingTodo()) {
-      if (input() === "") {
-        setTodos(todos().filter((todo) => todo.id !== props.todo.id))
+    if (!global.editingTodo()) {
+      if (title() === "") {
+        global.setTodos(
+          global.todos().filter((todo) => todo.id !== props.todo.id)
+        )
         return
       }
-      let indexOfTodoToEdit = todos().findIndex(
-        (todo) => todo.id === props.todo.id
-      )
-      let newTodos = todos()
-      newTodos[indexOfTodoToEdit].title = input()
-      setTodos(newTodos)
-      setTodoToEdit(0)
+      let indexOfTodoToEdit = global
+        .todos()
+        .findIndex((todo) => todo.id === props.todo.id)
+      let newTodos = global.todos()
+      newTodos[indexOfTodoToEdit].title = title()
+      newTodos[indexOfTodoToEdit].note = note()
+      global.setTodos(newTodos)
+      global.setTodoToEdit(0)
+    }
+  })
+
+  let titleRef!: HTMLInputElement, noteRef!: HTMLInputElement
+
+  createEffect(() => {
+    if (global.editNoteInTodo()) {
+      autofocus(noteRef)
+
+      createShortcut(["ArrowUp"], () => {
+        global.setEditNoteInTodo(false)
+      })
+    } else {
+      autofocus(titleRef)
+
+      createShortcut(["ArrowDown"], () => {
+        global.setEditNoteInTodo(true)
+      })
     }
   })
 
@@ -41,11 +64,11 @@ export default function TodoEdit(props: Props) {
         </div>
         <div class="w-full">
           <input
+            value={title()}
             autofocus
-            value={input()}
-            ref={autofocus}
+            ref={titleRef}
             oninput={(e) => {
-              setInput(e.target.value)
+              setTitle(e.target.value)
             }}
             style={{
               outline: "none",
@@ -54,9 +77,15 @@ export default function TodoEdit(props: Props) {
           ></input>
           <div class="pl-1.5">
             <input
+              autofocus
+              ref={noteRef}
               class="bg-transparent text-sm opacity-70 w-full outline-none"
               type="text"
-              value={props.todo.note}
+              oninput={(e) => {
+                setNote(e.target.value)
+              }}
+              placeholder="Notes"
+              value={props.todo.note ? props.todo.note : ""}
             />
           </div>
         </div>
