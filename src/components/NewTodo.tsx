@@ -28,6 +28,11 @@ export default function NewTodo(props: Props) {
   // id will most likely coming from grafbase so no worries
   createShortcut(["Enter"], () => {
     if (editingTodo()) return
+    if (input() === "") {
+      setNewTodo(false)
+      setEditingTodo(false)
+      return
+    }
 
     setTodos([
       ...todos(),

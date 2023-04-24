@@ -19,7 +19,7 @@ export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
         title: "Make KusKus",
         done: false,
         dueDate: new Date(),
-        note: "cover all use important use cases",
+        note: "cover all important use cases",
         starred: true,
         priority: 2,
       },
