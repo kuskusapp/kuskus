@@ -1,15 +1,13 @@
 import clsx from "clsx"
-import { createSignal, onMount } from "solid-js"
+import { onMount } from "solid-js"
 import Split from "split.js"
 import { useGlobalContext } from "~/GlobalContext/store"
 import Icon from "./Icon"
 import { isToday } from "~/lib/lib"
 import { GoogleClient } from "~/lib/auth"
-// import { signOut } from "@solid-auth/next/client"
 
 export default function Sidebar() {
-  const { activePage, setActivePage, todos, setFocusedTodo } =
-    useGlobalContext()
+  const global = useGlobalContext()
 
   onMount(() => {
     Split(["#sidebar", "#page"], {
@@ -45,41 +43,41 @@ export default function Sidebar() {
             <div
               class={clsx(
                 "flex px-2 cursor-pointer items-center",
-                activePage() === "All" &&
+                global.activePage() === "All" &&
                   "rounded dark:bg-neutral-700 bg-zinc-200"
               )}
               onClick={() => {
-                setActivePage("All")
-                setFocusedTodo(0)
+                global.setActivePage("All")
+                global.setFocusedTodo(0)
               }}
             >
               <Icon name="Inbox" />
               <span class="pl-1 overflow-hidden">All</span>
               <div class="opacity-40 text-xs ml-auto">
-                {todos().filter((t) => !t.done).length > 0 &&
-                  todos().filter((t) => !t.done).length}
+                {global.todos().filter((t) => !t.done).length > 0 &&
+                  global.todos().filter((t) => !t.done).length}
               </div>
             </div>
             <div
               class={clsx(
                 "flex px-2 cursor-pointer items-center",
-                activePage() === "Today" &&
+                global.activePage() === "Today" &&
                   "rounded dark:bg-neutral-700 bg-zinc-200"
               )}
               onClick={() => {
-                setActivePage("Today")
-                setFocusedTodo(0)
+                global.setActivePage("Today")
+                global.setFocusedTodo(0)
               }}
             >
               <Icon name="Today" />
               <span class="pl-1 overflow-hidden">Today</span>
               <div class="opacity-40 text-xs ml-auto">
-                {todos().filter((t) => {
+                {global.todos().filter((t) => {
                   if (!t.done && t.dueDate) {
                     return isToday(t.dueDate)
                   }
                 }).length > 0 &&
-                  todos().filter((t) => {
+                  global.todos().filter((t) => {
                     if (!t.done && t.dueDate) {
                       return isToday(t.dueDate)
                     }
@@ -89,34 +87,34 @@ export default function Sidebar() {
             <div
               class={clsx(
                 "flex px-2 cursor-pointer items-center",
-                activePage() === "Starred" &&
+                global.activePage() === "Starred" &&
                   "rounded dark:bg-neutral-700 bg-zinc-200"
               )}
               onClick={() => {
-                setActivePage("Starred")
-                setFocusedTodo(0)
+                global.setActivePage("Starred")
+                global.setFocusedTodo(0)
               }}
             >
               <Icon name="Star" />
               <span class="pl-1 overflow-hidden">Starred</span>
               <div class="opacity-40 text-xs ml-auto">
                 {/* TODO: not good, should not run filter twice */}
-                {todos().filter((t) => {
+                {global.todos().filter((t) => {
                   if (!t.done && t.starred) {
                     return true
                   }
-                }).length > 0 && todos().filter((t) => t.starred).length}
+                }).length > 0 && global.todos().filter((t) => t.starred).length}
               </div>
             </div>
             <div
               class={clsx(
                 "flex px-2 cursor-pointer items-center",
-                activePage() === "Done" &&
+                global.activePage() === "Done" &&
                   "rounded dark:bg-neutral-700 bg-zinc-200"
               )}
               onClick={() => {
-                setActivePage("Done")
-                setFocusedTodo(0)
+                global.setActivePage("Done")
+                global.setFocusedTodo(0)
               }}
             >
               <Icon name="Done" />
@@ -130,7 +128,12 @@ export default function Sidebar() {
                 // TODO: show modal with help
               }}
             >
-              <span class="tooltip rounded shadow-lg p-1 bg-gray-100 -mt-8">
+              <span
+                class="tooltip rounded shadow-lg p-1 bg-gray-100 -mt-8"
+                onClick={() => {
+                  global.setShowHelpModal(true)
+                }}
+              >
                 Learn KusKus
               </span>
               <Icon name="Question" />

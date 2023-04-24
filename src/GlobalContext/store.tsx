@@ -64,6 +64,7 @@ export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
     const [localSearchResultId, setLocalSearchResultId] = createSignal(0)
     const [currentlyFocusedTodo, setCurrentlyFocusedTodo] = createSignal(0)
     const [editNoteInTodo, setEditNoteInTodo] = createSignal(false)
+    const [showHelpModal, setShowHelpModal] = createSignal(false)
 
     return {
       activePage,
@@ -100,6 +101,8 @@ export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
       setCurrentlyFocusedTodo,
       editNoteInTodo,
       setEditNoteInTodo,
+      showHelpModal,
+      setShowHelpModal,
     } as const
   },
   // @ts-expect-error this is just to assert context as non-nullable

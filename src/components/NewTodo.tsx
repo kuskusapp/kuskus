@@ -12,48 +12,42 @@ interface Props {
 }
 
 export default function NewTodo(props: Props) {
-  const {
-    todos,
-    setTodos,
-    setNewTodo,
-    newTodoType,
-    setNewTodoType,
-    setFocusedTodo,
-    editingTodo,
-    setEditingTodo,
-  } = useGlobalContext()
+  const global = useGlobalContext()
   const [input, setInput] = createSignal("")
 
   // TODO: don't use Math.random() for id, find better way
   // id will most likely coming from grafbase so no worries
   createShortcut(["Enter"], () => {
-    if (editingTodo()) return
+    if (global.editingTodo()) return
     if (input() === "") {
-      setNewTodo(false)
-      setEditingTodo(false)
+      global.setNewTodo(false)
+      global.setEditingTodo(false)
       return
     }
 
-    setTodos([
-      ...todos(),
+    global.setTodos([
+      ...global.todos(),
       {
         id: Math.floor(Math.random() * 100 + 1),
         title: input(),
         done: false,
-        starred: newTodoType() === "starred",
+        starred: global.newTodoType() === "starred",
         priority: 0, // TODO: have way to set priority
       },
     ])
     props.setOrderedTodos(
-      todos()
+      global
+        .todos()
         .filter((t) => !t.done)
         .sort((a, b) => b.priority - a.priority)
     )
-    setNewTodo(false)
-    setEditingTodo(false)
-    setNewTodoType("")
+    global.setNewTodo(false)
+    global.setEditingTodo(false)
+    global.setNewTodoType("")
     props.setChangeFocus(true)
-    setFocusedTodo(props.orderedTodos()[props.orderedTodos().length - 1].id)
+    global.setFocusedTodo(
+      props.orderedTodos()[props.orderedTodos().length - 1].id
+    )
     props.setCurrentlyFocusedTodo(props.orderedTodos().length - 1)
   })
 

@@ -5,24 +5,13 @@ import Fuse from "fuse.js"
 import { findIndexOfId } from "~/lib/lib"
 
 export default function LocalSearch() {
-  const {
-    setFocusedTodo,
-    setLocalSearch,
-    setLocalSearchResultIds,
-    localSearchResultIds,
-    setLocalSearchResultId,
-    orderedTodos,
-    localSearchResultId,
-    setCurrentlyFocusedTodo,
-    focusedTodo,
-  } = useGlobalContext()
-  const [ref, setRef] = createSignal<HTMLInputElement>()
+  const global = useGlobalContext()
   const [index, setIndex] = createSignal<any>()
 
   // TODO: probably not the best place for this
   onMount(() => {
     setIndex(
-      new Fuse(orderedTodos(), {
+      new Fuse(global.orderedTodos(), {
         keys: ["title"],
         shouldSort: false,
       })
@@ -35,13 +24,13 @@ export default function LocalSearch() {
       class="w-full"
       onKeyPress={(e) => {
         if (e.key === "Enter") {
-          if (localSearchResultIds().length > 0) {
-            setFocusedTodo(localSearchResultId())
-            setLocalSearch(false)
-            setLocalSearchResultIds([])
-            setLocalSearchResultId(0)
-            setCurrentlyFocusedTodo(
-              findIndexOfId(orderedTodos(), focusedTodo())
+          if (global.localSearchResultIds().length > 0) {
+            global.setFocusedTodo(global.localSearchResultId())
+            global.setLocalSearch(false)
+            global.setLocalSearchResultIds([])
+            global.setLocalSearchResultId(0)
+            global.setCurrentlyFocusedTodo(
+              findIndexOfId(global.orderedTodos(), global.focusedTodo())
             )
           }
         }
@@ -51,11 +40,11 @@ export default function LocalSearch() {
       oninput={(e) => {
         const matches = index().search(e.target.value)
         if (matches.length === 0) {
-          setLocalSearchResultIds([])
+          global.setLocalSearchResultIds([])
         }
         if (matches.length > 0) {
-          setLocalSearchResultIds(matches.map((m: any) => m.item.id))
-          setLocalSearchResultId(matches[0].item.id)
+          global.setLocalSearchResultIds(matches.map((m: any) => m.item.id))
+          global.setLocalSearchResultId(matches[0].item.id)
         }
       }}
       autofocus
