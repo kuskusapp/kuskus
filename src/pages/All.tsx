@@ -8,7 +8,6 @@ import { findIndexOfId } from "~/lib/lib"
 
 export default function All() {
   const global = useGlobalContext()
-  const [changeFocus, setChangeFocus] = createSignal(true)
 
   let ref!: HTMLDivElement
   createEventListener(
@@ -32,7 +31,7 @@ export default function All() {
         global.setFocusedTodo(0)
         global.setNewTodoType("all")
         global.setNewTodo(true)
-        setChangeFocus(false)
+        global.setChangeFocus(false)
         global.setGuard(true)
       })
     },
@@ -46,14 +45,14 @@ export default function All() {
     batch(() => {
       global.setNewTodo(false)
       global.setLocalSearch(false)
-      setChangeFocus(true)
+      global.setChangeFocus(true)
       global.setEditingTodo(false)
     })
   })
 
   createShortcut(["ArrowDown"], () => {
     if (
-      !changeFocus() ||
+      !global.changeFocus() ||
       global.orderedTodos().length === 0 ||
       global.editingTodo()
     )
@@ -88,7 +87,7 @@ export default function All() {
 
   createShortcut(["ArrowUp"], () => {
     if (
-      !changeFocus() ||
+      !global.changeFocus() ||
       global.orderedTodos().length === 0 ||
       global.editingTodo()
     )
@@ -113,6 +112,13 @@ export default function All() {
           global.orderedTodos()[global.orderedTodos().length - 1].id
         )
       } else {
+        if (global.focusedTodo() === 0) {
+          global.setFocusedTodo(
+            global.orderedTodos()[global.orderedTodos().length - 1].id
+          )
+          return
+        }
+
         global.setFocusedTodo(
           global.orderedTodos()[
             findIndexOfId(global.orderedTodos(), global.focusedTodo()) - 1
@@ -240,10 +246,10 @@ export default function All() {
           return b.priority - a.priority
         })
         .map((todo) => {
-          return <Todo todo={todo} setChangeFocus={setChangeFocus} />
+          return <Todo todo={todo} />
         })}
       <Show when={global.newTodo() && !global.editingTodo()}>
-        <NewTodo setChangeFocus={setChangeFocus} />
+        <NewTodo />
       </Show>
     </div>
   )

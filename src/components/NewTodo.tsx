@@ -4,11 +4,7 @@ import { TodoType, useGlobalContext } from "../GlobalContext/store"
 import Icon from "./Icon"
 import { autofocus } from "@solid-primitives/autofocus"
 
-interface Props {
-  setChangeFocus: Setter<boolean>
-}
-
-export default function NewTodo(props: Props) {
+export default function NewTodo() {
   const global = useGlobalContext()
   const [input, setInput] = createSignal("")
 
@@ -41,7 +37,7 @@ export default function NewTodo(props: Props) {
     global.setNewTodo(false)
     global.setEditingTodo(false)
     global.setNewTodoType("")
-    props.setChangeFocus(true)
+    global.setChangeFocus(true)
     global.setFocusedTodo(
       global.orderedTodos()[global.orderedTodos().length - 1].id
     )

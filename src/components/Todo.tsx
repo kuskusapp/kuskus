@@ -6,7 +6,6 @@ import TodoEdit from "./TodoEdit"
 
 interface Props {
   todo: TodoType
-  setChangeFocus: Setter<boolean>
 }
 
 export default function Todo(props: Props) {
@@ -32,9 +31,7 @@ export default function Todo(props: Props) {
       </style>
       <Show
         when={global.todoToEdit() !== props.todo.id}
-        fallback={
-          <TodoEdit todo={props.todo} setChangeFocus={props.setChangeFocus} />
-        }
+        fallback={<TodoEdit todo={props.todo} />}
       >
         <div
           class={clsx(

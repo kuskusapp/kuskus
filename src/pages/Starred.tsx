@@ -20,7 +20,7 @@ export default function Starred() {
           return b.priority - a.priority
         })
         .map((todo) => {
-          return <Todo todo={todo} setChangeFocus={setChangeFocus} />
+          return <Todo todo={todo} />
         })}
     </div>
   )

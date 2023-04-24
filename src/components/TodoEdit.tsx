@@ -6,7 +6,6 @@ import { createShortcut } from "@solid-primitives/keyboard"
 
 interface Props {
   todo: TodoType
-  setChangeFocus: Setter<boolean>
 }
 
 export default function TodoEdit(props: Props) {
