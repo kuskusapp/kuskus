@@ -3,6 +3,7 @@ import { Accessor, Setter, Show, createSignal } from "solid-js"
 import { TodoType, useGlobalContext } from "../GlobalContext/store"
 import Icon from "./Icon"
 import TodoEdit from "./TodoEdit"
+import { isToday } from "~/lib/lib"
 
 interface Props {
   todo: TodoType
@@ -75,7 +76,7 @@ export default function Todo(props: Props) {
           }}
         >
           <div
-            style={{ display: "flex" }}
+            style={{ display: "flex", "align-items": "center", gap: "8px" }}
             class={triggerAnimation() ? "animated" : ""}
           >
             <div
@@ -93,21 +94,25 @@ export default function Todo(props: Props) {
                   setTriggerAnimation(false)
                 }, 300)
               }}
-              style={{ "padding-top": "0.22rem" }}
             >
               <Icon name={props.todo.done ? "SquareCheck" : "Square"} />
             </div>
             <div>
-              <div class="pl-1.5">{props.todo.title}</div>
-              <div class="opacity-60 text-sm pl-1.5">{props.todo.note}</div>
+              <div>{props.todo.title}</div>
+              <div class="opacity-60 text-sm ">{props.todo.note}</div>
             </div>
           </div>
           <div
-            style={{ "padding-top": "0.25rem", "padding-right": "0.375rem" }}
-            class="flex"
+            style={{ "padding-right": "0.375rem" }}
+            class="flex gap-3 items-center"
           >
+            <div class="opacity-50 " style={{ "font-size": "14.8px" }}>
+              {props.todo?.dueDate && isToday(props.todo.dueDate)
+                ? "Today"
+                : ""}
+            </div>
             <Show when={!props.todo.starred}>
-              <div class="">
+              <div>
                 {props.todo.priority === 3 && <Icon name={"Priority 3"} />}
                 {props.todo.priority === 2 && <Icon name={"Priority 2"} />}
                 {props.todo.priority === 1 && <Icon name={"Priority 1"} />}
