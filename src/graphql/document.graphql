@@ -1,14 +1,18 @@
+fragment Todo on Todo {
+  id
+  title
+  done
+  starred
+  priority
+  note
+  dueDate
+}
+
 query Todos {
   todoCollection(first: 50) {
     edges {
       node {
-        id
-        title
-        done
-        starred
-        priority
-        note
-        dueDate
+        ...Todo
       }
     }
   }

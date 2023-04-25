@@ -1,4 +1,20 @@
 import { GoogleClient } from "./auth"
+import { GraphQLClient } from "graphql-request"
+
+const endpoint = import.meta.env.VITE_GRAFBASE_API_URL
+const apiKey = import.meta.env.VITE_GRAFBASE_API_KEY
+
+// for server calls I think
+export const grafbaseServer = new GraphQLClient(endpoint, {
+  headers: { "x-api-key": apiKey },
+})
+
+// for client calls I think
+export const grafbase = new GraphQLClient(endpoint, {
+  headers: {
+    Authorization: `Bearer ${(await GoogleClient.getUser())?.id_token}`,
+  },
+})
 
 export async function gql(
   query: string,

@@ -73,6 +73,9 @@ dependencies:
   graphql:
     specifier: ^16.6.0
     version: 16.6.0
+  graphql-request:
+    specifier: ^6.0.0
+    version: 6.0.0(graphql@16.6.0)
   mark.js:
     specifier: ^8.11.1
     version: 8.11.1
@@ -4721,6 +4724,18 @@ packages:
       cross-fetch: 3.1.5
       extract-files: 9.0.0
       form-data: 3.0.1
+      graphql: 16.6.0
+    transitivePeerDependencies:
+      - encoding
+    dev: false
+
+  /graphql-request@6.0.0(graphql@16.6.0):
+    resolution: {integrity: sha512-2BmHTuglonjZvmNVw6ZzCfFlW/qkIPds0f+Qdi/Lvjsl3whJg2uvHmSvHnLWhUTEw6zcxPYAHiZoPvSVKOZ7Jw==}
+    peerDependencies:
+      graphql: 14 - 16
+    dependencies:
+      '@graphql-typed-document-node/core': 3.2.0(graphql@16.6.0)
+      cross-fetch: 3.1.5
       graphql: 16.6.0
     transitivePeerDependencies:
       - encoding
