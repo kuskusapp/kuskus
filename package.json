@@ -4,7 +4,7 @@
     "dev": "solid-start dev --https",
     "build": "solid-start build",
     "start": "solid-start start",
-    "graphql": "graphql-codegen --config ./src/graphql/codegen.yml -r dotenv/config",
+    "graphql": "graphql-codegen --config ./src/graphql/codegen.ts -r dotenv/config",
     "tauri": "tauri"
   },
   "type": "module",
