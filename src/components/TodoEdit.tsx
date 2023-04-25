@@ -79,7 +79,7 @@ export default function TodoEdit(props: Props) {
               ></input>
             </div>
           </div>
-          <div>
+          <div class="pl-7">
             <input
               autofocus
               ref={noteRef}
@@ -112,7 +112,12 @@ export default function TodoEdit(props: Props) {
               {props.todo.priority === 0 && <Icon name={"Star"} />}
             </div>
           </Show>
-          <div class="opacity-60 text-sm">
+          <div
+            class="opacity-60 text-sm"
+            onClick={() => {
+              global.setShowCalendar(true)
+            }}
+          >
             {" "}
             {props.todo?.dueDate && isToday(props.todo.dueDate) ? "Today" : ""}
           </div>

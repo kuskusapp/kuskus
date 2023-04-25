@@ -76,31 +76,31 @@ export default function Todo(props: Props) {
           }}
         >
           <div
-            style={{ display: "flex", "align-items": "center", gap: "8px" }}
-            class={triggerAnimation() ? "animated" : ""}
+            style={{ display: "flex" }}
+            class={triggerAnimation() ? "animated" : "flex-col justify-center"}
           >
-            <div
-              onClick={() => {
-                setTriggerAnimation(true)
-                setTimeout(() => {
-                  global.setTodos(
-                    global.todos().map((t) => {
-                      if (t.title === props.todo.title) {
-                        return { ...t, done: !t.done }
-                      }
-                      return t
-                    })
-                  )
-                  setTriggerAnimation(false)
-                }, 300)
-              }}
-            >
-              <Icon name={props.todo.done ? "SquareCheck" : "Square"} />
-            </div>
-            <div>
+            <div class="flex items-center gap-1">
+              <div
+                onClick={() => {
+                  setTriggerAnimation(true)
+                  setTimeout(() => {
+                    global.setTodos(
+                      global.todos().map((t) => {
+                        if (t.title === props.todo.title) {
+                          return { ...t, done: !t.done }
+                        }
+                        return t
+                      })
+                    )
+                    setTriggerAnimation(false)
+                  }, 300)
+                }}
+              >
+                <Icon name={props.todo.done ? "SquareCheck" : "Square"} />
+              </div>
               <div>{props.todo.title}</div>
-              <div class="opacity-60 text-sm ">{props.todo.note}</div>
             </div>
+            <div class="opacity-60 text-sm pl-5">{props.todo.note}</div>
           </div>
           <div
             style={{ "padding-right": "0.375rem" }}
