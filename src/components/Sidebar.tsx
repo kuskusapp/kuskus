@@ -3,12 +3,14 @@ import { onMount } from "solid-js"
 import Split from "split.js"
 import { useGlobalContext } from "~/GlobalContext/store"
 import Icon from "./Icon"
-import { isToday } from "~/lib/lib"
+import { todayDate } from "~/lib/lib"
 import { GoogleClient } from "~/lib/auth"
 import { createEventListener } from "@solid-primitives/event-listener"
 
 export default function Sidebar() {
   const global = useGlobalContext()
+
+  let today = todayDate()
 
   onMount(() => {
     Split(["#sidebar", "#page"], {
@@ -86,16 +88,10 @@ export default function Sidebar() {
               <Icon name="Calendar" />
               <span class="pl-1 overflow-hidden">Today</span>
               <div class="opacity-40 text-xs ml-auto">
-                {global.todos().filter((t) => {
-                  if (!t.done && t.dueDate) {
-                    return isToday(t.dueDate)
-                  }
-                }).length > 0 &&
-                  global.todos().filter((t) => {
-                    if (!t.done && t.dueDate) {
-                      return isToday(t.dueDate)
-                    }
-                  }).length}
+                {
+                  global.todos().filter((t) => !t.done && t.dueDate === today)
+                    .length
+                }
               </div>
             </div>
             <div

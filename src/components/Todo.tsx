@@ -109,7 +109,7 @@ export default function Todo(props: Props) {
             <div class="opacity-50 " style={{ "font-size": "14.8px" }}>
               {props.todo?.dueDate && isToday(props.todo.dueDate)
                 ? "Today"
-                : ""}
+                : props.todo.dueDate}
             </div>
             <Show when={!props.todo.starred}>
               <div>
