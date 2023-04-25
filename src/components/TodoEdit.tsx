@@ -61,12 +61,6 @@ export default function TodoEdit(props: Props) {
     }
   })
 
-  createEffect(() => {
-    if (global.showCalendar()) {
-      autofocus(datePickerRef)
-    }
-  })
-
   return (
     <>
       <div class="flex justify-between cursor-default pl-1.5 pr-1.5 dark:bg-neutral-700 bg-zinc-200 rounded py-2">
