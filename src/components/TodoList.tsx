@@ -213,32 +213,40 @@ export default function Page() {
   )
 
   for (const i of [0, 1, 2, 3] as const) {
-    createShortcut([`${i}`], () => {
-      if (global.focusedTodo() !== 0) {
-        global.setTodos((todos) =>
-          todos.map((t) => {
+    createShortcut(
+      [`${i}`],
+      () => {
+        if (global.focusedTodo() !== 0 && !global.editingTodo()) {
+          global.setTodos((todos) =>
+            todos.map((t) => {
+              if (t.id === global.focusedTodo()) {
+                t.priority = i
+              }
+              return t
+            })
+          )
+        }
+      },
+      { preventDefault: false }
+    )
+  }
+
+  createShortcut(
+    ["4"],
+    () => {
+      if (global.focusedTodo() !== 0 && !global.editingTodo()) {
+        global.setTodos(
+          global.todos().map((t) => {
             if (t.id === global.focusedTodo()) {
-              t.priority = i
+              t.starred = !t.starred
             }
             return t
           })
         )
       }
-    })
-  }
-
-  createShortcut(["4"], () => {
-    if (global.focusedTodo() !== 0) {
-      global.setTodos(
-        global.todos().map((t) => {
-          if (t.id === global.focusedTodo()) {
-            t.starred = !t.starred
-          }
-          return t
-        })
-      )
-    }
-  })
+    },
+    { preventDefault: false }
+  )
 
   return (
     <div id="page" class="flex flex-col" ref={ref}>

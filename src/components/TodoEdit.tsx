@@ -1,9 +1,9 @@
-import { Setter, Show, createEffect, createSignal, onMount } from "solid-js"
+import { Show, createEffect, createSignal, onMount } from "solid-js"
 import { TodoType, useGlobalContext } from "../GlobalContext/store"
 import Icon from "./Icon"
 import { autofocus } from "@solid-primitives/autofocus"
 import { createShortcut } from "@solid-primitives/keyboard"
-import { isToday } from "~/lib/lib"
+import { isToday, todayDate } from "~/lib/lib"
 
 interface Props {
   todo: TodoType
@@ -38,7 +38,9 @@ export default function TodoEdit(props: Props) {
     }
   })
 
-  let titleRef!: HTMLInputElement, noteRef!: HTMLInputElement
+  let titleRef!: HTMLInputElement,
+    noteRef!: HTMLInputElement,
+    datePickerRef!: HTMLInputElement
 
   createEffect(() => {
     if (global.editNoteInTodo()) {
@@ -53,6 +55,12 @@ export default function TodoEdit(props: Props) {
       createShortcut(["ArrowDown"], () => {
         global.setEditNoteInTodo(true)
       })
+    }
+  })
+
+  createEffect(() => {
+    if (global.showCalendar()) {
+      autofocus(datePickerRef)
     }
   })
 
@@ -112,34 +120,17 @@ export default function TodoEdit(props: Props) {
               {props.todo.priority === 0 && <Icon name={"Star"} />}
             </div>
           </Show>
-          <Show
-            when={!global.showCalendar()}
-            fallback={
-              <input
-                class="bg-transparent text-sm opacity-70 w-full outline-none"
-                type="date"
-                id="start"
-                name="trip-start"
-                value="2018-07-22"
-                min="2018-01-01"
-                max="2018-12-31"
-              ></input>
-            }
-          >
-            <div
-              class="opacity-60 text-sm"
-              onClick={() => {
-                global.setShowCalendar(true)
-              }}
-            >
-              {" "}
-              {props.todo?.dueDate && isToday(props.todo.dueDate) ? (
-                "Today"
-              ) : (
-                <Icon name="Calendar"></Icon>
-              )}
-            </div>
-          </Show>
+          <div class="opacity-60 text-sm">
+            <input
+              autofocus
+              ref={datePickerRef}
+              class="bg-transparent text-sm opacity-70 w-full outline-none"
+              type="date"
+              id="start"
+              value={todayDate()}
+              min={todayDate()}
+            ></input>
+          </div>
         </div>
       </div>
     </>

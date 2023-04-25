@@ -5,6 +5,14 @@ export function isToday(date: Date) {
   return today.toDateString() == date.toDateString()
 }
 
+export function todayDate() {
+  let date = new Date()
+  let day = ("0" + date.getDate()).slice(-2)
+  let month = ("0" + (date.getMonth() + 1)).slice(-2)
+  let today = date.getFullYear() + "-" + month + "-" + day
+  return today
+}
+
 export function sortTodosByPriority(todos: TodoType[]) {
   return todos.sort((a, b) => b.priority - a.priority)
 }
