@@ -1,18 +1,22 @@
-import { createShortcut } from "@solid-primitives/keyboard"
-import { Accessor, Setter, createSignal } from "solid-js"
-import { TodoType, useGlobalContext } from "../GlobalContext/store"
-import Icon from "./Icon"
 import { autofocus } from "@solid-primitives/autofocus"
+import { createShortcut } from "@solid-primitives/keyboard"
+import { Show, createEffect, createSignal, onMount } from "solid-js"
+import { todayDate } from "~/lib/lib"
+import { useGlobalContext } from "../GlobalContext/store"
+import Icon from "./Icon"
 
 export default function NewTodo() {
   const global = useGlobalContext()
-  const [input, setInput] = createSignal("")
+  const [title, setTitle] = createSignal("")
+  const [note, setNote] = createSignal("")
+  const [dueDate, setDueDate] = createSignal("")
+  const [showCalendar, setShowCalendar] = createSignal(false)
 
   // TODO: don't use Math.random() for id, find better way
   // id will most likely coming from grafbase so no worries
   createShortcut(["Enter"], () => {
     if (global.editingTodo()) return
-    if (input() === "") {
+    if (title() === "") {
       global.setNewTodo(false)
       global.setEditingTodo(false)
       return
@@ -22,10 +26,12 @@ export default function NewTodo() {
       ...global.todos(),
       {
         id: Math.floor(Math.random() * 100 + 1),
-        title: input(),
+        title: title(),
+        note: note(),
         done: false,
         starred: global.newTodoType() === "starred",
         priority: 0, // TODO: have way to set priority
+        dueDate: dueDate(),
       },
     ])
     global.setOrderedTodos(
@@ -44,20 +50,96 @@ export default function NewTodo() {
     global.setCurrentlyFocusedTodo(global.orderedTodos().length - 1)
   })
 
+  let titleRef!: HTMLInputElement,
+    noteRef!: HTMLInputElement,
+    datePickerRef!: HTMLInputElement
+
+  createEffect(() => {
+    if (global.editNoteInTodo()) {
+      autofocus(noteRef)
+
+      createShortcut(["ArrowUp"], () => {
+        global.setEditNoteInTodo(false)
+      })
+    } else {
+      autofocus(titleRef)
+
+      createShortcut(["ArrowDown"], () => {
+        global.setEditNoteInTodo(true)
+      })
+    }
+  })
+
   return (
-    <div class="flex cursor-default pl-1.5 mb-0.5 dark:bg-neutral-700 bg-zinc-200 rounded py-1">
-      <div style={{ "padding-top": "0.2rem" }}>
-        <Icon name={"Square"} />
+    <div class="flex justify-between cursor-default pl-1.5 pr-1.5 dark:bg-neutral-700 bg-zinc-200 rounded py-2">
+      <div class="w-full">
+        <div class="flex gap-2 items-center">
+          <div>
+            <Icon name={"Square"} />
+          </div>
+          <div class="w-full ">
+            <input
+              value={title()}
+              autofocus
+              ref={titleRef}
+              oninput={(e) => {
+                setTitle(e.target.value)
+              }}
+              style={{
+                outline: "none",
+              }}
+              class=" bg-inherit w-full"
+            ></input>
+          </div>
+        </div>
+        <div class="pl-7">
+          <input
+            autofocus
+            ref={noteRef}
+            class="bg-transparent text-sm opacity-70 w-full outline-none"
+            type="text"
+            oninput={(e) => {
+              setNote(e.target.value)
+            }}
+            placeholder="Notes"
+          />
+        </div>
       </div>
-      <input
-        autofocus
-        ref={autofocus}
-        oninput={(e) => setInput(e.target.value)}
-        style={{
-          outline: "none",
-        }}
-        class="pl-1.5 bg-inherit"
-      ></input>
+      <div
+        style={{ "padding-right": "0.375rem" }}
+        class="flex flex-col justify-between items-end"
+      >
+        <div class="opacity-60 text-sm">
+          <Show
+            when={dueDate() || showCalendar()}
+            fallback={
+              <div
+                class="cursor-pointer"
+                onClick={() => {
+                  setShowCalendar(true)
+                  datePickerRef.focus()
+                }}
+              >
+                <Icon name="Calendar"></Icon>
+              </div>
+            }
+          >
+            <input
+              autofocus
+              ref={datePickerRef}
+              style={{ width: "6.5rem" }}
+              class="bg-transparent text-sm opacity-70 outline-none"
+              type="date"
+              id="start"
+              onchange={(e) => {
+                setDueDate(e.target.value)
+              }}
+              value={dueDate()}
+              min={todayDate()}
+            ></input>
+          </Show>
+        </div>
+      </div>
     </div>
   )
 }
