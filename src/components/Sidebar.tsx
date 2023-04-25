@@ -1,5 +1,5 @@
 import clsx from "clsx"
-import { onMount } from "solid-js"
+import { createEffect, createSignal, onMount } from "solid-js"
 import Split from "split.js"
 import { useGlobalContext } from "~/GlobalContext/store"
 import Icon from "./Icon"

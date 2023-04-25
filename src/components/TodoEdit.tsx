@@ -32,7 +32,7 @@ export default function TodoEdit(props: Props) {
       let indexOfTodoToEdit = global
         .todos()
         .findIndex((todo) => todo.id === props.todo.id)
-      let newTodos = global.todos()
+      let newTodos = [...global.todos()]
       newTodos[indexOfTodoToEdit].title = title()
       newTodos[indexOfTodoToEdit].note = note()
       newTodos[indexOfTodoToEdit].dueDate = dueDate()
@@ -125,7 +125,7 @@ export default function TodoEdit(props: Props) {
                   class="cursor-pointer"
                   onClick={() => {
                     setShowCalendar(true)
-                    autofocus(datePickerRef)
+                    datePickerRef.focus()
                   }}
                 >
                   <Icon name="Calendar"></Icon>
