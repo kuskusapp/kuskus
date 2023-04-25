@@ -15,6 +15,8 @@ export default function TodoEdit(props: Props) {
   const [note, setNote] = createSignal(props.todo.note)
   const [dueDate, setDueDate] = createSignal(props.todo.dueDate)
   const [showCalendar, setShowCalendar] = createSignal(false)
+  const [showSelectPriority, setShowSelectPriority] = createSignal(false)
+  const [selectedPriority, setSelectedPriority] = createSignal<0 | 1 | 2 | 3>(0)
 
   onMount(() => {
     global.setClickTimeStamp(0)
@@ -34,6 +36,10 @@ export default function TodoEdit(props: Props) {
       let newTodos = [...global.todos()]
       newTodos[indexOfTodoToEdit].title = title()
       newTodos[indexOfTodoToEdit].note = note()
+
+      if (selectedPriority()) {
+        newTodos[indexOfTodoToEdit].priority = selectedPriority()
+      }
 
       if (showCalendar() && !dueDate()) {
         newTodos[indexOfTodoToEdit].dueDate = todayDate()
