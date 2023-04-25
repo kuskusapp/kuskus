@@ -1,5 +1,5 @@
 import { createEventListener } from "@solid-primitives/event-listener"
-import { Show, onMount } from "solid-js"
+import { Show, batch, onMount } from "solid-js"
 import { useGlobalContext } from "~/GlobalContext/store"
 import NewTodo from "~/components/NewTodo"
 import Todo from "~/components/Todo"
@@ -19,6 +19,27 @@ export default function All() {
     },
     { passive: true }
   )
+
+  onMount(() => {
+    if (global.orderedTodos().length === 0) {
+      batch(() => {
+        global.setOrderedTodos(
+          global
+            .todos()
+            .filter((t) => !t.done)
+            .sort((a, b) => {
+              if (b.starred && !a.starred) {
+                return 1
+              } else if (a.starred && !b.starred) {
+                return -1
+              }
+              return b.priority - a.priority
+            })
+        )
+        global.setFocusedTodo(global.orderedTodos()[0].id)
+      })
+    }
+  })
 
   // order by priority
   onMount(() => {

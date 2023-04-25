@@ -120,11 +120,18 @@ export default function Sidebar() {
               <Icon name="Calendar" />
               <span class="pl-1 overflow-hidden">Today</span>
               <div class="opacity-40 text-xs ml-auto">
-                {
+                {/* TODO: fix this. should not run filter twice */}
+                {/* maybe make it a runnable function inside the JSX */}
+                {/* save first filter computation, then check if it's > 0 */}
+                {/* have same issue for other places in this component */}
+                {global
+                  .todos()
+                  .filter((t) => !t.done && t.dueDate === todayDate()).length >
+                  0 &&
                   global
                     .todos()
-                    .filter((t) => !t.done && t.dueDate === todayDate()).length
-                }
+                    .filter((t) => !t.done && t.dueDate === todayDate())
+                    .length > 0}
               </div>
             </div>
             <div
