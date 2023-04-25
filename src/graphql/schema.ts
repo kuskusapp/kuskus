@@ -248,6 +248,17 @@ export type UserUpdatePayload = {
   user?: Maybe<User>
 }
 
+export type TodoFragment = {
+  __typename?: "Todo"
+  id: string
+  title: string
+  done: boolean
+  starred: boolean
+  priority: number
+  note?: string | null
+  dueDate?: string | null
+}
+
 export type TodosQueryVariables = Exact<{ [key: string]: never }>
 
 export type TodosQuery = {
@@ -282,6 +293,31 @@ export type CreateTodoMutation = {
   } | null
 }
 
+export const TodoFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "Todo" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "Todo" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "id" } },
+          { kind: "Field", name: { kind: "Name", value: "title" } },
+          { kind: "Field", name: { kind: "Name", value: "done" } },
+          { kind: "Field", name: { kind: "Name", value: "starred" } },
+          { kind: "Field", name: { kind: "Name", value: "priority" } },
+          { kind: "Field", name: { kind: "Name", value: "note" } },
+          { kind: "Field", name: { kind: "Name", value: "dueDate" } },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<TodoFragment, unknown>
 export const TodosDocument = {
   kind: "Document",
   definitions: [
@@ -318,32 +354,8 @@ export const TodosDocument = {
                           kind: "SelectionSet",
                           selections: [
                             {
-                              kind: "Field",
-                              name: { kind: "Name", value: "id" },
-                            },
-                            {
-                              kind: "Field",
-                              name: { kind: "Name", value: "title" },
-                            },
-                            {
-                              kind: "Field",
-                              name: { kind: "Name", value: "done" },
-                            },
-                            {
-                              kind: "Field",
-                              name: { kind: "Name", value: "starred" },
-                            },
-                            {
-                              kind: "Field",
-                              name: { kind: "Name", value: "priority" },
-                            },
-                            {
-                              kind: "Field",
-                              name: { kind: "Name", value: "note" },
-                            },
-                            {
-                              kind: "Field",
-                              name: { kind: "Name", value: "dueDate" },
+                              kind: "FragmentSpread",
+                              name: { kind: "Name", value: "Todo" },
                             },
                           ],
                         },
@@ -354,6 +366,26 @@ export const TodosDocument = {
               ],
             },
           },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "Todo" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "Todo" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "id" } },
+          { kind: "Field", name: { kind: "Name", value: "title" } },
+          { kind: "Field", name: { kind: "Name", value: "done" } },
+          { kind: "Field", name: { kind: "Name", value: "starred" } },
+          { kind: "Field", name: { kind: "Name", value: "priority" } },
+          { kind: "Field", name: { kind: "Name", value: "note" } },
+          { kind: "Field", name: { kind: "Name", value: "dueDate" } },
         ],
       },
     },

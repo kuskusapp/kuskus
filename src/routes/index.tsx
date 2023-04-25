@@ -3,7 +3,7 @@ import { GlobalContextProvider } from "~/GlobalContext/store"
 import { getUser } from "~/lib/auth"
 import App from "~/pages/App"
 import LandingPage from "~/pages/LandingPage"
-import { Query } from "~/graphql/schema"
+import { Query, TodosDocument } from "~/graphql/schema"
 import { grafbase } from "~/lib/graphql"
 
 export default function Home() {
@@ -11,7 +11,8 @@ export default function Home() {
   onMount(async () => {
     const user = await getUser()
     setUser(user)
-    const data = await grafbase.request<Query>()
+    const data = await grafbase.request<Query>(TodosDocument)
+    console.log(data)
   })
 
   return (
