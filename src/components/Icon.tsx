@@ -1,6 +1,6 @@
 interface Props {
   name:
-    | "Today"
+    | "Calendar"
     | "Done"
     | "Square"
     | "SquareCheck"
@@ -24,7 +24,7 @@ interface Props {
 
 export default function Icon(props: Props) {
   switch (props.name) {
-    case "Today":
+    case "Calendar":
       return (
         <svg width="18" height="18" fill="none" viewBox="0 0 24 24">
           <path

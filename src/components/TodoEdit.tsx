@@ -112,15 +112,34 @@ export default function TodoEdit(props: Props) {
               {props.todo.priority === 0 && <Icon name={"Star"} />}
             </div>
           </Show>
-          <div
-            class="opacity-60 text-sm"
-            onClick={() => {
-              global.setShowCalendar(true)
-            }}
+          <Show
+            when={!global.showCalendar()}
+            fallback={
+              <input
+                class="bg-transparent text-sm opacity-70 w-full outline-none"
+                type="date"
+                id="start"
+                name="trip-start"
+                value="2018-07-22"
+                min="2018-01-01"
+                max="2018-12-31"
+              ></input>
+            }
           >
-            {" "}
-            {props.todo?.dueDate && isToday(props.todo.dueDate) ? "Today" : ""}
-          </div>
+            <div
+              class="opacity-60 text-sm"
+              onClick={() => {
+                global.setShowCalendar(true)
+              }}
+            >
+              {" "}
+              {props.todo?.dueDate && isToday(props.todo.dueDate) ? (
+                "Today"
+              ) : (
+                <Icon name="Calendar"></Icon>
+              )}
+            </div>
+          </Show>
         </div>
       </div>
     </>

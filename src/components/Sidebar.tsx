@@ -83,7 +83,7 @@ export default function Sidebar() {
                 global.setFocusedTodo(0)
               }}
             >
-              <Icon name="Today" />
+              <Icon name="Calendar" />
               <span class="pl-1 overflow-hidden">Today</span>
               <div class="opacity-40 text-xs ml-auto">
                 {global.todos().filter((t) => {
