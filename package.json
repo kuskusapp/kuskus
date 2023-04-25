@@ -24,6 +24,7 @@
     "@graphql-codegen/typed-document-node": "^4.0.0",
     "@graphql-codegen/typescript": "^3.0.3",
     "@graphql-codegen/typescript-operations": "^3.0.3",
+    "@graphql-typed-document-node/core": "^3.2.0",
     "@neo4j/graphql": "^3.18.1",
     "@neo4j/graphql-plugin-auth": "^2.2.0",
     "@solid-auth/next": "^0.0.23",

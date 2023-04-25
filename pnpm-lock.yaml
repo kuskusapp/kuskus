@@ -16,6 +16,9 @@ dependencies:
   '@graphql-codegen/typescript-operations':
     specifier: ^3.0.3
     version: 3.0.3(graphql@16.6.0)
+  '@graphql-typed-document-node/core':
+    specifier: ^3.2.0
+    version: 3.2.0(graphql@16.6.0)
   '@neo4j/graphql':
     specifier: ^3.18.1
     version: 3.18.1(graphql@16.6.0)(neo4j-driver@5.7.0)
