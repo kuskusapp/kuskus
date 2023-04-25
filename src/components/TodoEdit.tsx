@@ -13,6 +13,8 @@ export default function TodoEdit(props: Props) {
   const global = useGlobalContext()
   const [title, setTitle] = createSignal("")
   const [note, setNote] = createSignal(props.todo.note)
+  const [dueDate, setDueDate] = createSignal(props.todo.dueDate)
+  const [showCalendar, setShowCalendar] = createSignal(false)
 
   onMount(() => {
     setTitle(props.todo.title)
@@ -33,6 +35,7 @@ export default function TodoEdit(props: Props) {
       let newTodos = global.todos()
       newTodos[indexOfTodoToEdit].title = title()
       newTodos[indexOfTodoToEdit].note = note()
+      newTodos[indexOfTodoToEdit].dueDate = dueDate()
       global.setTodos(newTodos)
       global.setTodoToEdit(0)
     }
@@ -121,15 +124,34 @@ export default function TodoEdit(props: Props) {
             </div>
           </Show>
           <div class="opacity-60 text-sm">
-            <input
-              autofocus
-              ref={datePickerRef}
-              class="bg-transparent text-sm opacity-70 w-full outline-none"
-              type="date"
-              id="start"
-              value={todayDate()}
-              min={todayDate()}
-            ></input>
+            <Show
+              when={props.todo.dueDate || showCalendar()}
+              fallback={
+                <div
+                  class="cursor-pointer"
+                  onClick={() => {
+                    setShowCalendar(true)
+                    autofocus(datePickerRef)
+                  }}
+                >
+                  <Icon name="Calendar"></Icon>
+                </div>
+              }
+            >
+              <input
+                autofocus
+                ref={datePickerRef}
+                style={{ width: "6.5rem" }}
+                class="bg-transparent text-sm opacity-70 outline-none"
+                type="date"
+                id="start"
+                onchange={(e) => {
+                  setDueDate(e.target.value)
+                }}
+                value={props.todo.dueDate ? props.todo.dueDate : todayDate()}
+                min={props.todo.dueDate ? props.todo.dueDate : todayDate()}
+              ></input>
+            </Show>
           </div>
         </div>
       </div>

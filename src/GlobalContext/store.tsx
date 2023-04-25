@@ -8,7 +8,7 @@ export type TodoType = {
   starred: boolean
   priority: 0 | 1 | 2 | 3
   note?: string
-  dueDate?: Date
+  dueDate?: string
 }
 
 export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
@@ -18,7 +18,7 @@ export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
         id: 1,
         title: "Make KusKus",
         done: false,
-        dueDate: new Date(),
+        dueDate: "2023-04-25",
         note: "cover all important use cases",
         starred: true,
         priority: 2,
