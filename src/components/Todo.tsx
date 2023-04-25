@@ -77,7 +77,11 @@ export default function Todo(props: Props) {
         >
           <div
             style={{ display: "flex" }}
-            class={triggerAnimation() ? "animated" : "flex-col justify-center"}
+            class={
+              triggerAnimation()
+                ? "animated flex-col justify-center"
+                : "flex-col justify-center"
+            }
           >
             <div class="flex items-center gap-1">
               <div

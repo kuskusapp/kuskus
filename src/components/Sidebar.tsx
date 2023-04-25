@@ -130,8 +130,7 @@ export default function Sidebar() {
                   0 &&
                   global
                     .todos()
-                    .filter((t) => !t.done && t.dueDate === todayDate())
-                    .length > 0}
+                    .filter((t) => !t.done && t.dueDate === todayDate()).length}
               </div>
             </div>
             <div
