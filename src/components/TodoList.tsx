@@ -59,6 +59,7 @@ export default function Page() {
 
       batch(() => {
         global.setFocusedTodo(0)
+        // TODO: change depending of where you create todo
         global.setNewTodoType("all")
         global.setNewTodo(true)
         global.setChangeFocus(false)

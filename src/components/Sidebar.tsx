@@ -212,7 +212,7 @@ export default function Sidebar() {
                 global.setShowHelpModal(true)
               }}
             >
-              <span class="tooltip rounded shadow-lg p-1 bg-gray-100 -mt-8">
+              <span class="tooltip rounded shadow-lg p-1 bg-gray-100 -mt-8 dark:text-black">
                 Learn KusKus
               </span>
               <Icon name="Question" />
@@ -223,7 +223,7 @@ export default function Sidebar() {
                 // TODO: show settings
               }}
             >
-              <span class="tooltip rounded shadow-lg p-1 bg-gray-100 -mt-8">
+              <span class="tooltip rounded shadow-lg p-1 bg-gray-100 -mt-8 dark:text-black">
                 Settings
               </span>
               <Icon name="Settings" />
@@ -236,7 +236,7 @@ export default function Sidebar() {
                 })
               }}
             >
-              <span class="tooltip rounded shadow-lg p-1 bg-gray-100 -mt-8">
+              <span class="tooltip rounded shadow-lg p-1 bg-gray-100 -mt-8 dark:text-black">
                 Sign Out
               </span>
               <Icon name="SignOut" />
