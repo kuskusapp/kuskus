@@ -16,6 +16,7 @@ export default function Modal() {
     (e) => {
       if (e.target === ref) {
         global.setShowHelpModal(false)
+        global.setNewTodo(false)
       }
     },
     { passive: true }

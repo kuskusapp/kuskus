@@ -21,6 +21,7 @@ export default function Page() {
       if (e.target === ref) {
         global.setFocusedTodo(0)
         global.setTodoToEdit(0)
+        global.setNewTodo(false)
       }
     },
     { passive: true }
@@ -180,6 +181,23 @@ export default function Page() {
   )
 
   createShortcut(
+    ["O"],
+    () => {
+      if (global.newSubtask()) return
+
+      batch(() => {
+        global.setNewSubtask(true)
+        // global.setFocusedTodo(0)
+        // global.setNewTodoType("all")
+        // global.setNewTodo(true)
+        // global.setChangeFocus(false)
+        // global.setGuard(true)
+      })
+    },
+    { preventDefault: false }
+  )
+
+  createShortcut(
     ["T"],
     () => {
       if (
@@ -203,7 +221,7 @@ export default function Page() {
   createShortcut(
     ["F"],
     () => {
-      if (global.editingTodo()) return
+      if (global.editingTodo() || global.newTodo()) return
 
       batch(() => {
         global.setLocalSearch(true)

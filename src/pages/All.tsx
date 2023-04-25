@@ -15,6 +15,7 @@ export default function All() {
       if (e.target === ref) {
         global.setFocusedTodo(0)
         global.setTodoToEdit(0)
+        global.setNewTodo(false)
       }
     },
     { passive: true }

@@ -18,6 +18,7 @@ export default function Home() {
   return (
     <main>
       <GlobalContextProvider>
+        {/* TODO: refresh page will show landing page briefly, fix */}
         <Show when={user()} fallback={LandingPage()}>
           <App />
         </Show>

@@ -9,6 +9,17 @@ export type TodoType = {
   priority: 0 | 1 | 2 | 3
   note?: string
   dueDate?: string
+  subtasks?: [
+    {
+      id: number
+      title: string
+      done: boolean
+      starred: boolean
+      priority: 0 | 1 | 2 | 3
+      note?: string
+      dueDate?: string
+    }
+  ]
 }
 
 export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
@@ -55,6 +66,7 @@ export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
     const [todoToEdit, setTodoToEdit] = createSignal<number>(0)
     const [editingTodo, setEditingTodo] = createSignal<boolean>(false)
     const [newTodo, setNewTodo] = createSignal<boolean>(false)
+    const [newSubtask, setNewSubtask] = createSignal<boolean>(false)
     const [newTodoType, setNewTodoType] = createSignal<string>("")
     const [todoEditInput, setTodoEditInput] = createSignal("")
     const [guard, setGuard] = createSignal(false)
@@ -109,6 +121,8 @@ export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
       setClickTimeStamp,
       changeFocus,
       setChangeFocus,
+      newSubtask,
+      setNewSubtask,
     } as const
   },
   // @ts-expect-error this is just to assert context as non-nullable

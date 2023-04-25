@@ -11,9 +11,12 @@ export default function NewTodo() {
   const [note, setNote] = createSignal("")
   const [dueDate, setDueDate] = createSignal("")
   const [showCalendar, setShowCalendar] = createSignal(false)
+  const [showSelectPriority, setShowSelectPriority] = createSignal(true)
+  const [priority, setPriority] = createSignal<0 | 1 | 2 | 3>(0)
+  const [starred, setStarred] = createSignal(false)
 
   // TODO: don't use Math.random() for id, find better way
-  // id will most likely coming from grafbase so no worries
+  // id will most likely be coming from grafbase so no worries
   createShortcut(["Enter"], () => {
     if (global.editingTodo()) return
     if (title() === "") {
@@ -29,8 +32,8 @@ export default function NewTodo() {
         title: title(),
         note: note(),
         done: false,
-        starred: global.newTodoType() === "starred",
-        priority: 0, // TODO: have way to set priority
+        starred: starred(),
+        priority: priority(),
         dueDate: dueDate(),
       },
     ])
@@ -41,7 +44,7 @@ export default function NewTodo() {
         .sort((a, b) => b.priority - a.priority)
     )
     global.setNewTodo(false)
-    global.setEditingTodo(false)
+    global.setEditingTodo(true)
     global.setNewTodoType("")
     global.setChangeFocus(true)
     global.setFocusedTodo(
@@ -109,6 +112,68 @@ export default function NewTodo() {
         style={{ "padding-right": "0.375rem" }}
         class="flex flex-col justify-between items-end"
       >
+        {/* TODO: don't duplicate like below.. */}
+        <Show when={showSelectPriority()}>
+          <div class="cursor-pointer flex">
+            <div
+              onClick={() => {
+                setPriority(1)
+                setShowSelectPriority(false)
+              }}
+            >
+              <Icon name={"Priority 1"} />
+            </div>
+            <div
+              onClick={() => {
+                setPriority(2)
+                setShowSelectPriority(false)
+              }}
+            >
+              <Icon name={"Priority 2"} />
+            </div>
+            <div
+              onClick={() => {
+                setPriority(3)
+                setShowSelectPriority(false)
+              }}
+            >
+              <Icon name={"Priority 3"} />
+            </div>
+            <div
+              onClick={() => {
+                setStarred(!starred())
+                setShowSelectPriority(false)
+              }}
+            >
+              <Icon name={"Star"} />
+            </div>
+          </div>
+        </Show>
+        <Show when={!starred() && !showSelectPriority()}>
+          <div
+            class="cursor-pointer"
+            onClick={() => {
+              setShowSelectPriority(true)
+            }}
+          >
+            {priority() === 3 && <Icon name={"Priority 3"} />}
+            {priority() === 2 && <Icon name={"Priority 2"} />}
+            {priority() === 1 && <Icon name={"Priority 1"} />}
+          </div>
+        </Show>
+        <Show when={starred() && !showSelectPriority()}>
+          <div
+            class="cursor-pointer"
+            onClick={() => {
+              setShowSelectPriority(true)
+            }}
+          >
+            {priority() === 3 && <Icon name={"StarWithPriority3"} />}
+            {priority() === 2 && <Icon name={"StarWithPriority2"} />}
+            {priority() === 1 && <Icon name={"StarWithPriority1"} />}
+            {priority() === 0 && <Icon name={"Star"} />}
+          </div>
+        </Show>
         <div class="opacity-60 text-sm">
           <Show
             when={dueDate() || showCalendar()}
