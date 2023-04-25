@@ -42,7 +42,8 @@ export default function Todo(props: Props) {
               "dark:bg-neutral-700 bg-zinc-200 rounded",
             global.localSearchResultIds().includes(props.todo.id) &&
               "border rounded border-blue-500",
-            global.localSearchResultId() === props.todo.id && "bg-red-200"
+            global.localSearchResultId() === props.todo.id &&
+              "bg-blue-300 dark:bg-blue-500"
           )}
           style={{
             "border-bottom-width": "1px",
