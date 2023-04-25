@@ -16,7 +16,8 @@ export default function TodoEdit(props: Props) {
   const [dueDate, setDueDate] = createSignal(props.todo.dueDate)
   const [showCalendar, setShowCalendar] = createSignal(false)
   const [showSelectPriority, setShowSelectPriority] = createSignal(false)
-  const [selectedPriority, setSelectedPriority] = createSignal<0 | 1 | 2 | 3>(0)
+  const [priority, setPriority] = createSignal(props.todo.priority)
+  const [starred, setStarred] = createSignal(props.todo.starred)
 
   onMount(() => {
     global.setClickTimeStamp(0)
@@ -36,10 +37,8 @@ export default function TodoEdit(props: Props) {
       let newTodos = [...global.todos()]
       newTodos[indexOfTodoToEdit].title = title()
       newTodos[indexOfTodoToEdit].note = note()
-
-      if (selectedPriority()) {
-        newTodos[indexOfTodoToEdit].priority = selectedPriority()
-      }
+      newTodos[indexOfTodoToEdit].priority = priority()
+      newTodos[indexOfTodoToEdit].starred = starred()
 
       if (showCalendar() && !dueDate()) {
         newTodos[indexOfTodoToEdit].dueDate = todayDate()
@@ -112,19 +111,66 @@ export default function TodoEdit(props: Props) {
         style={{ "padding-right": "0.375rem" }}
         class="flex flex-col justify-between items-end"
       >
-        <Show when={!props.todo.starred}>
-          <div class="">
-            {props.todo.priority === 3 && <Icon name={"Priority 3"} />}
-            {props.todo.priority === 2 && <Icon name={"Priority 2"} />}
-            {props.todo.priority === 1 && <Icon name={"Priority 1"} />}
+        {/* TODO: don't duplicate like below.. */}
+        <Show when={showSelectPriority()}>
+          <div class="cursor-pointer flex">
+            <div
+              onClick={() => {
+                setPriority(1)
+                setShowSelectPriority(false)
+              }}
+            >
+              <Icon name={"Priority 1"} />
+            </div>
+            <div
+              onClick={() => {
+                setPriority(2)
+                setShowSelectPriority(false)
+              }}
+            >
+              <Icon name={"Priority 2"} />
+            </div>
+            <div
+              onClick={() => {
+                setPriority(3)
+                setShowSelectPriority(false)
+              }}
+            >
+              <Icon name={"Priority 3"} />
+            </div>
+            <div
+              onClick={() => {
+                setStarred(!starred())
+                setShowSelectPriority(false)
+              }}
+            >
+              <Icon name={"Star"} />
+            </div>
           </div>
         </Show>
-        <Show when={props.todo.starred}>
-          <div>
-            {props.todo.priority === 3 && <Icon name={"StarWithPriority3"} />}
-            {props.todo.priority === 2 && <Icon name={"StarWithPriority2"} />}
-            {props.todo.priority === 1 && <Icon name={"StarWithPriority1"} />}
-            {props.todo.priority === 0 && <Icon name={"Star"} />}
+        <Show when={!starred() && !showSelectPriority()}>
+          <div
+            class="cursor-pointer"
+            onClick={() => {
+              setShowSelectPriority(true)
+            }}
+          >
+            {priority() === 3 && <Icon name={"Priority 3"} />}
+            {priority() === 2 && <Icon name={"Priority 2"} />}
+            {priority() === 1 && <Icon name={"Priority 1"} />}
+          </div>
+        </Show>
+        <Show when={starred() && !showSelectPriority()}>
+          <div
+            class="cursor-pointer"
+            onClick={() => {
+              setShowSelectPriority(true)
+            }}
+          >
+            {priority() === 3 && <Icon name={"StarWithPriority3"} />}
+            {priority() === 2 && <Icon name={"StarWithPriority2"} />}
+            {priority() === 1 && <Icon name={"StarWithPriority1"} />}
+            {priority() === 0 && <Icon name={"Star"} />}
           </div>
         </Show>
         <div class="opacity-60 text-sm">
