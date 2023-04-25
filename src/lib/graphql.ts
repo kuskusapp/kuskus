@@ -12,7 +12,7 @@ export const grafbaseServer = new GraphQLClient(endpoint, {
 // for client calls I think
 export const grafbase = new GraphQLClient(endpoint, {
   headers: {
-    Authorization: `Bearer ${(await GoogleClient.getUser())?.id_token}`,
+    authorization: `Bearer ${(await GoogleClient.getUser())?.id_token}`,
   },
 })
 
