@@ -6,7 +6,7 @@ mutation CreateTodo($todo: TodoCreateInput!) {
       done
       starred
       priority
-      description
+      note
       dueDate
     }
   }
