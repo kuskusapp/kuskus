@@ -35,7 +35,13 @@ export default function TodoEdit(props: Props) {
       let newTodos = [...global.todos()]
       newTodos[indexOfTodoToEdit].title = title()
       newTodos[indexOfTodoToEdit].note = note()
-      newTodos[indexOfTodoToEdit].dueDate = dueDate()
+
+      if (showCalendar() && !dueDate()) {
+        newTodos[indexOfTodoToEdit].dueDate = todayDate()
+      } else {
+        newTodos[indexOfTodoToEdit].dueDate = dueDate()
+      }
+
       global.setTodos(newTodos)
       global.setTodoToEdit(0)
     }
