@@ -1,5 +1,5 @@
 import clsx from "clsx"
-import { createEffect, createSignal, onMount } from "solid-js"
+import { batch, createEffect, createSignal, onMount } from "solid-js"
 import Split from "split.js"
 import { useGlobalContext } from "~/GlobalContext/store"
 import Icon from "./Icon"
@@ -9,8 +9,6 @@ import { createEventListener } from "@solid-primitives/event-listener"
 
 export default function Sidebar() {
   const global = useGlobalContext()
-
-  let today = todayDate()
 
   onMount(() => {
     Split(["#sidebar", "#page"], {
@@ -63,8 +61,25 @@ export default function Sidebar() {
                   "rounded dark:bg-neutral-700 bg-zinc-200"
               )}
               onClick={() => {
-                global.setActivePage("All")
-                global.setFocusedTodo(0)
+                batch(() => {
+                  global.setActivePage("All")
+                  global.setOrderedTodos(
+                    global
+                      .todos()
+                      .filter((t) => !t.done)
+                      .sort((a, b) => {
+                        if (b.starred && !a.starred) {
+                          return 1
+                        } else if (a.starred && !b.starred) {
+                          return -1
+                        }
+                        return b.priority - a.priority
+                      })
+                  )
+                  if (global.orderedTodos().length > 0) {
+                    global.setFocusedTodo(global.orderedTodos()[0].id)
+                  }
+                })
               }}
             >
               <Icon name="Inbox" />
@@ -81,16 +96,34 @@ export default function Sidebar() {
                   "rounded dark:bg-neutral-700 bg-zinc-200"
               )}
               onClick={() => {
-                global.setActivePage("Today")
-                global.setFocusedTodo(0)
+                batch(() => {
+                  global.setActivePage("Today")
+                  global.setOrderedTodos(
+                    global
+                      .todos()
+                      .filter((t) => !t.done && t.dueDate === todayDate())
+                      .sort((a, b) => {
+                        if (b.starred && !a.starred) {
+                          return 1
+                        } else if (a.starred && !b.starred) {
+                          return -1
+                        }
+                        return b.priority - a.priority
+                      })
+                  )
+                  if (global.orderedTodos().length > 0) {
+                    global.setFocusedTodo(global.orderedTodos()[0].id)
+                  }
+                })
               }}
             >
               <Icon name="Calendar" />
               <span class="pl-1 overflow-hidden">Today</span>
               <div class="opacity-40 text-xs ml-auto">
                 {
-                  global.todos().filter((t) => !t.done && t.dueDate === today)
-                    .length
+                  global
+                    .todos()
+                    .filter((t) => !t.done && t.dueDate === todayDate()).length
                 }
               </div>
             </div>
@@ -101,8 +134,25 @@ export default function Sidebar() {
                   "rounded dark:bg-neutral-700 bg-zinc-200"
               )}
               onClick={() => {
-                global.setActivePage("Starred")
-                global.setFocusedTodo(0)
+                batch(() => {
+                  global.setActivePage("Starred")
+                  global.setOrderedTodos(
+                    global
+                      .todos()
+                      .filter((t) => !t.done && t.starred)
+                      .sort((a, b) => {
+                        if (b.starred && !a.starred) {
+                          return 1
+                        } else if (a.starred && !b.starred) {
+                          return -1
+                        }
+                        return b.priority - a.priority
+                      })
+                  )
+                  if (global.orderedTodos().length > 0) {
+                    global.setFocusedTodo(global.orderedTodos()[0].id)
+                  }
+                })
               }}
             >
               <Icon name="Star" />
@@ -123,8 +173,26 @@ export default function Sidebar() {
                   "rounded dark:bg-neutral-700 bg-zinc-200"
               )}
               onClick={() => {
-                global.setActivePage("Done")
-                global.setFocusedTodo(0)
+                batch(() => {
+                  global.setActivePage("Done")
+                  global.setOrderedTodos(
+                    global
+                      .todos()
+                      .filter((t) => t.done)
+                      // TODO: filter by recently added to done
+                      .sort((a, b) => {
+                        if (b.starred && !a.starred) {
+                          return 1
+                        } else if (a.starred && !b.starred) {
+                          return -1
+                        }
+                        return b.priority - a.priority
+                      })
+                  )
+                  if (global.orderedTodos().length > 0) {
+                    global.setFocusedTodo(global.orderedTodos()[0].id)
+                  }
+                })
               }}
             >
               <Icon name="Done" />

@@ -1,10 +1,8 @@
 import { createEventListener } from "@solid-primitives/event-listener"
-import { createShortcut } from "@solid-primitives/keyboard"
-import { Show, batch, createEffect, createSignal, onMount } from "solid-js"
+import { Show, onMount } from "solid-js"
 import { useGlobalContext } from "~/GlobalContext/store"
 import NewTodo from "~/components/NewTodo"
 import Todo from "~/components/Todo"
-import { findIndexOfId } from "~/lib/lib"
 
 export default function All() {
   const global = useGlobalContext()
@@ -21,22 +19,6 @@ export default function All() {
     },
     { passive: true }
   )
-
-  onMount(() => {
-    global.setOrderedTodos(
-      global
-        .todos()
-        .filter((t) => !t.done)
-        .sort((a, b) => {
-          if (b.starred && !a.starred) {
-            return 1
-          } else if (a.starred && !b.starred) {
-            return -1
-          }
-          return b.priority - a.priority
-        })
-    )
-  })
 
   // order by priority
   onMount(() => {
