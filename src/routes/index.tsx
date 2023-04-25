@@ -11,8 +11,8 @@ export default function Home() {
   onMount(async () => {
     const user = await getUser()
     setUser(user)
-    const data = await grafbase.request<Query>(TodosDocument)
-    console.log(data)
+    // const data = await grafbase.request<Query>(TodosDocument)
+    // console.log(data)
   })
 
   return (

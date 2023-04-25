@@ -93,7 +93,7 @@ export default function Todo(props: Props) {
                   setTriggerAnimation(false)
                 }, 300)
               }}
-              style={{ "padding-top": "0.25rem" }}
+              style={{ "padding-top": "0.22rem" }}
             >
               <Icon name={props.todo.done ? "SquareCheck" : "Square"} />
             </div>
