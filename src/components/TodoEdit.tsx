@@ -48,19 +48,7 @@ export default function TodoEdit(props: Props) {
         newTodos[indexOfTodoToEdit].dueDate = dueDate()
       }
 
-      await grafbase.request<Mutation>(TodoUpdateDocument, {
-        id: props.todo.id,
-        todo: {
-          title: props.todo.title,
-          done: props.todo.done,
-          starred: props.todo.starred,
-          priority: props.todo.priority,
-          note: props.todo.note,
-          dueDate: props.todo.dueDate,
-        },
-      })
-
-      global.setRunMutation(props.todo.id)
+      global.setRunMutateTodo(props.todo.id)
       global.setTodos(newTodos)
       global.setTodoToEdit("")
     }

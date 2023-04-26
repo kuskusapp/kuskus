@@ -34,7 +34,7 @@ export type TodoType = {
 export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
   () => {
     const [todos, setTodos] = createSignal<TodoType[]>([])
-    const [runMutation, setRunMutation] = createSignal("")
+    const [runMutateTodo, setRunMutateTodo] = createSignal("") // id of the todo to mutate
 
     onMount(async () => {
       // await createTodosForDev()
@@ -46,27 +46,27 @@ export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
       }
     })
 
-    // createEffect(async () => {
-    //   if (runMutation() !== "") {
-    //     untrack(async () => {
-    //       if (todos().length > 0) {
-    //         let todo = todos().find((todo) => todo.id === runMutation())
-    //         await grafbase.request<Mutation>(TodoUpdateDocument, {
-    //           id: runMutation(),
-    //           todo: {
-    //             title: todo?.title,
-    //             done: todo?.done,
-    //             starred: todo?.starred,
-    //             priority: todo?.priority,
-    //             note: todo?.note,
-    //             dueDate: todo?.dueDate,
-    //           },
-    //         })
-    //         setRunMutation("")
-    //       }
-    //     })
-    //   }
-    // })
+    createEffect(async () => {
+      if (runMutateTodo() !== "") {
+        untrack(async () => {
+          if (todos().length > 0) {
+            let todo = todos().find((todo) => todo.id === runMutateTodo())
+            await grafbase.request<Mutation>(TodoUpdateDocument, {
+              id: runMutateTodo(),
+              todo: {
+                title: todo?.title,
+                done: todo?.done,
+                starred: todo?.starred,
+                priority: todo?.priority,
+                note: todo?.note,
+                dueDate: todo?.dueDate,
+              },
+            })
+            setRunMutateTodo("")
+          }
+        })
+      }
+    })
 
     const [activePage, setActivePage] = createSignal("All")
     const [localSearch, setLocalSearch] = createSignal(false)
@@ -135,8 +135,8 @@ export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
       setChangeFocus,
       newSubtask,
       setNewSubtask,
-      runMutation,
-      setRunMutation,
+      runMutateTodo,
+      setRunMutateTodo,
     } as const
   },
   // @ts-expect-error this is just to assert context as non-nullable
