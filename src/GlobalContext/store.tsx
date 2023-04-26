@@ -50,12 +50,15 @@ export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
           if (todos().length > 0) {
             let todo = todos().find((todo) => todo.id === runMutation())
             await grafbase.request<Mutation>(TodoUpdateDocument, {
-              title: todo?.title,
-              done: todo?.done,
-              starred: todo?.starred,
-              priority: todo?.priority,
-              note: todo?.note,
-              dueDate: todo?.dueDate,
+              id: runMutation(),
+              todo: {
+                title: todo?.title,
+                done: todo?.done,
+                starred: todo?.starred,
+                priority: todo?.priority,
+                note: todo?.note,
+                dueDate: todo?.dueDate,
+              },
             })
             setRunMutation("")
           }
