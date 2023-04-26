@@ -72,7 +72,6 @@ export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
           setTodos([...todos(), todo?.node])
         })
       }
-      console.log(todos(), "todos")
     })
     const [activePage, setActivePage] = createSignal("All")
     const [localSearch, setLocalSearch] = createSignal(false)

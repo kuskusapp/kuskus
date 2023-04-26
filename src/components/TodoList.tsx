@@ -104,9 +104,7 @@ export default function Page() {
         findIndexOfId(global.orderedTodos(), global.focusedTodo()) ===
         global.orderedTodos().length - 1
       ) {
-        global.setFocusedTodo(
-          findIndexOfId(global.orderedTodos(), global.focusedTodo())
-        )
+        global.setFocusedTodo(global.orderedTodos()[0].id)
       } else {
         global.setFocusedTodo(
           global.orderedTodos()[

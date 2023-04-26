@@ -23,9 +23,7 @@ export default function All() {
 
   createEffect(() => {
     if (global.todos().length > 0) {
-      console.log(global.todos(), "todos here")
       untrack(() => {
-        console.log("untrack run")
         batch(() => {
           global.setOrderedTodos(
             global
@@ -40,7 +38,6 @@ export default function All() {
                 return b.priority - a.priority
               })
           )
-          console.log(global.orderedTodos(), "ordered")
           global.setFocusedTodo(global.orderedTodos()[0].id)
         })
       })
