@@ -89,14 +89,7 @@ export default function Todo(props: Props) {
                 onClick={() => {
                   setTriggerAnimation(true)
                   setTimeout(() => {
-                    global.setTodos(
-                      global.todos().map((t) => {
-                        if (t.title === props.todo.title) {
-                          return { ...t, done: !t.done }
-                        }
-                        return t
-                      })
-                    )
+                    global.todosState.toggleTodo(props.todo.id)
                     setTriggerAnimation(false)
                   }, 300)
                 }}

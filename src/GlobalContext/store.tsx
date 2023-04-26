@@ -1,14 +1,6 @@
-import { createEffect, createSignal, onMount, untrack } from "solid-js"
+import { createSignal } from "solid-js"
 import { createContextProvider } from "@solid-primitives/context"
-import { grafbase } from "~/lib/graphql"
-import {
-  CreateTodoDocument,
-  Mutation,
-  Query,
-  TodoUpdateDocument,
-  TodosDocument,
-} from "~/graphql/schema"
-import { createTodosForDev } from "~/lib/local"
+import { createTodosState } from "./todos"
 
 export type TodoType = {
   id: string
@@ -33,42 +25,7 @@ export type TodoType = {
 
 export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
   () => {
-    const [todos, setTodos] = createSignal<TodoType[]>([])
-    const [runMutateTodo, setRunMutateTodo] = createSignal("") // id of the todo to mutate
-
-    onMount(async () => {
-      // await createTodosForDev()
-      const res = await grafbase.request<Query>(TodosDocument)
-      if (res.todoCollection?.edges) {
-        res.todoCollection.edges.map((todo) => {
-          setTodos([...todos(), todo?.node as TodoType])
-        })
-      }
-    })
-
-    createEffect(async () => {
-      if (runMutateTodo() !== "") {
-        untrack(async () => {
-          if (todos().length > 0) {
-            let todo = todos().find((todo) => todo.id === runMutateTodo())
-            console.log(todo?.priority, "priority")
-            console.log(runMutateTodo())
-            await grafbase.request<Mutation>(TodoUpdateDocument, {
-              id: runMutateTodo(),
-              todo: {
-                title: todo?.title,
-                done: todo?.done,
-                starred: todo?.starred,
-                priority: { set: todo?.priority },
-                note: todo?.note,
-                dueDate: todo?.dueDate,
-              },
-            })
-            setRunMutateTodo("")
-          }
-        })
-      }
-    })
+    const todosState = createTodosState()
 
     const [activePage, setActivePage] = createSignal("All")
     const [localSearch, setLocalSearch] = createSignal(false)
@@ -95,10 +52,9 @@ export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
     const [changeFocus, setChangeFocus] = createSignal(true)
 
     return {
+      todosState,
       activePage,
       setActivePage,
-      todos,
-      setTodos,
       focusedTodo,
       setFocusedTodo,
       todoToEdit,
@@ -137,8 +93,6 @@ export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
       setChangeFocus,
       newSubtask,
       setNewSubtask,
-      runMutateTodo,
-      setRunMutateTodo,
     } as const
   },
   // @ts-expect-error this is just to assert context as non-nullable

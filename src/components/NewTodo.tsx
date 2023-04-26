@@ -4,6 +4,7 @@ import { Show, createEffect, createSignal, onMount } from "solid-js"
 import { todayDate } from "~/lib/lib"
 import { useGlobalContext } from "../GlobalContext/store"
 import Icon from "./Icon"
+import { createId } from "~/GlobalContext/todos"
 
 export default function NewTodo() {
   const global = useGlobalContext()
@@ -24,20 +25,17 @@ export default function NewTodo() {
       return
     }
 
-    global.setTodos([
-      ...global.todos(),
-      {
-        id: Math.floor(Math.random() * 100 + 1),
-        title: title(),
-        note: note(),
-        done: false,
-        starred: starred(),
-        priority: priority(),
-        dueDate: dueDate(),
-      },
-    ])
+    global.todosState.addTodo({
+      id: createId(),
+      title: title(),
+      note: note(),
+      done: false,
+      starred: starred(),
+      priority: priority(),
+      dueDate: dueDate(),
+    })
     global.setOrderedTodos(
-      global
+      global.todosState
         .todos()
         .filter((t) => !t.done)
         .sort((a, b) => b.priority - a.priority)

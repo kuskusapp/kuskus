@@ -8,7 +8,7 @@ export default function Today() {
   return (
     <div class="p-16 pt-6">
       <h1 class="font-bold text-3xl mb-8">Today</h1>
-      {global
+      {global.todosState
         .todos()
         .filter((t) => !t.done && t.dueDate === todayDate())
         .sort((a, b) => {

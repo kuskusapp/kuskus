@@ -15,7 +15,7 @@ export default function App() {
       batch(() => {
         global.setActivePage("All")
         global.setOrderedTodos(
-          global
+          global.todosState
             .todos()
             .filter((t) => !t.done)
             .sort((a, b) => {
@@ -39,7 +39,7 @@ export default function App() {
       batch(() => {
         global.setActivePage("Today")
         global.setOrderedTodos(
-          global
+          global.todosState
             .todos()
             .filter((t) => !t.done && t.dueDate === todayDate())
             .sort((a, b) => {
@@ -65,7 +65,7 @@ export default function App() {
       batch(() => {
         global.setActivePage("Starred")
         global.setOrderedTodos(
-          global
+          global.todosState
             .todos()
             .filter((t) => !t.done && t.starred)
             .sort((a, b) => {
@@ -91,7 +91,7 @@ export default function App() {
       batch(() => {
         global.setActivePage("Done")
         global.setOrderedTodos(
-          global
+          global.todosState
             .todos()
             .filter((t) => t.done)
             // TODO: filter by recently added to done

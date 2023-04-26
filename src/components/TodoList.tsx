@@ -31,9 +31,7 @@ export default function Page() {
     ["Backspace"],
     () => {
       if (!global.localSearch() && !global.editingTodo()) {
-        global.setTodos(
-          global.todos().filter((todo) => todo.id !== global.focusedTodo())
-        )
+        global.todosState.removeTodo(global.focusedTodo())
 
         let todoIdToFocus =
           global
@@ -234,14 +232,10 @@ export default function Page() {
       [`${i}`],
       () => {
         if (global.focusedTodo() !== "" && !global.editingTodo()) {
-          global.setTodos((todos) =>
-            todos.map((t) => {
-              if (t.id === global.focusedTodo()) {
-                t.priority = i
-              }
-              return t
-            })
-          )
+          global.todosState.updateTodo(global.focusedTodo(), (todo) => ({
+            ...todo,
+            priority: i,
+          }))
         }
       },
       { preventDefault: false }
@@ -252,14 +246,10 @@ export default function Page() {
     ["4"],
     () => {
       if (global.focusedTodo() !== "" && !global.editingTodo()) {
-        global.setTodos(
-          global.todos().map((t) => {
-            if (t.id === global.focusedTodo()) {
-              t.starred = !t.starred
-            }
-            return t
-          })
-        )
+        global.todosState.updateTodo(global.focusedTodo(), (todo) => ({
+          ...todo,
+          starred: !todo.starred,
+        }))
       }
     },
     { preventDefault: false }

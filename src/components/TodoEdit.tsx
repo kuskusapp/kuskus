@@ -27,29 +27,21 @@ export default function TodoEdit(props: Props) {
 
   createEffect(async () => {
     if (!global.editingTodo()) {
+      // REMOVE
       if (title() === "") {
-        global.setTodos(
-          global.todos().filter((todo) => todo.id !== props.todo.id)
-        )
+        global.todosState.removeTodo(props.todo.id)
         return
       }
-      let indexOfTodoToEdit = global
-        .todos()
-        .findIndex((todo) => todo.id === props.todo.id)
-      let newTodos = [...global.todos()]
-      newTodos[indexOfTodoToEdit].title = title()
-      newTodos[indexOfTodoToEdit].note = note()
-      newTodos[indexOfTodoToEdit].priority = priority()
-      newTodos[indexOfTodoToEdit].starred = starred()
 
-      if (showCalendar() && !dueDate()) {
-        newTodos[indexOfTodoToEdit].dueDate = todayDate()
-      } else {
-        newTodos[indexOfTodoToEdit].dueDate = dueDate()
-      }
-
-      global.setRunMutateTodo(props.todo.id)
-      global.setTodos(newTodos)
+      // UPDATE
+      global.todosState.updateTodo(props.todo.id, (p) => ({
+        ...p,
+        title: title(),
+        note: note(),
+        priority: priority(),
+        starred: starred(),
+        dueDate: showCalendar() && !dueDate() ? todayDate() : dueDate(),
+      }))
       global.setTodoToEdit("")
     }
   })
