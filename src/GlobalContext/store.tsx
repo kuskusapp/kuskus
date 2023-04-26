@@ -33,17 +33,19 @@ export type TodoType = {
 export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
   () => {
     const [todos, setTodos] = createSignal<TodoType[]>([])
+    const [mounted, setMounted] = createSignal(false)
     onMount(async () => {
       const res = await grafbase.request<Query>(TodosDocument)
       if (res.todoCollection?.edges) {
         res.todoCollection.edges.map((todo) => {
-          setTodos([...todos(), todo?.node])
+          setTodos([...todos(), todo?.node as TodoType])
         })
       }
+      setMounted(true)
     })
 
     createEffect(async () => {
-      if (todos().length > 0) {
+      if (mounted() && todos().length > 0) {
         const res = await grafbase.request<Mutation>(TodoUpdateDocument, {
           id: "todo_01GYYYEEMR8EF1CC8F8AA0N29F",
           title: "New title",
