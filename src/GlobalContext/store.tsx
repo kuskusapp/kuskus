@@ -33,7 +33,8 @@ export type TodoType = {
 export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
   () => {
     const [todos, setTodos] = createSignal<TodoType[]>([])
-    const [mounted, setMounted] = createSignal(false)
+    const [runMutation, setRunMutation] = createSignal("")
+
     onMount(async () => {
       const res = await grafbase.request<Query>(TodosDocument)
       if (res.todoCollection?.edges) {
@@ -41,14 +42,23 @@ export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
           setTodos([...todos(), todo?.node as TodoType])
         })
       }
-      setMounted(true)
     })
 
     createEffect(async () => {
-      if (mounted() && todos().length > 0) {
-        const res = await grafbase.request<Mutation>(TodoUpdateDocument, {
-          id: "todo_01GYYYEEMR8EF1CC8F8AA0N29F",
-          title: "New title",
+      if (runMutation() !== "") {
+        untrack(async () => {
+          if (todos().length > 0) {
+            let todo = todos().find((todo) => todo.id === runMutation())
+            await grafbase.request<Mutation>(TodoUpdateDocument, {
+              title: todo?.title,
+              done: todo?.done,
+              starred: todo?.starred,
+              priority: todo?.priority,
+              note: todo?.note,
+              dueDate: todo?.dueDate,
+            })
+            setRunMutation("")
+          }
         })
       }
     })
@@ -120,6 +130,8 @@ export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
       setChangeFocus,
       newSubtask,
       setNewSubtask,
+      runMutation,
+      setRunMutation,
     } as const
   },
   // @ts-expect-error this is just to assert context as non-nullable

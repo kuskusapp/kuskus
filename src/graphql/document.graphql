@@ -31,6 +31,11 @@ mutation TodoUpdate($id: ID!, $title: String!) {
     todo {
       id
       title
+      done
+      starred
+      priority
+      note
+      dueDate
     }
   }
 }
