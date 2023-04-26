@@ -8,6 +8,7 @@ import {
   TodoUpdateDocument,
   TodosDocument,
 } from "~/graphql/schema"
+import { createTodosForDev } from "~/lib/local"
 
 export type TodoType = {
   id: string
@@ -36,6 +37,7 @@ export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
     const [runMutation, setRunMutation] = createSignal("")
 
     onMount(async () => {
+      // await createTodosForDev()
       const res = await grafbase.request<Query>(TodosDocument)
       if (res.todoCollection?.edges) {
         res.todoCollection.edges.map((todo) => {
@@ -44,27 +46,27 @@ export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
       }
     })
 
-    createEffect(async () => {
-      if (runMutation() !== "") {
-        untrack(async () => {
-          if (todos().length > 0) {
-            let todo = todos().find((todo) => todo.id === runMutation())
-            await grafbase.request<Mutation>(TodoUpdateDocument, {
-              id: runMutation(),
-              todo: {
-                title: todo?.title,
-                done: todo?.done,
-                starred: todo?.starred,
-                priority: todo?.priority,
-                note: todo?.note,
-                dueDate: todo?.dueDate,
-              },
-            })
-            setRunMutation("")
-          }
-        })
-      }
-    })
+    // createEffect(async () => {
+    //   if (runMutation() !== "") {
+    //     untrack(async () => {
+    //       if (todos().length > 0) {
+    //         let todo = todos().find((todo) => todo.id === runMutation())
+    //         await grafbase.request<Mutation>(TodoUpdateDocument, {
+    //           id: runMutation(),
+    //           todo: {
+    //             title: todo?.title,
+    //             done: todo?.done,
+    //             starred: todo?.starred,
+    //             priority: todo?.priority,
+    //             note: todo?.note,
+    //             dueDate: todo?.dueDate,
+    //           },
+    //         })
+    //         setRunMutation("")
+    //       }
+    //     })
+    //   }
+    // })
 
     const [activePage, setActivePage] = createSignal("All")
     const [localSearch, setLocalSearch] = createSignal(false)

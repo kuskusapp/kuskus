@@ -391,6 +391,7 @@ export type UserUpdatePayload = {
 
 export type TodoFragment = {
   __typename?: "Todo"
+  id: string
   title: string
   done: boolean
   starred: boolean
@@ -409,6 +410,7 @@ export type TodosQuery = {
       __typename?: "TodoEdge"
       node: {
         __typename?: "Todo"
+        id: string
         title: string
         done: boolean
         starred: boolean
@@ -458,6 +460,7 @@ export const TodoFragmentDoc = {
       selectionSet: {
         kind: "SelectionSet",
         selections: [
+          { kind: "Field", name: { kind: "Name", value: "id" } },
           { kind: "Field", name: { kind: "Name", value: "title" } },
           { kind: "Field", name: { kind: "Name", value: "done" } },
           { kind: "Field", name: { kind: "Name", value: "starred" } },
@@ -530,6 +533,7 @@ export const TodosDocument = {
       selectionSet: {
         kind: "SelectionSet",
         selections: [
+          { kind: "Field", name: { kind: "Name", value: "id" } },
           { kind: "Field", name: { kind: "Name", value: "title" } },
           { kind: "Field", name: { kind: "Name", value: "done" } },
           { kind: "Field", name: { kind: "Name", value: "starred" } },
