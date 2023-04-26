@@ -48,8 +48,8 @@ export default function TodoEdit(props: Props) {
         newTodos[indexOfTodoToEdit].dueDate = dueDate()
       }
 
-      global.setRunMutateTodo(props.todo.id)
       global.setTodos(newTodos)
+      global.setRunMutateTodo(props.todo.id)
       global.setTodoToEdit("")
     }
   })
