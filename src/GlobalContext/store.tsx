@@ -25,10 +25,7 @@ export type TodoType = {
 
 export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
   () => {
-    // const [todos, setTodos] = createSignal()
     const todosState = createTodosState()
-    todosState.todos()
-    // const todosState = {}
 
     const [activePage, setActivePage] = createSignal("All")
     const [localSearch, setLocalSearch] = createSignal(false)
