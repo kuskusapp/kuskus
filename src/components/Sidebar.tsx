@@ -65,7 +65,7 @@ export default function Sidebar() {
                 batch(() => {
                   global.setActivePage("All")
                   global.setOrderedTodos(
-                    global
+                    global.todosState
                       .todos()
                       .filter((t) => !t.done)
                       .sort((a, b) => {
@@ -86,8 +86,8 @@ export default function Sidebar() {
               <Icon name="Inbox" />
               <span class="pl-1 overflow-hidden">All</span>
               <div class="opacity-40 text-xs ml-auto">
-                {global.todos().filter((t) => !t.done).length > 0 &&
-                  global.todos().filter((t) => !t.done).length}
+                {global.todosState.todos().filter((t) => !t.done).length > 0 &&
+                  global.todosState.todos().filter((t) => !t.done).length}
               </div>
             </div>
             <div
@@ -100,7 +100,7 @@ export default function Sidebar() {
                 batch(() => {
                   global.setActivePage("Today")
                   global.setOrderedTodos(
-                    global
+                    global.todosState
                       .todos()
                       .filter((t) => !t.done && t.dueDate === todayDate())
                       .sort((a, b) => {
@@ -125,11 +125,11 @@ export default function Sidebar() {
                 {/* maybe make it a runnable function inside the JSX */}
                 {/* save first filter computation, then check if it's > 0 */}
                 {/* have same issue for other places in this component */}
-                {global
+                {global.todosState
                   .todos()
                   .filter((t) => !t.done && t.dueDate === todayDate()).length >
                   0 &&
-                  global
+                  global.todosState
                     .todos()
                     .filter((t) => !t.done && t.dueDate === todayDate()).length}
               </div>
@@ -144,7 +144,7 @@ export default function Sidebar() {
                 batch(() => {
                   global.setActivePage("Starred")
                   global.setOrderedTodos(
-                    global
+                    global.todosState
                       .todos()
                       .filter((t) => !t.done && t.starred)
                       .sort((a, b) => {
@@ -166,11 +166,12 @@ export default function Sidebar() {
               <span class="pl-1 overflow-hidden">Starred</span>
               <div class="opacity-40 text-xs ml-auto">
                 {/* TODO: not good, should not run filter twice */}
-                {global.todos().filter((t) => {
+                {global.todosState.todos().filter((t) => {
                   if (!t.done && t.starred) {
                     return true
                   }
-                }).length > 0 && global.todos().filter((t) => t.starred).length}
+                }).length > 0 &&
+                  global.todosState.todos().filter((t) => t.starred).length}
               </div>
             </div>
             <div
@@ -183,7 +184,7 @@ export default function Sidebar() {
                 batch(() => {
                   global.setActivePage("Done")
                   global.setOrderedTodos(
-                    global
+                    global.todosState
                       .todos()
                       .filter((t) => t.done)
                       // TODO: filter by recently added to done

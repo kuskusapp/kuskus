@@ -1,6 +1,6 @@
 import { autofocus } from "@solid-primitives/autofocus"
 import { createShortcut } from "@solid-primitives/keyboard"
-import { Show, createEffect, createSignal, onMount } from "solid-js"
+import { Show, batch, createEffect, createSignal, onMount } from "solid-js"
 import { todayDate } from "~/lib/lib"
 import { TodoType, useGlobalContext } from "../GlobalContext/store"
 import Icon from "./Icon"
@@ -27,30 +27,24 @@ export default function TodoEdit(props: Props) {
 
   createEffect(async () => {
     if (!global.editingTodo()) {
+      // REMOVE
       if (title() === "") {
-        global.setTodos(
-          global.todos().filter((todo) => todo.id !== props.todo.id)
-        )
+        global.todosState.removeTodo(props.todo.id)
         return
       }
-      let indexOfTodoToEdit = global
-        .todos()
-        .findIndex((todo) => todo.id === props.todo.id)
-      let newTodos = [...global.todos()]
-      newTodos[indexOfTodoToEdit].title = title()
-      newTodos[indexOfTodoToEdit].note = note()
-      newTodos[indexOfTodoToEdit].priority = priority()
-      newTodos[indexOfTodoToEdit].starred = starred()
 
-      if (showCalendar() && !dueDate()) {
-        newTodos[indexOfTodoToEdit].dueDate = todayDate()
-      } else {
-        newTodos[indexOfTodoToEdit].dueDate = dueDate()
-      }
-
-      global.setTodos(newTodos)
-      global.setRunMutateTodo(props.todo.id)
-      global.setTodoToEdit("")
+      // UPDATE
+      batch(() => {
+        global.todosState.updateTodo(props.todo.id, (p) => ({
+          ...p,
+          title: title(),
+          note: note(),
+          priority: priority(),
+          starred: starred(),
+          dueDate: showCalendar() && !dueDate() ? todayDate() : dueDate(),
+        }))
+        global.setTodoToEdit("")
+      })
     }
   })
 

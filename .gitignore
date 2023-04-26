@@ -24,3 +24,6 @@ gitignore
 # System Files
 .DS_Store
 Thumbs.db
+
+# Vite
+vite.config.ts.timestamp-*-*.mjs

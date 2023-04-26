@@ -25,9 +25,21 @@ dependencies:
   '@solid-primitives/event-listener':
     specifier: ^2.2.10
     version: 2.2.10(solid-js@1.7.3)
+  '@solid-primitives/flux-store':
+    specifier: ^0.0.2
+    version: 0.0.2(solid-js@1.7.3)
   '@solid-primitives/keyboard':
     specifier: ^1.2.0
     version: 1.2.0(solid-js@1.7.3)
+  '@solid-primitives/keyed':
+    specifier: ^1.2.0
+    version: 1.2.0(solid-js@1.7.3)
+  '@solid-primitives/scheduled':
+    specifier: ^1.3.2
+    version: 1.3.2(solid-js@1.7.3)
+  '@solid-primitives/utils':
+    specifier: ^6.1.0
+    version: 6.1.0(solid-js@1.7.3)
   '@solidjs/meta':
     specifier: ^0.28.4
     version: 0.28.4(solid-js@1.7.3)
@@ -81,9 +93,15 @@ devDependencies:
   autoprefixer:
     specifier: ^10.4.14
     version: 10.4.14(postcss@8.4.23)
+  grafbase:
+    specifier: ^0.18.7
+    version: 0.18.7
   postcss:
     specifier: ^8.4.23
     version: 8.4.23
+  prettier:
+    specifier: ^2.8.8
+    version: 2.8.8
   solid-devtools:
     specifier: ^0.26.0
     version: 0.26.0(@solidjs/meta@0.28.4)(@solidjs/router@0.8.2)(solid-js@1.7.3)(solid-start-node@0.2.26)(vite@4.3.2)
@@ -1460,6 +1478,42 @@ packages:
     requiresBuild: true
     optional: true
 
+  /@grafbase/cli-aarch64-apple-darwin@0.18.7:
+    resolution: {integrity: sha512-rbpvjls6v1e9EQfILAVzKDdFenGxeARyZDlgWfh7Y40ramfy8LPvr/XArhTNdS2EfN5iPQWsrj7kVf1zkq1XYg==}
+    engines: {node: '>=16.13.0'}
+    cpu: [arm64]
+    os: [darwin]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@grafbase/cli-x86_64-apple-darwin@0.18.7:
+    resolution: {integrity: sha512-iBDZXZcsINpRwPs0VT3TFyLYGc78LlKLoxZsBR7DbTcBR1DCi0QCyBna1KP6mYNN6Jli7I2Gwa9oTDCX1Xbk9g==}
+    engines: {node: '>=16.13.0'}
+    cpu: [x64]
+    os: [darwin]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@grafbase/cli-x86_64-pc-windows-msvc@0.18.7:
+    resolution: {integrity: sha512-zZ4tYu8H5Hz4JQf/xjUDR6aX72D6w/bppzius1pS3o5k8P5b4V2eFKF+pA2/V2Nglot0BqaENlBaLVFF/+jqNA==}
+    engines: {node: '>=16.13.0'}
+    cpu: [x64]
+    os: [win32]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /@grafbase/cli-x86_64-unknown-linux-musl@0.18.7:
+    resolution: {integrity: sha512-R1qshQGDmMEFAQsaM9s67mlTSFBZwE2iCoebMXcjCbKbBVD0mPKsueLo886s1DXc3CzON4NrN8T0qKh4xYS6AQ==}
+    engines: {node: '>=16.13.0'}
+    cpu: [x64]
+    os: [linux]
+    requiresBuild: true
+    dev: true
+    optional: true
+
   /@graphql-codegen/cli@3.3.1(@babel/core@7.21.3)(@types/node@18.16.0)(graphql@16.6.0):
     resolution: {integrity: sha512-4Es8Y9zFeT0Zx2qRL7L3qXDbbqvXK6aID+8v8lP6gaYD+uWx3Jd4Hsq5vxwVBR+6flm0BW/C85Qm0cvmT7O6LA==}
     hasBin: true
@@ -2218,7 +2272,7 @@ packages:
     peerDependencies:
       solid-js: ^1.6.12
     dependencies:
-      '@solid-primitives/utils': 6.0.0(solid-js@1.7.3)
+      '@solid-primitives/utils': 6.1.0(solid-js@1.7.3)
       solid-js: 1.7.3
     dev: false
 
@@ -2267,6 +2321,14 @@ packages:
       '@solid-primitives/utils': 6.1.0(solid-js@1.7.3)
       solid-js: 1.7.3
 
+  /@solid-primitives/flux-store@0.0.2(solid-js@1.7.3):
+    resolution: {integrity: sha512-kFzOWyFbcpae92EJmZmXIV0ZdbinhttOd6iQpYKZr/idbdshGCtAvjoQta7kq63bsNApPExdtME4JRQZlfdGnw==}
+    peerDependencies:
+      solid-js: ^1.6.12
+    dependencies:
+      solid-js: 1.7.3
+    dev: false
+
   /@solid-primitives/immutable@0.1.10(solid-js@1.7.3):
     resolution: {integrity: sha512-5XkiiBGSuUaoG2HFei1bG2eDyUwsj/b6IBP7ggm4UMU5mM/APz1u7e3rzMyPn5zVqnHT3oRSbj3UDPNYb5Y9Qg==}
     peerDependencies:
@@ -2285,6 +2347,14 @@ packages:
       '@solid-primitives/rootless': 1.3.2(solid-js@1.7.3)
       '@solid-primitives/utils': 6.1.0(solid-js@1.7.3)
       solid-js: 1.7.3
+
+  /@solid-primitives/keyed@1.2.0(solid-js@1.7.3):
+    resolution: {integrity: sha512-0DuTeJdxWjCTu73XnDZs24JzfXckBnpvCfQ6Mf/kTPKkMZJh7tjkBnZEk48ckrE9xmwat9stIdfrBmZctsepIw==}
+    peerDependencies:
+      solid-js: ^1.6.12
+    dependencies:
+      solid-js: 1.7.3
+    dev: false
 
   /@solid-primitives/media@2.1.6(solid-js@1.7.3):
     resolution: {integrity: sha512-7yixsXmhZfbsAxk/glmTFWcacXhudYsbc/9kbC7EbaE+Jnd6i0HZmmQEkV+s/rZ32e5sE9dAHvlhPtiLbQb7Jg==}
@@ -2343,7 +2413,6 @@ packages:
       solid-js: ^1.6.12
     dependencies:
       solid-js: 1.7.3
-    dev: true
 
   /@solid-primitives/static-store@0.0.2(solid-js@1.7.3):
     resolution: {integrity: sha512-JR51MmoZbFWE7fmzm0NnfS4RuLHpzXpPqAb7RJu3fHDGHp+q7v4KylseULcailINzDIosHQXbpiDQlj2Lx9zbQ==}
@@ -2370,14 +2439,6 @@ packages:
     dependencies:
       solid-js: 1.7.3
     dev: true
-
-  /@solid-primitives/utils@6.0.0(solid-js@1.7.3):
-    resolution: {integrity: sha512-SSu12+vvU6J8SVWW9eGV+dqiMsc0WG1Oy8YYY9AWzRzssmzNXg/uexaW+0eqTuj8JcRAaGplMDjhraB01HOidA==}
-    peerDependencies:
-      solid-js: ^1.6.12
-    dependencies:
-      solid-js: 1.7.3
-    dev: false
 
   /@solid-primitives/utils@6.1.0(solid-js@1.7.3):
     resolution: {integrity: sha512-uTikKFrq33UO+MnKt2WzZr9WYbQe5YX58ytGkL+29DL6o0pZs1wrICbd4ymzSm8azqzMcQqEQOL3HLWjuv9tLw==}
@@ -3597,6 +3658,18 @@ packages:
   /graceful-fs@4.2.11:
     resolution: {integrity: sha512-RbJ5/jmFcNNCcDV5o9eTnBLJ/HszWV0P73bc+Ff4nS/rJj+YaS6IGyiOL0VoBYX+l1Wrl3k63h/KrH+nhJ0XvQ==}
 
+  /grafbase@0.18.7:
+    resolution: {integrity: sha512-K24MvLDjrS3tk3Y2F0te9qHSj85J9mGzrGSeqQU/FdbZrIy2Aj3n+xQnO1ueci8nUpGcKkdVbj4fCRjrogAkag==}
+    engines: {node: '>=16.13.0'}
+    hasBin: true
+    requiresBuild: true
+    optionalDependencies:
+      '@grafbase/cli-aarch64-apple-darwin': 0.18.7
+      '@grafbase/cli-x86_64-apple-darwin': 0.18.7
+      '@grafbase/cli-x86_64-pc-windows-msvc': 0.18.7
+      '@grafbase/cli-x86_64-unknown-linux-musl': 0.18.7
+    dev: true
+
   /graphql-config@4.5.0(@types/node@18.16.0)(graphql@16.6.0):
     resolution: {integrity: sha512-x6D0/cftpLUJ0Ch1e5sj1TZn6Wcxx4oMfmhaG9shM0DKajA9iR+j1z86GSTQ19fShbGvrSSvbIQsHku6aQ6BBw==}
     engines: {node: '>= 10.0.0'}
@@ -4533,6 +4606,12 @@ packages:
       nanoid: 3.3.6
       picocolors: 1.0.0
       source-map-js: 1.0.2
+
+  /prettier@2.8.8:
+    resolution: {integrity: sha512-tdN8qQGvNjw4CHbY+XXk0JgCXn9QiF21a55rBe5LJAU+kDyC4WQn4+awm2Xfk2lQMk5fKup9XgzTZtGkjBdP9Q==}
+    engines: {node: '>=10.13.0'}
+    hasBin: true
+    dev: true
 
   /promise@7.3.1:
     resolution: {integrity: sha512-nolQXZ/4L+bP/UGlkfaIujX9BKxGwmQ9OT4mOt5yvy8iK1h3wqTEJCijzGANTCCl9nWjY41juyAn2K3Q1hLLTg==}

@@ -6,7 +6,7 @@ export default function Starred() {
   return (
     <div class="p-16 pt-6">
       <h1 class="font-bold text-3xl mb-8">Starred</h1>
-      {global
+      {global.todosState
         .todos()
         .filter((t) => !t.done && t.starred)
         .sort((a, b) => {

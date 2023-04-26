@@ -1,5 +1,6 @@
 import { createEventListener } from "@solid-primitives/event-listener"
-import { Show, batch, createEffect, onMount, untrack } from "solid-js"
+import { Key } from "@solid-primitives/keyed"
+import { Show, Suspense, batch, createEffect, onMount, untrack } from "solid-js"
 import { useGlobalContext } from "~/GlobalContext/store"
 import NewTodo from "~/components/NewTodo"
 import Todo from "~/components/Todo"
@@ -22,11 +23,11 @@ export default function All() {
   )
 
   createEffect(() => {
-    if (global.todos().length > 0) {
+    if (global.todosState.todos().length > 0) {
       untrack(() => {
         batch(() => {
           global.setOrderedTodos(
-            global
+            global.todosState
               .todos()
               .filter((t) => !t.done)
               .sort((a, b) => {
@@ -52,8 +53,8 @@ export default function All() {
   return (
     <div class="p-16 pt-6" ref={ref}>
       <h1 class="font-bold text-3xl mb-8">All</h1>
-      <Show when={global.todos().length > 0}>
-        {global
+      <Key
+        each={global
           .todos()
           .filter((t) => !t.done)
           .sort((a, b) => {
@@ -63,11 +64,11 @@ export default function All() {
               return -1
             }
             return b.priority - a.priority
-          })
-          .map((todo) => {
-            return <Todo todo={todo} />
           })}
-      </Show>
+        by="id"
+      >
+        {(todo) => <Todo todo={todo()} />}
+      </Key>
       <Show when={global.newTodo() && !global.editingTodo()}>
         <NewTodo />
       </Show>
