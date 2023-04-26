@@ -18,6 +18,16 @@ type User @model {
 
 type Todo @model {
   title: String!
+  starred: Boolean!
+  priority: Int!
+  done: Boolean!
+  note: String
+  dueDate: String
+  subtasks: [Subtask]
+}
+
+type Subtask @model {
+  title: String!
   done: Boolean!
   starred: Boolean!
   priority: Int!

@@ -1,8 +1,15 @@
-import { createSignal } from "solid-js"
+import { createSignal, onMount } from "solid-js"
 import { createContextProvider } from "@solid-primitives/context"
+import { grafbase } from "~/lib/graphql"
+import {
+  CreateTodoDocument,
+  Mutation,
+  Query,
+  TodosDocument,
+} from "~/graphql/schema"
 
 export type TodoType = {
-  id: number
+  id: string
   title: string
   done: boolean
   starred: boolean
@@ -24,46 +31,57 @@ export type TodoType = {
 
 export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
   () => {
-    const [todos, setTodos] = createSignal<TodoType[]>([
-      {
-        id: 1,
-        title: "Make KusKus",
-        done: false,
-        dueDate: "2023-04-25",
-        note: "cover all important use cases",
-        starred: true,
-        priority: 2,
-      },
-      {
-        id: 2,
-        title: "Release KusKus",
-        done: false,
-        starred: true,
-        priority: 1,
-      },
-      {
-        id: 3,
-        title: "Fix all bugs",
-        done: false,
-        starred: true,
-        priority: 3,
-      },
-      {
-        id: 4,
-        title: "Polish",
-        done: false,
-        starred: true,
-        priority: 0,
-      },
-    ])
+    const [todos, setTodos] = createSignal<TodoType[]>([])
+    onMount(async () => {
+      // await grafbase.request<Mutation>(CreateTodoDocument, {
+      //   todo: {
+      //     title: "Fix all bugs",
+      //     starred: true,
+      //     priority: 3,
+      //     done: false,
+      //   },
+      // })
+      // await grafbase.request<Mutation>(CreateTodoDocument, {
+      //   todo: {
+      //     title: "Make Kuskus",
+      //     starred: true,
+      //     priority: 2,
+      //     done: false,
+      //     note: "cover all important use cases",
+      //   },
+      // })
+      // await grafbase.request<Mutation>(CreateTodoDocument, {
+      //   todo: {
+      //     title: "Release KusKus",
+      //     starred: true,
+      //     priority: 1,
+      //     done: false,
+      //   },
+      // })
+      // await grafbase.request<Mutation>(CreateTodoDocument, {
+      //   todo: {
+      //     title: "Polish",
+      //     starred: true,
+      //     priority: 0,
+      //     done: false,
+      //   },
+      // })
+      const res = await grafbase.request<Query>(TodosDocument)
+      if (res.todoCollection?.edges) {
+        res.todoCollection.edges.map((todo) => {
+          setTodos([...todos(), todo?.node])
+        })
+      }
+      console.log(todos(), "todos")
+    })
     const [activePage, setActivePage] = createSignal("All")
     const [localSearch, setLocalSearch] = createSignal(false)
     const [orderedTodos, setOrderedTodos] = createSignal<TodoType[]>([])
     const [focusedTodoFromSearch, setFocusedTodoFromSearch] = createSignal(0)
     const [highlitedTodosFromSearch, setHighlightedTodosFromSearch] =
       createSignal([])
-    const [focusedTodo, setFocusedTodo] = createSignal<number>(0) // id of todo
-    const [todoToEdit, setTodoToEdit] = createSignal<number>(0)
+    const [focusedTodo, setFocusedTodo] = createSignal<string>("") // id of todo
+    const [todoToEdit, setTodoToEdit] = createSignal<string>("")
     const [editingTodo, setEditingTodo] = createSignal<boolean>(false)
     const [newTodo, setNewTodo] = createSignal<boolean>(false)
     const [newSubtask, setNewSubtask] = createSignal<boolean>(false)

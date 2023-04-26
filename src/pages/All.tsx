@@ -1,5 +1,5 @@
 import { createEventListener } from "@solid-primitives/event-listener"
-import { Show, batch, onMount } from "solid-js"
+import { Show, batch, createEffect, onMount, untrack } from "solid-js"
 import { useGlobalContext } from "~/GlobalContext/store"
 import NewTodo from "~/components/NewTodo"
 import Todo from "~/components/Todo"
@@ -13,7 +13,7 @@ export default function All() {
     "click",
     (e) => {
       if (e.target === ref) {
-        global.setFocusedTodo(0)
+        global.setFocusedTodo("")
         global.setTodoToEdit(0)
         global.setNewTodo(false)
       }
@@ -21,23 +21,28 @@ export default function All() {
     { passive: true }
   )
 
-  onMount(() => {
-    if (global.orderedTodos().length === 0) {
-      batch(() => {
-        global.setOrderedTodos(
-          global
-            .todos()
-            .filter((t) => !t.done)
-            .sort((a, b) => {
-              if (b.starred && !a.starred) {
-                return 1
-              } else if (a.starred && !b.starred) {
-                return -1
-              }
-              return b.priority - a.priority
-            })
-        )
-        global.setFocusedTodo(global.orderedTodos()[0].id)
+  createEffect(() => {
+    if (global.todos().length > 0) {
+      console.log(global.todos(), "todos here")
+      untrack(() => {
+        console.log("untrack run")
+        batch(() => {
+          global.setOrderedTodos(
+            global
+              .todos()
+              .filter((t) => !t.done)
+              .sort((a, b) => {
+                if (b.starred && !a.starred) {
+                  return 1
+                } else if (a.starred && !b.starred) {
+                  return -1
+                }
+                return b.priority - a.priority
+              })
+          )
+          console.log(global.orderedTodos(), "ordered")
+          global.setFocusedTodo(global.orderedTodos()[0].id)
+        })
       })
     }
   })
@@ -50,20 +55,22 @@ export default function All() {
   return (
     <div class="p-16 pt-6" ref={ref}>
       <h1 class="font-bold text-3xl mb-8">All</h1>
-      {global
-        .todos()
-        .filter((t) => !t.done)
-        .sort((a, b) => {
-          if (b.starred && !a.starred) {
-            return 1
-          } else if (a.starred && !b.starred) {
-            return -1
-          }
-          return b.priority - a.priority
-        })
-        .map((todo) => {
-          return <Todo todo={todo} />
-        })}
+      <Show when={global.todos().length > 0}>
+        {global
+          .todos()
+          .filter((t) => !t.done)
+          .sort((a, b) => {
+            if (b.starred && !a.starred) {
+              return 1
+            } else if (a.starred && !b.starred) {
+              return -1
+            }
+            return b.priority - a.priority
+          })
+          .map((todo) => {
+            return <Todo todo={todo} />
+          })}
+      </Show>
       <Show when={global.newTodo() && !global.editingTodo()}>
         <NewTodo />
       </Show>

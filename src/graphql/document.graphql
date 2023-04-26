@@ -9,7 +9,7 @@ fragment Todo on Todo {
 }
 
 query Todos {
-  todoCollection(first: 50) {
+  todoCollection(first: 100) {
     edges {
       node {
         ...Todo

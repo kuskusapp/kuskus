@@ -19,8 +19,8 @@ export default function Page() {
     "click",
     (e) => {
       if (e.target === ref) {
-        global.setFocusedTodo(0)
-        global.setTodoToEdit(0)
+        global.setFocusedTodo("")
+        global.setTodoToEdit("")
         global.setNewTodo(false)
       }
     },
@@ -59,7 +59,7 @@ export default function Page() {
       if (global.newTodo()) return
 
       batch(() => {
-        global.setFocusedTodo(0)
+        global.setFocusedTodo("")
         // TODO: change depending of where you create todo
         global.setNewTodoType("all")
         global.setNewTodo(true)
@@ -144,7 +144,7 @@ export default function Page() {
           global.orderedTodos()[global.orderedTodos().length - 1].id
         )
       } else {
-        if (global.focusedTodo() === 0) {
+        if (global.focusedTodo() === "") {
           global.setFocusedTodo(
             global.orderedTodos()[global.orderedTodos().length - 1].id
           )
@@ -164,7 +164,7 @@ export default function Page() {
     ["Enter"],
     () => {
       if (
-        global.focusedTodo() !== 0 &&
+        global.focusedTodo() !== "" &&
         !global.localSearch() &&
         !global.newTodo()
       ) {
@@ -201,7 +201,7 @@ export default function Page() {
     ["T"],
     () => {
       if (
-        global.focusedTodo() !== 0 &&
+        global.focusedTodo() !== "" &&
         !global.localSearch() &&
         !global.newTodo() &&
         !global.editingTodo()
@@ -225,7 +225,7 @@ export default function Page() {
 
       batch(() => {
         global.setLocalSearch(true)
-        global.setFocusedTodo(0)
+        global.setFocusedTodo("")
       })
     },
     { preventDefault: false }
@@ -235,7 +235,7 @@ export default function Page() {
     createShortcut(
       [`${i}`],
       () => {
-        if (global.focusedTodo() !== 0 && !global.editingTodo()) {
+        if (global.focusedTodo() !== "" && !global.editingTodo()) {
           global.setTodos((todos) =>
             todos.map((t) => {
               if (t.id === global.focusedTodo()) {
@@ -253,7 +253,7 @@ export default function Page() {
   createShortcut(
     ["4"],
     () => {
-      if (global.focusedTodo() !== 0 && !global.editingTodo()) {
+      if (global.focusedTodo() !== "" && !global.editingTodo()) {
         global.setTodos(
           global.todos().map((t) => {
             if (t.id === global.focusedTodo()) {

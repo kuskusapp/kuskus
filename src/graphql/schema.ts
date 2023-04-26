@@ -29,6 +29,12 @@ export type IntOperationsInput = {
 
 export type Mutation = {
   __typename?: "Mutation"
+  /** Create a Subtask */
+  subtaskCreate?: Maybe<SubtaskCreatePayload>
+  /** Delete a Subtask by ID or unique field */
+  subtaskDelete?: Maybe<SubtaskDeletePayload>
+  /** Update a Subtask */
+  subtaskUpdate?: Maybe<SubtaskUpdatePayload>
   /** Create a Todo */
   todoCreate?: Maybe<TodoCreatePayload>
   /** Delete a Todo by ID or unique field */
@@ -41,6 +47,19 @@ export type Mutation = {
   userDelete?: Maybe<UserDeletePayload>
   /** Update a User */
   userUpdate?: Maybe<UserUpdatePayload>
+}
+
+export type MutationSubtaskCreateArgs = {
+  input: SubtaskCreateInput
+}
+
+export type MutationSubtaskDeleteArgs = {
+  by: SubtaskByInput
+}
+
+export type MutationSubtaskUpdateArgs = {
+  by: SubtaskByInput
+  input: SubtaskUpdateInput
 }
 
 export type MutationTodoCreateArgs = {
@@ -84,6 +103,10 @@ export type PageInfo = {
 
 export type Query = {
   __typename?: "Query"
+  /** Query a single Subtask by an ID or a unique field */
+  subtask?: Maybe<Subtask>
+  /** Paginated query to fetch the whole list of `Subtask`. */
+  subtaskCollection?: Maybe<SubtaskConnection>
   /** Query a single Todo by an ID or a unique field */
   todo?: Maybe<Todo>
   /** Paginated query to fetch the whole list of `Todo`. */
@@ -92,6 +115,18 @@ export type Query = {
   user?: Maybe<User>
   /** Paginated query to fetch the whole list of `User`. */
   userCollection?: Maybe<UserConnection>
+}
+
+export type QuerySubtaskArgs = {
+  by: SubtaskByInput
+}
+
+export type QuerySubtaskCollectionArgs = {
+  after?: InputMaybe<Scalars["String"]>
+  before?: InputMaybe<Scalars["String"]>
+  first?: InputMaybe<Scalars["Int"]>
+  last?: InputMaybe<Scalars["Int"]>
+  orderBy?: InputMaybe<SubtaskOrderByInput>
 }
 
 export type QueryTodoArgs = {
@@ -118,8 +153,8 @@ export type QueryUserCollectionArgs = {
   orderBy?: InputMaybe<UserOrderByInput>
 }
 
-export type Todo = {
-  __typename?: "Todo"
+export type Subtask = {
+  __typename?: "Subtask"
   /** when the model was created */
   createdAt: Scalars["DateTime"]
   done: Scalars["Boolean"]
@@ -132,6 +167,110 @@ export type Todo = {
   title: Scalars["String"]
   /** when the model was updated */
   updatedAt: Scalars["DateTime"]
+}
+
+export type SubtaskByInput = {
+  id?: InputMaybe<Scalars["ID"]>
+}
+
+export type SubtaskConnection = {
+  __typename?: "SubtaskConnection"
+  edges?: Maybe<Array<Maybe<SubtaskEdge>>>
+  /** Information to aid in pagination */
+  pageInfo: PageInfo
+}
+
+/** Input to create a Subtask */
+export type SubtaskCreateInput = {
+  done: Scalars["Boolean"]
+  dueDate?: InputMaybe<Scalars["String"]>
+  note?: InputMaybe<Scalars["String"]>
+  priority: Scalars["Int"]
+  starred: Scalars["Boolean"]
+  title: Scalars["String"]
+}
+
+export type SubtaskCreatePayload = {
+  __typename?: "SubtaskCreatePayload"
+  subtask?: Maybe<Subtask>
+}
+
+export type SubtaskDeletePayload = {
+  __typename?: "SubtaskDeletePayload"
+  deletedId: Scalars["ID"]
+}
+
+export type SubtaskEdge = {
+  __typename?: "SubtaskEdge"
+  cursor: Scalars["String"]
+  node: Subtask
+}
+
+export type SubtaskOrderByInput = {
+  createdAt?: InputMaybe<OrderByDirection>
+}
+
+/** Input to create a Subtask for the SubtaskToTodo relation of Todo */
+export type SubtaskToTodoCreateSubtask = {
+  done: Scalars["Boolean"]
+  dueDate?: InputMaybe<Scalars["String"]>
+  note?: InputMaybe<Scalars["String"]>
+  priority: Scalars["Int"]
+  starred: Scalars["Boolean"]
+  title: Scalars["String"]
+}
+
+/** Input to link to or create a Subtask for the SubtaskToTodo relation of Todo */
+export type SubtaskToTodoCreateSubtaskRelation = {
+  create?: InputMaybe<SubtaskToTodoCreateSubtask>
+  link?: InputMaybe<Scalars["ID"]>
+}
+
+/** Input to link/unlink to or create a Subtask for the SubtaskToTodo relation of Todo */
+export type SubtaskToTodoUpdateSubtaskRelation = {
+  create?: InputMaybe<SubtaskToTodoCreateSubtask>
+  link?: InputMaybe<Scalars["ID"]>
+  unlink?: InputMaybe<Scalars["ID"]>
+}
+
+/** Input to update a Subtask */
+export type SubtaskUpdateInput = {
+  done?: InputMaybe<Scalars["Boolean"]>
+  dueDate?: InputMaybe<Scalars["String"]>
+  note?: InputMaybe<Scalars["String"]>
+  priority?: InputMaybe<IntOperationsInput>
+  starred?: InputMaybe<Scalars["Boolean"]>
+  title?: InputMaybe<Scalars["String"]>
+}
+
+export type SubtaskUpdatePayload = {
+  __typename?: "SubtaskUpdatePayload"
+  subtask?: Maybe<Subtask>
+}
+
+export type Todo = {
+  __typename?: "Todo"
+  /** when the model was created */
+  createdAt: Scalars["DateTime"]
+  done: Scalars["Boolean"]
+  dueDate?: Maybe<Scalars["String"]>
+  /** Unique identifier */
+  id: Scalars["ID"]
+  note?: Maybe<Scalars["String"]>
+  priority: Scalars["Int"]
+  starred: Scalars["Boolean"]
+  subtasks?: Maybe<SubtaskConnection>
+  title: Scalars["String"]
+  /** when the model was updated */
+  updatedAt: Scalars["DateTime"]
+}
+
+export type TodoSubtasksArgs = {
+  after?: InputMaybe<Scalars["String"]>
+  before?: InputMaybe<Scalars["String"]>
+  first?: InputMaybe<Scalars["Int"]>
+  last?: InputMaybe<Scalars["Int"]>
+  orderBy?: InputMaybe<TodoOrderByInput>
 }
 
 export type TodoByInput = {
@@ -152,6 +291,7 @@ export type TodoCreateInput = {
   note?: InputMaybe<Scalars["String"]>
   priority: Scalars["Int"]
   starred: Scalars["Boolean"]
+  subtasks?: InputMaybe<Array<InputMaybe<SubtaskToTodoCreateSubtaskRelation>>>
   title: Scalars["String"]
 }
 
@@ -182,6 +322,7 @@ export type TodoUpdateInput = {
   note?: InputMaybe<Scalars["String"]>
   priority?: InputMaybe<IntOperationsInput>
   starred?: InputMaybe<Scalars["Boolean"]>
+  subtasks?: InputMaybe<Array<InputMaybe<SubtaskToTodoUpdateSubtaskRelation>>>
   title?: InputMaybe<Scalars["String"]>
 }
 
@@ -335,7 +476,7 @@ export const TodosDocument = {
               {
                 kind: "Argument",
                 name: { kind: "Name", value: "first" },
-                value: { kind: "IntValue", value: "50" },
+                value: { kind: "IntValue", value: "100" },
               },
             ],
             selectionSet: {
