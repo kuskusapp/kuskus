@@ -1,5 +1,4 @@
 fragment Todo on Todo {
-  id
   title
   done
   starred
@@ -26,16 +25,10 @@ mutation CreateTodo($todo: TodoCreateInput!) {
   }
 }
 
-mutation TodoUpdate($id: ID!, $title: String!) {
-  todoUpdate(by: { id: $id }, input: { title: $title }) {
+mutation TodoUpdate($id: ID!, $todo: Todo!) {
+  todoUpdate(by: { id: $id }, input: $todo) {
     todo {
       id
-      title
-      done
-      starred
-      priority
-      note
-      dueDate
     }
   }
 }
