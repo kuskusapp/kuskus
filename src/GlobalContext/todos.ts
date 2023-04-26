@@ -2,10 +2,16 @@ import { createAction } from "@solid-primitives/flux-store"
 import { keyArray } from "@solid-primitives/keyed"
 import { debounce } from "@solid-primitives/scheduled"
 import { SetterParam, defer } from "@solid-primitives/utils"
-import { createEffect, createResource, onCleanup } from "solid-js"
+import {
+  createEffect,
+  createResource,
+  createSignal,
+  onCleanup,
+  onMount,
+} from "solid-js"
 import {
   CreateTodoDocument,
-  DeleteTodoDocument,
+  // DeleteTodoDocument,
   Mutation,
   Query,
   TodoUpdateDocument,
@@ -14,8 +20,9 @@ import {
 import { grafbase } from "~/lib/graphql"
 import { createTodosForDev } from "~/lib/local"
 import { TodoType } from "./store"
+import { getUser } from "~/lib/auth"
 
-const START_WITH_DEV_DATA = false
+// const START_WITH_DEV_DATA = false
 
 let lastId = 0
 
@@ -26,29 +33,47 @@ export function createId(): string {
 export function createTodosState() {
   const ignoreAddedIds = new Set<string>()
 
-  const [todos, { mutate }] = createResource<TodoType[]>(
-    async (_, info) => {
-      if (START_WITH_DEV_DATA) {
-        await createTodosForDev()
+  const [todos, setTodos] = createSignal<any[]>([])
+
+  onMount(async () => {
+    const res = await grafbase.request<Query>(TodosDocument)
+    let newTodos = [...todos()]
+
+    if (res.todoCollection?.edges) {
+      for (const todo of res.todoCollection.edges) {
+        if (!todo?.node) continue
+        newTodos.push(todo.node as TodoType)
+        ignoreAddedIds.add(todo.node.id)
       }
+      setTodos(newTodos)
+    }
+  })
 
-      const res = await grafbase.request<Query>(TodosDocument)
+  // const [todos, { mutate }] = createResource<TodoType[]>(
+  //   async (_, info) => {
+  //     // if (START_WITH_DEV_DATA) {
+  //     //   await createTodosForDev()
+  //     // }
 
-      // not sure why info.value is types as TodoType[] | undefined
-      const newTodos = info.value ?? []
+  //     // console.log(await getUser(), "get user in resource")
+  //     // const res = await grafbase.request<Query>(TodosDocument)
+  //     // const res = []
 
-      if (res.todoCollection?.edges) {
-        for (const todo of res.todoCollection.edges) {
-          if (!todo?.node) continue
-          newTodos.push(todo.node as TodoType)
-          ignoreAddedIds.add(todo.node.id)
-        }
-      }
+  //     // not sure why info.value is types as TodoType[] | undefined
+  //     const newTodos = info.value ?? []
 
-      return newTodos
-    },
-    { initialValue: [] }
-  )
+  // if (res.todoCollection?.edges) {
+  //   for (const todo of res.todoCollection.edges) {
+  //     if (!todo?.node) continue
+  //     newTodos.push(todo.node as TodoType)
+  //     ignoreAddedIds.add(todo.node.id)
+  //   }
+  // }
+
+  //     return newTodos
+  //   },
+  //   { initialValue: [] }
+  // )
 
   createEffect(
     debounce(
@@ -56,6 +81,7 @@ export function createTodosState() {
         todos,
         (todo) => todo.id,
         (todo) => {
+          console.log("running")
           const id = todo().id
 
           if (ignoreAddedIds.has(id)) {
@@ -77,10 +103,10 @@ export function createTodosState() {
           )
 
           onCleanup(() => {
-            grafbase.request<Mutation>(DeleteTodoDocument, {
-              /* deleted data */
-              id,
-            })
+            // grafbase.request<Mutation>(DeleteTodoDocument, {
+            //   /* deleted data */
+            //   id,
+            // })
           })
         }
       ),
@@ -89,15 +115,15 @@ export function createTodosState() {
   )
 
   const addTodo = createAction((todo: TodoType) => {
-    mutate((p) => [...p, todo])
+    setTodos((p) => [...p, todo])
   })
 
   const toggleTodo = createAction((id: string) => {
-    mutate((p) => p.map((t) => (t.id === id ? { ...t, done: !t.done } : t)))
+    setTodos((p) => p.map((t) => (t.id === id ? { ...t, done: !t.done } : t)))
   })
 
   const updateTodo = createAction((id: string, todo: SetterParam<TodoType>) => {
-    mutate((p) =>
+    setTodos((p) =>
       p.map((t) =>
         t.id === id ? (typeof todo === "function" ? todo(t) : todo) : t
       )
@@ -105,7 +131,7 @@ export function createTodosState() {
   })
 
   const removeTodo = createAction((id: string) => {
-    mutate((p) => p.filter((t) => t.id !== id))
+    setTodos((p) => p.filter((t) => t.id !== id))
   })
 
   return {
