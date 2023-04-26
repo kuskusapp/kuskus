@@ -391,7 +391,6 @@ export type UserUpdatePayload = {
 
 export type TodoFragment = {
   __typename?: "Todo"
-  id: string
   title: string
   done: boolean
   starred: boolean
@@ -410,7 +409,6 @@ export type TodosQuery = {
       __typename?: "TodoEdge"
       node: {
         __typename?: "Todo"
-        id: string
         title: string
         done: boolean
         starred: boolean
@@ -436,7 +434,7 @@ export type CreateTodoMutation = {
 
 export type TodoUpdateMutationVariables = Exact<{
   id: Scalars["ID"]
-  title: Scalars["String"]
+  todo: TodoUpdateInput
 }>
 
 export type TodoUpdateMutation = {
@@ -460,7 +458,6 @@ export const TodoFragmentDoc = {
       selectionSet: {
         kind: "SelectionSet",
         selections: [
-          { kind: "Field", name: { kind: "Name", value: "id" } },
           { kind: "Field", name: { kind: "Name", value: "title" } },
           { kind: "Field", name: { kind: "Name", value: "done" } },
           { kind: "Field", name: { kind: "Name", value: "starred" } },
@@ -533,7 +530,6 @@ export const TodosDocument = {
       selectionSet: {
         kind: "SelectionSet",
         selections: [
-          { kind: "Field", name: { kind: "Name", value: "id" } },
           { kind: "Field", name: { kind: "Name", value: "title" } },
           { kind: "Field", name: { kind: "Name", value: "done" } },
           { kind: "Field", name: { kind: "Name", value: "starred" } },
@@ -620,15 +616,12 @@ export const TodoUpdateDocument = {
         },
         {
           kind: "VariableDefinition",
-          variable: {
-            kind: "Variable",
-            name: { kind: "Name", value: "title" },
-          },
+          variable: { kind: "Variable", name: { kind: "Name", value: "todo" } },
           type: {
             kind: "NonNullType",
             type: {
               kind: "NamedType",
-              name: { kind: "Name", value: "String" },
+              name: { kind: "Name", value: "TodoUpdateInput" },
             },
           },
         },
@@ -661,17 +654,8 @@ export const TodoUpdateDocument = {
                 kind: "Argument",
                 name: { kind: "Name", value: "input" },
                 value: {
-                  kind: "ObjectValue",
-                  fields: [
-                    {
-                      kind: "ObjectField",
-                      name: { kind: "Name", value: "title" },
-                      value: {
-                        kind: "Variable",
-                        name: { kind: "Name", value: "title" },
-                      },
-                    },
-                  ],
+                  kind: "Variable",
+                  name: { kind: "Name", value: "todo" },
                 },
               },
             ],

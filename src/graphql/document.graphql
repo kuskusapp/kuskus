@@ -25,10 +25,11 @@ mutation CreateTodo($todo: TodoCreateInput!) {
   }
 }
 
-mutation TodoUpdate($id: ID!, $todo: Todo!) {
+mutation TodoUpdate($id: ID!, $todo: TodoUpdateInput!) {
   todoUpdate(by: { id: $id }, input: $todo) {
     todo {
       id
+      title
     }
   }
 }
