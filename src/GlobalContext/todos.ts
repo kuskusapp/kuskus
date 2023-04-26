@@ -1,14 +1,7 @@
 import { createAction } from "@solid-primitives/flux-store"
 import { keyArray } from "@solid-primitives/keyed"
-import { debounce } from "@solid-primitives/scheduled"
 import { SetterParam, defer } from "@solid-primitives/utils"
-import {
-  createEffect,
-  createResource,
-  createSignal,
-  onCleanup,
-  onMount,
-} from "solid-js"
+import { createEffect, createSignal, onCleanup, onMount } from "solid-js"
 import {
   CreateTodoDocument,
   // DeleteTodoDocument,
@@ -18,9 +11,7 @@ import {
   TodosDocument,
 } from "~/graphql/schema"
 import { grafbase } from "~/lib/graphql"
-import { createTodosForDev } from "~/lib/local"
 import { TodoType } from "./store"
-import { getUser } from "~/lib/auth"
 
 // const START_WITH_DEV_DATA = false
 
@@ -33,7 +24,7 @@ export function createId(): string {
 export function createTodosState() {
   const ignoreAddedIds = new Set<string>()
 
-  const [todos, setTodos] = createSignal<any[]>([])
+  const [todos, setTodos] = createSignal<TodoType[]>([])
 
   onMount(async () => {
     const res = await grafbase.request<Query>(TodosDocument)
@@ -54,14 +45,11 @@ export function createTodosState() {
   //     // if (START_WITH_DEV_DATA) {
   //     //   await createTodosForDev()
   //     // }
-
   //     // console.log(await getUser(), "get user in resource")
   //     // const res = await grafbase.request<Query>(TodosDocument)
   //     // const res = []
-
   //     // not sure why info.value is types as TodoType[] | undefined
   //     const newTodos = info.value ?? []
-
   // if (res.todoCollection?.edges) {
   //   for (const todo of res.todoCollection.edges) {
   //     if (!todo?.node) continue
@@ -69,48 +57,54 @@ export function createTodosState() {
   //     ignoreAddedIds.add(todo.node.id)
   //   }
   // }
-
   //     return newTodos
   //   },
   //   { initialValue: [] }
   // )
 
   createEffect(
-    debounce(
-      keyArray(
-        todos,
-        (todo) => todo.id,
-        (todo) => {
-          console.log("running")
-          const id = todo().id
+    keyArray(
+      todos,
+      (todo) => todo.id,
+      (todo) => {
+        const id = todo().id
+        console.log("added", id)
 
-          if (ignoreAddedIds.has(id)) {
-            ignoreAddedIds.delete(id)
-          } else {
-            grafbase.request<Mutation>(CreateTodoDocument, {
-              /* added data */
-              todo: todo(),
-            })
-          }
-
-          createEffect(
-            defer(todo, (todo) => {
-              grafbase.request<Mutation>(TodoUpdateDocument, {
-                /* updated data */
-                todo,
-              })
-            })
-          )
-
-          onCleanup(() => {
-            // grafbase.request<Mutation>(DeleteTodoDocument, {
-            //   /* deleted data */
-            //   id,
-            // })
+        if (ignoreAddedIds.has(id)) {
+          ignoreAddedIds.delete(id)
+        } else {
+          grafbase.request<Mutation>(CreateTodoDocument, {
+            /* added data */
+            todo: todo(),
           })
         }
-      ),
-      100
+
+        createEffect(
+          defer(todo, (todo) => {
+            console.log("updated", id)
+            console.log(todo, "todo")
+            grafbase.request<Mutation>(TodoUpdateDocument, {
+              id: todo.id,
+              todo: {
+                title: todo.title,
+                done: todo.done,
+                starred: todo.starred,
+                priority: { set: todo.priority },
+                note: todo.note,
+                dueDate: todo.dueDate,
+              },
+            })
+          })
+        )
+
+        onCleanup(() => {
+          console.log("removed", id)
+          // grafbase.request<Mutation>(DeleteTodoDocument, {
+          //   /* deleted data */
+          //   id,
+          // })
+        })
+      }
     )
   )
 

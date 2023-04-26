@@ -1,24 +1,27 @@
-import { Show, createSignal, onMount } from "solid-js"
+import { Show, Suspense, createResource, createSignal, onMount } from "solid-js"
 import { GlobalContextProvider } from "~/GlobalContext/store"
 import { getUser } from "~/lib/auth"
 import App from "~/pages/App"
 import LandingPage from "~/pages/LandingPage"
 
 export default function Home() {
-  const [user, setUser] = createSignal()
-
-  onMount(async () => {
-    const user = await getUser()
-    setUser(user)
+  /**
+   * undefined - loading
+   * null - not-logged in
+   * user - user
+   */
+  const [user] = createResource(async () => {
+    return await getUser()
   })
 
   return (
     <main>
       <GlobalContextProvider>
-        {/* TODO: refresh page will show landing page briefly, fix */}
-        <Show when={user()} fallback={LandingPage()}>
-          <App />
-        </Show>
+        <Suspense fallback={<p>loading</p>}>
+          <Show when={user()} fallback={LandingPage()}>
+            <App />
+          </Show>
+        </Suspense>
       </GlobalContextProvider>
     </main>
   )

@@ -2,9 +2,14 @@ import solid from "solid-start/vite"
 import { defineConfig } from "vite"
 import devtools from "solid-devtools/vite"
 
+// TODO: ssr: false because with it createResource doesn't log to client
+// because callbacks happen on server
+// something to fix for later
+// ideally the landing page is SSR'd
+// with true, the logs are sent to client
 export default defineConfig({
   plugins: [
-    solid(),
+    solid({ ssr: false }),
     devtools({
       /* additional options */
       autoname: true, // e.g. enable autoname

@@ -53,7 +53,7 @@ export default function All() {
     <div class="p-16 pt-6" ref={ref}>
       <h1 class="font-bold text-3xl mb-8">All</h1>
       <Show when={global.todosState.todos().length > 0}>
-        {global.todosState
+        {global
           .todos()
           .filter((t) => !t.done)
           .sort((a, b) => {

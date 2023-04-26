@@ -96,6 +96,7 @@ export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
       setChangeFocus,
       newSubtask,
       setNewSubtask,
+      todos: todosState.todos,
     } as const
   },
   // @ts-expect-error this is just to assert context as non-nullable
