@@ -1,10 +1,11 @@
-import { createSignal, onMount } from "solid-js"
+import { createEffect, createSignal, onMount, untrack } from "solid-js"
 import { createContextProvider } from "@solid-primitives/context"
 import { grafbase } from "~/lib/graphql"
 import {
   CreateTodoDocument,
   Mutation,
   Query,
+  TodoUpdateDocument,
   TodosDocument,
 } from "~/graphql/schema"
 
@@ -33,39 +34,6 @@ export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
   () => {
     const [todos, setTodos] = createSignal<TodoType[]>([])
     onMount(async () => {
-      // await grafbase.request<Mutation>(CreateTodoDocument, {
-      //   todo: {
-      //     title: "Fix all bugs",
-      //     starred: true,
-      //     priority: 3,
-      //     done: false,
-      //   },
-      // })
-      // await grafbase.request<Mutation>(CreateTodoDocument, {
-      //   todo: {
-      //     title: "Make Kuskus",
-      //     starred: true,
-      //     priority: 2,
-      //     done: false,
-      //     note: "cover all important use cases",
-      //   },
-      // })
-      // await grafbase.request<Mutation>(CreateTodoDocument, {
-      //   todo: {
-      //     title: "Release KusKus",
-      //     starred: true,
-      //     priority: 1,
-      //     done: false,
-      //   },
-      // })
-      // await grafbase.request<Mutation>(CreateTodoDocument, {
-      //   todo: {
-      //     title: "Polish",
-      //     starred: true,
-      //     priority: 0,
-      //     done: false,
-      //   },
-      // })
       const res = await grafbase.request<Query>(TodosDocument)
       if (res.todoCollection?.edges) {
         res.todoCollection.edges.map((todo) => {
@@ -73,6 +41,16 @@ export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
         })
       }
     })
+
+    createEffect(async () => {
+      if (todos().length > 0) {
+        const res = await grafbase.request<Mutation>(TodoUpdateDocument, {
+          id: "todo_01GYYYEEMR8EF1CC8F8AA0N29F",
+          title: "New title",
+        })
+      }
+    })
+
     const [activePage, setActivePage] = createSignal("All")
     const [localSearch, setLocalSearch] = createSignal(false)
     const [orderedTodos, setOrderedTodos] = createSignal<TodoType[]>([])

@@ -4,6 +4,8 @@ import { Show, createEffect, createSignal, onMount } from "solid-js"
 import { todayDate } from "~/lib/lib"
 import { TodoType, useGlobalContext } from "../GlobalContext/store"
 import Icon from "./Icon"
+import { grafbase } from "~/lib/graphql"
+import { Mutation, TodoUpdateDocument } from "~/graphql/schema"
 
 interface Props {
   todo: TodoType
@@ -23,7 +25,7 @@ export default function TodoEdit(props: Props) {
     global.setClickTimeStamp(0)
   })
 
-  createEffect(() => {
+  createEffect(async () => {
     if (!global.editingTodo()) {
       if (title() === "") {
         global.setTodos(
@@ -40,6 +42,11 @@ export default function TodoEdit(props: Props) {
       newTodos[indexOfTodoToEdit].priority = priority()
       newTodos[indexOfTodoToEdit].starred = starred()
 
+      await grafbase.request<Mutation>(TodoUpdateDocument, {
+        id: props.todo.id,
+        title: title(),
+      })
+
       if (showCalendar() && !dueDate()) {
         newTodos[indexOfTodoToEdit].dueDate = todayDate()
       } else {
@@ -47,7 +54,7 @@ export default function TodoEdit(props: Props) {
       }
 
       global.setTodos(newTodos)
-      global.setTodoToEdit(0)
+      global.setTodoToEdit("")
     }
   })
 
