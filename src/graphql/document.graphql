@@ -34,3 +34,9 @@ mutation TodoUpdate($id: ID!, $todo: TodoUpdateInput!) {
     }
   }
 }
+
+mutation TodoDelete($id: ID!) {
+  todoDelete(by: { id: $id }) {
+    deletedId
+  }
+}

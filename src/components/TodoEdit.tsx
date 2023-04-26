@@ -1,6 +1,6 @@
 import { autofocus } from "@solid-primitives/autofocus"
 import { createShortcut } from "@solid-primitives/keyboard"
-import { Show, createEffect, createSignal, onMount } from "solid-js"
+import { Show, batch, createEffect, createSignal, onMount } from "solid-js"
 import { todayDate } from "~/lib/lib"
 import { TodoType, useGlobalContext } from "../GlobalContext/store"
 import Icon from "./Icon"
@@ -34,15 +34,17 @@ export default function TodoEdit(props: Props) {
       }
 
       // UPDATE
-      global.todosState.updateTodo(props.todo.id, (p) => ({
-        ...p,
-        title: title(),
-        note: note(),
-        priority: priority(),
-        starred: starred(),
-        dueDate: showCalendar() && !dueDate() ? todayDate() : dueDate(),
-      }))
-      global.setTodoToEdit("")
+      batch(() => {
+        global.todosState.updateTodo(props.todo.id, (p) => ({
+          ...p,
+          title: title(),
+          note: note(),
+          priority: priority(),
+          starred: starred(),
+          dueDate: showCalendar() && !dueDate() ? todayDate() : dueDate(),
+        }))
+        global.setTodoToEdit("")
+      })
     }
   })
 
