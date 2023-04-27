@@ -12,9 +12,9 @@ export default function Sidebar() {
 
   onMount(() => {
     Split(["#sidebar", "#page"], {
-      gutterSize: 3,
+      gutterSize: 6,
       sizes: [15, 85],
-      snapOffset: 0,
+      snapOffset: 15,
     })
   })
 
@@ -47,11 +47,12 @@ export default function Sidebar() {
             }
           .gutter.gutter-horizontal {
             cursor: col-resize;
+            margin-right: -12px;
           }
           `}
       </style>
       <div
-        class="w-screen dark:bg-stone-900 bg-gray-100 mt-3 p-2 text-xs"
+        class="w-screen dark:bg-stone-900 bg-gray-100 mt-3 mr-2 p-2 text-xs"
         id="sidebar"
       >
         <div class="flex flex-col gap-1 justify-between h-full" ref={ref}>
