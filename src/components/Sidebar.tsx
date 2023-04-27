@@ -23,8 +23,8 @@ export default function Sidebar() {
     "click",
     (e) => {
       if (e.target === ref) {
-        global.setFocusedTodo(0)
-        global.setTodoToEdit(0)
+        global.setFocusedTodo("")
+        global.setTodoToEdit("")
         global.setNewTodo(false)
       }
     },
