@@ -44,15 +44,16 @@ export function createTodosState() {
     keyArray(
       todos,
       (todo) => todo.id,
-      (todo) => {
+      async (todo) => {
         const id = todo()?.id
 
         if (ignoreAddedIds.has(id)) {
           ignoreAddedIds.delete(id)
         } else {
-          grafbase.request<Mutation>(CreateTodoDocument, {
-            todo: todo(),
-          })
+          // const res = await grafbase.request<Mutation>(CreateTodoDocument, {
+          //   todo: todo(),
+          // })
+          // console.log(res)
         }
 
         createEffect(
@@ -81,10 +82,14 @@ export function createTodosState() {
     )
   )
 
-  const addTodo = createAction((todo: Omit<TodoType, "id">) => {
+  const addTodo = createAction(async (todo: Omit<TodoType, "id">) => {
     // TODO: quick hack, when creating todos, you don't need an id
-    // @ts-ignore
-    mutate((p) => [...p, todo])
+
+    const res = await grafbase.request<Mutation>(CreateTodoDocument, {
+      todo: todo,
+    })
+
+    mutate((p) => [...p, { ...todo, id: res.todoCreate?.todo.id }])
   })
 
   const toggleTodo = createAction((id: string) => {

@@ -33,12 +33,14 @@ export default function NewTodo() {
       priority: priority(),
       dueDate: dueDate(),
     })
+
     global.setOrderedTodos(
       global.todosState
         .todos()
         .filter((t) => !t.done)
         .sort((a, b) => b.priority - a.priority)
     )
+    console.log(global.orderedTodos(), "ordered")
     global.setNewTodo(false)
     global.setEditingTodo(true)
     global.setNewTodoType("")
