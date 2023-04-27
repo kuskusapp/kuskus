@@ -303,7 +303,7 @@ export default function Page() {
           style={{
             "border-radius": "20px",
           }}
-          class="flex sticky bottom-2 right-1 p-2 dark:bg-stone-900 ml-3 mr-3  bg-gray-50"
+          class="flex sticky bottom-2 right-1 p-1 dark:bg-stone-900 ml-3 mr-3  bg-gray-100"
         >
           <Show when={global.localSearch()} fallback={<ActionBar />}>
             <LocalSearch />

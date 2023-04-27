@@ -113,10 +113,13 @@ export default function App() {
   )
 
   return (
-    <div class="flex min-h-screen  bg-gray-50 dark:bg-stone-900">
+    <div class="flex min-h-screen  bg-gray-100 dark:bg-stone-900">
       <Sidebar />
       <TodoList />
-      <Show when={global.showHelpModal()}>
+      <Show when={global.showHelp()}>
+        <Modal />
+      </Show>
+      <Show when={global.showSettings()}>
         <Modal />
       </Show>
     </div>

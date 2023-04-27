@@ -1,10 +1,6 @@
 import { useGlobalContext } from "~/GlobalContext/store"
 import Icon from "./Icon"
-import {
-  createEventListener,
-  makeEventListener,
-} from "@solid-primitives/event-listener"
-import { onMount } from "solid-js"
+import { createEventListener } from "@solid-primitives/event-listener"
 
 export default function Modal() {
   const global = useGlobalContext()
@@ -15,7 +11,8 @@ export default function Modal() {
     "click",
     (e) => {
       if (e.target === ref) {
-        global.setShowHelpModal(false)
+        global.setShowHelp(false)
+        global.setShowSettings(false)
         global.setNewTodo(false)
       }
     },
@@ -46,7 +43,7 @@ export default function Modal() {
             >
               <div
                 class="cursor-pointer"
-                onClick={() => global.setShowHelpModal(false)}
+                onClick={() => global.setShowHelp(false)}
               >
                 <Icon name="Cross" />
               </div>

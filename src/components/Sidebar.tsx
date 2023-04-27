@@ -51,7 +51,7 @@ export default function Sidebar() {
           `}
       </style>
       <div
-        class="w-screen dark:bg-stone-900 bg-gray-50 mt-3 p-2 text-xs"
+        class="w-screen dark:bg-stone-900 bg-gray-100 mt-3 p-2 text-xs"
         id="sidebar"
       >
         <div class="flex flex-col gap-1 justify-between h-full" ref={ref}>
@@ -208,29 +208,8 @@ export default function Sidebar() {
               <span class="pl-1 overflow-hidden">Done</span>
             </div>
           </div>
-          <div class="flex justify-between justify-self-end">
-            <div
-              class="has-tooltip cursor-pointer"
-              onClick={() => {
-                global.setShowHelpModal(true)
-              }}
-            >
-              <span class="tooltip rounded shadow-lg p-1 bg-gray-100 -mt-8 dark:text-black">
-                Learn KusKus
-              </span>
-              <Icon name="Question" />
-            </div>
-            <div
-              class="has-tooltip cursor-pointer"
-              onClick={() => {
-                // TODO: show settings
-              }}
-            >
-              <span class="tooltip rounded shadow-lg p-1 bg-gray-100 -mt-8 dark:text-black">
-                Settings
-              </span>
-              <Icon name="Settings" />
-            </div>
+          {/* TODO: move this to settings */}
+          {/* <div class="flex justify-between justify-self-end">
             <div
               class="has-tooltip cursor-pointer"
               onClick={() => {
@@ -244,7 +223,7 @@ export default function Sidebar() {
               </span>
               <Icon name="SignOut" />
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     </>

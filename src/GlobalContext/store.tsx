@@ -55,7 +55,8 @@ export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
     const [localSearchResultId, setLocalSearchResultId] = createSignal("")
     const [currentlyFocusedTodo, setCurrentlyFocusedTodo] = createSignal(0)
     const [editNoteInTodo, setEditNoteInTodo] = createSignal(false)
-    const [showHelpModal, setShowHelpModal] = createSignal(false)
+    const [showHelp, setShowHelp] = createSignal(false)
+    const [showSettings, setShowSettings] = createSignal(false)
     const [clickTimeStamp, setClickTimeStamp] = createSignal(0)
     const [changeFocus, setChangeFocus] = createSignal(true)
 
@@ -93,8 +94,10 @@ export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
       setCurrentlyFocusedTodo,
       editNoteInTodo,
       setEditNoteInTodo,
-      showHelpModal,
-      setShowHelpModal,
+      showHelp,
+      setShowHelp,
+      showSettings,
+      setShowSettings,
       clickTimeStamp,
       setClickTimeStamp,
       changeFocus,
