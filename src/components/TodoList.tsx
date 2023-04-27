@@ -282,7 +282,7 @@ export default function Page() {
         }`}
       </style>
       <div
-        class="flex flex-col m-3 mb-1 rounded overflow-auto relative w-full mt-6 drop"
+        class="flex flex-col m-3 mb-1 justify-between rounded overflow-auto relative w-full mt-6 drop"
         ref={ref}
       >
         <Switch>
