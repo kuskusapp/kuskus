@@ -182,11 +182,11 @@ export type SubtaskConnection = {
 
 /** Input to create a Subtask */
 export type SubtaskCreateInput = {
-  done: Scalars["Boolean"]
+  done?: Scalars["Boolean"]
   dueDate?: InputMaybe<Scalars["String"]>
   note?: InputMaybe<Scalars["String"]>
-  priority: Scalars["Int"]
-  starred: Scalars["Boolean"]
+  priority?: Scalars["Int"]
+  starred?: Scalars["Boolean"]
   title: Scalars["String"]
 }
 
@@ -212,11 +212,11 @@ export type SubtaskOrderByInput = {
 
 /** Input to create a Subtask for the SubtaskToTodo relation of Todo */
 export type SubtaskToTodoCreateSubtask = {
-  done: Scalars["Boolean"]
+  done?: Scalars["Boolean"]
   dueDate?: InputMaybe<Scalars["String"]>
   note?: InputMaybe<Scalars["String"]>
-  priority: Scalars["Int"]
-  starred: Scalars["Boolean"]
+  priority?: Scalars["Int"]
+  starred?: Scalars["Boolean"]
   title: Scalars["String"]
 }
 
@@ -286,11 +286,11 @@ export type TodoConnection = {
 
 /** Input to create a Todo */
 export type TodoCreateInput = {
-  done: Scalars["Boolean"]
+  done?: Scalars["Boolean"]
   dueDate?: InputMaybe<Scalars["String"]>
   note?: InputMaybe<Scalars["String"]>
-  priority: Scalars["Int"]
-  starred: Scalars["Boolean"]
+  priority?: Scalars["Int"]
+  starred?: Scalars["Boolean"]
   subtasks?: InputMaybe<Array<InputMaybe<SubtaskToTodoCreateSubtaskRelation>>>
   title: Scalars["String"]
 }
@@ -443,7 +443,7 @@ export type TodoUpdateMutation = {
   __typename?: "Mutation"
   todoUpdate?: {
     __typename?: "TodoUpdatePayload"
-    todo?: { __typename?: "Todo"; id: string; title: string } | null
+    todo?: { __typename?: "Todo"; id: string } | null
   } | null
 }
 
@@ -454,6 +454,31 @@ export type TodoDeleteMutationVariables = Exact<{
 export type TodoDeleteMutation = {
   __typename?: "Mutation"
   todoDelete?: { __typename?: "TodoDeletePayload"; deletedId: string } | null
+}
+
+export type SubtasksQueryVariables = Exact<{ [key: string]: never }>
+
+export type SubtasksQuery = {
+  __typename?: "Query"
+  subtaskCollection?: {
+    __typename?: "SubtaskConnection"
+    edges?: Array<{
+      __typename?: "SubtaskEdge"
+      node: { __typename?: "Subtask"; id: string; title: string }
+    } | null> | null
+  } | null
+}
+
+export type SubtaskCreateMutationVariables = Exact<{
+  subtask: SubtaskCreateInput
+}>
+
+export type SubtaskCreateMutation = {
+  __typename?: "Mutation"
+  subtaskCreate?: {
+    __typename?: "SubtaskCreatePayload"
+    subtask?: { __typename?: "Subtask"; id: string } | null
+  } | null
 }
 
 export const TodoFragmentDoc = {
@@ -682,7 +707,6 @@ export const TodoUpdateDocument = {
                     kind: "SelectionSet",
                     selections: [
                       { kind: "Field", name: { kind: "Name", value: "id" } },
-                      { kind: "Field", name: { kind: "Name", value: "title" } },
                     ],
                   },
                 },
@@ -748,3 +772,123 @@ export const TodoDeleteDocument = {
     },
   ],
 } as unknown as DocumentNode<TodoDeleteMutation, TodoDeleteMutationVariables>
+export const SubtasksDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "Subtasks" },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "subtaskCollection" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "first" },
+                value: { kind: "IntValue", value: "100" },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "edges" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "node" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "title" },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<SubtasksQuery, SubtasksQueryVariables>
+export const SubtaskCreateDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "SubtaskCreate" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "subtask" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "SubtaskCreateInput" },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "subtaskCreate" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "input" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "subtask" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "subtask" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  SubtaskCreateMutation,
+  SubtaskCreateMutationVariables
+>

@@ -1,4 +1,8 @@
-import { CreateTodoDocument, Mutation } from "~/graphql/schema"
+import {
+  CreateTodoDocument,
+  Mutation,
+  SubtaskCreateDocument,
+} from "~/graphql/schema"
 import { grafbase } from "./graphql"
 
 export async function createTodosForDev() {
@@ -33,6 +37,12 @@ export async function createTodosForDev() {
       starred: true,
       priority: 0,
       done: false,
+    },
+  })
+
+  await grafbase.request<Mutation>(SubtaskCreateDocument, {
+    subtask: {
+      title: "check all TODO: in code",
     },
   })
 }

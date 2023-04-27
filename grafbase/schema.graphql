@@ -18,9 +18,9 @@ type User @model {
 
 type Todo @model {
   title: String!
-  starred: Boolean!
-  priority: Int!
-  done: Boolean!
+  done: Boolean! @default(value: false)
+  starred: Boolean! @default(value: false)
+  priority: Int! @default(value: 0)
   note: String
   dueDate: String
   subtasks: [Subtask]
@@ -28,9 +28,9 @@ type Todo @model {
 
 type Subtask @model {
   title: String!
-  done: Boolean!
-  starred: Boolean!
-  priority: Int!
+  done: Boolean! @default(value: false)
+  starred: Boolean! @default(value: false)
+  priority: Int! @default(value: 0)
   note: String
   dueDate: String
 }

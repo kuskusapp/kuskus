@@ -28,7 +28,7 @@ export default function LocalSearch() {
             global.setFocusedTodo(global.localSearchResultId())
             global.setLocalSearch(false)
             global.setLocalSearchResultIds([])
-            global.setLocalSearchResultId(0)
+            global.setLocalSearchResultId("")
             global.setCurrentlyFocusedTodo(
               findIndexOfId(global.orderedTodos(), global.focusedTodo())
             )

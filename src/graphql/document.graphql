@@ -30,7 +30,6 @@ mutation TodoUpdate($id: ID!, $todo: TodoUpdateInput!) {
   todoUpdate(by: { id: $id }, input: $todo) {
     todo {
       id
-      title
     }
   }
 }
@@ -38,5 +37,24 @@ mutation TodoUpdate($id: ID!, $todo: TodoUpdateInput!) {
 mutation TodoDelete($id: ID!) {
   todoDelete(by: { id: $id }) {
     deletedId
+  }
+}
+
+query Subtasks {
+  subtaskCollection(first: 100) {
+    edges {
+      node {
+        id
+        title
+      }
+    }
+  }
+}
+
+mutation SubtaskCreate($subtask: SubtaskCreateInput!) {
+  subtaskCreate(input: $subtask) {
+    subtask {
+      id
+    }
   }
 }

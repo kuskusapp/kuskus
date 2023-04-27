@@ -26,7 +26,15 @@ export type TodoType = {
 export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
   () => {
     const todosState = createTodosState()
-
+    const [subtasks, setSubtasks] = createSignal<TodoType[]>([
+      {
+        id: "",
+        title: "check all TODO: in code",
+        done: false,
+        starred: false,
+        priority: 0,
+      },
+    ])
     const [activePage, setActivePage] = createSignal("All")
     const [localSearch, setLocalSearch] = createSignal(false)
     const [orderedTodos, setOrderedTodos] = createSignal<TodoType[]>([])
@@ -42,9 +50,9 @@ export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
     const [todoEditInput, setTodoEditInput] = createSignal("")
     const [guard, setGuard] = createSignal(false)
     const [localSearchResultIds, setLocalSearchResultIds] = createSignal<
-      number[]
+      string[]
     >([])
-    const [localSearchResultId, setLocalSearchResultId] = createSignal(0)
+    const [localSearchResultId, setLocalSearchResultId] = createSignal("")
     const [currentlyFocusedTodo, setCurrentlyFocusedTodo] = createSignal(0)
     const [editNoteInTodo, setEditNoteInTodo] = createSignal(false)
     const [showHelpModal, setShowHelpModal] = createSignal(false)
@@ -94,6 +102,8 @@ export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
       newSubtask,
       setNewSubtask,
       todos: todosState.todos,
+      subtasks,
+      setSubtasks,
     } as const
   },
   // @ts-expect-error this is just to assert context as non-nullable

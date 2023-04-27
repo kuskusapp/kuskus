@@ -67,7 +67,14 @@ export default function All() {
           })}
         by="id"
       >
-        {(todo) => <Todo todo={todo()} />}
+        {(todo) => (
+          <>
+            <Todo todo={todo()} />
+            <div class="ml-6">
+              <Todo todo={todo()} />
+            </div>
+          </>
+        )}
       </Key>
       <Show when={global.newTodo() && !global.editingTodo()}>
         <NewTodo />
