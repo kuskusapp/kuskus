@@ -266,28 +266,47 @@ export default function Page() {
   )
 
   return (
-    <div id="page" class="flex flex-col" ref={ref}>
-      <Switch>
-        <Match when={global.activePage() === "All"}>
-          <All />
-        </Match>
-        <Match when={global.activePage() === "Today"}>
-          <Today />
-        </Match>
-        <Match when={global.activePage() === "Starred"}>
-          <Starred />
-        </Match>
-        <Match when={global.activePage() === "Done"}>
-          <Done />
-        </Match>
-      </Switch>
-      <div
-        class="flex fixed bottom-0 p-2 border-t border-opacity-25 border-slate-600 w-full"
-        style={{ "margin-left": "-3px" }}
-      >
-        <Show when={global.localSearch()} fallback={<ActionBar />}>
-          <LocalSearch />
-        </Show>
+    <div
+      id="page"
+      style={{
+        "border-radius": "20px",
+        height: "96vh",
+        flex: "1",
+      }}
+      class="flex m-3 w-full rounded bg-white dark:bg-neutral-800 grow overflow-auto justify-between relative"
+    >
+      <style>
+        {`
+
+        ::-webkit-scrollbar {
+          display: none
+        }`}
+      </style>
+      <div class="flex flex-col m-3 rounded overflow-auto relative" ref={ref}>
+        <Switch>
+          <Match when={global.activePage() === "All"}>
+            <All />
+          </Match>
+          <Match when={global.activePage() === "Today"}>
+            <Today />
+          </Match>
+          <Match when={global.activePage() === "Starred"}>
+            <Starred />
+          </Match>
+          <Match when={global.activePage() === "Done"}>
+            <Done />
+          </Match>
+        </Switch>
+        <div
+          style={{
+            "border-radius": "20px",
+          }}
+          class="flex sticky bottom-2 right-1 p-2 dark:bg-stone-900 ml-3 mr-3  bg-gray-50"
+        >
+          <Show when={global.localSearch()} fallback={<ActionBar />}>
+            <LocalSearch />
+          </Show>
+        </div>
       </div>
     </div>
   )

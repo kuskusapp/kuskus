@@ -14,6 +14,7 @@ export default function Sidebar() {
     Split(["#sidebar", "#page"], {
       gutterSize: 3,
       sizes: [15, 85],
+      snapOffset: 0,
     })
   })
 
@@ -50,7 +51,7 @@ export default function Sidebar() {
           `}
       </style>
       <div
-        class="sticky top-0 left-0 dark:bg-stone-900 bg-gray-50 p-2 text-xs"
+        class="w-screen dark:bg-stone-900 bg-gray-50 mt-3 p-2 text-xs"
         id="sidebar"
       >
         <div class="flex flex-col gap-1 justify-between h-full" ref={ref}>

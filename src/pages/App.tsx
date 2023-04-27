@@ -113,7 +113,7 @@ export default function App() {
   )
 
   return (
-    <div class="flex h-screen">
+    <div class="flex min-h-screen  bg-gray-50 dark:bg-stone-900">
       <Sidebar />
       <TodoList />
       <Show when={global.showHelpModal()}>
