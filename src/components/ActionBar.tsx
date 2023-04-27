@@ -18,7 +18,7 @@ export default function ActionBar() {
         <Icon name="Question" />
       </div>
       <div
-        class="has-tooltip cursor-pointer pl-24 pt-2 pb-2 pr-24 border rounded"
+        class="has-tooltip cursor-pointer pl-24 pt-2 pb-2 pr-24 border rounded dark:border-stone-800"
         onClick={() => {
           if (!global.newTodo()) {
             // TODO: get context of current page, pass it as second arg

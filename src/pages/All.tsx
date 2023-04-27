@@ -70,9 +70,10 @@ export default function All() {
         {(todo) => (
           <>
             <Todo todo={todo()} />
-            <div class="ml-6">
+            {/* TODO: add subtasks */}
+            {/* <div class="ml-6">
               <Todo todo={todo()} />
-            </div>
+            </div> */}
           </>
         )}
       </Key>
