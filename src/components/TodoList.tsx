@@ -271,9 +271,8 @@ export default function Page() {
       style={{
         "border-radius": "20px",
         height: "96vh",
-        flex: "1",
       }}
-      class="flex m-3 w-full rounded bg-white dark:bg-neutral-800 grow overflow-auto justify-between relative"
+      class="flex m-3 w-full rounded bg-white dark:bg-neutral-800 grow overflow-auto justify-between relative "
     >
       <style>
         {`
@@ -282,7 +281,10 @@ export default function Page() {
           display: none
         }`}
       </style>
-      <div class="flex flex-col m-3 rounded overflow-auto relative" ref={ref}>
+      <div
+        class="flex flex-col m-3 mb-1 rounded overflow-auto relative w-full mt-6 drop"
+        ref={ref}
+      >
         <Switch>
           <Match when={global.activePage() === "All"}>
             <All />
