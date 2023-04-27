@@ -1,4 +1,4 @@
-import { Show, Suspense, createResource, createSignal, onMount } from "solid-js"
+import { Show, Suspense, createResource } from "solid-js"
 import { GlobalContextProvider } from "~/GlobalContext/store"
 import { getUser } from "~/lib/auth"
 import App from "~/pages/App"
@@ -16,7 +16,7 @@ export default function Home() {
 
   return (
     <main>
-      <Suspense fallback={<p>loading</p>}>
+      <Suspense fallback={<></>}>
         <Show when={user()} fallback={LandingPage()}>
           <GlobalContextProvider>
             <App />

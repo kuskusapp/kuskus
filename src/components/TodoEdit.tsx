@@ -1,11 +1,16 @@
 import { autofocus } from "@solid-primitives/autofocus"
 import { createShortcut } from "@solid-primitives/keyboard"
-import { Show, batch, createEffect, createSignal, onMount } from "solid-js"
+import {
+  Show,
+  batch,
+  createEffect,
+  createSignal,
+  onCleanup,
+  onMount,
+} from "solid-js"
 import { todayDate } from "~/lib/lib"
 import { TodoType, useGlobalContext } from "../GlobalContext/store"
 import Icon from "./Icon"
-import { grafbase } from "~/lib/graphql"
-import { Mutation, TodoUpdateDocument } from "~/graphql/schema"
 
 interface Props {
   todo: TodoType

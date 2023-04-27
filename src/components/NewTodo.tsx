@@ -18,7 +18,7 @@ export default function NewTodo() {
 
   // TODO: don't use Math.random() for id, find better way
   // id will most likely be coming from grafbase so no worries
-  createShortcut(["Enter"], () => {
+  createShortcut(["Enter"], async () => {
     if (title() === "") {
       global.setNewTodo(false)
       global.setEditingTodo(false)
@@ -26,7 +26,6 @@ export default function NewTodo() {
     }
 
     global.todosState.addTodo({
-      id: createId(),
       title: title(),
       note: note(),
       done: false,

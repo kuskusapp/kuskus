@@ -9,6 +9,7 @@ import LocalSearch from "./LocalSearch"
 import { findIndexOfId } from "~/lib/lib"
 import { createShortcut } from "@solid-primitives/keyboard"
 import { createEventListener } from "@solid-primitives/event-listener"
+import { createTodosForDev } from "~/lib/local"
 
 export default function Page() {
   const global = useGlobalContext()
@@ -223,6 +224,15 @@ export default function Page() {
         global.setLocalSearch(true)
         global.setFocusedTodo("")
       })
+    },
+    { preventDefault: false }
+  )
+
+  // TODO: don't use in production, only for development
+  createShortcut(
+    ["Control", "I"],
+    async () => {
+      createTodosForDev()
     },
     { preventDefault: false }
   )

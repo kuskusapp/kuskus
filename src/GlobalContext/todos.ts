@@ -4,9 +4,9 @@ import { SetterParam, defer } from "@solid-primitives/utils"
 import { createEffect, createResource, onCleanup } from "solid-js"
 import {
   CreateTodoDocument,
-  // DeleteTodoDocument,
   Mutation,
   Query,
+  TodoDeleteDocument,
   TodoUpdateDocument,
   TodosDocument,
 } from "~/graphql/schema"
@@ -45,22 +45,18 @@ export function createTodosState() {
       todos,
       (todo) => todo.id,
       (todo) => {
-        const id = todo().id
-        console.log("added", id)
+        const id = todo()?.id
 
         if (ignoreAddedIds.has(id)) {
           ignoreAddedIds.delete(id)
         } else {
           grafbase.request<Mutation>(CreateTodoDocument, {
-            /* added data */
             todo: todo(),
           })
         }
 
         createEffect(
           defer(todo, (todo) => {
-            console.log("updated", id)
-            console.log(todo, "todo")
             grafbase.request<Mutation>(TodoUpdateDocument, {
               id: todo.id,
               todo: {
@@ -75,18 +71,19 @@ export function createTodosState() {
           })
         )
 
-        onCleanup(() => {
-          console.log("removed", id)
-          // grafbase.request<Mutation>(DeleteTodoDocument, {
-          //   /* deleted data */
-          //   id,
-          // })
-        })
+        // onCleanup(() => {
+        //   // grafbase.request<Mutation>(DeleteTodoDocument, {
+        //   //   /* deleted data */
+        //   //   id,
+        //   // })
+        // })
       }
     )
   )
 
-  const addTodo = createAction((todo: TodoType) => {
+  const addTodo = createAction((todo: Omit<TodoType, "id">) => {
+    // TODO: quick hack, when creating todos, you don't need an id
+    // @ts-ignore
     mutate((p) => [...p, todo])
   })
 
@@ -104,6 +101,9 @@ export function createTodosState() {
 
   const removeTodo = createAction((id: string) => {
     mutate((p) => p.filter((t) => t.id !== id))
+    grafbase.request<Mutation>(TodoDeleteDocument, {
+      id,
+    })
   })
 
   return {
