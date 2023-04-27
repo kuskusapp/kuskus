@@ -33,9 +33,16 @@ export default function ActionBar() {
           }
         }}
       >
-        <span class="tooltip rounded shadow-lg p-1 bg-gray-100 -mt-8 dark:text-black">
-          New Todo
-        </span>
+        <div
+          class="tooltip shadow-lg p-1 bg-stone-900 -mt-8 text-white text-sm flex items-center px-3 gap-1 font-bold "
+          style={{
+            "border-radius": "25px",
+            "transition-delay": "0.5s",
+          }}
+        >
+          <span>New Todo</span>
+          <Icon name="N key" />
+        </div>
         <Icon name="Plus" />
       </div>
       <div

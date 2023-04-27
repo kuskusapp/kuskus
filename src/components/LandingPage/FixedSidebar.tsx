@@ -13,7 +13,7 @@ export default function FixedSidebar(props: any) {
         style={{
           width: "47vw",
         }}
-        class="top-0 left-0 fixed flex justify-center items-center h-screen bg-black"
+        class="top-0 left-0 fixed flex justify-center items-center h-screen "
       >
         <div class="flex flex-col justify-center items-center">
           <div class="flex items-center gap-3">

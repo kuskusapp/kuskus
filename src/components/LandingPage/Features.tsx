@@ -1,6 +1,6 @@
 export default function Features() {
   return (
-    <div class="flex flex-col pl-16 pt-20 gap-6">
+    <div class="flex flex-col pl-16 pt-20 gap-6 bg-white dark:bg-stone-700 h-screen">
       <div>
         <h1 class="text-3xl font-bold text-sky-300 mb-3">AI</h1>
         <div>Create a task. AI will create subtasks for you.</div>
