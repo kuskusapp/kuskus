@@ -1,5 +1,5 @@
 import { useGlobalContext } from "~/GlobalContext/store"
-import { Match, Show, Switch, batch } from "solid-js"
+import { Match, Show, Switch, batch, createEffect, onMount } from "solid-js"
 import Today from "~/pages/Today"
 import Done from "~/pages/Done"
 import All from "~/pages/All"
@@ -20,8 +20,8 @@ export default function Page() {
     "click",
     (e) => {
       if (e.target === ref) {
-        global.setFocusedTodo("")
-        global.setTodoToEdit("")
+        global.setFocusedTodo(null)
+        global.setTodoToEdit(-1)
         global.setNewTodo(false)
       }
     },
@@ -32,7 +32,7 @@ export default function Page() {
     ["Backspace"],
     () => {
       if (!global.localSearch() && !global.editingTodo()) {
-        global.todosState.removeTodo(global.focusedTodo())
+        global.todosState.removeTodo(global.focusedTodo()!)
 
         let todoIdToFocus =
           global
@@ -40,13 +40,11 @@ export default function Page() {
             .findIndex((todo) => todo.id === global.focusedTodo()) + 1
 
         if (global.orderedTodos().length === todoIdToFocus) {
-          global.setFocusedTodo(global.orderedTodos()[0].id)
+          global.setFocusedTodo(global.orderedTodos()[0].key)
         } else {
-          global.setFocusedTodo(global.orderedTodos()[todoIdToFocus].id)
+          global.setFocusedTodo(global.orderedTodos()[todoIdToFocus].key)
         }
-        global.setCurrentlyFocusedTodo(
-          findIndexOfId(global.orderedTodos(), global.focusedTodo()) - 1
-        )
+        console.log(global.focusedTodo())
       }
     },
     { preventDefault: false }
@@ -58,7 +56,7 @@ export default function Page() {
       if (global.newTodo()) return
 
       batch(() => {
-        global.setFocusedTodo("")
+        global.setFocusedTodo(null)
         // TODO: change depending of where you create todo
         global.setNewTodoType("all")
         global.setNewTodo(true)
@@ -103,12 +101,12 @@ export default function Page() {
         findIndexOfId(global.orderedTodos(), global.focusedTodo()) ===
         global.orderedTodos().length - 1
       ) {
-        global.setFocusedTodo(global.orderedTodos()[0].id)
+        global.setFocusedTodo(global.orderedTodos()[0].key)
       } else {
         global.setFocusedTodo(
           global.orderedTodos()[
             findIndexOfId(global.orderedTodos(), global.focusedTodo()) + 1
-          ].id
+          ].key
         )
       }
     }
@@ -136,14 +134,14 @@ export default function Page() {
         global.setLocalSearchResultId(global.localSearchResultIds()[index - 1])
       }
     } else {
-      if (findIndexOfId(global.orderedTodos(), global.focusedTodo()) === 0) {
+      if (findIndexOfId(global.orderedTodos(), global.focusedTodo()) === -1) {
         global.setFocusedTodo(
-          global.orderedTodos()[global.orderedTodos().length - 1].id
+          global.orderedTodos()[global.orderedTodos().length - 1].key
         )
       } else {
-        if (global.focusedTodo() === "") {
+        if (global.focusedTodo() === 0) {
           global.setFocusedTodo(
-            global.orderedTodos()[global.orderedTodos().length - 1].id
+            global.orderedTodos()[global.orderedTodos().length - 1].key
           )
           return
         }
@@ -151,7 +149,7 @@ export default function Page() {
         global.setFocusedTodo(
           global.orderedTodos()[
             findIndexOfId(global.orderedTodos(), global.focusedTodo()) - 1
-          ].id
+          ].key
         )
       }
     }
@@ -161,7 +159,7 @@ export default function Page() {
     ["Enter"],
     () => {
       if (
-        global.focusedTodo() !== "" &&
+        global.focusedTodo() !== 0 &&
         !global.localSearch() &&
         !global.newTodo()
       ) {
@@ -198,7 +196,7 @@ export default function Page() {
     ["T"],
     () => {
       if (
-        global.focusedTodo() !== "" &&
+        global.focusedTodo() !== 0 &&
         !global.localSearch() &&
         !global.newTodo() &&
         !global.editingTodo()
@@ -222,7 +220,7 @@ export default function Page() {
 
       batch(() => {
         global.setLocalSearch(true)
-        global.setFocusedTodo("")
+        global.setFocusedTodo(-1)
       })
     },
     { preventDefault: false }
@@ -241,8 +239,8 @@ export default function Page() {
     createShortcut(
       [`${i}`],
       () => {
-        if (global.focusedTodo() !== "" && !global.editingTodo()) {
-          global.todosState.updateTodo(global.focusedTodo(), (todo) => ({
+        if (global.focusedTodo() !== 0 && !global.editingTodo()) {
+          global.todosState.updateTodo(global.focusedTodo()!, (todo) => ({
             ...todo,
             priority: i,
           }))
@@ -255,8 +253,8 @@ export default function Page() {
   createShortcut(
     ["4"],
     () => {
-      if (global.focusedTodo() !== "" && !global.editingTodo()) {
-        global.todosState.updateTodo(global.focusedTodo(), (todo) => ({
+      if (global.focusedTodo() !== 0 && !global.editingTodo()) {
+        global.todosState.updateTodo(global.focusedTodo()!, (todo) => ({
           ...todo,
           starred: !todo.starred,
         }))

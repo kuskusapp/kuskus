@@ -1,12 +1,12 @@
 import clsx from "clsx"
-import { Accessor, Setter, Show, createSignal } from "solid-js"
-import { TodoType, useGlobalContext } from "../GlobalContext/store"
+import { Show, createSignal } from "solid-js"
+import { findIndexOfId, isToday } from "~/lib/lib"
+import { ClientTodo, useGlobalContext } from "../GlobalContext/store"
 import Icon from "./Icon"
 import TodoEdit from "./TodoEdit"
-import { isToday } from "~/lib/lib"
 
 interface Props {
-  todo: TodoType
+  todo: ClientTodo
 }
 
 export default function Todo(props: Props) {
@@ -31,7 +31,7 @@ export default function Todo(props: Props) {
       `}
       </style>
       <Show
-        when={global.todoToEdit() !== props.todo.id}
+        when={global.todoToEdit() !== props.todo.key}
         fallback={<TodoEdit todo={props.todo} />}
       >
         <div>
@@ -39,11 +39,11 @@ export default function Todo(props: Props) {
             class={clsx(
               "flex cursor-default pl-1.5 justify-between p-1 dark:border-neutral-700 mb-1",
               props.todo.note && "min-h-min",
-              props.todo.id === global.focusedTodo() &&
+              props.todo.key === global.focusedTodo() &&
                 "dark:bg-neutral-700 bg-zinc-200 rounded",
-              global.localSearchResultIds().includes(props.todo.id) &&
+              global.localSearchResultIds().includes(props.todo.key) &&
                 "border rounded border-blue-500",
-              global.localSearchResultId() === props.todo.id &&
+              global.localSearchResultId() === props.todo.key &&
                 "bg-blue-300 dark:bg-blue-500"
             )}
             style={{
@@ -60,19 +60,14 @@ export default function Todo(props: Props) {
               } else {
                 if (e.timeStamp - global.clickTimeStamp() < 200) {
                   global.setEditingTodo(true)
-                  global.setTodoToEdit(props.todo.id)
+                  global.setTodoToEdit(props.todo.key)
                   return
                 }
               }
 
               if (props.todo.id !== global.focusedTodo()) {
-                let array = global.orderedTodos()
                 global.setEditingTodo(false)
-                global.setFocusedTodo(props.todo.id)
-
-                global.setCurrentlyFocusedTodo(
-                  array.findIndex((i) => i.id === props.todo.id)
-                )
+                global.setFocusedTodo(props.todo.key)
               }
             }}
           >
@@ -89,7 +84,7 @@ export default function Todo(props: Props) {
                   onClick={() => {
                     setTriggerAnimation(true)
                     setTimeout(() => {
-                      global.todosState.toggleTodo(props.todo.id)
+                      global.todosState.toggleTodo(props.todo.key)
                       setTriggerAnimation(false)
                     }, 300)
                   }}

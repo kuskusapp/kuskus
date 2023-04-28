@@ -4,7 +4,6 @@ import { Show, createEffect, createSignal, onMount } from "solid-js"
 import { todayDate } from "~/lib/lib"
 import { useGlobalContext } from "../GlobalContext/store"
 import Icon from "./Icon"
-import { createId } from "~/GlobalContext/todos"
 
 export default function NewTodo() {
   const global = useGlobalContext()
@@ -16,8 +15,6 @@ export default function NewTodo() {
   const [priority, setPriority] = createSignal<0 | 1 | 2 | 3>(0)
   const [starred, setStarred] = createSignal(false)
 
-  // TODO: don't use Math.random() for id, find better way
-  // id will most likely be coming from grafbase so no worries
   createShortcut(["Enter"], async () => {
     if (title() === "") {
       global.setNewTodo(false)
@@ -25,30 +22,21 @@ export default function NewTodo() {
       return
     }
 
-    global.todosState.addTodo({
+    const newTodoKey = global.todosState.addTodo({
       title: title(),
       note: note(),
       done: false,
       starred: starred(),
       priority: priority(),
       dueDate: dueDate(),
+      subtasks: [],
     })
 
-    global.setOrderedTodos(
-      global.todosState
-        .todos()
-        .filter((t) => !t.done)
-        .sort((a, b) => b.priority - a.priority)
-    )
-    console.log(global.orderedTodos(), "ordered")
     global.setNewTodo(false)
     global.setEditingTodo(true)
     global.setNewTodoType("")
     global.setChangeFocus(true)
-    global.setFocusedTodo(
-      global.orderedTodos()[global.orderedTodos().length - 1].id
-    )
-    global.setCurrentlyFocusedTodo(global.orderedTodos().length - 1)
+    global.setFocusedTodo(newTodoKey)
   })
 
   let titleRef!: HTMLInputElement,

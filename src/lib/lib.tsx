@@ -1,4 +1,4 @@
-import { TodoType } from "~/GlobalContext/store"
+import { ClientTodo } from "~/GlobalContext/todos"
 
 export function isToday(date: string) {
   const today = todayDate()
@@ -15,10 +15,8 @@ export function todayDate() {
   return today
 }
 
-export function sortTodosByPriority(todos: TodoType[]) {
-  return todos.sort((a, b) => b.priority - a.priority)
-}
-
+// there is https://primitives.solidjs.community/package/marker#createMarker
+// use it instead of this
 export function turnHighlightsIntoSpans(str: string, match: string) {
   const regex = new RegExp(`\\b(${match})\\b`, "g")
   const parts = str.split(regex)
@@ -32,6 +30,6 @@ export function turnHighlightsIntoSpans(str: string, match: string) {
   return <div>{result}</div>
 }
 
-export function findIndexOfId(todos: TodoType[], todoId: string) {
-  return todos.findIndex((t) => t.id === todoId)
+export function findIndexOfId(todos: ClientTodo[], id: number | null) {
+  return todos.findIndex((t) => t.key === id)
 }

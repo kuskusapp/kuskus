@@ -1,19 +1,12 @@
 import { autofocus } from "@solid-primitives/autofocus"
 import { createShortcut } from "@solid-primitives/keyboard"
-import {
-  Show,
-  batch,
-  createEffect,
-  createSignal,
-  onCleanup,
-  onMount,
-} from "solid-js"
+import { Show, batch, createEffect, createSignal, onMount } from "solid-js"
 import { todayDate } from "~/lib/lib"
-import { TodoType, useGlobalContext } from "../GlobalContext/store"
+import { ClientTodo, useGlobalContext } from "../GlobalContext/store"
 import Icon from "./Icon"
 
 interface Props {
-  todo: TodoType
+  todo: ClientTodo
 }
 
 export default function TodoEdit(props: Props) {
@@ -34,13 +27,13 @@ export default function TodoEdit(props: Props) {
     if (!global.editingTodo()) {
       // REMOVE
       if (title() === "") {
-        global.todosState.removeTodo(props.todo.id)
+        global.todosState.removeTodo(props.todo.key)
         return
       }
 
       // UPDATE
       batch(() => {
-        global.todosState.updateTodo(props.todo.id, (p) => ({
+        global.todosState.updateTodo(props.todo.key, (p) => ({
           ...p,
           title: title(),
           note: note(),
@@ -48,7 +41,7 @@ export default function TodoEdit(props: Props) {
           starred: starred(),
           dueDate: showCalendar() && !dueDate() ? todayDate() : dueDate(),
         }))
-        global.setTodoToEdit("")
+        global.setTodoToEdit(-1)
       })
     }
   })

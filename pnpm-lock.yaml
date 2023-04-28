@@ -25,9 +25,6 @@ dependencies:
   '@solid-primitives/event-listener':
     specifier: ^2.2.10
     version: 2.2.10(solid-js@1.7.3)
-  '@solid-primitives/flux-store':
-    specifier: ^0.0.2
-    version: 0.0.2(solid-js@1.7.3)
   '@solid-primitives/keyboard':
     specifier: ^1.2.0
     version: 1.2.0(solid-js@1.7.3)
@@ -2320,14 +2317,6 @@ packages:
     dependencies:
       '@solid-primitives/utils': 6.1.0(solid-js@1.7.3)
       solid-js: 1.7.3
-
-  /@solid-primitives/flux-store@0.0.2(solid-js@1.7.3):
-    resolution: {integrity: sha512-kFzOWyFbcpae92EJmZmXIV0ZdbinhttOd6iQpYKZr/idbdshGCtAvjoQta7kq63bsNApPExdtME4JRQZlfdGnw==}
-    peerDependencies:
-      solid-js: ^1.6.12
-    dependencies:
-      solid-js: 1.7.3
-    dev: false
 
   /@solid-primitives/immutable@0.1.10(solid-js@1.7.3):
     resolution: {integrity: sha512-5XkiiBGSuUaoG2HFei1bG2eDyUwsj/b6IBP7ggm4UMU5mM/APz1u7e3rzMyPn5zVqnHT3oRSbj3UDPNYb5Y9Qg==}

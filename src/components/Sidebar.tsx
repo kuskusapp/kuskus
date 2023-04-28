@@ -1,7 +1,7 @@
 import clsx from "clsx"
 import { batch, createEffect, createSignal, onMount } from "solid-js"
 import Split from "split.js"
-import { useGlobalContext } from "~/GlobalContext/store"
+import { PageType, useGlobalContext } from "~/GlobalContext/store"
 import Icon from "./Icon"
 import { todayDate } from "~/lib/lib"
 import { GoogleClient } from "~/lib/auth"
@@ -24,8 +24,8 @@ export default function Sidebar() {
     "click",
     (e) => {
       if (e.target === ref) {
-        global.setFocusedTodo("")
-        global.setTodoToEdit("")
+        global.setFocusedTodo(null)
+        global.setTodoToEdit(0)
         global.setNewTodo(false)
       }
     },
@@ -52,7 +52,7 @@ export default function Sidebar() {
           `}
       </style>
       <div
-        class="w-screen dark:bg-stone-900 bg-gray-100 mt-3 mr-2 p-2 text-xs"
+        class="w-screen dark:bg-stone-900 bg-gray-100 mt-3 p-2 text-xs"
         id="sidebar"
       >
         <div class="flex flex-col gap-1 justify-between h-full" ref={ref}>
@@ -60,65 +60,25 @@ export default function Sidebar() {
             <div
               class={clsx(
                 "flex px-2 cursor-pointer items-center",
-                global.activePage() === "All" &&
+                global.isPageActive(PageType.All) &&
                   "rounded dark:bg-neutral-700 bg-zinc-200"
               )}
-              onClick={() => {
-                batch(() => {
-                  global.setActivePage("All")
-                  global.setOrderedTodos(
-                    global.todosState
-                      .todos()
-                      .filter((t) => !t.done)
-                      .sort((a, b) => {
-                        if (b.starred && !a.starred) {
-                          return 1
-                        } else if (a.starred && !b.starred) {
-                          return -1
-                        }
-                        return b.priority - a.priority
-                      })
-                  )
-                  if (global.orderedTodos().length > 0) {
-                    global.setFocusedTodo(global.orderedTodos()[0].id)
-                  }
-                })
-              }}
+              onClick={() => global.setActivePage(PageType.All)}
             >
               <Icon name="Inbox" />
               <span class="pl-1 overflow-hidden">All</span>
               <div class="opacity-40 text-xs ml-auto">
-                {global.todosState.todos().filter((t) => !t.done).length > 0 &&
-                  global.todosState.todos().filter((t) => !t.done).length}
+                {global.todos.filter((t) => !t.done).length > 0 &&
+                  global.todos.filter((t) => !t.done).length}
               </div>
             </div>
             <div
               class={clsx(
                 "flex px-2 cursor-pointer items-center",
-                global.activePage() === "Today" &&
+                global.isPageActive(PageType.Today) &&
                   "rounded dark:bg-neutral-700 bg-zinc-200"
               )}
-              onClick={() => {
-                batch(() => {
-                  global.setActivePage("Today")
-                  global.setOrderedTodos(
-                    global.todosState
-                      .todos()
-                      .filter((t) => !t.done && t.dueDate === todayDate())
-                      .sort((a, b) => {
-                        if (b.starred && !a.starred) {
-                          return 1
-                        } else if (a.starred && !b.starred) {
-                          return -1
-                        }
-                        return b.priority - a.priority
-                      })
-                  )
-                  if (global.orderedTodos().length > 0) {
-                    global.setFocusedTodo(global.orderedTodos()[0].id)
-                  }
-                })
-              }}
+              onClick={() => global.setActivePage(PageType.Today)}
             >
               <Icon name="Calendar" />
               <span class="pl-1 overflow-hidden">Today</span>
@@ -127,83 +87,40 @@ export default function Sidebar() {
                 {/* maybe make it a runnable function inside the JSX */}
                 {/* save first filter computation, then check if it's > 0 */}
                 {/* have same issue for other places in this component */}
-                {global.todosState
-                  .todos()
-                  .filter((t) => !t.done && t.dueDate === todayDate()).length >
-                  0 &&
-                  global.todosState
-                    .todos()
-                    .filter((t) => !t.done && t.dueDate === todayDate()).length}
+                {global.todosState.todos.filter(
+                  (t) => !t.done && t.dueDate === todayDate()
+                ).length > 0 &&
+                  global.todosState.todos.filter(
+                    (t) => !t.done && t.dueDate === todayDate()
+                  ).length}
               </div>
             </div>
             <div
               class={clsx(
                 "flex px-2 cursor-pointer items-center",
-                global.activePage() === "Starred" &&
+                global.isPageActive(PageType.Starred) &&
                   "rounded dark:bg-neutral-700 bg-zinc-200"
               )}
-              onClick={() => {
-                batch(() => {
-                  global.setActivePage("Starred")
-                  global.setOrderedTodos(
-                    global.todosState
-                      .todos()
-                      .filter((t) => !t.done && t.starred)
-                      .sort((a, b) => {
-                        if (b.starred && !a.starred) {
-                          return 1
-                        } else if (a.starred && !b.starred) {
-                          return -1
-                        }
-                        return b.priority - a.priority
-                      })
-                  )
-                  if (global.orderedTodos().length > 0) {
-                    global.setFocusedTodo(global.orderedTodos()[0].id)
-                  }
-                })
-              }}
+              onClick={() => global.setActivePage(PageType.Starred)}
             >
               <Icon name="Star" />
               <span class="pl-1 overflow-hidden">Starred</span>
               <div class="opacity-40 text-xs ml-auto">
                 {/* TODO: not good, should not run filter twice */}
-                {global.todosState.todos().filter((t) => {
+                {global.todos.filter((t) => {
                   if (!t.done && t.starred) {
                     return true
                   }
-                }).length > 0 &&
-                  global.todosState.todos().filter((t) => t.starred).length}
+                }).length > 0 && global.todos.filter((t) => t.starred).length}
               </div>
             </div>
             <div
               class={clsx(
                 "flex px-2 cursor-pointer items-center",
-                global.activePage() === "Done" &&
+                global.isPageActive(PageType.Done) &&
                   "rounded dark:bg-neutral-700 bg-zinc-200"
               )}
-              onClick={() => {
-                batch(() => {
-                  global.setActivePage("Done")
-                  global.setOrderedTodos(
-                    global.todosState
-                      .todos()
-                      .filter((t) => t.done)
-                      // TODO: filter by recently added to done
-                      .sort((a, b) => {
-                        if (b.starred && !a.starred) {
-                          return 1
-                        } else if (a.starred && !b.starred) {
-                          return -1
-                        }
-                        return b.priority - a.priority
-                      })
-                  )
-                  if (global.orderedTodos().length > 0) {
-                    global.setFocusedTodo(global.orderedTodos()[0].id)
-                  }
-                })
-              }}
+              onClick={() => global.setActivePage(PageType.Done)}
             >
               <Icon name="Done" />
               <span class="pl-1 overflow-hidden">Done</span>
