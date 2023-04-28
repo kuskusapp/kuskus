@@ -37,10 +37,10 @@ export default function Page() {
         let todoIdToFocus =
           global
             .orderedTodos()
-            .findIndex((todo) => todo.id === global.focusedTodo()) + 1
+            .findIndex((todo) => todo.key === global.focusedTodo()) + 1
 
-        if (global.orderedTodos().length === todoIdToFocus) {
-          global.setFocusedTodo(global.orderedTodos()[0].key)
+        if (global.orderedTodos().length === 0) {
+          global.setFocusedTodo(-1)
         } else {
           global.setFocusedTodo(global.orderedTodos()[todoIdToFocus].key)
         }

@@ -400,6 +400,17 @@ export type TodoFragment = {
   dueDate?: string | null
 }
 
+export type SubtaskFragment = {
+  __typename?: "Subtask"
+  id: string
+  title: string
+  done: boolean
+  starred: boolean
+  priority: number
+  note?: string | null
+  dueDate?: string | null
+}
+
 export type TodosQueryVariables = Exact<{ [key: string]: never }>
 
 export type TodosQuery = {
@@ -417,6 +428,22 @@ export type TodosQuery = {
         priority: number
         note?: string | null
         dueDate?: string | null
+        subtasks?: {
+          __typename?: "SubtaskConnection"
+          edges?: Array<{
+            __typename?: "SubtaskEdge"
+            node: {
+              __typename?: "Subtask"
+              id: string
+              title: string
+              done: boolean
+              starred: boolean
+              priority: number
+              note?: string | null
+              dueDate?: string | null
+            }
+          } | null> | null
+        } | null
       }
     } | null> | null
   } | null
@@ -456,19 +483,6 @@ export type TodoDeleteMutation = {
   todoDelete?: { __typename?: "TodoDeletePayload"; deletedId: string } | null
 }
 
-export type SubtasksQueryVariables = Exact<{ [key: string]: never }>
-
-export type SubtasksQuery = {
-  __typename?: "Query"
-  subtaskCollection?: {
-    __typename?: "SubtaskConnection"
-    edges?: Array<{
-      __typename?: "SubtaskEdge"
-      node: { __typename?: "Subtask"; id: string; title: string }
-    } | null> | null
-  } | null
-}
-
 export type TodoLinkSubtaskMutationVariables = Exact<{
   taskId: Scalars["ID"]
   subtaskId: Scalars["ID"]
@@ -482,6 +496,19 @@ export type TodoLinkSubtaskMutation = {
   } | null
 }
 
+export type SubtasksQueryVariables = Exact<{ [key: string]: never }>
+
+export type SubtasksQuery = {
+  __typename?: "Query"
+  subtaskCollection?: {
+    __typename?: "SubtaskConnection"
+    edges?: Array<{
+      __typename?: "SubtaskEdge"
+      node: { __typename?: "Subtask"; id: string; title: string }
+    } | null> | null
+  } | null
+}
+
 export type SubtaskCreateMutationVariables = Exact<{
   subtask: SubtaskCreateInput
 }>
@@ -491,6 +518,18 @@ export type SubtaskCreateMutation = {
   subtaskCreate?: {
     __typename?: "SubtaskCreatePayload"
     subtask?: { __typename?: "Subtask"; id: string } | null
+  } | null
+}
+
+export type SubtaskDeleteMutationVariables = Exact<{
+  id: Scalars["ID"]
+}>
+
+export type SubtaskDeleteMutation = {
+  __typename?: "Mutation"
+  subtaskDelete?: {
+    __typename?: "SubtaskDeletePayload"
+    deletedId: string
   } | null
 }
 
@@ -519,6 +558,31 @@ export const TodoFragmentDoc = {
     },
   ],
 } as unknown as DocumentNode<TodoFragment, unknown>
+export const SubtaskFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "Subtask" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "Subtask" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "id" } },
+          { kind: "Field", name: { kind: "Name", value: "title" } },
+          { kind: "Field", name: { kind: "Name", value: "done" } },
+          { kind: "Field", name: { kind: "Name", value: "starred" } },
+          { kind: "Field", name: { kind: "Name", value: "priority" } },
+          { kind: "Field", name: { kind: "Name", value: "note" } },
+          { kind: "Field", name: { kind: "Name", value: "dueDate" } },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<SubtaskFragment, unknown>
 export const TodosDocument = {
   kind: "Document",
   definitions: [
@@ -558,6 +622,47 @@ export const TodosDocument = {
                               kind: "FragmentSpread",
                               name: { kind: "Name", value: "Todo" },
                             },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "subtasks" },
+                              arguments: [
+                                {
+                                  kind: "Argument",
+                                  name: { kind: "Name", value: "first" },
+                                  value: { kind: "IntValue", value: "20" },
+                                },
+                              ],
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "edges" },
+                                    selectionSet: {
+                                      kind: "SelectionSet",
+                                      selections: [
+                                        {
+                                          kind: "Field",
+                                          name: { kind: "Name", value: "node" },
+                                          selectionSet: {
+                                            kind: "SelectionSet",
+                                            selections: [
+                                              {
+                                                kind: "FragmentSpread",
+                                                name: {
+                                                  kind: "Name",
+                                                  value: "Subtask",
+                                                },
+                                              },
+                                            ],
+                                          },
+                                        },
+                                      ],
+                                    },
+                                  },
+                                ],
+                              },
+                            },
                           ],
                         },
                       },
@@ -576,6 +681,26 @@ export const TodosDocument = {
       typeCondition: {
         kind: "NamedType",
         name: { kind: "Name", value: "Todo" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "id" } },
+          { kind: "Field", name: { kind: "Name", value: "title" } },
+          { kind: "Field", name: { kind: "Name", value: "done" } },
+          { kind: "Field", name: { kind: "Name", value: "starred" } },
+          { kind: "Field", name: { kind: "Name", value: "priority" } },
+          { kind: "Field", name: { kind: "Name", value: "note" } },
+          { kind: "Field", name: { kind: "Name", value: "dueDate" } },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "Subtask" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "Subtask" },
       },
       selectionSet: {
         kind: "SelectionSet",
@@ -785,63 +910,6 @@ export const TodoDeleteDocument = {
     },
   ],
 } as unknown as DocumentNode<TodoDeleteMutation, TodoDeleteMutationVariables>
-export const SubtasksDocument = {
-  kind: "Document",
-  definitions: [
-    {
-      kind: "OperationDefinition",
-      operation: "query",
-      name: { kind: "Name", value: "Subtasks" },
-      selectionSet: {
-        kind: "SelectionSet",
-        selections: [
-          {
-            kind: "Field",
-            name: { kind: "Name", value: "subtaskCollection" },
-            arguments: [
-              {
-                kind: "Argument",
-                name: { kind: "Name", value: "first" },
-                value: { kind: "IntValue", value: "100" },
-              },
-            ],
-            selectionSet: {
-              kind: "SelectionSet",
-              selections: [
-                {
-                  kind: "Field",
-                  name: { kind: "Name", value: "edges" },
-                  selectionSet: {
-                    kind: "SelectionSet",
-                    selections: [
-                      {
-                        kind: "Field",
-                        name: { kind: "Name", value: "node" },
-                        selectionSet: {
-                          kind: "SelectionSet",
-                          selections: [
-                            {
-                              kind: "Field",
-                              name: { kind: "Name", value: "id" },
-                            },
-                            {
-                              kind: "Field",
-                              name: { kind: "Name", value: "title" },
-                            },
-                          ],
-                        },
-                      },
-                    ],
-                  },
-                },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<SubtasksQuery, SubtasksQueryVariables>
 export const TodoLinkSubtaskDocument = {
   kind: "Document",
   definitions: [
@@ -953,6 +1021,63 @@ export const TodoLinkSubtaskDocument = {
   TodoLinkSubtaskMutation,
   TodoLinkSubtaskMutationVariables
 >
+export const SubtasksDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "Subtasks" },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "subtaskCollection" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "first" },
+                value: { kind: "IntValue", value: "100" },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "edges" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "node" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "title" },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<SubtasksQuery, SubtasksQueryVariables>
 export const SubtaskCreateDocument = {
   kind: "Document",
   definitions: [
@@ -1015,4 +1140,61 @@ export const SubtaskCreateDocument = {
 } as unknown as DocumentNode<
   SubtaskCreateMutation,
   SubtaskCreateMutationVariables
+>
+export const SubtaskDeleteDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "SubtaskDelete" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: { kind: "Variable", name: { kind: "Name", value: "id" } },
+          type: {
+            kind: "NonNullType",
+            type: { kind: "NamedType", name: { kind: "Name", value: "ID" } },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "subtaskDelete" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "by" },
+                value: {
+                  kind: "ObjectValue",
+                  fields: [
+                    {
+                      kind: "ObjectField",
+                      name: { kind: "Name", value: "id" },
+                      value: {
+                        kind: "Variable",
+                        name: { kind: "Name", value: "id" },
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "deletedId" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  SubtaskDeleteMutation,
+  SubtaskDeleteMutationVariables
 >

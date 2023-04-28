@@ -1,12 +1,34 @@
 import {
   CreateTodoDocument,
   Mutation,
+  Query,
   SubtaskCreateDocument,
+  SubtaskDeleteDocument,
+  TodoDeleteDocument,
   TodoLinkSubtaskDocument,
+  TodosDocument,
 } from "~/graphql/schema"
 import { grafbase } from "./graphql"
 
 export async function createTodosForDev() {
+  // delete all todos and subtasks in db
+  const existingTodos = await grafbase.request<Query>(TodosDocument)
+  let todoIdsToDelete = <string[]>[]
+  let subtaskIdsToDelete = <string[]>[]
+  existingTodos.todoCollection?.edges?.map((todo) => {
+    todoIdsToDelete.push(todo?.node.id!)
+    todo?.node.subtasks?.edges?.map((subtask) => {
+      subtaskIdsToDelete.push(subtask?.node.id!)
+    })
+  })
+  todoIdsToDelete.map((id) => {
+    grafbase.request<Mutation>(TodoDeleteDocument, { id: id })
+  })
+  subtaskIdsToDelete.map((id) => {
+    grafbase.request<Mutation>(SubtaskDeleteDocument, { id: id })
+  })
+
+  // create new todos and subtasks
   const task = await grafbase.request<Mutation>(CreateTodoDocument, {
     todo: {
       title: "Fix all bugs",

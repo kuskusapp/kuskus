@@ -8,11 +8,28 @@ fragment Todo on Todo {
   dueDate
 }
 
+fragment Subtask on Subtask {
+  id
+  title
+  done
+  starred
+  priority
+  note
+  dueDate
+}
+
 query Todos {
   todoCollection(first: 100) {
     edges {
       node {
         ...Todo
+        subtasks(first: 20) {
+          edges {
+            node {
+              ...Subtask
+            }
+          }
+        }
       }
     }
   }
@@ -40,6 +57,14 @@ mutation TodoDelete($id: ID!) {
   }
 }
 
+mutation TodoLinkSubtask($taskId: ID!, $subtaskId: ID!) {
+  todoUpdate(by: { id: $taskId }, input: { subtasks: [{ link: $subtaskId }] }) {
+    todo {
+      id
+    }
+  }
+}
+
 query Subtasks {
   subtaskCollection(first: 100) {
     edges {
@@ -51,18 +76,16 @@ query Subtasks {
   }
 }
 
-mutation TodoLinkSubtask($taskId: ID!, $subtaskId: ID!) {
-  todoUpdate(by: { id: $taskId }, input: { subtasks: [{ link: $subtaskId }] }) {
-    todo {
-      id
-    }
-  }
-}
-
 mutation SubtaskCreate($subtask: SubtaskCreateInput!) {
   subtaskCreate(input: $subtask) {
     subtask {
       id
     }
+  }
+}
+
+mutation SubtaskDelete($id: ID!) {
+  subtaskDelete(by: { id: $id }) {
+    deletedId
   }
 }
