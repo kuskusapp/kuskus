@@ -15,15 +15,6 @@ export const enum PageType {
 export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
   () => {
     const todosState = createTodosState()
-    const [subtasks, setSubtasks] = createSignal<ClientTodo[]>([
-      {
-        id: "",
-        title: "check all TODO: in code",
-        done: false,
-        starred: false,
-        priority: 0,
-      },
-    ])
 
     const [activePage, setActivePage] = createSignal(PageType.All)
     const isPageActive = createSelector<PageType | null, PageType>(activePage)
@@ -44,7 +35,7 @@ export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
     const [todoEditInput, setTodoEditInput] = createSignal("")
     const [guard, setGuard] = createSignal(false)
     const [localSearchResultIds, setLocalSearchResultIds] = createSignal<
-      string[]
+      TodoKey[]
     >([])
     const [localSearchResultId, setLocalSearchResultId] = createSignal("")
     const [editNoteInTodo, setEditNoteInTodo] = createSignal(false)
@@ -73,6 +64,12 @@ export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
       todosState.todos
         .filter(filterPredicateMap[activePage()])
         .sort(compareTodos)
+    )
+
+    const focusedTodoIndex = createMemo(
+      () =>
+        focusedTodo() &&
+        todosState.todos.findIndex((t) => t.key === focusedTodo())
     )
 
     return {
@@ -120,8 +117,7 @@ export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
       setChangeFocus,
       newSubtask,
       setNewSubtask,
-      subtasks,
-      setSubtasks,
+      focusedTodoIndex,
     } as const
   },
   // @ts-expect-error this is just to assert context as non-nullable

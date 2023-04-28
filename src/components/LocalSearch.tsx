@@ -29,9 +29,6 @@ export default function LocalSearch() {
             global.setLocalSearch(false)
             global.setLocalSearchResultIds([])
             global.setLocalSearchResultId("")
-            global.setCurrentlyFocusedTodo(
-              findIndexOfId(global.orderedTodos(), global.focusedTodo())
-            )
           }
         }
       }}

@@ -1,12 +1,12 @@
 import clsx from "clsx"
-import { Accessor, Setter, Show, createSignal } from "solid-js"
-import { TodoType, useGlobalContext } from "../GlobalContext/store"
+import { Show, createSignal, onMount } from "solid-js"
+import { isToday } from "~/lib/lib"
+import { ClientTodo, useGlobalContext } from "../GlobalContext/store"
 import Icon from "./Icon"
 import TodoEdit from "./TodoEdit"
-import { isToday } from "~/lib/lib"
 
 interface Props {
-  todo: TodoType
+  todo: ClientTodo
 }
 
 export default function Todo(props: Props) {
@@ -66,13 +66,8 @@ export default function Todo(props: Props) {
               }
 
               if (props.todo.id !== global.focusedTodo()) {
-                let array = global.orderedTodos()
                 global.setEditingTodo(false)
                 global.setFocusedTodo(props.todo.id)
-
-                global.setCurrentlyFocusedTodo(
-                  array.findIndex((i) => i.id === props.todo.id)
-                )
               }
             }}
           >

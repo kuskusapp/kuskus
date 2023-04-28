@@ -52,7 +52,7 @@ export default function Sidebar() {
           `}
       </style>
       <div
-        class="w-screen dark:bg-stone-900 bg-gray-100 mt-3 mr-2 p-2 text-xs"
+        class="w-screen dark:bg-stone-900 bg-gray-100 mt-3 p-2 text-xs"
         id="sidebar"
       >
         <div class="flex flex-col gap-1 justify-between h-full" ref={ref}>

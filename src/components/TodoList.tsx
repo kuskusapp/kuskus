@@ -20,7 +20,7 @@ export default function Page() {
     "click",
     (e) => {
       if (e.target === ref) {
-        global.setFocusedTodo("")
+        global.setFocusedTodo(null)
         global.setTodoToEdit("")
         global.setNewTodo(false)
       }
@@ -32,7 +32,7 @@ export default function Page() {
     ["Backspace"],
     () => {
       if (!global.localSearch() && !global.editingTodo()) {
-        global.todosState.removeTodo(global.focusedTodo())
+        global.todosState.removeTodo(global.focusedTodo()!)
 
         let todoIdToFocus =
           global
@@ -40,13 +40,11 @@ export default function Page() {
             .findIndex((todo) => todo.id === global.focusedTodo()) + 1
 
         if (global.orderedTodos().length === todoIdToFocus) {
-          global.setFocusedTodo(global.orderedTodos()[0].id)
+          global.setFocusedTodo(global.orderedTodos()[0])
         } else {
           global.setFocusedTodo(global.orderedTodos()[todoIdToFocus].id)
         }
-        global.setCurrentlyFocusedTodo(
-          findIndexOfId(global.orderedTodos(), global.focusedTodo()) - 1
-        )
+        console.log(global.focusedTodo())
       }
     },
     { preventDefault: false }
@@ -58,7 +56,7 @@ export default function Page() {
       if (global.newTodo()) return
 
       batch(() => {
-        global.setFocusedTodo("")
+        global.setFocusedTodo(null)
         // TODO: change depending of where you create todo
         global.setNewTodoType("all")
         global.setNewTodo(true)
