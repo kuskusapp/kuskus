@@ -15,8 +15,6 @@ export default function NewTodo() {
   const [priority, setPriority] = createSignal<0 | 1 | 2 | 3>(0)
   const [starred, setStarred] = createSignal(false)
 
-  // TODO: don't use Math.random() for id, find better way
-  // id will most likely be coming from grafbase so no worries
   createShortcut(["Enter"], async () => {
     if (title() === "") {
       global.setNewTodo(false)
@@ -24,7 +22,7 @@ export default function NewTodo() {
       return
     }
 
-    const newTodo = global.todosState.addTodo({
+    const newTodoKey = global.todosState.addTodo({
       title: title(),
       note: note(),
       done: false,
@@ -34,12 +32,11 @@ export default function NewTodo() {
       subtasks: [],
     })
 
-    console.log(global.orderedTodos(), "ordered")
     global.setNewTodo(false)
     global.setEditingTodo(true)
     global.setNewTodoType("")
     global.setChangeFocus(true)
-    global.setFocusedTodo(newTodo)
+    global.setFocusedTodo(newTodoKey)
   })
 
   let titleRef!: HTMLInputElement,

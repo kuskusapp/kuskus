@@ -1,7 +1,6 @@
 import { createMemo, createSelector, createSignal } from "solid-js"
 import { createContextProvider } from "@solid-primitives/context"
-import { ClientTodo, createTodosState } from "./todos"
-import { unwrap } from "solid-js/store"
+import { ClientTodo, TodoKey, createTodosState } from "./todos"
 import { todayDate } from "~/lib/lib"
 
 export type { ClientSubtask, ClientTodo } from "./todos"
@@ -25,18 +24,17 @@ export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
         priority: 0,
       },
     ])
+
     const [activePage, setActivePage] = createSignal(PageType.All)
+    const isPageActive = createSelector<PageType | null, PageType>(activePage)
+
     const [localSearch, setLocalSearch] = createSignal(false)
     const [focusedTodoFromSearch, setFocusedTodoFromSearch] = createSignal(0)
     const [highlitedTodosFromSearch, setHighlightedTodosFromSearch] =
       createSignal([])
 
-    // reference to the todo that is currently focused
-    const [focusedTodo, setFocusedTodo] = createSignal<ClientTodo | null>(null)
-    const isTodoFocused = createSelector(
-      focusedTodo,
-      (a: ClientTodo, b) => unwrap(b) === unwrap(a)
-    )
+    const [focusedTodo, setFocusedTodo] = createSignal<TodoKey | null>(null)
+    const isTodoFocused = createSelector<TodoKey | null, TodoKey>(focusedTodo)
 
     const [todoToEdit, setTodoToEdit] = createSignal<string>("")
     const [editingTodo, setEditingTodo] = createSignal<boolean>(false)
@@ -83,6 +81,7 @@ export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
       ...todosState,
       orderedTodos,
       activePage,
+      isPageActive,
       setActivePage,
       focusedTodo,
       isTodoFocused,

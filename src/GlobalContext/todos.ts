@@ -1,4 +1,4 @@
-import { createEffect, createMemo, mapArray, onCleanup } from "solid-js"
+import { createEffect, mapArray, onCleanup } from "solid-js"
 import { StoreSetter, createStore, produce, unwrap } from "solid-js/store"
 import {
   CreateTodoDocument,
@@ -12,8 +12,9 @@ import {
 import { grafbase } from "~/lib/graphql"
 
 export type Priority = 0 | 1 | 2 | 3
+export type TodoKey = number
 
-export type BaseTodo = {
+export type BaseTask = {
   title: string
   done: boolean
   starred: boolean
@@ -22,15 +23,24 @@ export type BaseTodo = {
   dueDate: string | null
 }
 
-export type ClientSubtask = BaseTodo & { id: string }
+export type ClientSubtask = BaseTask & { id: string }
 
-export type ClientTodo = BaseTodo & {
+export type ClientTodo = BaseTask & {
   /**
    * ID in the database, todos created client side will not have an id until they are saved to the database
    */
   id: string | null
+  /**
+   * Local unique key
+   */
+  key: TodoKey
   subtasks: ClientSubtask[]
 }
+
+const getNewKey = (() => {
+  let last = 0
+  return () => last++
+})()
 
 const parseDbPriority = (int: number): Priority => {
   int = Math.floor(int)
@@ -73,6 +83,7 @@ export function createTodosState() {
             if (!todo?.node) continue
             const clientTodo: ClientTodo = {
               id: todo.node.id,
+              key: getNewKey(),
               done: todo.node.done,
               starred: todo.node.starred,
               title: todo.node.title,
@@ -158,23 +169,23 @@ export function createTodosState() {
     // state
     todos,
     // actions
-    addTodo: (fields: Omit<ClientTodo, "id">): ClientTodo => {
-      const todo: ClientTodo = { ...fields, id: null }
-      setTodos(todos.length, todo)
-      return todo
+    addTodo: (fields: Omit<ClientTodo, "id" | "key">): number => {
+      const key = getNewKey()
+      setTodos(todos.length, { ...fields, id: null, key })
+      return key
     },
-    toggleTodo: (id: string) => {
+    toggleTodo: (key: number) => {
       setTodos(
-        (t) => t.id === id,
+        (t) => t.key === key,
         "done",
         (d) => !d
       )
     },
-    updateTodo: (id: string, setter: StoreSetter<ClientTodo, [number]>) => {
-      setTodos((t) => t.id === id, setter)
+    updateTodo: (key: number, setter: StoreSetter<ClientTodo, [number]>) => {
+      setTodos((t) => t.key === key, setter)
     },
-    removeTodo: (id: string) => {
-      setTodos((p) => p.filter((t) => t.id !== id))
+    removeTodo: (key: number) => {
+      setTodos((p) => p.filter((t) => t.key !== key))
     },
     // a windcard setter if you want to share that 🤷‍♂️
     // setTodos,

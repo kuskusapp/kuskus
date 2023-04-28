@@ -27,13 +27,13 @@ export default function TodoEdit(props: Props) {
     if (!global.editingTodo()) {
       // REMOVE
       if (title() === "") {
-        global.todosState.removeTodo(props.todo.id)
+        global.todosState.removeTodo(props.todo.key)
         return
       }
 
       // UPDATE
       batch(() => {
-        global.todosState.updateTodo(props.todo.id, (p) => ({
+        global.todosState.updateTodo(props.todo.key, (p) => ({
           ...p,
           title: title(),
           note: note(),

@@ -1,5 +1,5 @@
 import { createEventListener } from "@solid-primitives/event-listener"
-import { For, Show, batch, createEffect, onMount, untrack } from "solid-js"
+import { For, Show } from "solid-js"
 import { useGlobalContext } from "~/GlobalContext/store"
 import NewTodo from "~/components/NewTodo"
 import Todo from "~/components/Todo"
