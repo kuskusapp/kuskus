@@ -1,32 +1,22 @@
-import { createSignal } from "solid-js"
+import { createMemo, createSelector, createSignal } from "solid-js"
 import { createContextProvider } from "@solid-primitives/context"
-import { createTodosState } from "./todos"
+import { ClientTodo, createTodosState } from "./todos"
+import { unwrap } from "solid-js/store"
+import { todayDate } from "~/lib/lib"
 
-export type TodoType = {
-  id: string
-  title: string
-  done: boolean
-  starred: boolean
-  priority: 0 | 1 | 2 | 3
-  note?: string
-  dueDate?: string
-  subtasks?: [
-    {
-      id: number
-      title: string
-      done: boolean
-      starred: boolean
-      priority: 0 | 1 | 2 | 3
-      note?: string
-      dueDate?: string
-    }
-  ]
+export type { ClientSubtask, ClientTodo } from "./todos"
+
+export const enum PageType {
+  All = "All",
+  Today = "Today",
+  Done = "Done",
+  Starred = "Starred",
 }
 
 export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
   () => {
     const todosState = createTodosState()
-    const [subtasks, setSubtasks] = createSignal<TodoType[]>([
+    const [subtasks, setSubtasks] = createSignal<ClientTodo[]>([
       {
         id: "",
         title: "check all TODO: in code",
@@ -35,13 +25,19 @@ export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
         priority: 0,
       },
     ])
-    const [activePage, setActivePage] = createSignal("All")
+    const [activePage, setActivePage] = createSignal(PageType.All)
     const [localSearch, setLocalSearch] = createSignal(false)
-    const [orderedTodos, setOrderedTodos] = createSignal<TodoType[]>([])
     const [focusedTodoFromSearch, setFocusedTodoFromSearch] = createSignal(0)
     const [highlitedTodosFromSearch, setHighlightedTodosFromSearch] =
       createSignal([])
-    const [focusedTodo, setFocusedTodo] = createSignal<string>("") // id of todo
+
+    // reference to the todo that is currently focused
+    const [focusedTodo, setFocusedTodo] = createSignal<ClientTodo | null>(null)
+    const isTodoFocused = createSelector(
+      focusedTodo,
+      (a: ClientTodo, b) => unwrap(b) === unwrap(a)
+    )
+
     const [todoToEdit, setTodoToEdit] = createSignal<string>("")
     const [editingTodo, setEditingTodo] = createSignal<boolean>(false)
     const [newTodo, setNewTodo] = createSignal<boolean>(false)
@@ -53,18 +49,43 @@ export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
       string[]
     >([])
     const [localSearchResultId, setLocalSearchResultId] = createSignal("")
-    const [currentlyFocusedTodo, setCurrentlyFocusedTodo] = createSignal(0)
     const [editNoteInTodo, setEditNoteInTodo] = createSignal(false)
     const [showHelp, setShowHelp] = createSignal(false)
     const [showSettings, setShowSettings] = createSignal(false)
     const [clickTimeStamp, setClickTimeStamp] = createSignal(0)
     const [changeFocus, setChangeFocus] = createSignal(true)
 
+    const compareTodos = (a: ClientTodo, b: ClientTodo): number => {
+      if (b.starred && !a.starred) {
+        return 1
+      } else if (a.starred && !b.starred) {
+        return -1
+      }
+      return b.priority - a.priority
+    }
+
+    const filterPredicateMap: Record<PageType, (t: ClientTodo) => boolean> = {
+      [PageType.All]: (t) => !t.done,
+      [PageType.Today]: (t) => !t.done && t.dueDate === todayDate(),
+      [PageType.Done]: (t) => t.done,
+      [PageType.Starred]: (t) => !t.done && t.starred,
+    }
+
+    const orderedTodos = createMemo(() =>
+      todosState.todos
+        .filter(filterPredicateMap[activePage()])
+        .sort(compareTodos)
+    )
+
     return {
       todosState,
+      // all the todosState state and methods can be available top level
+      ...todosState,
+      orderedTodos,
       activePage,
       setActivePage,
       focusedTodo,
+      isTodoFocused,
       setFocusedTodo,
       todoToEdit,
       setTodoToEdit,
@@ -88,10 +109,6 @@ export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
       setLocalSearchResultIds,
       localSearchResultId,
       setLocalSearchResultId,
-      orderedTodos,
-      setOrderedTodos,
-      currentlyFocusedTodo,
-      setCurrentlyFocusedTodo,
       editNoteInTodo,
       setEditNoteInTodo,
       showHelp,
@@ -104,7 +121,6 @@ export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
       setChangeFocus,
       newSubtask,
       setNewSubtask,
-      todos: todosState.todos,
       subtasks,
       setSubtasks,
     } as const

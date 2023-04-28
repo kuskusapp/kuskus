@@ -1,19 +1,12 @@
 import { autofocus } from "@solid-primitives/autofocus"
 import { createShortcut } from "@solid-primitives/keyboard"
-import {
-  Show,
-  batch,
-  createEffect,
-  createSignal,
-  onCleanup,
-  onMount,
-} from "solid-js"
+import { Show, batch, createEffect, createSignal, onMount } from "solid-js"
 import { todayDate } from "~/lib/lib"
-import { TodoType, useGlobalContext } from "../GlobalContext/store"
+import { ClientTodo, useGlobalContext } from "../GlobalContext/store"
 import Icon from "./Icon"
 
 interface Props {
-  todo: TodoType
+  todo: ClientTodo
 }
 
 export default function TodoEdit(props: Props) {
