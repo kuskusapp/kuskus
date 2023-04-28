@@ -76,6 +76,8 @@ export default function Page() {
       global.setLocalSearch(false)
       global.setChangeFocus(true)
       global.setEditingTodo(false)
+      global.setLocalSearchResultId(null)
+      global.setLocalSearchResultIds([])
     })
   })
 

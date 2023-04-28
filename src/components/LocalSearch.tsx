@@ -44,7 +44,7 @@ export default function LocalSearch() {
         }
       }}
       autofocus
-      ref={autofocus}
+      ref={(el) => autofocus(el)}
       type="text"
       placeholder="Go to..."
     />

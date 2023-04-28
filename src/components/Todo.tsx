@@ -1,7 +1,11 @@
 import clsx from "clsx"
-import { Show, createSignal } from "solid-js"
-import { findIndexOfId, isToday } from "~/lib/lib"
-import { ClientTodo, useGlobalContext } from "../GlobalContext/store"
+import { For, Show, createSignal } from "solid-js"
+import { isToday } from "~/lib/lib"
+import {
+  ClientSubtask,
+  ClientTodo,
+  useGlobalContext,
+} from "../GlobalContext/store"
 import Icon from "./Icon"
 import TodoEdit from "./TodoEdit"
 
@@ -129,6 +133,17 @@ export default function Todo(props: Props) {
           </div>
         </div>
       </Show>
+      <For each={props.todo.subtasks}>
+        {(subtask) => {
+          return (
+            <div class="ml-4">
+              {/* TODO: don't know how to make it work nicely */}
+              {/* @ts-ignore */}
+              <Todo todo={subtask}></Todo>
+            </div>
+          )
+        }}
+      </For>
     </>
   )
 }
