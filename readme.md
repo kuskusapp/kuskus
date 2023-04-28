@@ -1,6 +1,6 @@
 # KusKus
 
-> Fast todo app
+> Fast todo app with GitHub integration and AI features
 
 ## Features
 
@@ -14,18 +14,29 @@
 - Project support ala [Height](https://height.app/), [Linear](https://linear.app/)
 - Public todos/projects with user profiles
 
-## Run web (SolidJS)
+## File structure
 
-```bash
-pnpm i
-pnpm dev
-```
+Important bits defined below.
 
-Then go to http://localhost:3000/ and it will go straight to the app.
+- [grafbase](grafbase) - [grafbase](https://grafbase.com/) provides the database exposed via GraphQL
+  - [schema.graphql](grafbase/schema.graphql) - GraphQL schema with models
+- [src](src) - holds hold for website built with [Solid](https://www.solidjs.com/) (on top of [Solid Start](https://github.com/solidjs/solid-start) starter)
+  - [GlobalContext](src/GlobalContext)
+    - [store.tsx](src/GlobalContext/store.tsx) - global state. signals defined then exposed via context
+    - [todos.ts](src/GlobalContext/todos.ts) - defines `todosState` which exposes a signal with todos. [change todos signal and it sends mutations to grafbase for persistance](https://twitter.com/nikitavoloboev/status/1651358480526106624)
+  - [components](src/components) - solid components
+  - [graphql](src/graphql) - graphql utils
+  - [lib](src/lib) - generic utils
+  - [pages](src/pages) - components for pages inside the app
+  - [routes](src/routes) - routes defined using file system
 
-For now this app uses signals to hold the state, check [src/GlobalContext/store.tsx](src/GlobalContext/store.tsx).
+## Setup
 
-## Setup Auth (Google)
+Before running the app, you need to setup up some environment variables, specifcially for auth.
+
+### Auth setup (Google)
+
+> It would be great if this could be avoided for just running the app in development. Don't know how to do it yet though. For now do below.
 
 For auth to work, first [create a new Google OAuth client ID](https://console.cloud.google.com/apis/credentials/oauthclient).
 
@@ -44,9 +55,22 @@ VITE_GOOGLE_SECRET=
 VITE_GRAFBASE_API_URL=http://127.0.0.1:4000/graphql
 ```
 
-## Run server (GraphQL/Grafbase)
+## Run web (SolidJS)
 
-Using [Grafbase](https://grafbase.com/).
+```bash
+pnpm i
+pnpm dev
+```
+
+Then go to http://localhost:3000/, it renders route defined at [src/routes/index.tsx](src/routes/index.tsx).
+
+If there is a user, it shows the app, otherwise the landing page.
+
+Press the `Login` button in landing page and auth with Google, it should show the app if all is good.
+
+If not, ask questions and get help on [Discord](https://discord.gg/f8YHjyrX3h).
+
+## Run server (GraphQL/Grafbase)
 
 Create new file at `grafbase/.env` with this content:
 
@@ -64,11 +88,11 @@ npx grafbase@latest dev
 
 Open http://localhost:4000 for GraphQL playground.
 
-## Deploy
+<!-- ## Deploy
 
 TODO: see how Tauri apps get built
 
-TODO: deploy website + assets on cloud provider
+TODO: deploy website + assets on cloud provider -->
 
 ## Discuss / help
 
