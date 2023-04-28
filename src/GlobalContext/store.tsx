@@ -27,7 +27,7 @@ export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
     const [focusedTodo, setFocusedTodo] = createSignal<TodoKey | null>(null)
     const isTodoFocused = createSelector<TodoKey | null, TodoKey>(focusedTodo)
 
-    const [todoToEdit, setTodoToEdit] = createSignal<string>("")
+    const [todoToEdit, setTodoToEdit] = createSignal<number | null>(-1)
     const [editingTodo, setEditingTodo] = createSignal<boolean>(false)
     const [newTodo, setNewTodo] = createSignal<boolean>(false)
     const [newSubtask, setNewSubtask] = createSignal<boolean>(false)
@@ -37,7 +37,8 @@ export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
     const [localSearchResultIds, setLocalSearchResultIds] = createSignal<
       TodoKey[]
     >([])
-    const [localSearchResultId, setLocalSearchResultId] = createSignal("")
+    const [localSearchResultId, setLocalSearchResultId] =
+      createSignal<TodoKey | null>(null)
     const [editNoteInTodo, setEditNoteInTodo] = createSignal(false)
     const [showHelp, setShowHelp] = createSignal(false)
     const [showSettings, setShowSettings] = createSignal(false)

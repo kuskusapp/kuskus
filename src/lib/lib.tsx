@@ -30,6 +30,6 @@ export function turnHighlightsIntoSpans(str: string, match: string) {
   return <div>{result}</div>
 }
 
-export function findIndexOfId(todos: ClientTodo[], id: string) {
-  return todos.findIndex((t) => t.id === id)
+export function findIndexOfId(todos: ClientTodo[], id: number | null) {
+  return todos.findIndex((t) => t.key === id)
 }

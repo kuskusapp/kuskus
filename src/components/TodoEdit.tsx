@@ -41,7 +41,7 @@ export default function TodoEdit(props: Props) {
           starred: starred(),
           dueDate: showCalendar() && !dueDate() ? todayDate() : dueDate(),
         }))
-        global.setTodoToEdit("")
+        global.setTodoToEdit(-1)
       })
     }
   })

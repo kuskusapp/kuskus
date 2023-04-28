@@ -25,7 +25,7 @@ export default function Sidebar() {
     (e) => {
       if (e.target === ref) {
         global.setFocusedTodo(null)
-        global.setTodoToEdit("")
+        global.setTodoToEdit(0)
         global.setNewTodo(false)
       }
     },
