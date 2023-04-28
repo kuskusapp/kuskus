@@ -13,6 +13,7 @@ import { grafbase } from "~/lib/graphql"
 
 export type Priority = 0 | 1 | 2 | 3
 export type TodoKey = number
+export type SubtaskKey = number
 
 export type BaseTask = {
   title: string
@@ -23,7 +24,7 @@ export type BaseTask = {
   dueDate: string | null
 }
 
-export type ClientSubtask = BaseTask & { id: string }
+export type ClientSubtask = BaseTask & { id: string; key: SubtaskKey }
 
 export type ClientTodo = BaseTask & {
   /**
@@ -42,6 +43,11 @@ const getNewKey = (() => {
   return () => last++
 })()
 
+const getSubtaskKey = (() => {
+  let last = 0
+  return () => last++
+})()
+
 const parseDbPriority = (int: number): Priority => {
   int = Math.floor(int)
   return Math.min(Math.max(int, 0), 3) as Priority
@@ -56,6 +62,7 @@ const parseDbSubtasks = (
       if (!edge || !edge.node) continue
       result.push({
         id: edge.node.id,
+        key: getSubtaskKey(),
         title: edge.node.title,
         done: edge.node.done,
         starred: edge.node.starred,

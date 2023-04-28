@@ -148,11 +148,18 @@ export default function Page() {
           return
         }
 
-        global.setFocusedTodo(
+        let focusedTodo =
           global.orderedTodos()[
             findIndexOfId(global.orderedTodos(), global.focusedTodo()) - 1
-          ].key
-        )
+          ]
+
+        console.log(global.todos)
+        console.log(focusedTodo.subtasks)
+        if (focusedTodo.subtasks.length > 0) {
+          return
+        } else {
+          global.setFocusedTodo(focusedTodo.key)
+        }
       }
     }
   })
