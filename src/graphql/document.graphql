@@ -51,6 +51,14 @@ query Subtasks {
   }
 }
 
+mutation TodoLinkSubtask($taskId: ID!, $subtaskId: ID!) {
+  todoUpdate(by: { id: $taskId }, input: { subtasks: [{ link: $subtaskId }] }) {
+    todo {
+      id
+    }
+  }
+}
+
 mutation SubtaskCreate($subtask: SubtaskCreateInput!) {
   subtaskCreate(input: $subtask) {
     subtask {

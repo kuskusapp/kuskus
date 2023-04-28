@@ -2,11 +2,12 @@ import {
   CreateTodoDocument,
   Mutation,
   SubtaskCreateDocument,
+  TodoLinkSubtaskDocument,
 } from "~/graphql/schema"
 import { grafbase } from "./graphql"
 
 export async function createTodosForDev() {
-  await grafbase.request<Mutation>(CreateTodoDocument, {
+  const task = await grafbase.request<Mutation>(CreateTodoDocument, {
     todo: {
       title: "Fix all bugs",
       starred: true,
@@ -40,9 +41,14 @@ export async function createTodosForDev() {
     },
   })
 
-  await grafbase.request<Mutation>(SubtaskCreateDocument, {
+  const subtask = await grafbase.request<Mutation>(SubtaskCreateDocument, {
     subtask: {
       title: "check all TODO: in code",
     },
+  })
+
+  await grafbase.request<Mutation>(TodoLinkSubtaskDocument, {
+    taskId: task.todoCreate?.todo?.id,
+    subtaskId: subtask.subtaskCreate?.subtask?.id,
   })
 }

@@ -469,6 +469,19 @@ export type SubtasksQuery = {
   } | null
 }
 
+export type TodoLinkSubtaskMutationVariables = Exact<{
+  taskId: Scalars["ID"]
+  subtaskId: Scalars["ID"]
+}>
+
+export type TodoLinkSubtaskMutation = {
+  __typename?: "Mutation"
+  todoUpdate?: {
+    __typename?: "TodoUpdatePayload"
+    todo?: { __typename?: "Todo"; id: string } | null
+  } | null
+}
+
 export type SubtaskCreateMutationVariables = Exact<{
   subtask: SubtaskCreateInput
 }>
@@ -829,6 +842,117 @@ export const SubtasksDocument = {
     },
   ],
 } as unknown as DocumentNode<SubtasksQuery, SubtasksQueryVariables>
+export const TodoLinkSubtaskDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "TodoLinkSubtask" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "taskId" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: { kind: "NamedType", name: { kind: "Name", value: "ID" } },
+          },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "subtaskId" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: { kind: "NamedType", name: { kind: "Name", value: "ID" } },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "todoUpdate" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "by" },
+                value: {
+                  kind: "ObjectValue",
+                  fields: [
+                    {
+                      kind: "ObjectField",
+                      name: { kind: "Name", value: "id" },
+                      value: {
+                        kind: "Variable",
+                        name: { kind: "Name", value: "taskId" },
+                      },
+                    },
+                  ],
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "input" },
+                value: {
+                  kind: "ObjectValue",
+                  fields: [
+                    {
+                      kind: "ObjectField",
+                      name: { kind: "Name", value: "subtasks" },
+                      value: {
+                        kind: "ListValue",
+                        values: [
+                          {
+                            kind: "ObjectValue",
+                            fields: [
+                              {
+                                kind: "ObjectField",
+                                name: { kind: "Name", value: "link" },
+                                value: {
+                                  kind: "Variable",
+                                  name: { kind: "Name", value: "subtaskId" },
+                                },
+                              },
+                            ],
+                          },
+                        ],
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "todo" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  TodoLinkSubtaskMutation,
+  TodoLinkSubtaskMutationVariables
+>
 export const SubtaskCreateDocument = {
   kind: "Document",
   definitions: [
