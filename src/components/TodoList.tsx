@@ -220,7 +220,7 @@ export default function Page() {
 
       batch(() => {
         global.setLocalSearch(true)
-        global.setFocusedTodo(0)
+        global.setFocusedTodo(-1)
       })
     },
     { preventDefault: false }
@@ -240,7 +240,7 @@ export default function Page() {
       [`${i}`],
       () => {
         if (global.focusedTodo() !== 0 && !global.editingTodo()) {
-          global.todosState.updateTodo(global.focusedTodo(), (todo) => ({
+          global.todosState.updateTodo(global.focusedTodo()!, (todo) => ({
             ...todo,
             priority: i,
           }))
@@ -254,7 +254,7 @@ export default function Page() {
     ["4"],
     () => {
       if (global.focusedTodo() !== 0 && !global.editingTodo()) {
-        global.todosState.updateTodo(global.focusedTodo(), (todo) => ({
+        global.todosState.updateTodo(global.focusedTodo()!, (todo) => ({
           ...todo,
           starred: !todo.starred,
         }))

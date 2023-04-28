@@ -1,6 +1,6 @@
-import { createShortcut, useKeyDownList } from "@solid-primitives/keyboard"
-import { Show, batch, createEffect } from "solid-js"
-import { useGlobalContext } from "~/GlobalContext/store"
+import { createShortcut } from "@solid-primitives/keyboard"
+import { Show, batch } from "solid-js"
+import { PageType, useGlobalContext } from "~/GlobalContext/store"
 import Modal from "~/components/Modal"
 import Sidebar from "~/components/Sidebar"
 import TodoList from "~/components/TodoList"
@@ -13,21 +13,10 @@ export default function App() {
     ["Control", "1"],
     () => {
       batch(() => {
-        global.setActivePage("All")
-        global.setOrderedTodos(
-          global.todosState
-            .todos()
-            .filter((t) => !t.done)
-            .sort((a, b) => {
-              if (b.starred && !a.starred) {
-                return 1
-              } else if (a.starred && !b.starred) {
-                return -1
-              }
-              return b.priority - a.priority
-            })
-        )
-        global.setFocusedTodo(global.orderedTodos()[0].id)
+        global.setActivePage(PageType.All)
+        if (global.orderedTodos().length > 0) {
+          global.setFocusedTodo(global.orderedTodos()[0].key)
+        }
       })
     },
     { preventDefault: false }
@@ -37,22 +26,9 @@ export default function App() {
     ["Control", "2"],
     () => {
       batch(() => {
-        global.setActivePage("Today")
-        global.setOrderedTodos(
-          global.todosState
-            .todos()
-            .filter((t) => !t.done && t.dueDate === todayDate())
-            .sort((a, b) => {
-              if (b.starred && !a.starred) {
-                return 1
-              } else if (a.starred && !b.starred) {
-                return -1
-              }
-              return b.priority - a.priority
-            })
-        )
+        global.setActivePage(PageType.Today)
         if (global.orderedTodos().length > 0) {
-          global.setFocusedTodo(global.orderedTodos()[0].id)
+          global.setFocusedTodo(global.orderedTodos()[0].key)
         }
       })
     },
@@ -63,22 +39,9 @@ export default function App() {
     ["Control", "3"],
     () => {
       batch(() => {
-        global.setActivePage("Starred")
-        global.setOrderedTodos(
-          global.todosState
-            .todos()
-            .filter((t) => !t.done && t.starred)
-            .sort((a, b) => {
-              if (b.starred && !a.starred) {
-                return 1
-              } else if (a.starred && !b.starred) {
-                return -1
-              }
-              return b.priority - a.priority
-            })
-        )
+        global.setActivePage(PageType.Starred)
         if (global.orderedTodos().length > 0) {
-          global.setFocusedTodo(global.orderedTodos()[0].id)
+          global.setFocusedTodo(global.orderedTodos()[0].key)
         }
       })
     },
@@ -89,23 +52,9 @@ export default function App() {
     ["Control", "4"],
     () => {
       batch(() => {
-        global.setActivePage("Done")
-        global.setOrderedTodos(
-          global.todosState
-            .todos()
-            .filter((t) => t.done)
-            // TODO: filter by recently added to done
-            .sort((a, b) => {
-              if (b.starred && !a.starred) {
-                return 1
-              } else if (a.starred && !b.starred) {
-                return -1
-              }
-              return b.priority - a.priority
-            })
-        )
+        global.setActivePage(PageType.Done)
         if (global.orderedTodos().length > 0) {
-          global.setFocusedTodo(global.orderedTodos()[0].id)
+          global.setFocusedTodo(global.orderedTodos()[0].key)
         }
       })
     },

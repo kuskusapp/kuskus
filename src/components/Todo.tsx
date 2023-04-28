@@ -43,7 +43,7 @@ export default function Todo(props: Props) {
                 "dark:bg-neutral-700 bg-zinc-200 rounded",
               global.localSearchResultIds().includes(props.todo.key) &&
                 "border rounded border-blue-500",
-              global.localSearchResultId() === props.todo.id &&
+              global.localSearchResultId() === props.todo.key &&
                 "bg-blue-300 dark:bg-blue-500"
             )}
             style={{

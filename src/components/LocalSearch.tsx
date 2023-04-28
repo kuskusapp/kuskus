@@ -1,8 +1,7 @@
 import { autofocus } from "@solid-primitives/autofocus"
+import Fuse from "fuse.js"
 import { createSignal, onMount } from "solid-js"
 import { useGlobalContext } from "~/GlobalContext/store"
-import Fuse from "fuse.js"
-import { findIndexOfId } from "~/lib/lib"
 
 export default function LocalSearch() {
   const global = useGlobalContext()
@@ -40,8 +39,8 @@ export default function LocalSearch() {
           global.setLocalSearchResultIds([])
         }
         if (matches.length > 0) {
-          global.setLocalSearchResultIds(matches.map((m: any) => m.item.id))
-          global.setLocalSearchResultId(matches[0].item.id)
+          global.setLocalSearchResultIds(matches.map((m: any) => m.item.key))
+          global.setLocalSearchResultId(matches[0].item.key)
         }
       }}
       autofocus
