@@ -23,7 +23,7 @@ Important bits defined below.
 - [src](src) - code for website built with [Solid](https://www.solidjs.com/) (on top of [Solid Start](https://github.com/solidjs/solid-start) starter)
   - [GlobalContext](src/GlobalContext)
     - [store.tsx](src/GlobalContext/store.tsx) - global state. signals defined then exposed via context
-    - [todos.ts](src/GlobalContext/todos.ts) - defines `todosState` which exposes a signal with todos. [change todos signal and it sends mutations to grafbase for persistance](https://twitter.com/nikitavoloboev/status/1651358480526106624)
+    - [todos.ts](src/GlobalContext/todos.ts) - defines `todosState` which exposes a signal with todos. when first run, loads todos signal with data from grafbase, can then [modify a signal and it sends mutations to grafbase in background for persistance](https://twitter.com/nikitavoloboev/status/1651358480526106624)
   - [components](src/components) - solid components
   - [graphql](src/graphql) - graphql utils
   - [lib](src/lib) - generic utils

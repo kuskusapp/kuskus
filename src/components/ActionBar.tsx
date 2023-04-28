@@ -18,7 +18,7 @@ export default function ActionBar() {
         <Icon name="Question" />
       </div>
       <div
-        class="has-tooltip cursor-pointer pl-24 pt-2 pb-2 pr-24 border rounded dark:border-stone-800"
+        class="has-tooltip cursor-pointer pl-24 pt-2 pb-2 pr-24 rounded dark:border-stone-800"
         onClick={() => {
           if (!global.newTodo()) {
             // TODO: get context of current page, pass it as second arg
@@ -34,7 +34,7 @@ export default function ActionBar() {
         }}
       >
         <div
-          class="tooltip shadow-lg p-1 bg-stone-900 -mt-8 text-white text-sm flex items-center px-3 gap-1 font-bold "
+          class="tooltip shadow-lg p-1 bg-stone-900 -mt-8 text-white text-sm flex items-center px-3 gap-1 font-bold"
           style={{
             "border-radius": "25px",
             "transition-delay": "0.5s",
