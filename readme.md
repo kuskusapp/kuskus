@@ -1,6 +1,6 @@
 # KusKus
 
-> Fast todo app with GitHub integration and AI features
+> Fast fully keyboard driven todo app with GitHub integration and AI features
 
 ## Features
 
@@ -20,7 +20,7 @@ Important bits defined below.
 
 - [grafbase](grafbase) - [grafbase](https://grafbase.com/) provides the database exposed via GraphQL
   - [schema.graphql](grafbase/schema.graphql) - GraphQL schema with models
-- [src](src) - holds hold for website built with [Solid](https://www.solidjs.com/) (on top of [Solid Start](https://github.com/solidjs/solid-start) starter)
+- [src](src) - code for website built with [Solid](https://www.solidjs.com/) (on top of [Solid Start](https://github.com/solidjs/solid-start) starter)
   - [GlobalContext](src/GlobalContext)
     - [store.tsx](src/GlobalContext/store.tsx) - global state. signals defined then exposed via context
     - [todos.ts](src/GlobalContext/todos.ts) - defines `todosState` which exposes a signal with todos. [change todos signal and it sends mutations to grafbase for persistance](https://twitter.com/nikitavoloboev/status/1651358480526106624)
@@ -29,6 +29,7 @@ Important bits defined below.
   - [lib](src/lib) - generic utils
   - [pages](src/pages) - components for pages inside the app
   - [routes](src/routes) - routes defined using file system
+- [src-tauri](src-tauri) - [Tauri](https://tauri.app) rust code that makes the desktop app, in future will call interface with LLMs and use [llm-chain](https://github.com/sobelio/llm-chain)
 
 ## Setup
 
