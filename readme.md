@@ -29,7 +29,7 @@ Important bits defined below.
   - [lib](src/lib) - generic utils
   - [pages](src/pages) - components for pages inside the app
   - [routes](src/routes) - routes defined using file system
-- [src-tauri](src-tauri) - [Tauri](https://tauri.app) rust code that makes the desktop app, in future will interface with LLMs (OpenAI or embedded LLM) and use [llm-chain](https://github.com/sobelio/llm-chain) for complex prompt chaining
+- [src-tauri](src-tauri) - [Tauri](https://tauri.app) rust code that makes the desktop app, in future will interface with LLMs (OpenAI or embedded LLM) and use [llm-chain](https://github.com/sobelio/llm-chain) for complex prompt chaining. will also use sqlite (or something else) to setup local caching in the app
 
 ## Setup
 
