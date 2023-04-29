@@ -76,6 +76,14 @@ query Subtasks {
   }
 }
 
+mutation SubtaskUpdate($id: ID!, $subtask: SubtaskUpdateInput!) {
+  subtaskUpdate(by: { id: $id }, input: $subtask) {
+    subtask {
+      id
+    }
+  }
+}
+
 mutation SubtaskCreate($subtask: SubtaskCreateInput!) {
   subtaskCreate(input: $subtask) {
     subtask {

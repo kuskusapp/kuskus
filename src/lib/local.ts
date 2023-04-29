@@ -77,7 +77,7 @@ export async function createTodosForDev() {
     subtaskId: subtask.subtaskCreate?.subtask?.id,
   })
 
-  await grafbase.request<Mutation>(CreateTodoDocument, {
+  task = await grafbase.request<Mutation>(CreateTodoDocument, {
     todo: {
       title: "Release KusKus",
       starred: true,

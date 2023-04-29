@@ -509,6 +509,19 @@ export type SubtasksQuery = {
   } | null
 }
 
+export type SubtaskUpdateMutationVariables = Exact<{
+  id: Scalars["ID"]
+  subtask: SubtaskUpdateInput
+}>
+
+export type SubtaskUpdateMutation = {
+  __typename?: "Mutation"
+  subtaskUpdate?: {
+    __typename?: "SubtaskUpdatePayload"
+    subtask?: { __typename?: "Subtask"; id: string } | null
+  } | null
+}
+
 export type SubtaskCreateMutationVariables = Exact<{
   subtask: SubtaskCreateInput
 }>
@@ -1078,6 +1091,94 @@ export const SubtasksDocument = {
     },
   ],
 } as unknown as DocumentNode<SubtasksQuery, SubtasksQueryVariables>
+export const SubtaskUpdateDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "SubtaskUpdate" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: { kind: "Variable", name: { kind: "Name", value: "id" } },
+          type: {
+            kind: "NonNullType",
+            type: { kind: "NamedType", name: { kind: "Name", value: "ID" } },
+          },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "subtask" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "SubtaskUpdateInput" },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "subtaskUpdate" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "by" },
+                value: {
+                  kind: "ObjectValue",
+                  fields: [
+                    {
+                      kind: "ObjectField",
+                      name: { kind: "Name", value: "id" },
+                      value: {
+                        kind: "Variable",
+                        name: { kind: "Name", value: "id" },
+                      },
+                    },
+                  ],
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "input" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "subtask" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "subtask" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  SubtaskUpdateMutation,
+  SubtaskUpdateMutationVariables
+>
 export const SubtaskCreateDocument = {
   kind: "Document",
   definitions: [

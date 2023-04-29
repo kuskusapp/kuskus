@@ -1,6 +1,13 @@
 import { autofocus } from "@solid-primitives/autofocus"
 import { createShortcut } from "@solid-primitives/keyboard"
-import { Show, batch, createEffect, createSignal, onMount } from "solid-js"
+import {
+  Show,
+  batch,
+  createEffect,
+  createSignal,
+  onCleanup,
+  onMount,
+} from "solid-js"
 import { todayDate } from "~/lib/lib"
 import {
   ClientSubtask,
@@ -27,27 +34,25 @@ export default function TodoEdit(props: Props) {
     global.setClickTimeStamp(0)
   })
 
-  createEffect(async () => {
-    if (!global.editingTodo()) {
-      // REMOVE
-      if (title() === "") {
-        global.todosState.removeTodo(props.todo.key)
-        return
-      }
-
-      // UPDATE
-      batch(() => {
-        global.todosState.updateTodo(props.todo.key, (p) => ({
-          ...p,
-          title: title(),
-          note: note(),
-          priority: priority(),
-          starred: starred(),
-          dueDate: showCalendar() && !dueDate() ? todayDate() : dueDate(),
-        }))
-        global.setEditingTodo(false)
-      })
+  onCleanup(() => {
+    // REMOVE
+    if (title() === "") {
+      global.todosState.removeTodo(props.todo.key)
+      return
     }
+
+    // UPDATE
+    batch(() => {
+      global.todosState.updateTodo(props.todo.key, (p) => ({
+        ...p,
+        title: title(),
+        note: note(),
+        priority: priority(),
+        starred: starred(),
+        dueDate: showCalendar() && !dueDate() ? todayDate() : dueDate(),
+      }))
+      global.setEditingTodo(false)
+    })
   })
 
   let titleRef!: HTMLInputElement,

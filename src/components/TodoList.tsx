@@ -51,10 +51,10 @@ export default function Page() {
   createShortcut(
     ["N"],
     () => {
-      if (global.newTodo()) return
+      if (global.newTodo() || global.editingTodo()) return
 
       batch(() => {
-        global.setFocusedTodo(-1)
+        global.setFocusedTodo(null)
         // TODO: change depending of where you create todo
         global.setNewTodoType("all")
         global.setNewTodo(true)
@@ -88,6 +88,12 @@ export default function Page() {
       return
 
     const currentIndex = global.focusedTodoIndex()
+    if (currentIndex === 0) {
+      global.setFocusedTodo(
+        global.flatTasks()[global.flatTasks().length - 1].key
+      )
+      return
+    }
 
     global.setFocusedTodo(
       global.flatTasks()[
@@ -112,6 +118,11 @@ export default function Page() {
 
     const currentIndex = global.focusedTodoIndex()
 
+    if (currentIndex === global.flatTasks().length - 1) {
+      global.setFocusedTodo(0)
+      return
+    }
+
     global.setFocusedTodo(
       global.flatTasks()[
         Math.max(
@@ -129,6 +140,7 @@ export default function Page() {
     ["Enter"],
     () => {
       if (!global.localSearch()) {
+        console.log(global.editingTodo())
         global.setEditingTodo((p) => !p)
       }
     },
@@ -203,10 +215,22 @@ export default function Page() {
           () => {
             const focusedTodoValue = global.focusedTodo()
             if (focusedTodoValue) {
-              global.todosState.updateTodo(focusedTodoValue, (todo) => ({
-                ...todo,
-                priority: i,
-              }))
+              // update subtask
+              if ("parent" in global.flatTasks()[global.focusedTodo()!]) {
+                global.todosState.updateSubtask(
+                  focusedTodoValue,
+                  (subtask) => ({
+                    ...subtask,
+                    priority: i,
+                  })
+                )
+              } else {
+                // update task
+                global.todosState.updateTodo(focusedTodoValue, (todo) => ({
+                  ...todo,
+                  priority: i,
+                }))
+              }
             }
           },
           { preventDefault: false }

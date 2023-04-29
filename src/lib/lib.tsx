@@ -34,25 +34,3 @@ export function turnHighlightsIntoSpans(str: string, match: string) {
 export function findIndexOfId(todos: ClientTodo[], id: number | null) {
   return todos.findIndex((t) => t.key === id)
 }
-
-export function findParentOfSubtask(subtaskId: string, todos: ClientTodo[]) {
-  let todo = todos.find((todo, i) => {
-    let foundSubtask = todo.subtasks.find((subtask) => {
-      if (subtask.id === subtaskId) {
-        return subtask
-      }
-    })
-    if (foundSubtask) {
-      return todo
-    }
-  })
-  return todo
-}
-
-export function isParentOfSubtaskFocused(
-  subtaskId: string,
-  todos: ClientTodo[]
-) {
-  const global = useGlobalContext()
-  let parent = findParentOfSubtask(subtaskId, todos)
-}
