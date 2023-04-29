@@ -130,6 +130,7 @@ export default function Page() {
           global.setFocusedSubtask((e) => {
             return e + 1
           })
+          console.log(global.focusedSubtask(), "focused sub on down")
         }
       } else {
         global.setFocusedTodo(global.orderedTodos()[indexOfPastTodo + 1].key)
@@ -159,16 +160,47 @@ export default function Page() {
         global.setLocalSearchResultId(global.localSearchResultIds()[index - 1])
       }
     } else {
-      if (findIndexOfId(global.orderedTodos(), global.focusedTodo()) === -1) {
+      // focus on the todo above
+      let indexOfPastTodo = findIndexOfId(
+        global.orderedTodos(),
+        global.focusedTodo()
+      )
+
+      // if no todo is focused, focus on the last todo
+      if (global.focusedTodo() === 0 || global.focusedTodo() === -1) {
         global.setFocusedTodo(
           global.orderedTodos()[global.orderedTodos().length - 1].key
         )
+        return
+      }
+
+      // checks if top todo has subtasks
+      if (
+        indexOfPastTodo !== -1 &&
+        global.orderedTodos()[global.focusedTodo() - 1].subtasks.length > 0
+      ) {
+        // when its a subtask, check if its the last subtask
+        if (0 === global.focusedSubtask()) {
+          global.setFocusedSubtask(-1)
+          global.setFocusedTodo(global.orderedTodos()[indexOfPastTodo - 1].key)
+          global.setFocusingSubtask(false)
+        } else {
+          let i = global.orderedTodos()[indexOfPastTodo - 1].subtasks.length - 1
+
+          global.setFocusingSubtask(true)
+          if (global.focusedSubtask() === -1) {
+            global.setFocusedSubtask(i)
+            return
+          }
+          global.setFocusedSubtask((e) => {
+            return e - 1
+          })
+          console.log(global.focusedSubtask(), "focused sub on up")
+        }
       } else {
-        global.setFocusedTodo(
-          global.orderedTodos()[
-            findIndexOfId(global.orderedTodos(), global.focusedTodo()) - 1
-          ].key
-        )
+        // runs when top todo does not have subtasks
+        // it focuses on the todo above
+        global.setFocusedTodo(global.orderedTodos()[indexOfPastTodo - 1].key)
       }
     }
   })
