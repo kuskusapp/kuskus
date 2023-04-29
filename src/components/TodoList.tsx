@@ -1,4 +1,8 @@
-import { useGlobalContext } from "~/GlobalContext/store"
+import {
+  ClientSubtask,
+  ClientTodo,
+  useGlobalContext,
+} from "~/GlobalContext/store"
 import { Match, Show, Switch, batch, createEffect, onMount } from "solid-js"
 import Today from "~/pages/Today"
 import Done from "~/pages/Done"
@@ -216,11 +220,12 @@ export default function Page() {
             const focusedTodoValue = global.focusedTodo()
             if (focusedTodoValue) {
               // update subtask
+              // TODO: does not work
               if ("parent" in global.flatTasks()[global.focusedTodo()!]) {
                 global.todosState.updateSubtask(
                   focusedTodoValue,
-                  (subtask) => ({
-                    ...subtask,
+                  (s: ClientSubtask) => ({
+                    ...s,
                     priority: i,
                   })
                 )

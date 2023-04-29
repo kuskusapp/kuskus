@@ -197,17 +197,19 @@ export function createTodosState() {
       )
     },
     updateTodo: (key: number, setter: StoreSetter<ClientTodo, [number]>) => {
-      console.log(setter, "setter")
       setTodos((t) => t.key === key, setter)
     },
     removeTodo: (key: number) => {
       setTodos((p) => p.filter((t) => t.key !== key))
     },
-    updateSubtask: (
-      key: number,
-      setter: StoreSetter<ClientSubtask, [number]>
-    ) => {
-      setTodos((t) => t.key === key, setter)
+    // TODO: not sure how to make this work
+    updateSubtask: (key: number, setter: any) => {
+      // console.log(foundSubtask)
+      // let newSubtask = { ...foundSubtask, subtask }
+      // console.log(newSubtask, "new subtask")
+      // setTodos((t) => {
+      //   // t.subtasks.find((s) => s.key === key)
+      // })
     },
     // a windcard setter if you want to share that 🤷‍♂️
     // setTodos,
