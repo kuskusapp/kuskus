@@ -10,10 +10,11 @@ import All from "~/pages/All"
 import Starred from "~/pages/Starred"
 import ActionBar from "./ActionBar"
 import LocalSearch from "./LocalSearch"
-import { findIndexOfId } from "~/lib/lib"
+import { findIndexOfId, isSubtask } from "~/lib/lib"
 import { createShortcut } from "@solid-primitives/keyboard"
 import { createEventListener } from "@solid-primitives/event-listener"
 import { createTodosForDev } from "~/lib/local"
+import AiChat from "./AiChat"
 
 export default function Page() {
   const global = useGlobalContext()
@@ -81,6 +82,12 @@ export default function Page() {
       global.setLocalSearchResultId(null)
       global.setLocalSearchResultIds([])
     })
+  })
+
+  createShortcut(["A"], () => {
+    if (global.focusedTodo() !== null && !isSubtask(global.focusedTodo()!)) {
+      global.setShowAiChat(true)
+    }
   })
 
   createShortcut(["ArrowUp"], () => {
@@ -314,25 +321,33 @@ export default function Page() {
         class="flex flex-col m-3 mb-1 justify-between rounded overflow-auto relative w-full mt-6 drop"
         ref={ref}
       >
-        <Switch>
-          <Match when={global.activePage() === "All"}>
-            <All />
-          </Match>
-          <Match when={global.activePage() === "Today"}>
-            <Today />
-          </Match>
-          <Match when={global.activePage() === "Starred"}>
-            <Starred />
-          </Match>
-          <Match when={global.activePage() === "Done"}>
-            <Done />
-          </Match>
-        </Switch>
+        <div
+          class="grow flex justify-between "
+          style={{ "margin-bottom": "21.5px" }}
+        >
+          <div class="grow">
+            <Switch>
+              <Match when={global.activePage() === "All"}>
+                <All />
+              </Match>
+              <Match when={global.activePage() === "Today"}>
+                <Today />
+              </Match>
+              <Match when={global.activePage() === "Starred"}>
+                <Starred />
+              </Match>
+              <Match when={global.activePage() === "Done"}>
+                <Done />
+              </Match>
+            </Switch>
+          </div>
+          <AiChat />
+        </div>
         <div
           style={{
             "border-radius": "20px",
           }}
-          class="flex sticky bottom-2 right-0 p-1 dark:bg-stone-900 ml-3 mr-3 bg-gray-100"
+          class="flex sticky bottom-2 right-0 p-1 dark:bg-stone-900 ml-1 mr-1 bg-gray-100"
         >
           <Show when={global.localSearch()} fallback={<ActionBar />}>
             <LocalSearch />

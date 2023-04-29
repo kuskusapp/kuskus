@@ -17,6 +17,7 @@ export const enum PageType {
   Starred = "Starred",
 }
 
+// TODO: remove non used signals!
 export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
   () => {
     const todosState = createTodosState()
@@ -58,6 +59,7 @@ export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
     const [changeFocus, setChangeFocus] = createSignal(true)
     const [localSearchResultIndex, setLocalSearchResultIndex] =
       createSignal<number>(0)
+    const [showAiChat, setShowAiChat] = createSignal<boolean>(false)
 
     const compareTodos = (a: ClientTodo, b: ClientTodo): number => {
       if (b.starred && !a.starred) {
@@ -144,6 +146,8 @@ export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
       focusedTodoIndex,
       localSearchResultIndex,
       setLocalSearchResultIndex,
+      showAiChat,
+      setShowAiChat,
     } as const
   },
   // @ts-expect-error this is just to assert context as non-nullable

@@ -1,5 +1,5 @@
 import { useGlobalContext } from "~/GlobalContext/store"
-import { ClientTodo } from "~/GlobalContext/todos"
+import { ClientTodo, TodoKey } from "~/GlobalContext/todos"
 
 export function isToday(date: string) {
   const today = todayDate()
@@ -33,4 +33,12 @@ export function turnHighlightsIntoSpans(str: string, match: string) {
 
 export function findIndexOfId(todos: ClientTodo[], id: number | null) {
   return todos.findIndex((t) => t.key === id)
+}
+
+export function isSubtask(key: TodoKey): boolean {
+  const global = useGlobalContext()
+  if ("subtasks" in global.flatTasks()[key]) {
+    return false
+  }
+  return true
 }
