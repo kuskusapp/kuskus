@@ -29,36 +29,11 @@ export async function createTodosForDev() {
   })
 
   // create new todos and subtasks
-  const task = await grafbase.request<Mutation>(CreateTodoDocument, {
+  let task = await grafbase.request<Mutation>(CreateTodoDocument, {
     todo: {
       title: "Fix all bugs",
       starred: true,
       priority: 3,
-      done: false,
-    },
-  })
-  await grafbase.request<Mutation>(CreateTodoDocument, {
-    todo: {
-      title: "Make Kuskus",
-      starred: true,
-      priority: 2,
-      done: false,
-      note: "cover all important use cases",
-    },
-  })
-  await grafbase.request<Mutation>(CreateTodoDocument, {
-    todo: {
-      title: "Release KusKus",
-      starred: true,
-      priority: 1,
-      done: false,
-    },
-  })
-  await grafbase.request<Mutation>(CreateTodoDocument, {
-    todo: {
-      title: "Polish",
-      starred: true,
-      priority: 0,
       done: false,
     },
   })
@@ -86,6 +61,41 @@ export async function createTodosForDev() {
   subtask = await grafbase.request<Mutation>(SubtaskCreateDocument, {
     subtask: {
       title: "release",
+    },
+  })
+  await grafbase.request<Mutation>(TodoLinkSubtaskDocument, {
+    taskId: task.todoCreate?.todo?.id,
+    subtaskId: subtask.subtaskCreate?.subtask?.id,
+  })
+
+  await grafbase.request<Mutation>(CreateTodoDocument, {
+    todo: {
+      title: "Make Kuskus",
+      starred: true,
+      priority: 2,
+      done: false,
+      note: "cover all important use cases",
+    },
+  })
+  await grafbase.request<Mutation>(CreateTodoDocument, {
+    todo: {
+      title: "Release KusKus",
+      starred: true,
+      priority: 1,
+      done: false,
+    },
+  })
+  task = await grafbase.request<Mutation>(CreateTodoDocument, {
+    todo: {
+      title: "Polish",
+      starred: true,
+      priority: 0,
+      done: false,
+    },
+  })
+  subtask = await grafbase.request<Mutation>(SubtaskCreateDocument, {
+    subtask: {
+      title: "do it well",
     },
   })
   await grafbase.request<Mutation>(TodoLinkSubtaskDocument, {

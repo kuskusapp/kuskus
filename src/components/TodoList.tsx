@@ -80,64 +80,6 @@ export default function Page() {
     })
   })
 
-  createShortcut(["ArrowDown"], () => {
-    if (
-      !global.changeFocus() ||
-      global.orderedTodos().length === 0 ||
-      global.editingTodo()
-    )
-      return
-
-    if (global.localSearch() && global.localSearchResultIds().length > 0) {
-      let index = global
-        .localSearchResultIds()
-        .findIndex((id) => id === global.localSearchResultId())
-      if (index === global.localSearchResultIds().length - 1) {
-        global.setLocalSearchResultId(global.localSearchResultIds()[0])
-      } else {
-        global.setLocalSearchResultId(global.localSearchResultIds()[index + 1])
-      }
-    } else {
-      // runs this if not in local search
-      let indexOfPastTodo = findIndexOfId(
-        global.orderedTodos(),
-        global.focusedTodo()
-      )
-
-      // check for overflow of tasks
-      if (indexOfPastTodo === global.orderedTodos().length - 1) {
-        // if tasks overflow, focus on first todo in the list
-        global.setFocusedTodo(global.orderedTodos()[0].key)
-        return
-      }
-
-      // focus on next todo in the list
-      // first check if todo below is a subtask
-      if (
-        indexOfPastTodo !== -1 &&
-        global.orderedTodos()[indexOfPastTodo].subtasks.length > 0
-      ) {
-        // when its a subtask, check if its the last subtask
-        if (
-          global.orderedTodos()[indexOfPastTodo].subtasks.length - 1 ===
-          global.focusedSubtask()
-        ) {
-          global.setFocusedSubtask(-1)
-          global.setFocusedTodo(global.orderedTodos()[indexOfPastTodo + 1].key)
-          global.setFocusingSubtask(false)
-        } else {
-          global.setFocusingSubtask(true)
-          global.setFocusedSubtask((e) => {
-            return e + 1
-          })
-          console.log(global.focusedSubtask(), "focused sub on down")
-        }
-      } else {
-        global.setFocusedTodo(global.orderedTodos()[indexOfPastTodo + 1].key)
-      }
-    }
-  })
-
   createShortcut(["ArrowUp"], () => {
     if (
       !global.changeFocus() ||
@@ -146,6 +88,7 @@ export default function Page() {
     )
       return
 
+    // change focus between results of local search
     if (global.localSearch() && global.localSearchResultIds().length > 0) {
       let index = global
         .localSearchResultIds()
@@ -159,49 +102,120 @@ export default function Page() {
       } else {
         global.setLocalSearchResultId(global.localSearchResultIds()[index - 1])
       }
-    } else {
-      // focus on the todo above
-      let indexOfPastTodo = findIndexOfId(
-        global.orderedTodos(),
-        global.focusedTodo()
+      return
+    }
+    // change focus to todo/subtask above
+
+    let indexOfPastTodo = findIndexOfId(
+      global.orderedTodos(),
+      global.focusedTodo()
+    )
+
+    // console.log(global.orderedTodos(), "ordered todos")
+    console.log(indexOfPastTodo, "index of past todo")
+    console.log(global.focusedTodo(), "focused todo")
+    console.log(global.focusedSubtask(), "focused subtask")
+
+    // if no todo or first todo is focused, focus on the last todo
+    if (global.focusedTodo() === 0 || global.focusedTodo() === -1) {
+      global.setFocusedTodo(
+        global.orderedTodos()[global.orderedTodos().length - 1].key
       )
+      return
+    }
 
-      // if no todo is focused, focus on the last todo
-      if (global.focusedTodo() === 0 || global.focusedTodo() === -1) {
-        global.setFocusedTodo(
-          global.orderedTodos()[global.orderedTodos().length - 1].key
-        )
-        return
-      }
-
-      // checks if top todo has subtasks
-      if (
-        indexOfPastTodo !== -1 &&
-        global.orderedTodos()[global.focusedTodo() - 1].subtasks.length > 0
-      ) {
-        // when its a subtask, check if its the last subtask
-        if (0 === global.focusedSubtask()) {
-          global.setFocusedSubtask(-1)
-          global.setFocusedTodo(global.orderedTodos()[indexOfPastTodo - 1].key)
-          global.setFocusingSubtask(false)
-        } else {
-          let i = global.orderedTodos()[indexOfPastTodo - 1].subtasks.length - 1
-
-          global.setFocusingSubtask(true)
-          if (global.focusedSubtask() === -1) {
-            global.setFocusedSubtask(i)
-            return
-          }
-          global.setFocusedSubtask((e) => {
-            return e - 1
-          })
-          console.log(global.focusedSubtask(), "focused sub on up")
-        }
-      } else {
-        // runs when top todo does not have subtasks
-        // it focuses on the todo above
+    // check if todo above the last todo has subtasks
+    if (global.orderedTodos()[global.focusedTodo() - 1].subtasks.length > 0) {
+      // when its a subtask, check if its the last subtask
+      if (global.focusedSubtask() === 0) {
+        global.setFocusedSubtask(-1)
         global.setFocusedTodo(global.orderedTodos()[indexOfPastTodo - 1].key)
+        global.setFocusingSubtask(false)
+      } else {
+        console.log("run in subtask with up key")
+        let i = global.orderedTodos()[indexOfPastTodo - 1].subtasks.length - 1
+
+        global.setFocusingSubtask(true)
+        if (global.focusedSubtask() === -1) {
+          global.setFocusedSubtask(i)
+          return
+        }
+        global.setFocusedSubtask((e) => {
+          return e - 1
+        })
       }
+    } else {
+      // runs when top todo does not have subtasks
+      // it focuses on the todo above
+      global.setFocusedTodo(global.orderedTodos()[indexOfPastTodo - 1].key)
+    }
+  })
+
+  createShortcut(["ArrowDown"], () => {
+    if (
+      !global.changeFocus() ||
+      global.orderedTodos().length === 0 ||
+      global.editingTodo()
+    )
+      return
+
+    // change focus between results of local search
+    if (global.localSearch() && global.localSearchResultIds().length > 0) {
+      let index = global
+        .localSearchResultIds()
+        .findIndex((id) => id === global.localSearchResultId())
+      if (index === global.localSearchResultIds().length - 1) {
+        global.setLocalSearchResultId(global.localSearchResultIds()[0])
+      } else {
+        global.setLocalSearchResultId(global.localSearchResultIds()[index + 1])
+      }
+      return
+    }
+    // change focus to todo/subtask below
+
+    let indexOfPastTodo = findIndexOfId(
+      global.orderedTodos(),
+      global.focusedTodo()
+    )
+
+    // console.log(global.orderedTodos(), "ordered todos")
+    console.log(indexOfPastTodo, "index of past todo")
+    console.log(global.focusedTodo(), "focused todo")
+    console.log(global.focusedSubtask(), "focused subtask")
+
+    // if last todo is focused, focus on the first todo
+    if (indexOfPastTodo === global.orderedTodos().length - 1) {
+      global.setFocusedTodo(global.orderedTodos()[0].key)
+      return
+    }
+
+    // focus on todo/subtask below
+    if (
+      // if no todo focused, focus on first todo
+      indexOfPastTodo !== -1 &&
+      // check that currently focused todo has subtasks
+      global.orderedTodos()[global.focusedTodo()].subtasks.length > 0
+    ) {
+      console.log("this is a subtask")
+      // check that it's the last subtask in current todo
+      if (
+        global.orderedTodos()[indexOfPastTodo].subtasks.length - 1 ===
+        global.focusedSubtask()
+      ) {
+        console.log("it was last subtask, do this")
+        global.setFocusedSubtask(-1)
+        global.setFocusedTodo(global.orderedTodos()[indexOfPastTodo + 1].key)
+        global.setFocusingSubtask(false)
+      } else {
+        console.log("not last subtask, do this")
+        global.setFocusingSubtask(true)
+        global.setFocusedSubtask((e) => {
+          return e + 1
+        })
+      }
+    } else {
+      // increment
+      global.setFocusedTodo(global.orderedTodos()[indexOfPastTodo + 1].key)
     }
   })
 
