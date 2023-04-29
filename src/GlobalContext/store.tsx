@@ -56,6 +56,8 @@ export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
     const [showSettings, setShowSettings] = createSignal(false)
     const [clickTimeStamp, setClickTimeStamp] = createSignal(0)
     const [changeFocus, setChangeFocus] = createSignal(true)
+    const [localSearchResultIndex, setLocalSearchResultIndex] =
+      createSignal<number>(0)
 
     const compareTodos = (a: ClientTodo, b: ClientTodo): number => {
       if (b.starred && !a.starred) {
@@ -140,6 +142,8 @@ export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
       newSubtask,
       setNewSubtask,
       focusedTodoIndex,
+      localSearchResultIndex,
+      setLocalSearchResultIndex,
     } as const
   },
   // @ts-expect-error this is just to assert context as non-nullable

@@ -84,6 +84,24 @@ export default function Page() {
   })
 
   createShortcut(["ArrowUp"], () => {
+    if (global.localSearch()) {
+      if (global.localSearchResultIndex() === 0) {
+        global.setLocalSearchResultIndex(
+          global.localSearchResultIds().length - 1
+        )
+        console.log(global.localSearchResultIndex()!)
+        global.setLocalSearchResultId(
+          global.localSearchResultIds()[global.localSearchResultIndex()!]
+        )
+        return
+      }
+      global.setLocalSearchResultId(
+        global.localSearchResultIds()[
+          global.setLocalSearchResultIndex((e) => e! - 1)
+        ]
+      )
+      return
+    }
     if (
       !global.changeFocus() ||
       global.orderedTodos().length === 0 ||
@@ -113,6 +131,25 @@ export default function Page() {
   })
 
   createShortcut(["ArrowDown"], () => {
+    if (global.localSearch()) {
+      if (
+        global.localSearchResultIds().length - 1 ===
+        global.localSearchResultIndex()
+      ) {
+        global.setLocalSearchResultIndex(0)
+        global.setLocalSearchResultId(
+          global.localSearchResultIds()[global.localSearchResultIndex()!]
+        )
+        return
+      }
+      global.setLocalSearchResultId(
+        global.localSearchResultIds()[
+          global.setLocalSearchResultIndex((e) => e! + 1)
+        ]
+      )
+      return
+    }
+
     if (
       !global.changeFocus() ||
       global.orderedTodos().length === 0 ||
