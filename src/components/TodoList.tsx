@@ -20,9 +20,8 @@ export default function Page() {
     "click",
     (e) => {
       if (e.target === ref) {
-        global.setFocusedTodo(-1)
-        global.setTodoToEdit(-1)
-        global.setNewTodo(false)
+        global.setFocusedTodo(null)
+        // global.setNewTodo(false)
       }
     },
     { passive: true }
@@ -40,7 +39,7 @@ export default function Page() {
             .findIndex((todo) => todo.key === global.focusedTodo()) + 1
 
         if (global.orderedTodos().length === 0) {
-          global.setFocusedTodo(-1)
+          global.setFocusedTodo(null)
         } else {
           global.setFocusedTodo(global.orderedTodos()[todoIdToFocus].key)
         }
@@ -88,67 +87,19 @@ export default function Page() {
     )
       return
 
-    // change focus between results of local search
-    if (global.localSearch() && global.localSearchResultIds().length > 0) {
-      let index = global
-        .localSearchResultIds()
-        .findIndex((id) => id === global.localSearchResultId())
-      if (index === 0) {
-        global.setLocalSearchResultId(
-          global.localSearchResultIds()[
-            global.localSearchResultIds().length - 1
-          ]
+    const currentIndex = global.focusedTodoIndex()
+
+    global.setFocusedTodo(
+      global.flatTasks()[
+        Math.max(
+          0,
+          Math.min(
+            currentIndex ? currentIndex - 1 : 0,
+            global.flatTasks().length - 1
+          )
         )
-      } else {
-        global.setLocalSearchResultId(global.localSearchResultIds()[index - 1])
-      }
-      return
-    }
-    // change focus to todo/subtask above
-
-    let indexOfPastTodo = findIndexOfId(
-      global.orderedTodos(),
-      global.focusedTodo()
+      ].key
     )
-
-    // console.log(global.orderedTodos(), "ordered todos")
-    console.log(indexOfPastTodo, "index of past todo")
-    console.log(global.focusedTodo(), "focused todo")
-    console.log(global.focusedSubtask(), "focused subtask")
-
-    // if no todo or first todo is focused, focus on the last todo
-    if (global.focusedTodo() === 0 || global.focusedTodo() === -1) {
-      global.setFocusedTodo(
-        global.orderedTodos()[global.orderedTodos().length - 1].key
-      )
-      return
-    }
-
-    // check if todo above the last todo has subtasks
-    if (global.orderedTodos()[global.focusedTodo() - 1].subtasks.length > 0) {
-      // when its a subtask, check if its the last subtask
-      if (global.focusedSubtask() === 0) {
-        global.setFocusedSubtask(-1)
-        global.setFocusedTodo(global.orderedTodos()[indexOfPastTodo - 1].key)
-        global.setFocusingSubtask(false)
-      } else {
-        console.log("run in subtask with up key")
-        let i = global.orderedTodos()[indexOfPastTodo - 1].subtasks.length - 1
-
-        global.setFocusingSubtask(true)
-        if (global.focusedSubtask() === -1) {
-          global.setFocusedSubtask(i)
-          return
-        }
-        global.setFocusedSubtask((e) => {
-          return e - 1
-        })
-      }
-    } else {
-      // runs when top todo does not have subtasks
-      // it focuses on the todo above
-      global.setFocusedTodo(global.orderedTodos()[indexOfPastTodo - 1].key)
-    }
   })
 
   createShortcut(["ArrowDown"], () => {
@@ -159,81 +110,26 @@ export default function Page() {
     )
       return
 
-    // change focus between results of local search
-    if (global.localSearch() && global.localSearchResultIds().length > 0) {
-      let index = global
-        .localSearchResultIds()
-        .findIndex((id) => id === global.localSearchResultId())
-      if (index === global.localSearchResultIds().length - 1) {
-        global.setLocalSearchResultId(global.localSearchResultIds()[0])
-      } else {
-        global.setLocalSearchResultId(global.localSearchResultIds()[index + 1])
-      }
-      return
-    }
-    // change focus to todo/subtask below
+    const currentIndex = global.focusedTodoIndex()
 
-    let indexOfPastTodo = findIndexOfId(
-      global.orderedTodos(),
-      global.focusedTodo()
+    global.setFocusedTodo(
+      global.flatTasks()[
+        Math.max(
+          0,
+          Math.min(
+            currentIndex !== null ? currentIndex + 1 : 0,
+            global.flatTasks().length - 1
+          )
+        )
+      ].key
     )
-
-    // console.log(global.orderedTodos(), "ordered todos")
-    console.log(indexOfPastTodo, "index of past todo")
-    console.log(global.focusedTodo(), "focused todo")
-    console.log(global.focusedSubtask(), "focused subtask")
-
-    // if last todo is focused, focus on the first todo
-    if (indexOfPastTodo === global.orderedTodos().length - 1) {
-      global.setFocusedTodo(global.orderedTodos()[0].key)
-      return
-    }
-
-    // focus on todo/subtask below
-    if (
-      // if no todo focused, focus on first todo
-      indexOfPastTodo !== -1 &&
-      // check that currently focused todo has subtasks
-      global.orderedTodos()[global.focusedTodo()].subtasks.length > 0
-    ) {
-      console.log("this is a subtask")
-      // check that it's the last subtask in current todo
-      if (
-        global.orderedTodos()[indexOfPastTodo].subtasks.length - 1 ===
-        global.focusedSubtask()
-      ) {
-        console.log("it was last subtask, do this")
-        global.setFocusedSubtask(-1)
-        global.setFocusedTodo(global.orderedTodos()[indexOfPastTodo + 1].key)
-        global.setFocusingSubtask(false)
-      } else {
-        console.log("not last subtask, do this")
-        global.setFocusingSubtask(true)
-        global.setFocusedSubtask((e) => {
-          return e + 1
-        })
-      }
-    } else {
-      // increment
-      global.setFocusedTodo(global.orderedTodos()[indexOfPastTodo + 1].key)
-    }
   })
 
   createShortcut(
     ["Enter"],
     () => {
-      if (
-        global.focusedTodo() !== 0 &&
-        !global.localSearch() &&
-        !global.newTodo()
-      ) {
-        if (global.editingTodo()) {
-          global.setEditingTodo(false)
-          global.setEditNoteInTodo(false)
-        } else {
-          global.setEditingTodo(true)
-        }
-        global.setTodoToEdit(global.focusedTodo())
+      if (!global.localSearch()) {
+        global.setEditingTodo((p) => !p)
       }
     },
     { preventDefault: false }
@@ -260,7 +156,7 @@ export default function Page() {
     ["T"],
     () => {
       if (
-        global.focusedTodo() !== 0 &&
+        global.focusedTodo() !== null &&
         !global.localSearch() &&
         !global.newTodo() &&
         !global.editingTodo()
@@ -271,7 +167,7 @@ export default function Page() {
           global.setEditingTodo(true)
           global.setEditNoteInTodo(true)
         }
-        global.setTodoToEdit(global.focusedTodo())
+        // global.setTodoToEdit(null)
       }
     },
     { preventDefault: false }
@@ -284,7 +180,7 @@ export default function Page() {
 
       batch(() => {
         global.setLocalSearch(true)
-        global.setFocusedTodo(-1)
+        global.setFocusedTodo(null)
       })
     },
     { preventDefault: false }
@@ -299,33 +195,38 @@ export default function Page() {
     { preventDefault: false }
   )
 
-  for (const i of [0, 1, 2, 3] as const) {
-    createShortcut(
-      [`${i}`],
-      () => {
-        if (global.focusedTodo() !== 0 && !global.editingTodo()) {
-          global.todosState.updateTodo(global.focusedTodo()!, (todo) => ({
-            ...todo,
-            priority: i,
-          }))
-        }
-      },
-      { preventDefault: false }
-    )
-  }
-
-  createShortcut(
-    ["4"],
-    () => {
-      if (global.focusedTodo() !== 0 && !global.editingTodo()) {
-        global.todosState.updateTodo(global.focusedTodo()!, (todo) => ({
-          ...todo,
-          starred: !todo.starred,
-        }))
+  createEffect(() => {
+    if (!global.editingTodo()) {
+      for (const i of [0, 1, 2, 3] as const) {
+        createShortcut(
+          [`${i}`],
+          () => {
+            const focusedTodoValue = global.focusedTodo()
+            if (focusedTodoValue) {
+              global.todosState.updateTodo(focusedTodoValue, (todo) => ({
+                ...todo,
+                priority: i,
+              }))
+            }
+          },
+          { preventDefault: false }
+        )
       }
-    },
-    { preventDefault: false }
-  )
+
+      createShortcut(
+        ["4"],
+        () => {
+          if (global.focusedTodo() !== 0) {
+            global.todosState.updateTodo(global.focusedTodo()!, (todo) => ({
+              ...todo,
+              starred: !todo.starred,
+            }))
+          }
+        },
+        { preventDefault: false }
+      )
+    }
+  })
 
   return (
     <div

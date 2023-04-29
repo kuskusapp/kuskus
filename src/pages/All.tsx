@@ -1,8 +1,9 @@
 import { createEventListener } from "@solid-primitives/event-listener"
-import { For, Show } from "solid-js"
+import { For, Match, Show, Switch } from "solid-js"
 import { useGlobalContext } from "~/GlobalContext/store"
 import NewTodo from "~/components/NewTodo"
 import Todo from "~/components/Todo"
+import TodoEdit from "~/components/TodoEdit"
 
 export default function All() {
   const global = useGlobalContext()
@@ -13,8 +14,7 @@ export default function All() {
     "click",
     (e) => {
       if (e.target === ref) {
-        global.setFocusedTodo(-1)
-        global.setTodoToEdit(0)
+        global.setFocusedTodo(null)
         global.setNewTodo(false)
       }
     },
@@ -24,7 +24,20 @@ export default function All() {
   return (
     <div class="p-16 pt-6" ref={ref}>
       <h1 class="font-bold text-3xl mb-8">All</h1>
-      <For each={global.orderedTodos()}>{(todo) => <Todo todo={todo} />}</For>
+      <For each={global.flatTasks()}>
+        {(todo) => (
+          <Switch>
+            <Match
+              when={global.isTodoFocused(todo.key) && global.editingTodo()}
+            >
+              <TodoEdit todo={todo} />
+            </Match>
+            <Match when={true}>
+              <Todo todo={todo} subtask={"parent" in todo} />
+            </Match>
+          </Switch>
+        )}
+      </For>
       <Show when={global.newTodo() && !global.editingTodo()}>
         <NewTodo />
       </Show>

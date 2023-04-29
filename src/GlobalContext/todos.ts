@@ -13,7 +13,6 @@ import { grafbase } from "~/lib/graphql"
 
 export type Priority = 0 | 1 | 2 | 3
 export type TodoKey = number
-export type SubtaskKey = number
 
 export type BaseTask = {
   title: string
@@ -24,7 +23,11 @@ export type BaseTask = {
   dueDate: string | null
 }
 
-export type ClientSubtask = BaseTask & { id: string; key: SubtaskKey }
+export type ClientSubtask = BaseTask & {
+  id: string
+  key: TodoKey
+  parent: ClientTodo
+}
 
 export type ClientTodo = BaseTask & {
   /**
@@ -38,14 +41,12 @@ export type ClientTodo = BaseTask & {
   subtasks: ClientSubtask[]
 }
 
-const getNewKey = (() => {
+const { getNewKey, getSubtaskKey } = (() => {
   let last = 0
-  return () => last++
-})()
-
-const getSubtaskKey = (() => {
-  let last = 0
-  return () => last++
+  return {
+    getNewKey: () => last++,
+    getSubtaskKey: () => last++,
+  }
 })()
 
 const parseDbPriority = (int: number): Priority => {
@@ -54,7 +55,8 @@ const parseDbPriority = (int: number): Priority => {
 }
 
 const parseDbSubtasks = (
-  subtasks: SubtaskConnection | null | undefined
+  subtasks: SubtaskConnection | null | undefined,
+  parent: ClientTodo
 ): ClientSubtask[] => {
   const result: ClientSubtask[] = []
   if (subtasks?.edges)
@@ -69,6 +71,7 @@ const parseDbSubtasks = (
         dueDate: edge.node.dueDate ?? null,
         note: edge.node.note ?? null,
         priority: parseDbPriority(edge.node.priority),
+        parent,
       })
     }
   return result
@@ -88,6 +91,7 @@ export function createTodosState() {
         if (res.todoCollection?.edges) {
           for (const todo of res.todoCollection.edges) {
             if (!todo?.node) continue
+            const subtasks: ClientTodo["subtasks"] = []
             const clientTodo: ClientTodo = {
               id: todo.node.id,
               key: getNewKey(),
@@ -97,8 +101,12 @@ export function createTodosState() {
               priority: parseDbPriority(todo.node.priority),
               note: todo.node.note ?? null,
               dueDate: todo.node.dueDate ?? null,
-              subtasks: parseDbSubtasks(todo.node.subtasks),
+              subtasks,
             }
+            subtasks.push.apply(
+              subtasks,
+              parseDbSubtasks(todo.node.subtasks, clientTodo)
+            )
             state.push(clientTodo)
             ignoreAdded.add(clientTodo)
           }

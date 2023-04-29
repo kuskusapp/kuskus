@@ -40,7 +40,7 @@ export async function createTodosForDev() {
 
   let subtask = await grafbase.request<Mutation>(SubtaskCreateDocument, {
     subtask: {
-      title: "check all TODO: in code",
+      title: "subtask 1",
     },
   })
   await grafbase.request<Mutation>(TodoLinkSubtaskDocument, {
@@ -50,7 +50,7 @@ export async function createTodosForDev() {
 
   subtask = await grafbase.request<Mutation>(SubtaskCreateDocument, {
     subtask: {
-      title: "fix all TODO: in code",
+      title: "subtask 2",
     },
   })
   await grafbase.request<Mutation>(TodoLinkSubtaskDocument, {
@@ -58,17 +58,7 @@ export async function createTodosForDev() {
     subtaskId: subtask.subtaskCreate?.subtask?.id,
   })
 
-  subtask = await grafbase.request<Mutation>(SubtaskCreateDocument, {
-    subtask: {
-      title: "release",
-    },
-  })
-  await grafbase.request<Mutation>(TodoLinkSubtaskDocument, {
-    taskId: task.todoCreate?.todo?.id,
-    subtaskId: subtask.subtaskCreate?.subtask?.id,
-  })
-
-  await grafbase.request<Mutation>(CreateTodoDocument, {
+  task = await grafbase.request<Mutation>(CreateTodoDocument, {
     todo: {
       title: "Make Kuskus",
       starred: true,
@@ -77,6 +67,16 @@ export async function createTodosForDev() {
       note: "cover all important use cases",
     },
   })
+  subtask = await grafbase.request<Mutation>(SubtaskCreateDocument, {
+    subtask: {
+      title: "subtask",
+    },
+  })
+  await grafbase.request<Mutation>(TodoLinkSubtaskDocument, {
+    taskId: task.todoCreate?.todo?.id,
+    subtaskId: subtask.subtaskCreate?.subtask?.id,
+  })
+
   await grafbase.request<Mutation>(CreateTodoDocument, {
     todo: {
       title: "Release KusKus",

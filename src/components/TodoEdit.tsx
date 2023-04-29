@@ -2,11 +2,15 @@ import { autofocus } from "@solid-primitives/autofocus"
 import { createShortcut } from "@solid-primitives/keyboard"
 import { Show, batch, createEffect, createSignal, onMount } from "solid-js"
 import { todayDate } from "~/lib/lib"
-import { ClientTodo, useGlobalContext } from "../GlobalContext/store"
+import {
+  ClientSubtask,
+  ClientTodo,
+  useGlobalContext,
+} from "../GlobalContext/store"
 import Icon from "./Icon"
 
 interface Props {
-  todo: ClientTodo
+  todo: ClientTodo | ClientSubtask
 }
 
 export default function TodoEdit(props: Props) {
@@ -41,7 +45,7 @@ export default function TodoEdit(props: Props) {
           starred: starred(),
           dueDate: showCalendar() && !dueDate() ? todayDate() : dueDate(),
         }))
-        global.setTodoToEdit(-1)
+        global.setEditingTodo(false)
       })
     }
   })
