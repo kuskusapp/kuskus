@@ -1,6 +1,6 @@
 import { createMemo, createSelector, createSignal } from "solid-js"
 import { createContextProvider } from "@solid-primitives/context"
-import { ClientTodo, TodoKey, createTodosState } from "./todos"
+import { ClientTodo, SubtaskKey, TodoKey, createTodosState } from "./todos"
 import { todayDate } from "~/lib/lib"
 
 export type { ClientSubtask, ClientTodo } from "./todos"
@@ -24,8 +24,10 @@ export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
     const [highlitedTodosFromSearch, setHighlightedTodosFromSearch] =
       createSignal([])
 
-    const [focusedTodo, setFocusedTodo] = createSignal<TodoKey | null>(null)
-    const isTodoFocused = createSelector<TodoKey | null, TodoKey>(focusedTodo)
+    const [focusedTodo, setFocusedTodo] = createSignal<TodoKey>(-1)
+    const [focusedSubtask, setFocusedSubtask] = createSignal<SubtaskKey>(-1)
+    const [focusingSubtask, setFocusingSubtask] = createSignal(false)
+    const isTodoFocused = createSelector<TodoKey | null, TodoKey>(focusedTodo) // TODO: should use it somehow..
 
     const [todoToEdit, setTodoToEdit] = createSignal<number | null>(-1)
     const [editingTodo, setEditingTodo] = createSignal<boolean>(false)
@@ -119,6 +121,10 @@ export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
       newSubtask,
       setNewSubtask,
       focusedTodoIndex,
+      focusedSubtask,
+      setFocusedSubtask,
+      focusingSubtask,
+      setFocusingSubtask,
     } as const
   },
   // @ts-expect-error this is just to assert context as non-nullable

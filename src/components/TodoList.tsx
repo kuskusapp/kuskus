@@ -20,7 +20,7 @@ export default function Page() {
     "click",
     (e) => {
       if (e.target === ref) {
-        global.setFocusedTodo(null)
+        global.setFocusedTodo(-1)
         global.setTodoToEdit(-1)
         global.setNewTodo(false)
       }
@@ -44,7 +44,6 @@ export default function Page() {
         } else {
           global.setFocusedTodo(global.orderedTodos()[todoIdToFocus].key)
         }
-        console.log(global.focusedTodo())
       }
     },
     { preventDefault: false }
@@ -56,7 +55,7 @@ export default function Page() {
       if (global.newTodo()) return
 
       batch(() => {
-        global.setFocusedTodo(null)
+        global.setFocusedTodo(-1)
         // TODO: change depending of where you create todo
         global.setNewTodoType("all")
         global.setNewTodo(true)
@@ -99,17 +98,41 @@ export default function Page() {
         global.setLocalSearchResultId(global.localSearchResultIds()[index + 1])
       }
     } else {
-      if (
-        findIndexOfId(global.orderedTodos(), global.focusedTodo()) ===
-        global.orderedTodos().length - 1
-      ) {
+      // runs this if not in local search
+      let indexOfPastTodo = findIndexOfId(
+        global.orderedTodos(),
+        global.focusedTodo()
+      )
+
+      // check for overflow of tasks
+      if (indexOfPastTodo === global.orderedTodos().length - 1) {
+        // if tasks overflow, focus on first todo in the list
         global.setFocusedTodo(global.orderedTodos()[0].key)
+        return
+      }
+
+      // focus on next todo in the list
+      // first check if todo below is a subtask
+      if (
+        indexOfPastTodo !== -1 &&
+        global.orderedTodos()[indexOfPastTodo].subtasks.length > 0
+      ) {
+        // when its a subtask, check if its the last subtask
+        if (
+          global.orderedTodos()[indexOfPastTodo].subtasks.length - 1 ===
+          global.focusedSubtask()
+        ) {
+          global.setFocusedSubtask(-1)
+          global.setFocusedTodo(global.orderedTodos()[indexOfPastTodo + 1].key)
+          global.setFocusingSubtask(false)
+        } else {
+          global.setFocusingSubtask(true)
+          global.setFocusedSubtask((e) => {
+            return e + 1
+          })
+        }
       } else {
-        global.setFocusedTodo(
-          global.orderedTodos()[
-            findIndexOfId(global.orderedTodos(), global.focusedTodo()) + 1
-          ].key
-        )
+        global.setFocusedTodo(global.orderedTodos()[indexOfPastTodo + 1].key)
       }
     }
   })
@@ -141,25 +164,11 @@ export default function Page() {
           global.orderedTodos()[global.orderedTodos().length - 1].key
         )
       } else {
-        if (global.focusedTodo() === 0) {
-          global.setFocusedTodo(
-            global.orderedTodos()[global.orderedTodos().length - 1].key
-          )
-          return
-        }
-
-        let focusedTodo =
+        global.setFocusedTodo(
           global.orderedTodos()[
             findIndexOfId(global.orderedTodos(), global.focusedTodo()) - 1
-          ]
-
-        console.log(global.todos)
-        console.log(focusedTodo.subtasks)
-        if (focusedTodo.subtasks.length > 0) {
-          return
-        } else {
-          global.setFocusedTodo(focusedTodo.key)
-        }
+          ].key
+        )
       }
     }
   })

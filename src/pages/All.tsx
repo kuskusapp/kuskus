@@ -13,7 +13,7 @@ export default function All() {
     "click",
     (e) => {
       if (e.target === ref) {
-        global.setFocusedTodo(null)
+        global.setFocusedTodo(-1)
         global.setTodoToEdit(0)
         global.setNewTodo(false)
       }
