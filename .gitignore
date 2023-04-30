@@ -27,3 +27,6 @@ Thumbs.db
 
 # Vite
 vite.config.ts.timestamp-*-*.mjs
+
+# Rust
+ai/target

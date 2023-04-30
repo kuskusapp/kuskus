@@ -35,7 +35,7 @@ export function findIndexOfId(todos: ClientTodo[], id: number | null) {
   return todos.findIndex((t) => t.key === id)
 }
 
-export function isSubtask(key: TodoKey): boolean {
+export function isSubtask(key: TodoKey) {
   const global = useGlobalContext()
   if ("subtasks" in global.flatTasks()[key]) {
     return false
