@@ -1,6 +1,7 @@
 import solid from "solid-start/vite"
 import { defineConfig } from "vite"
 import devtools from "solid-devtools/vite"
+import cloudflare from "solid-start-cloudflare-pages"
 
 // TODO: ssr: false because with it createResource doesn't log to client
 // because callbacks happen on server
@@ -9,7 +10,7 @@ import devtools from "solid-devtools/vite"
 // with true, the logs are sent to client
 export default defineConfig({
   plugins: [
-    solid({ ssr: false }),
+    solid({ ssr: false, adapter: cloudflare({}) }),
     devtools({
       /* additional options */
       autoname: true, // e.g. enable autoname
