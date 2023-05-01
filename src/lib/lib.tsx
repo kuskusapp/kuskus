@@ -36,6 +36,9 @@ export function findIndexOfId(todos: ClientTodo[], id: number | null) {
 }
 
 export function isSubtask(key: TodoKey) {
+  // TODO: is this good to do? it works but seems wrong..
+  // also doesn't work if run inside TodoEdit.tsx
+  // it breaks with global.flatTasks is not a function..
   const global = useGlobalContext()
   if ("subtasks" in global.flatTasks()[key]) {
     return false

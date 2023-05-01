@@ -3,6 +3,7 @@ import { StoreSetter, createStore, produce, unwrap } from "solid-js/store"
 import {
   CreateTodoDocument,
   Query,
+  Subtask,
   SubtaskConnection,
   TodoDeleteDocument,
   TodoUpdateDocument,
@@ -203,7 +204,11 @@ export function createTodosState() {
       setTodos((p) => p.filter((t) => t.key !== key))
     },
     // TODO: not sure how to make this work
-    updateSubtask: (key: number, setter: any) => {
+    updateSubtask: (
+      key: number,
+      setter: StoreSetter<ClientSubtask, [number]>
+    ) => {
+      // setTodos((t) => {})
       // console.log(foundSubtask)
       // let newSubtask = { ...foundSubtask, subtask }
       // console.log(newSubtask, "new subtask")

@@ -15,6 +15,7 @@ import {
   useGlobalContext,
 } from "../GlobalContext/store"
 import Icon from "./Icon"
+import { isSubtask } from "~/lib/lib"
 
 interface Props {
   todo: ClientTodo | ClientSubtask
@@ -41,9 +42,24 @@ export default function TodoEdit(props: Props) {
       return
     }
 
-    // UPDATE
+    if ("subtasks" in global.flatTasks()[props.todo.key]) {
+      // UPDATE TASK
+      batch(() => {
+        global.todosState.updateTodo(props.todo.key, (p) => ({
+          ...p,
+          title: title(),
+          note: note(),
+          priority: priority(),
+          starred: starred(),
+          dueDate: showCalendar() && !dueDate() ? todayDate() : dueDate(),
+        }))
+        global.setEditingTodo(false)
+      })
+      return
+    }
+    // UPDATE SUBTASK
     batch(() => {
-      global.todosState.updateTodo(props.todo.key, (p) => ({
+      global.todosState.updateSubtask(props.todo.key, (p) => ({
         ...p,
         title: title(),
         note: note(),
