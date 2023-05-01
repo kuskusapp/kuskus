@@ -8,8 +8,8 @@ export default function Loader() {
           display: flex;
           align-items: center;
           justify-content: space-between;
-          width: var(--uib-size);
-          height: var(--uib-size);
+          width: 40px;
+          height: 40px;
         }
 
         .dot {
@@ -26,25 +26,25 @@ export default function Loader() {
         .dot::before {
           content: '';
           display: block;
-          height: calc(var(--uib-size) * 0.22);
-          width: calc(var(--uib-size) * 0.22);
+          height: calc(40px * 0.22);
+          width: calc(40px * 0.22);
           border-radius: 50%;
-          background-color: var(--uib-color);
+          background-color: black;
         }
 
         .dot:nth-child(1) {
-          animation: leapFrog var(--uib-speed) ease infinite;
+          animation: leapFrog 2.5s ease infinite;
         }
 
         .dot:nth-child(2) {
-          transform: translateX(calc(var(--uib-size) * 0.4));
-          animation: leapFrog var(--uib-speed) ease calc(var(--uib-speed) / -1.5)
+          transform: translateX(calc(40px * 0.4));
+          animation: leapFrog 2.5s ease calc(2.5s / -1.5)
             infinite;
         }
 
         .dot:nth-child(3) {
-          transform: translateX(calc(var(--uib-size) * 0.8)) rotate(0deg);
-          animation: leapFrog var(--uib-speed) ease calc(var(--uib-speed) / -3) infinite;
+          transform: translateX(calc(40px * 0.8)) rotate(0deg);
+          animation: leapFrog 2.5s ease calc(2.5s / -3) infinite;
         }
 
         @keyframes leapFrog {
@@ -57,11 +57,11 @@ export default function Loader() {
           }
 
           66.666% {
-            transform: translateX(calc(var(--uib-size) * -0.4)) rotate(180deg);
+            transform: translateX(calc(40px * -0.4)) rotate(180deg);
           }
 
           99.999% {
-            transform: translateX(calc(var(--uib-size) * -0.8)) rotate(180deg);
+            transform: translateX(calc(40px * -0.8)) rotate(180deg);
           }
 
           100% {
@@ -70,14 +70,7 @@ export default function Loader() {
         }
         `}
       </style>
-      <div
-        class={"container"}
-        style={{
-          "--uib-size": 40 + "px",
-          "--uib-color": "black",
-          "--uib-speed": 2.5 + "s",
-        }}
-      >
+      <div class={"container"}>
         <div class={"dot"} />
         <div class={"dot"} />
         <div class={"dot"} />
