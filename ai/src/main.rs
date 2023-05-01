@@ -1,6 +1,7 @@
 use axum::{extract::Query, http::StatusCode, response::IntoResponse, routing::get, Json, Router};
 use dotenvy::dotenv;
 use llm_chain::{executor, output::Output, parameters, prompt, step::Step};
+use redis::Commands;
 use serde::{Deserialize, Serialize};
 use std::{collections::VecDeque, net::SocketAddr};
 
@@ -61,13 +62,13 @@ struct JsonRequest {
     request: String,
 }
 
-#[derive(Serialize, Debug)]
+#[derive(Deserialize, Serialize, Debug)]
 struct Subtask {
     title: String,
     note: String,
 }
 
-#[derive(Serialize, Debug)]
+#[derive(Deserialize, Serialize, Debug)]
 struct JsonResponse {
     subtasks: Vec<Subtask>,
 }
@@ -79,13 +80,47 @@ struct JsonResponse {
 // }]
 // }
 
+#[derive(Serialize, Debug, Deserialize)]
+enum SubtasksResponse {
+    Success(JsonResponse),
+    Error(String),
+}
+
 async fn subtasks_from_request(Query(request_data): Query<JsonRequest>) -> impl IntoResponse {
+    let client = redis::Client::open(
+        std::env::var("UPSTASH_REDIS_CONNECTION").expect("UPSTASH_REDIS_CONNECTION not found"),
+    );
+    if let Err(e) = client {
+        return (
+            StatusCode::INTERNAL_SERVER_ERROR,
+            Json(SubtasksResponse::Error(format!("Error: {}", e))),
+        );
+    }
+    let client = client.unwrap();
+
+    let con = client.get_connection();
+    if let Err(e) = con {
+        return (
+            StatusCode::INTERNAL_SERVER_ERROR,
+            Json(SubtasksResponse::Error(format!("Error: {}", e))),
+        );
+    }
+    let mut con = con.unwrap();
+
+    if let Ok(data) = con.get(&format!("cache:{}", request_data.request)) {
+        let s: String = data;
+        return (
+            StatusCode::OK,
+            Json(SubtasksResponse::Success(serde_json::from_str(&s).unwrap())),
+        );
+    }
+
     // Create a new ChatGPT executor
     let exec = executor!();
     if let Err(e) = exec {
         return (
             StatusCode::INTERNAL_SERVER_ERROR,
-            Json(format!("Error: {}", e)),
+            Json(SubtasksResponse::Error(format!("Error: {}", e))),
         );
     }
     let exec = exec.unwrap();
@@ -96,12 +131,12 @@ async fn subtasks_from_request(Query(request_data): Query<JsonRequest>) -> impl 
         "Provide detailed steps to do this task: {{text}}. Use bullet points for each step.",
     ));
 
-    let res = step.run(&parameters!(request_data.request), &exec).await;
+    let res = step.run(&parameters!(&request_data.request), &exec).await;
 
     if let Err(e) = res {
         return (
             StatusCode::INTERNAL_SERVER_ERROR,
-            Json(format!("Error: {}", e)),
+            Json(SubtasksResponse::Error(format!("Error: {}", e))),
         );
     }
     let res = res.unwrap();
@@ -120,7 +155,15 @@ async fn subtasks_from_request(Query(request_data): Query<JsonRequest>) -> impl 
 
     let response = JsonResponse { subtasks };
 
-    (StatusCode::OK, Json(response))
+    if let Ok(s) = con.set(
+        &format!("cache:{}", &request_data.request),
+        serde_json::to_string(&response).unwrap(),
+    ) {
+        let s: String = s;
+        println!("set cache: {}", s);
+    }
+
+    (StatusCode::OK, Json(SubtasksResponse::Success(response)))
 }
 
 // === new stuff ===
