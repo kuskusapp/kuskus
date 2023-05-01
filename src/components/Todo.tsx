@@ -89,7 +89,14 @@ export default function Todo(props: Props) {
             style={{ "padding-right": "0.375rem" }}
             class="flex gap-3 items-center"
           >
-            <Loader />
+            <Show
+              when={
+                global.loadingSuggestedTodos() &&
+                global.focusedTodo() === props.todo.key
+              }
+            >
+              <Loader />
+            </Show>
             <div class="opacity-50 " style={{ "font-size": "14.8px" }}>
               {props.todo?.dueDate && isToday(props.todo.dueDate)
                 ? "Today"

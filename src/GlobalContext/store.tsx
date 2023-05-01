@@ -69,6 +69,8 @@ export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
       createSignal<number>(0)
     const [showSuggestedTasksModal, setShowSuggestedTasksModal] =
       createSignal<boolean>(false)
+    const [loadingSuggestedTodos, setLoadingSuggestedTodos] =
+      createSignal(false)
 
     const compareTodos = (a: ClientTodo, b: ClientTodo): number => {
       if (b.starred && !a.starred) {
@@ -161,6 +163,8 @@ export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
       setSuggestedTodos,
       focusedSuggestedTodo,
       setFocusedSuggestedTodo,
+      loadingSuggestedTodos,
+      setLoadingSuggestedTodos,
     } as const
   },
   // @ts-expect-error this is just to assert context as non-nullable

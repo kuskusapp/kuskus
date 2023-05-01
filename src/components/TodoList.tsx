@@ -97,20 +97,27 @@ export default function Page() {
       if (global.newTodo() || global.editingTodo()) return
 
       if (global.focusedTodo() !== null && !isSubtask(global.focusedTodo()!)) {
-        global.setShowSuggestedTasksModal(true)
+        global.setLoadingSuggestedTodos(true)
         // TODO: use https://github.com/solidjs-community/solid-primitives/tree/main/packages/fetch#readme
         // maybe do it in `createRequest`?
         // type the response, we know the structure
-        const res = await fetch(
-          "http://127.0.0.1:3001/?request=make%20a%20game"
-        )
+        // type the response well!
 
-        // TODO: type it..
-        // also not sure why I can't do .Success right after `res.json()`, whole thing is a hack to get it working for now
-        // @ts-ignore
+        const urlEncodedTask = global.flatTasks()[global.focusedTodo()!].title
+
+        const res = await fetch(
+          `http://127.0.0.1:3001/?request=${urlEncodedTask}`
+        )
         const resJson = await res.json()
+        // not sure why I can't do .Success right after `res.json()`, whole thing is a hack to get it working for now
         const suggestedTodos = resJson.Success.subtasks
-        global.setSuggestedTodos(suggestedTodos)
+
+        // TODO: requires more thought on error handling, things can go wrong..
+        global.setLoadingSuggestedTodos(false)
+        if (suggestedTodos.length > 0) {
+          global.setSuggestedTodos(suggestedTodos)
+          global.setShowSuggestedTasksModal(true)
+        }
       }
     },
     { preventDefault: false }
