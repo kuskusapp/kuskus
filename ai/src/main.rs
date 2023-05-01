@@ -1,11 +1,46 @@
 use axum::{extract::Query, http::StatusCode, response::IntoResponse, routing::get, Json, Router};
 use dotenvy::dotenv;
-use llm_chain::{executor, parameters, prompt, step::Step};
+use llm_chain::{executor, output::Output, parameters, prompt, step::Step};
 use serde::{Deserialize, Serialize};
-use std::net::SocketAddr;
+use std::{collections::VecDeque, net::SocketAddr};
 
 #[tokio::main]
 async fn main() {
+    let ext = extract_first_list("
+    Sure, here are the steps to create a CLI in Rust to scrape title and URL from a website:
+
+1. Create a new Rust project by running `cargo new project-name --bin` in your terminal. Replace `project-name` with your desired project name.
+2. Navigate to the project directory by running `cd project-name`.
+3. Open `Cargo.toml` and add the following section
+
+
+
+   These dependencies will be required for HTTP requests, HTML parsing, and CLI parameter parsing respectively.
+
+4. Create a new file named `main.rs` to write your Rust code.
+5. Start by importing the required libraries by adding the following code:
+
+
+
+6. Define the initial client by adding `let client = Client::new();` below the imports.
+7. Define the CLI parameters by adding the following code
+   This will prompt the user to specify the URL to scrape when running the CLI.
+
+8. Parse the URL provided by the user by adding the following code:
+
+
+   This will send an HTTP GET request to the specified URL and retrieve the HTML content.
+
+9. Extract the title and URLs by adding the following code:
+
+   This code finds all anchor tags (`<a>`) in the HTML document that have an `href` attribute (i.e., links) and then extracts their `text` and `href` attributes, respectively.
+
+10. Save the file and run the CLI by running `cargo run <url>` in your terminal, where `<url>` is the URL you want to scrape.
+
+That's it! The CLI will now scrape the title and URLs from the specified website and print them to the console.
+    ");
+
+    println!("{:?}", ext);
     // load environment variables from .env file
     dotenv().expect(".env file not found");
 
@@ -21,18 +56,27 @@ async fn main() {
         .unwrap();
 }
 
-#[derive(Deserialize)]
+#[derive(Deserialize, Debug)]
 struct JsonRequest {
     request: String,
 }
 
-#[derive(Serialize)]
+#[derive(Serialize, Debug)]
+struct Subtask {
+    title: String,
+    note: String,
+}
+
+#[derive(Serialize, Debug)]
 struct JsonResponse {
-    message: Vec<String>,
+    subtasks: Vec<Subtask>,
 }
 
 // {
-// "message": ["1. subtask", "2. subtask"]
+// "subtasks": [{
+// "title": "markdown",
+// "note": "markdown",
+// }]
 // }
 
 async fn subtasks_from_request(Query(request_data): Query<JsonRequest>) -> impl IntoResponse {
@@ -64,6 +108,101 @@ async fn subtasks_from_request(Query(request_data): Query<JsonRequest>) -> impl 
 
     println!("{}", res);
 
-    let response = format!("Received request: {}", res);
+    let text_output = res
+        .primary_textual_output()
+        .await
+        .expect("our model will always return at least one output");
+
+    let subtasks: Vec<_> = extract_first_list(&text_output)
+        .into_iter()
+        .map(|(title, note)| Subtask { title, note })
+        .collect();
+
+    let response = JsonResponse { subtasks };
+
     (StatusCode::OK, Json(response))
+}
+
+// === new stuff ===
+
+// 1.
+//   1.
+//   2.
+// 2.
+
+// well first you could have something like this:
+// 1. foo
+// 2. bar
+// but then if consider foo
+// 1. something else
+// 2. something else
+
+use markdown::{mdast::Node, to_mdast, ParseOptions};
+/// Extracts the first list from the LLM response
+///
+/// LLMs are often inconsistent when they return lists. This function grabs the first list we encounter.
+/// ```markdown
+/// - a list of two items
+/// - this second one
+///
+/// 1. another list
+/// 2. that's irrelevant
+/// ```
+///
+/// # Parameters
+/// - `text` the text to parse
+///
+/// # Returns
+/// Vec<String> A vector of key value pairs.
+///
+/// # Examples
+///
+/// ```ignore
+/// use llm_chain::parsing::extract_labeled_text;
+/// let data = "
+/// - alpha: beta
+/// - *gamma*: delta
+/// ";
+/// let labs = extract_labeled_text(data);
+/// println!("{:?}", labs);
+/// assert_eq!(labs[0], ("alpha".to_string(), "beta".to_string()));
+/// ```
+pub fn extract_first_list(text: &str) -> Vec<(String, String)> {
+    let options = ParseOptions::default();
+    let ast = to_mdast(text, &options).expect("markdown parsing can't fail");
+    let mut nodes = VecDeque::new();
+    nodes.push_back(ast);
+    // We need a list to contain the things we found. (or maybe not actually)
+    let mut extracted_items = Vec::new();
+
+    while let Some(node) = nodes.pop_front() {
+        match node {
+            Node::List(list) => {
+                for child in &list.children {
+                    match &child {
+                        Node::ListItem(item) => {
+                            let pos = item
+                                .position
+                                .as_ref()
+                                .expect("position can't fail (maybe?)");
+                            let snippet = text[pos.start.offset..pos.end.offset].to_string();
+                            let (title, note) = snippet.split_once("\n").unwrap_or((&snippet, ""));
+                            extracted_items.push((title.to_string(), note.to_string()));
+                        }
+                        _ => {}
+                    }
+                }
+                return extracted_items;
+            }
+            _ => {}
+        }
+        let mut index = 0;
+        if let Some(children) = node.children() {
+            for child in children.iter().cloned() {
+                nodes.insert(index, child);
+                index += 1;
+            }
+        }
+    }
+    extracted_items
 }

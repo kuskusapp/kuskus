@@ -29,6 +29,7 @@ dependencies = [
  "dotenvy_macro",
  "llm-chain",
  "llm-chain-openai",
+ "markdown",
  "redis",
  "serde",
  "tokio",
