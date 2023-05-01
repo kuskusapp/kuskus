@@ -7,6 +7,7 @@ import {
   useGlobalContext,
 } from "../GlobalContext/store"
 import Icon from "./Icon"
+import Loader from "./Loader"
 
 interface Props {
   todo: ClientTodo | ClientSubtask
@@ -88,6 +89,8 @@ export default function Todo(props: Props) {
             style={{ "padding-right": "0.375rem" }}
             class="flex gap-3 items-center"
           >
+            <Loader />
+            <div>loading</div>
             <div class="opacity-50 " style={{ "font-size": "14.8px" }}>
               {props.todo?.dueDate && isToday(props.todo.dueDate)
                 ? "Today"
