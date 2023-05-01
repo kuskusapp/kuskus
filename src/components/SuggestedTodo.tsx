@@ -13,10 +13,13 @@ export default function SuggestedTodo(props: Props) {
   return (
     <div
       class={clsx(
-        "flex flex-col p-2 m-2 flex-auto",
+        "p-2 m-2 mb-2 grid-cols-5 col-span-5",
         props.index === global.focusedSuggestedTodo() &&
           "bg-zinc-200 rounded-lg"
       )}
+      onClick={() => {
+        global.setFocusedSuggestedTodo(props.index)
+      }}
     >
       <div>{props.title.split(":")[0]}</div>
       <div class=" opacity-60 text-sm pl-5 text-start text-ellipsis">

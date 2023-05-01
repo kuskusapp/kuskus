@@ -15,29 +15,33 @@ export default function NewTodo() {
   const [priority, setPriority] = createSignal<0 | 1 | 2 | 3>(0)
   const [starred, setStarred] = createSignal(false)
 
-  createShortcut(["Enter"], async () => {
-    if (title() === "") {
+  createShortcut(
+    ["Enter"],
+    async () => {
+      if (title() === "") {
+        global.setNewTodo(false)
+        global.setEditingTodo(false)
+        return
+      }
+
+      const newTodoKey = global.todosState.addTodo({
+        title: title(),
+        note: note(),
+        done: false,
+        starred: starred(),
+        priority: priority(),
+        dueDate: dueDate(),
+        subtasks: [],
+      })
+
       global.setNewTodo(false)
-      global.setEditingTodo(false)
-      return
-    }
-
-    const newTodoKey = global.todosState.addTodo({
-      title: title(),
-      note: note(),
-      done: false,
-      starred: starred(),
-      priority: priority(),
-      dueDate: dueDate(),
-      subtasks: [],
-    })
-
-    global.setNewTodo(false)
-    global.setEditingTodo(true)
-    global.setNewTodoType("")
-    global.setChangeFocus(true)
-    global.setFocusedTodo(newTodoKey)
-  })
+      global.setEditingTodo(true)
+      global.setNewTodoType("")
+      global.setChangeFocus(true)
+      global.setFocusedTodo(newTodoKey)
+    },
+    { preventDefault: false }
+  )
 
   let titleRef!: HTMLInputElement,
     noteRef!: HTMLInputElement,

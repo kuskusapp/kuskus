@@ -8,7 +8,10 @@ import ActionBar from "./ActionBar"
 import LocalSearch from "./LocalSearch"
 import { isSubtask } from "~/lib/lib"
 import { createShortcut } from "@solid-primitives/keyboard"
-import { createEventListener } from "@solid-primitives/event-listener"
+import {
+  createEventListener,
+  preventDefault,
+} from "@solid-primitives/event-listener"
 import { createTodosForDev } from "~/lib/local"
 import SuggestedTodos from "./SuggestedTodos"
 
@@ -31,6 +34,8 @@ export default function Page() {
   createShortcut(
     ["Backspace"],
     () => {
+      if (global.newTodo()) return
+
       if (!global.localSearch() && !global.editingTodo()) {
         global.todosState.removeTodo(global.focusedTodo()!)
 
@@ -67,6 +72,11 @@ export default function Page() {
   )
 
   createShortcut(["Escape"], () => {
+    if (global.showSuggestedTasksModal()) {
+      global.setShowSuggestedTasksModal(false)
+      global.setFocusedSuggestedTodo(0)
+      return
+    }
     if (!global.newTodo() && !global.localSearch() && !global.editingTodo())
       return
 
@@ -81,21 +91,30 @@ export default function Page() {
   })
 
   // TODO: improve this code..
-  createShortcut(["A"], async () => {
-    if (global.focusedTodo() !== null && !isSubtask(global.focusedTodo()!)) {
-      global.setShowSuggestedTasksModal(true)
-      // TODO: use https://github.com/solidjs-community/solid-primitives/tree/main/packages/fetch#readme
-      // maybe do it in `createRequest`?
-      // type the response, we know the structure
-      const res = await fetch("http://127.0.0.1:3001/?request=make%20a%20game")
-      // TODO: type it..
-      // also not sure why I can't do .Success right after `res.json()`, whole thing is a hack to get it working for now
-      // @ts-ignore
-      const resJson = await res.json()
-      const suggestedTodos = resJson.Success.subtasks
-      global.setSuggestedTodos(suggestedTodos)
-    }
-  })
+  createShortcut(
+    ["A"],
+    async () => {
+      if (global.newTodo() || global.editingTodo()) return
+
+      if (global.focusedTodo() !== null && !isSubtask(global.focusedTodo()!)) {
+        global.setShowSuggestedTasksModal(true)
+        // TODO: use https://github.com/solidjs-community/solid-primitives/tree/main/packages/fetch#readme
+        // maybe do it in `createRequest`?
+        // type the response, we know the structure
+        const res = await fetch(
+          "http://127.0.0.1:3001/?request=make%20a%20game"
+        )
+
+        // TODO: type it..
+        // also not sure why I can't do .Success right after `res.json()`, whole thing is a hack to get it working for now
+        // @ts-ignore
+        const resJson = await res.json()
+        const suggestedTodos = resJson.Success.subtasks
+        global.setSuggestedTodos(suggestedTodos)
+      }
+    },
+    { preventDefault: false }
+  )
 
   createShortcut(["ArrowUp"], () => {
     if (global.showSuggestedTasksModal()) {
@@ -106,7 +125,6 @@ export default function Page() {
         global.setLocalSearchResultIndex(
           global.localSearchResultIds().length - 1
         )
-        console.log(global.localSearchResultIndex()!)
         global.setLocalSearchResultId(
           global.localSearchResultIds()[global.localSearchResultIndex()!]
         )
@@ -201,11 +219,10 @@ export default function Page() {
   createShortcut(
     ["Enter"],
     () => {
-      if (global.showSuggestedTasksModal()) {
+      if (global.showSuggestedTasksModal() || global.newTodo()) {
         return
       }
       if (!global.localSearch()) {
-        console.log(global.editingTodo())
         global.setEditingTodo((p) => !p)
       }
     },

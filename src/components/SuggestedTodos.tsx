@@ -1,4 +1,4 @@
-import { For, createEffect, onMount } from "solid-js"
+import { For } from "solid-js"
 import { useGlobalContext } from "~/GlobalContext/store"
 import SuggestedTodo from "./SuggestedTodo"
 import { createShortcut } from "@solid-primitives/keyboard"
@@ -13,7 +13,15 @@ export type SuggestedTodos = {
 export default function SuggestedTodos() {
   const global = useGlobalContext()
 
-  createShortcut(["Enter"], () => {})
+  // createShortcut(["Enter"], () => {
+  //   global.todosState.updateTodo(global.focusedTodo()!, (p) => ({
+  //     ...p,
+  //     subtasks: p.subtasks.push({
+  //       title: "testing",
+  //       subutask: "subtask"
+  //     })
+  //   })
+  // })
 
   createShortcut(["ArrowDown"], () => {
     global.setFocusedSuggestedTodo(
@@ -39,9 +47,9 @@ export default function SuggestedTodos() {
         style={{ "border-radius": "25px 25px 0 0" }}
         class="text-xs dark:bg-stone-900 bg-gray-100 drop-shadow-lg w-full p-1 text-center"
       >
-        Suggested tasks for {global.todos[global.focusedTodo()!].title}
+        Suggested tasks for {global.flatTasks()[global.focusedTodo()!].title}
       </div>
-      <div class="flex flex-col">
+      <div class="grid-cols-5 col-span-5">
         <For each={global.suggestedTodos()}>
           {(todo, index) => (
             <SuggestedTodo title={todo.title} index={index()} />

@@ -52,6 +52,7 @@ export default function Todo(props: Props) {
             "user-select": "none",
           }}
           onClick={(e) => {
+            global.setNewTodo(false)
             if (global.isTodoFocused(props.todo.key)) {
               global.setEditingTodo(true)
             } else {
