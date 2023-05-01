@@ -1,13 +1,13 @@
-use axum::{http::StatusCode, routing::get, Json, Router};
-use serde::Serialize;
+use axum::{extract::Query, http::StatusCode, response::IntoResponse, routing::get, Json, Router};
+use serde::{Deserialize, Serialize};
 use std::net::SocketAddr;
 
 #[tokio::main]
 async fn main() {
-    // build our application with a route
-    let app = Router::new().route("/", get(handler));
+    // define routes
+    let app = Router::new().route("/", get(subtasks_from_request));
 
-    // run it, 3001 port is used as 3000 is web app for now
+    // run it on 3001 port. 3000 is used for web app
     let addr = SocketAddr::from(([127, 0, 0, 1], 3001));
     println!("listening on {}", addr);
     axum::Server::bind(&addr)
@@ -16,15 +16,17 @@ async fn main() {
         .unwrap();
 }
 
-async fn handler() -> (StatusCode, Json<MyJsonResponse>) {
-    let response = MyJsonResponse {
-        message: "Hello from JSON!".to_string(),
-    };
-
-    (StatusCode::OK, Json(response))
+#[derive(Deserialize)]
+struct JsonRequest {
+    request: String,
 }
 
 #[derive(Serialize)]
-struct MyJsonResponse {
+struct JsonResponse {
     message: String,
+}
+
+async fn subtasks_from_request(Query(request_data): Query<JsonRequest>) -> impl IntoResponse {
+    let response = format!("Received request: {}", request_data.request);
+    (StatusCode::OK, Json(response))
 }
