@@ -20,8 +20,15 @@ export default function Loader() {
         height: 60%;
         width: 60%;
         border-radius: 50%;
-        background-color: var(--uib-color);
+        background-color: black;
         flex-shrink: 0;
+      }
+
+      @media (prefers-color-scheme: dark) {
+      .container::before,
+      .container::after {
+        background-color: white;
+      }
       }
 
       .container::before {
@@ -137,8 +144,7 @@ export default function Loader() {
       <div
         class={"container"}
         style={{
-          "--uib-size": 15 + "px",
-          "--uib-color": "black",
+          "--uib-size": 13 + "px",
           "--uib-speed": 1.5 + "s",
         }}
       ></div>
