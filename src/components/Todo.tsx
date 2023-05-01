@@ -90,7 +90,6 @@ export default function Todo(props: Props) {
             class="flex gap-3 items-center"
           >
             <Loader />
-            <div>loading</div>
             <div class="opacity-50 " style={{ "font-size": "14.8px" }}>
               {props.todo?.dueDate && isToday(props.todo.dueDate)
                 ? "Today"
