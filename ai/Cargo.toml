@@ -19,3 +19,4 @@ tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 uuid = { version = "1.0", features = ["serde", "v4"] }
 dotenvy = "0.15.7"
 dotenvy_macro = "0.15.7"
+redis = "0.23.0"
