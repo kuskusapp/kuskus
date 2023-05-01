@@ -7,41 +7,6 @@ use std::{collections::VecDeque, net::SocketAddr};
 
 #[tokio::main]
 async fn main() {
-    let ext = extract_first_list("
-    Sure, here are the steps to create a CLI in Rust to scrape title and URL from a website:
-
-1. Create a new Rust project by running `cargo new project-name --bin` in your terminal. Replace `project-name` with your desired project name.
-2. Navigate to the project directory by running `cd project-name`.
-3. Open `Cargo.toml` and add the following section
-
-
-
-   These dependencies will be required for HTTP requests, HTML parsing, and CLI parameter parsing respectively.
-
-4. Create a new file named `main.rs` to write your Rust code.
-5. Start by importing the required libraries by adding the following code:
-
-
-
-6. Define the initial client by adding `let client = Client::new();` below the imports.
-7. Define the CLI parameters by adding the following code
-   This will prompt the user to specify the URL to scrape when running the CLI.
-
-8. Parse the URL provided by the user by adding the following code:
-
-
-   This will send an HTTP GET request to the specified URL and retrieve the HTML content.
-
-9. Extract the title and URLs by adding the following code:
-
-   This code finds all anchor tags (`<a>`) in the HTML document that have an `href` attribute (i.e., links) and then extracts their `text` and `href` attributes, respectively.
-
-10. Save the file and run the CLI by running `cargo run <url>` in your terminal, where `<url>` is the URL you want to scrape.
-
-That's it! The CLI will now scrape the title and URLs from the specified website and print them to the console.
-    ");
-
-    println!("{:?}", ext);
     // load environment variables from .env file
     dotenv().expect(".env file not found");
 
