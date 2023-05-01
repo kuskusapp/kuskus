@@ -1,6 +1,7 @@
 import { For, createEffect, onMount } from "solid-js"
 import { useGlobalContext } from "~/GlobalContext/store"
 import SuggestedTodo from "./SuggestedTodo"
+import { createShortcut } from "@solid-primitives/keyboard"
 
 // TODO: best move this someplace else
 // this is temporary
@@ -12,8 +13,21 @@ export type SuggestedTodos = {
 export default function SuggestedTodos() {
   const global = useGlobalContext()
 
-  createEffect(() => {
-    console.log(global.suggestedTodos())
+  createShortcut(["Enter"], () => {})
+
+  createShortcut(["ArrowDown"], () => {
+    global.setFocusedSuggestedTodo(
+      (global.focusedSuggestedTodo()! + 1) % global.suggestedTodos().length
+    )
+  })
+
+  createShortcut(["ArrowUp"], () => {
+    if (global.focusedSuggestedTodo() === 0) {
+      global.setFocusedSuggestedTodo(global.suggestedTodos().length)
+    }
+    global.setFocusedSuggestedTodo(
+      (global.focusedSuggestedTodo()! - 1) % global.suggestedTodos().length
+    )
   })
 
   return (
@@ -27,9 +41,13 @@ export default function SuggestedTodos() {
       >
         Suggested tasks for {global.todos[global.focusedTodo()!].title}
       </div>
-      <For each={global.suggestedTodos()}>
-        {(todo, index) => <SuggestedTodo title={todo.title} index={index()} />}
-      </For>
+      <div class="flex flex-col">
+        <For each={global.suggestedTodos()}>
+          {(todo, index) => (
+            <SuggestedTodo title={todo.title} index={index()} />
+          )}
+        </For>
+      </div>
 
       {/* <div>chat</div> */}
       {/* <div class="m-3 w-4/5">

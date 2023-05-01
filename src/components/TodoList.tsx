@@ -98,6 +98,9 @@ export default function Page() {
   })
 
   createShortcut(["ArrowUp"], () => {
+    if (global.showSuggestedTasksModal()) {
+      return
+    }
     if (global.localSearch()) {
       if (global.localSearchResultIndex() === 0) {
         global.setLocalSearchResultIndex(
@@ -145,6 +148,10 @@ export default function Page() {
   })
 
   createShortcut(["ArrowDown"], () => {
+    if (global.showSuggestedTasksModal()) {
+      return
+    }
+
     if (global.localSearch()) {
       if (
         global.localSearchResultIds().length - 1 ===
@@ -194,6 +201,9 @@ export default function Page() {
   createShortcut(
     ["Enter"],
     () => {
+      if (global.showSuggestedTasksModal()) {
+        return
+      }
       if (!global.localSearch()) {
         console.log(global.editingTodo())
         global.setEditingTodo((p) => !p)

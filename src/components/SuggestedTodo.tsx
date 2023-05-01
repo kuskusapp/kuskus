@@ -9,10 +9,11 @@ interface Props {
 
 export default function SuggestedTodo(props: Props) {
   const global = useGlobalContext()
+
   return (
     <div
       class={clsx(
-        "flex flex-col p-2 m-2",
+        "flex flex-col p-2 m-2 flex-auto",
         props.index === global.focusedSuggestedTodo() &&
           "bg-zinc-200 rounded-lg"
       )}
