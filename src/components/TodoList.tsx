@@ -92,7 +92,7 @@ export default function Page() {
       // also not sure why I can't do .Success right after `res.json()`, whole thing is a hack to get it working for now
       // @ts-ignore
       const resJson = await res.json()
-      const suggestedTodos = resJson.Success
+      const suggestedTodos = resJson.Success.subtasks
       global.setSuggestedTodos(suggestedTodos)
     }
   })
@@ -329,7 +329,7 @@ export default function Page() {
         ref={ref}
       >
         <div
-          class="grow flex justify-between "
+          class="grow flex justify-between"
           style={{ "margin-bottom": "21.5px" }}
         >
           <div class="grow">
@@ -352,6 +352,7 @@ export default function Page() {
             <SuggestedTodos />
           </Show>
         </div>
+
         <div
           style={{
             "border-radius": "20px",

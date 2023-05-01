@@ -1,5 +1,6 @@
-import { createEffect, onMount } from "solid-js"
+import { For, createEffect, onMount } from "solid-js"
 import { useGlobalContext } from "~/GlobalContext/store"
+import SuggestedTodo from "./SuggestedTodo"
 
 // TODO: best move this someplace else
 // this is temporary
@@ -11,10 +12,14 @@ export type SuggestedTodos = {
 export default function SuggestedTodos() {
   const global = useGlobalContext()
 
+  createEffect(() => {
+    console.log(global.suggestedTodos())
+  })
+
   return (
     <div
-      style={{ "border-radius": "25px", width: "45%", opacity: "0.6" }}
-      class="dark:bg-stone-900 bg-gray-100 rounded mr-2 flex flex-col justify-between items-center h-full "
+      style={{ "border-radius": "25px", width: "45%", height: "84.6vh" }}
+      class="dark:bg-stone-900 bg-gray-100 rounded mr-2 flex flex-col justify-between items-center overflow-scroll"
     >
       <div
         style={{ "border-radius": "25px 25px 0 0" }}
@@ -22,6 +27,9 @@ export default function SuggestedTodos() {
       >
         Suggested tasks for {global.todos[global.focusedTodo()!].title}
       </div>
+      <For each={global.suggestedTodos()}>
+        {(todo, index) => <SuggestedTodo title={todo.title} index={index()} />}
+      </For>
 
       {/* <div>chat</div> */}
       {/* <div class="m-3 w-4/5">

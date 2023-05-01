@@ -40,6 +40,9 @@ export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
       []
     )
 
+    const [focusedSuggestedTodo, setFocusedSuggestedTodo] =
+      createSignal<number>(0)
+
     // TODO: intercepting a signal setter is a better way
     // createComputed runs before other createEffects
     createComputed(() => {
@@ -156,6 +159,8 @@ export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
       setShowSuggestedTasksModal,
       suggestedTodos,
       setSuggestedTodos,
+      focusedSuggestedTodo,
+      setFocusedSuggestedTodo,
     } as const
   },
   // @ts-expect-error this is just to assert context as non-nullable
