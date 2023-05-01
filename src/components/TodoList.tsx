@@ -1,8 +1,4 @@
-import {
-  ClientSubtask,
-  ClientTodo,
-  useGlobalContext,
-} from "~/GlobalContext/store"
+import { ClientSubtask, useGlobalContext } from "~/GlobalContext/store"
 import { Match, Show, Switch, batch, createEffect, onMount } from "solid-js"
 import Today from "~/pages/Today"
 import Done from "~/pages/Done"
@@ -10,11 +6,11 @@ import All from "~/pages/All"
 import Starred from "~/pages/Starred"
 import ActionBar from "./ActionBar"
 import LocalSearch from "./LocalSearch"
-import { findIndexOfId, isSubtask } from "~/lib/lib"
+import { isSubtask } from "~/lib/lib"
 import { createShortcut } from "@solid-primitives/keyboard"
 import { createEventListener } from "@solid-primitives/event-listener"
 import { createTodosForDev } from "~/lib/local"
-import AiChat from "./AiChat"
+import SuggestedTodos from "./SuggestedTodos"
 
 export default function Page() {
   const global = useGlobalContext()
@@ -84,9 +80,20 @@ export default function Page() {
     })
   })
 
-  createShortcut(["A"], () => {
+  // TODO: improve this code..
+  createShortcut(["A"], async () => {
     if (global.focusedTodo() !== null && !isSubtask(global.focusedTodo()!)) {
-      global.setShowAiChat(true)
+      global.setShowSuggestedTasksModal(true)
+      // TODO: use https://github.com/solidjs-community/solid-primitives/tree/main/packages/fetch#readme
+      // maybe do it in `createRequest`?
+      // type the response, we know the structure
+      const res = await fetch("http://127.0.0.1:3001/?request=make%20a%20game")
+      // TODO: type it..
+      // also not sure why I can't do .Success right after `res.json()`, whole thing is a hack to get it working for now
+      // @ts-ignore
+      const resJson = await res.json()
+      const suggestedTodos = resJson.Success
+      global.setSuggestedTodos(suggestedTodos)
     }
   })
 
@@ -341,7 +348,9 @@ export default function Page() {
               </Match>
             </Switch>
           </div>
-          <AiChat />
+          <Show when={global.showSuggestedTasksModal()}>
+            <SuggestedTodos />
+          </Show>
         </div>
         <div
           style={{

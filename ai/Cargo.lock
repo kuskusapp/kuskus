@@ -27,6 +27,7 @@ dependencies = [
  "axum",
  "dotenvy",
  "dotenvy_macro",
+ "http",
  "llm-chain",
  "llm-chain-openai",
  "markdown",

@@ -30,3 +30,4 @@ vite.config.ts.timestamp-*-*.mjs
 
 # Rust
 target/
+dump.rdb

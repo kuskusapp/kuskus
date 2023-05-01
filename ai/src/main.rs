@@ -1,17 +1,24 @@
 use axum::{extract::Query, http::StatusCode, response::IntoResponse, routing::get, Json, Router};
 use dotenvy::dotenv;
+use http::Method;
 use llm_chain::{executor, output::Output, parameters, prompt, step::Step};
 use redis::Commands;
 use serde::{Deserialize, Serialize};
 use std::{collections::VecDeque, net::SocketAddr};
+use tower_http::cors::{Any, CorsLayer};
 
 #[tokio::main]
 async fn main() {
     // load environment variables from .env file
     dotenv().expect(".env file not found");
 
+    let cors = CorsLayer::new()
+        .allow_methods([Method::GET])
+        // allow requests from any origin
+        .allow_origin(Any);
+
     // define routes
-    let app = Router::new().route("/", get(subtasks_from_request));
+    let app = Router::new().route("/", get(subtasks_from_request).layer(cors));
 
     // run it on 3001 port. 3000 is used for web app
     let addr = SocketAddr::from(([127, 0, 0, 1], 3001));

@@ -7,6 +7,7 @@ import {
 import { createContextProvider } from "@solid-primitives/context"
 import { ClientTodo, TodoKey, createTodosState } from "./todos"
 import { todayDate } from "~/lib/lib"
+import { SuggestedTodos } from "~/components/SuggestedTodos"
 
 export type { ClientSubtask, ClientTodo } from "./todos"
 
@@ -35,6 +36,10 @@ export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
 
     const [editingTodo, setEditingTodo] = createSignal<boolean>(false)
 
+    const [suggestedTodos, setSuggestedTodos] = createSignal<SuggestedTodos[]>(
+      []
+    )
+
     // TODO: intercepting a signal setter is a better way
     // createComputed runs before other createEffects
     createComputed(() => {
@@ -59,7 +64,8 @@ export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
     const [changeFocus, setChangeFocus] = createSignal(true)
     const [localSearchResultIndex, setLocalSearchResultIndex] =
       createSignal<number>(0)
-    const [showAiChat, setShowAiChat] = createSignal<boolean>(false)
+    const [showSuggestedTasksModal, setShowSuggestedTasksModal] =
+      createSignal<boolean>(false)
 
     const compareTodos = (a: ClientTodo, b: ClientTodo): number => {
       if (b.starred && !a.starred) {
@@ -146,8 +152,10 @@ export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
       focusedTodoIndex,
       localSearchResultIndex,
       setLocalSearchResultIndex,
-      showAiChat,
-      setShowAiChat,
+      showSuggestedTasksModal,
+      setShowSuggestedTasksModal,
+      suggestedTodos,
+      setSuggestedTodos,
     } as const
   },
   // @ts-expect-error this is just to assert context as non-nullable
