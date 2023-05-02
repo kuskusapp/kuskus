@@ -1,7 +1,7 @@
 use axum::{extract::Query, http::StatusCode, response::IntoResponse, routing::get, Json, Router};
 use dotenvy::dotenv;
 use http::Method;
-use jwt_authorizer::{AuthError, JwtAuthorizer, JwtClaims};
+// use jwt_authorizer::{AuthError, JwtAuthorizer, JwtClaims};
 use llm_chain::{executor, output::Output, parameters, prompt, step::Step};
 use redis::Commands;
 use serde::{Deserialize, Serialize};
@@ -19,15 +19,15 @@ async fn main() {
         .allow_origin(Any);
 
     // create an authorizer builder from a JWKS Endpoint
-    let jwt_auth: JwtAuthorizer<User> = JwtAuthorizer::from_jwks_url("https://accounts.google.com");
+    // let jwt_auth: JwtAuthorizer<User> = JwtAuthorizer::from_jwks_url("https://accounts.google.com");
 
     // define routes
     let app = Router::new()
-        .route("/subtasks", get(subtasks_request))
-        .route("/explain", get(explain_request))
-        .route("/protected", get(protected))
-        .layer(cors)
-        .layer(jwt_auth.layer().await.unwrap());
+        .route("/", get(subtasks_request))
+        // .route("/explain", get(explain_request)) // TODO: need to fix
+        .layer(cors);
+    // .route("/protected", get(protected))
+    // .layer(jwt_auth.layer().await.unwrap());
 
     // run it on 3001 port. 3000 is used for web app
     let addr = SocketAddr::from(([127, 0, 0, 1], 3001));
@@ -43,23 +43,25 @@ async fn main() {
 // currently when I added jwt_authorizer, all routes stopped working, even ones that worked before
 
 // struct representing the authorized caller, deserializable from JWT claims
-#[derive(Debug, Deserialize, Clone)]
-struct User {
-    sub: String,
-}
+// #[derive(Debug, Deserialize, Clone)]
+// struct User {
+//     sub: String,
+// }
 
-// proteced handler with user injection (mapping some jwt claims)
-// for some reason after adding jwt_authorizer, all routes stopped working :(
-async fn protected(JwtClaims(user): JwtClaims<User>) -> Result<String, AuthError> {
-    // Send the protected data to the user
-    Ok(format!("Welcome: {}", user.sub))
-}
+// // proteced handler with user injection (mapping some jwt claims)
+// // for some reason after adding jwt_authorizer, all routes stopped working :(
+// async fn protected(JwtClaims(user): JwtClaims<User>) -> Result<String, AuthError> {
+//     // Send the protected data to the user
+//     Ok(format!("Welcome: {}", user.sub))
+// }
 // --- end of jwt auth testing
 
+// TODO: removed model for now as it's not used
+// should use it though
 #[derive(Deserialize, Debug)]
 struct JsonRequestWithModel {
     request: String,
-    model: String, // 'gpt-3' or 'gpt-4' TODO: not sure how you can limit the type on String here like in TS
+    // model: String, // 'gpt-3' or 'gpt-4' TODO: not sure how you can limit the type on String here like in TS
 }
 
 #[derive(Deserialize, Serialize, Debug)]
@@ -106,9 +108,13 @@ async fn subtasks_request(Query(request_data): Query<JsonRequestWithModel>) -> i
     }
     let mut con = con.unwrap();
 
+    // TODO: also dash separate the request string
+    // so key is of form make-a-game for a request with `make a game`
+
     // key for redis is of form `gpt-3-subtasks-request`, where gpt-3 and request are variables coming from request
     // TODO: code below does not look great, but I don't know rust, this is solution I found
-    let mut redis_key = request_data.model.clone();
+    // let mut redis_key = request_data.model.clone();
+    let mut redis_key = String::from("gpt-3");
     let separator = "-subtasks-";
     redis_key.push_str(separator);
     let request = &request_data.request;
@@ -195,81 +201,81 @@ enum ExplainResponse {
     Error(String),
 }
 
-async fn explain_request(Query(request_data): Query<JsonRequestWithModel>) -> impl IntoResponse {
-    let client = redis::Client::open(
-        std::env::var("UPSTASH_REDIS_CONNECTION").expect("UPSTASH_REDIS_CONNECTION not found"),
-    );
-    if let Err(e) = client {
-        return (
-            StatusCode::INTERNAL_SERVER_ERROR,
-            Json(SubtasksResponse::Error(format!("Error: {}", e))),
-        );
-    }
-    let client = client.unwrap();
+// async fn explain_request(Query(request_data): Query<JsonRequestWithModel>) -> impl IntoResponse {
+//     let client = redis::Client::open(
+//         std::env::var("UPSTASH_REDIS_CONNECTION").expect("UPSTASH_REDIS_CONNECTION not found"),
+//     );
+//     if let Err(e) = client {
+//         return (
+//             StatusCode::INTERNAL_SERVER_ERROR,
+//             Json(SubtasksResponse::Error(format!("Error: {}", e))),
+//         );
+//     }
+//     let client = client.unwrap();
 
-    let con = client.get_connection();
-    if let Err(e) = con {
-        return (
-            StatusCode::INTERNAL_SERVER_ERROR,
-            Json(SubtasksResponse::Error(format!("Error: {}", e))),
-        );
-    }
-    let mut con = con.unwrap();
+//     let con = client.get_connection();
+//     if let Err(e) = con {
+//         return (
+//             StatusCode::INTERNAL_SERVER_ERROR,
+//             Json(SubtasksResponse::Error(format!("Error: {}", e))),
+//         );
+//     }
+//     let mut con = con.unwrap();
 
-    // key for redis is of form `gpt-3-explain-request`, where gpt-3 and request are variables coming from request
-    // TODO: code below does not look great, but I don't know rust, this is solution I found
-    let mut redis_key = request_data.model.clone();
-    let separator = "-explain-";
-    redis_key.push_str(separator);
-    let request = &request_data.request;
-    redis_key.push_str(request);
+//     // key for redis is of form `gpt-3-explain-request`, where gpt-3 and request are variables coming from request
+//     // TODO: code below does not look great, but I don't know rust, this is solution I found
+//     let mut redis_key = request_data.model.clone();
+//     let separator = "-explain-";
+//     redis_key.push_str(separator);
+//     let request = &request_data.request;
+//     redis_key.push_str(request);
 
-    if let Ok(data) = con.get(&format!("cache:{}", redis_key)) {
-        let s: String = data;
-        return (
-            StatusCode::OK,
-            Json(SubtasksResponse::Success(serde_json::from_str(&s).unwrap())),
-        );
-    }
+//     if let Ok(data) = con.get(&format!("cache:{}", redis_key)) {
+//         let s: String = data;
+//         return (
+//             StatusCode::OK,
+//             Json(SubtasksResponse::Success(serde_json::from_str(&s).unwrap())),
+//         );
+//     }
 
-    // Create a new ChatGPT executor
-    let exec = executor!();
-    if let Err(e) = exec {
-        return (
-            StatusCode::INTERNAL_SERVER_ERROR,
-            Json(SubtasksResponse::Error(format!("Error: {}", e))),
-        );
-    }
-    let exec = exec.unwrap();
+//     // Create a new ChatGPT executor
+//     let exec = executor!();
+//     if let Err(e) = exec {
+//         return (
+//             StatusCode::INTERNAL_SERVER_ERROR,
+//             Json(SubtasksResponse::Error(format!("Error: {}", e))),
+//         );
+//     }
+//     let exec = exec.unwrap();
 
-    // creates step with prompt to generate explanation for a given request
-    let step = Step::for_prompt_template(prompt!(
-        "You are a bot for explaining things in detail.",
-        "Provide detailed explanation for what this is: {{text}}.",
-    ));
+//     // creates step with prompt to generate explanation for a given request
+//     let step = Step::for_prompt_template(prompt!(
+//         "You are a bot for explaining things in detail.",
+//         "Provide detailed explanation for what this is: {{text}}.",
+//     ));
 
-    let res = step.run(&parameters!(&request_data.request), &exec).await;
+//     let res = step.run(&parameters!(&request_data.request), &exec).await;
 
-    if let Err(e) = res {
-        return (
-            StatusCode::INTERNAL_SERVER_ERROR,
-            Json(SubtasksResponse::Error(format!("Error: {}", e))),
-        );
-    }
-    let res = res.unwrap();
+//     if let Err(e) = res {
+//         return (
+//             StatusCode::INTERNAL_SERVER_ERROR,
+//             Json(SubtasksResponse::Error(format!("Error: {}", e))),
+//         );
+//     }
+//     let res = res.unwrap();
 
-    // Output to string, don't know how for redis
-    if let Ok(s) = con.set(
-        &format!("cache:{}", redis_key),
-        serde_json::to_string(&res).unwrap(),
-    ) {
-        let s: String = s;
-        println!("set cache: {}", s);
-    }
+//     // Output to string, don't know how for redis
+//     if let Ok(s) = con.set(
+//         &format!("cache:{}", redis_key),
+//         serde_json::to_string(&res).unwrap(),
+//     ) {
+//         let s: String = s;
+//         println!("set cache: {}", s);
+//     }
 
-    // TODO: not sure how to go from `Output` to `JsonSubtaskResponse` nicely in rust too
-    (StatusCode::OK, Json(SubtasksResponse::Success(res)))
-}
+//     // TODO: not sure how to go from `Output` to `JsonSubtaskResponse` nicely in rust too
+//     (StatusCode::OK, Json(SubtasksResponse::Success(res)))
+// }
 
 // === new stuff ===
 
