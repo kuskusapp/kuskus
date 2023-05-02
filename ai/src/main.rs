@@ -1,6 +1,7 @@
 use axum::{extract::Query, http::StatusCode, response::IntoResponse, routing::get, Json, Router};
 use dotenvy::dotenv;
 use http::Method;
+use jwt_authorizer::{AuthError, JwtAuthorizer, JwtClaims};
 use llm_chain::{executor, output::Output, parameters, prompt, step::Step};
 use redis::Commands;
 use serde::{Deserialize, Serialize};
@@ -17,8 +18,16 @@ async fn main() {
         // allow requests from any origin
         .allow_origin(Any);
 
+    // create an authorizer builder from a JWKS Endpoint
+    let jwt_auth: JwtAuthorizer<User> = JwtAuthorizer::from_jwks_url("https://accounts.google.com");
+
     // define routes
-    let app = Router::new().route("/", get(subtasks_from_request).layer(cors));
+    let app = Router::new()
+        .route("/subtasks", get(subtasks_request))
+        .route("/explain", get(explain_request))
+        .route("/protected", get(protected))
+        .layer(cors)
+        .layer(jwt_auth.layer().await.unwrap());
 
     // run it on 3001 port. 3000 is used for web app
     let addr = SocketAddr::from(([127, 0, 0, 1], 3001));
@@ -29,9 +38,28 @@ async fn main() {
         .unwrap();
 }
 
+// --- TODO: just testing jwt auth thing, it is breaking now
+// it should validate the authorization bearer token using google oidc endpoint (I think that's how it works)
+// currently when I added jwt_authorizer, all routes stopped working, even ones that worked before
+
+// struct representing the authorized caller, deserializable from JWT claims
+#[derive(Debug, Deserialize, Clone)]
+struct User {
+    sub: String,
+}
+
+// proteced handler with user injection (mapping some jwt claims)
+// for some reason after adding jwt_authorizer, all routes stopped working :(
+async fn protected(JwtClaims(user): JwtClaims<User>) -> Result<String, AuthError> {
+    // Send the protected data to the user
+    Ok(format!("Welcome: {}", user.sub))
+}
+// --- end of jwt auth testing
+
 #[derive(Deserialize, Debug)]
-struct JsonRequest {
+struct JsonRequestWithModel {
     request: String,
+    model: String, // 'gpt-3' or 'gpt-4' TODO: not sure how you can limit the type on String here like in TS
 }
 
 #[derive(Deserialize, Serialize, Debug)]
@@ -40,25 +68,24 @@ struct Subtask {
     note: String,
 }
 
+// {
+// "subtasks": [{
+//   "title": "markdown",
+//   "note": "markdown",
+// }]
+// }
 #[derive(Deserialize, Serialize, Debug)]
-struct JsonResponse {
+struct JsonSubtasksResponse {
     subtasks: Vec<Subtask>,
 }
 
-// {
-// "subtasks": [{
-// "title": "markdown",
-// "note": "markdown",
-// }]
-// }
-
 #[derive(Serialize, Debug, Deserialize)]
 enum SubtasksResponse {
-    Success(JsonResponse),
+    Success(JsonSubtasksResponse),
     Error(String),
 }
 
-async fn subtasks_from_request(Query(request_data): Query<JsonRequest>) -> impl IntoResponse {
+async fn subtasks_request(Query(request_data): Query<JsonRequestWithModel>) -> impl IntoResponse {
     let client = redis::Client::open(
         std::env::var("UPSTASH_REDIS_CONNECTION").expect("UPSTASH_REDIS_CONNECTION not found"),
     );
@@ -79,7 +106,125 @@ async fn subtasks_from_request(Query(request_data): Query<JsonRequest>) -> impl 
     }
     let mut con = con.unwrap();
 
-    if let Ok(data) = con.get(&format!("cache:{}", request_data.request)) {
+    // key for redis is of form `gpt-3-subtasks-request`, where gpt-3 and request are variables coming from request
+    // TODO: code below does not look great, but I don't know rust, this is solution I found
+    let mut redis_key = request_data.model.clone();
+    let separator = "-subtasks-";
+    redis_key.push_str(separator);
+    let request = &request_data.request;
+    redis_key.push_str(request);
+
+    if let Ok(data) = con.get(&format!("cache:{}", redis_key)) {
+        let s: String = data;
+        return (
+            StatusCode::OK,
+            Json(SubtasksResponse::Success(serde_json::from_str(&s).unwrap())),
+        );
+    }
+
+    // TODO: the request should also return the number of tokens that were used to make the request
+    // on discord, someone wrote:
+    // openai Executor returns Output::Response which wraps CreateChatCompletionResponse which has a usage: Option<Usage> field that should contain token usage data
+    // not sure how to make it work
+
+    // TODO: should use the model passed in the request
+    // https://docs.rs/llm-chain/latest/llm_chain/step/struct.Step.html
+    // unclear how to pass in which model to use to llm-chain
+
+    // Create a new ChatGPT executor
+    let exec = executor!();
+    if let Err(e) = exec {
+        return (
+            StatusCode::INTERNAL_SERVER_ERROR,
+            Json(SubtasksResponse::Error(format!("Error: {}", e))),
+        );
+    }
+    let exec = exec.unwrap();
+
+    // creates step with prompt to generate subtasks from a given request
+    // does not have to be a step, but in future maybe can chain things
+    // llm-chain allows you to do it directly without a step too, don't think there is any perf hit though
+    // so leaving it like this
+    let step = Step::for_prompt_template(prompt!(
+        "You are a bot for creating subtasks from a given task to you.",
+        "Provide detailed steps to do this task: {{text}}. Use bullet points for each step.",
+    ));
+
+    let res = step.run(&parameters!(&request_data.request), &exec).await;
+
+    if let Err(e) = res {
+        return (
+            StatusCode::INTERNAL_SERVER_ERROR,
+            Json(SubtasksResponse::Error(format!("Error: {}", e))),
+        );
+    }
+    let res = res.unwrap();
+    println!("{}", res);
+
+    let text_output = res
+        .primary_textual_output()
+        .await
+        .expect("our model will always return at least one output");
+
+    let subtasks: Vec<_> = extract_first_list(&text_output)
+        .into_iter()
+        .map(|(title, note)| Subtask { title, note })
+        .collect();
+
+    let response = JsonSubtasksResponse { subtasks };
+
+    if let Ok(s) = con.set(
+        &format!("cache:{}", redis_key),
+        serde_json::to_string(&response).unwrap(),
+    ) {
+        let s: String = s;
+        println!("set cache: {}", s);
+    }
+
+    (StatusCode::OK, Json(SubtasksResponse::Success(response)))
+}
+
+#[derive(Deserialize, Serialize, Debug)]
+struct JsonExplainResponse {
+    explanation: String,
+}
+
+#[derive(Serialize, Debug, Deserialize)]
+enum ExplainResponse {
+    Success(JsonSubtasksResponse),
+    Error(String),
+}
+
+async fn explain_request(Query(request_data): Query<JsonRequestWithModel>) -> impl IntoResponse {
+    let client = redis::Client::open(
+        std::env::var("UPSTASH_REDIS_CONNECTION").expect("UPSTASH_REDIS_CONNECTION not found"),
+    );
+    if let Err(e) = client {
+        return (
+            StatusCode::INTERNAL_SERVER_ERROR,
+            Json(SubtasksResponse::Error(format!("Error: {}", e))),
+        );
+    }
+    let client = client.unwrap();
+
+    let con = client.get_connection();
+    if let Err(e) = con {
+        return (
+            StatusCode::INTERNAL_SERVER_ERROR,
+            Json(SubtasksResponse::Error(format!("Error: {}", e))),
+        );
+    }
+    let mut con = con.unwrap();
+
+    // key for redis is of form `gpt-3-explain-request`, where gpt-3 and request are variables coming from request
+    // TODO: code below does not look great, but I don't know rust, this is solution I found
+    let mut redis_key = request_data.model.clone();
+    let separator = "-explain-";
+    redis_key.push_str(separator);
+    let request = &request_data.request;
+    redis_key.push_str(request);
+
+    if let Ok(data) = con.get(&format!("cache:{}", redis_key)) {
         let s: String = data;
         return (
             StatusCode::OK,
@@ -97,10 +242,10 @@ async fn subtasks_from_request(Query(request_data): Query<JsonRequest>) -> impl 
     }
     let exec = exec.unwrap();
 
-    // Create our step containing our prompt template
+    // creates step with prompt to generate explanation for a given request
     let step = Step::for_prompt_template(prompt!(
-        "You are a bot for creating subtasks from a given task to you.",
-        "Provide detailed steps to do this task: {{text}}. Use bullet points for each step.",
+        "You are a bot for explaining things in detail.",
+        "Provide detailed explanation for what this is: {{text}}.",
     ));
 
     let res = step.run(&parameters!(&request_data.request), &exec).await;
@@ -113,29 +258,17 @@ async fn subtasks_from_request(Query(request_data): Query<JsonRequest>) -> impl 
     }
     let res = res.unwrap();
 
-    println!("{}", res);
-
-    let text_output = res
-        .primary_textual_output()
-        .await
-        .expect("our model will always return at least one output");
-
-    let subtasks: Vec<_> = extract_first_list(&text_output)
-        .into_iter()
-        .map(|(title, note)| Subtask { title, note })
-        .collect();
-
-    let response = JsonResponse { subtasks };
-
+    // Output to string, don't know how for redis
     if let Ok(s) = con.set(
-        &format!("cache:{}", &request_data.request),
-        serde_json::to_string(&response).unwrap(),
+        &format!("cache:{}", redis_key),
+        serde_json::to_string(&res).unwrap(),
     ) {
         let s: String = s;
         println!("set cache: {}", s);
     }
 
-    (StatusCode::OK, Json(SubtasksResponse::Success(response)))
+    // TODO: not sure how to go from `Output` to `JsonSubtaskResponse` nicely in rust too
+    (StatusCode::OK, Json(SubtasksResponse::Success(res)))
 }
 
 // === new stuff ===
