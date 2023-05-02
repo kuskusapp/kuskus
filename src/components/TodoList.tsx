@@ -165,7 +165,7 @@ export default function Page() {
       return
 
     const currentIndex = global.focusedTodoIndex()
-    if (currentIndex === 0) {
+    if (global.focusedTodo() === global.flatTasks()[0].key) {
       global.setFocusedTodo(
         global.flatTasks()[global.flatTasks().length - 1].key
       )
