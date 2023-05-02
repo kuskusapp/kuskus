@@ -308,33 +308,18 @@ export default function Page() {
           [`${i}`],
           () => {
             const focusedTodoValue = global.focusedTodo()
-            if (focusedTodoValue) {
-              // batch(() =>
-              //   global.todosState.updateTodo(props.todo.key, (p) => ({
-              //     ...p,
-              //     title: title(),
-              //     note: note(),
-              //     priority: priority(),
-              //     starred: starred(),
-              //     dueDate: showCalendar() && !dueDate() ? todayDate() : dueDate(),
-              //   }))
-              //   global.setEditingTodo(false)
-              // })
+            if (focusedTodoValue !== null) {
               // update subtask
               // TODO: does not work
-              console.log(global.focusedTodo())
-              console.log(global.flatTasks()[global.focusedTodo()!])
               if ("parent" in global.flatTasks()[global.focusedTodo()!]) {
-                console.log("this runs..")
-                global.todosState.updateSubtask(
-                  focusedTodoValue,
-                  (s: ClientSubtask) => ({
-                    ...s,
-                    priority: i,
-                  })
-                )
+                // global.todosState.updateSubtask(
+                //   focusedTodoValue,
+                //   (s: ClientSubtask) => ({
+                //     ...s,
+                //     priority: i,
+                //   })
+                // )
               } else {
-                console.log("update task..")
                 // update task
                 global.todosState.updateTodo(focusedTodoValue, (todo) => ({
                   ...todo,

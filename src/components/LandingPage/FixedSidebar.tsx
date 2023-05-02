@@ -1,13 +1,14 @@
 import { useNavigate } from "solid-start"
 
-export default function FixedSidebar(props: any) {
+export default function FixedSidebar() {
   const navigate = useNavigate()
   return (
     <div
       style={{
         width: "47vw",
+        "background-image": "url('./red-gradient-background.svg')",
       }}
-      class=" h-screen"
+      class="h-screen"
     >
       <div
         style={{
@@ -19,17 +20,16 @@ export default function FixedSidebar(props: any) {
           <div class="flex items-center gap-3">
             <img
               style={{
-                "border-radius": "50%",
-                border: "2.5px solid black",
+                "border-radius": "25px",
                 width: "90px",
                 height: "90px",
-                transform: "rotate(27deg)",
               }}
-              src="./black-logo.jpg"
+              src="./logo.jpg"
+              // src="./wat.svg"
             />
             <div class="text-white text-4xl">KusKus</div>
           </div>
-          <h1 class="mt-14 font-display text-4xl/tight font-light text-white">
+          <h1 class="mt-14 font-display text-4xl/tight font-light dark:text-white text-white">
             Fast todo app with <span class="text-sky-300">AI</span>
           </h1>
           <p class="mt-4 text-sm/6 text-gray-300 w-96 text-center">
@@ -38,7 +38,7 @@ export default function FixedSidebar(props: any) {
           </p>
           <div class="flex flex-col items-center mt-5">
             <button
-              class="text-white flex w-full justify-center p-3 bg-black mb-2 rounded-md active:translate-y-0.5 border-white border hover:bg-green-600 hover:border-green-600"
+              class="text-white flex w-full justify-center p-3 bg-black mb-2 rounded-md active:translate-y-0.5 hover:bg-green-600 hover:border-green-600"
               style={{
                 filter: "drop-shadow(1.5px 4.5px 3px #151515)",
               }}
@@ -49,7 +49,7 @@ export default function FixedSidebar(props: any) {
             </button>
             <div class="flex gap-3">
               <button
-                class="text-white flex justify-center p-3 bg-black w-32 rounded-md active:translate-y-0.5 border-white border hover:bg-white hover:text-black"
+                class="text-white flex justify-center p-3 bg-black w-32 rounded-md active:translate-y-0.5 hover:bg-white hover:text-black"
                 style={{
                   filter: "drop-shadow(1.5px 4.5px 3px #151515)",
                 }}
@@ -61,7 +61,7 @@ export default function FixedSidebar(props: any) {
                 {/* <Icon name="" /> */}
               </button>
               <button
-                class="text-white flex justify-center p-3 bg-black w-32 rounded-md active:translate-y-0.5 border-white border hover:bg-white hover:text-black"
+                class="text-white flex justify-center p-3 bg-black w-32 rounded-md active:translate-y-0.5 hover:bg-white hover:text-black"
                 style={{
                   filter: "drop-shadow(1.5px 4.5px 3px #151515)",
                 }}

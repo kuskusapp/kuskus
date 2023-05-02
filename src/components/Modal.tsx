@@ -2,7 +2,11 @@ import { useGlobalContext } from "~/GlobalContext/store"
 import Icon from "./Icon"
 import { createEventListener } from "@solid-primitives/event-listener"
 
-export default function Modal() {
+// TODO: should contain JSX passed in
+// find a type for JSX.element..
+interface Props {}
+
+export default function Modal(props: Props) {
   const global = useGlobalContext()
 
   let ref!: HTMLDivElement

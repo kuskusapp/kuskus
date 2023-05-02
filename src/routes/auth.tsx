@@ -4,20 +4,38 @@ import { GoogleClient } from "~/lib/auth"
 export default function Auth() {
   return (
     <>
-      <div class="flex flex-col items-center h-screen justify-center">
-        <img
+      <div
+        style={{
+          "background-image": "url('./red-gradient-background.svg')",
+          "background-size": "cover",
+        }}
+      >
+        <div
           style={{
-            "border-radius": "50%",
-            border: "2.5px solid black",
-            width: "90px",
-            height: "90px",
-            transform: "rotate(27deg)",
+            "background-image": "url('./red-left.svg')",
+            "background-size": "cover",
           }}
-          src="./nearly-black-logo.jpg"
-        />
-        <div class="text-2xl mt-3 mb-2">Sign in/up with</div>
-        <div class="flex gap-2 items-start">
-          {/* <button
+        >
+          <div
+            style={{
+              "background-image": "url('./red-right.svg')",
+              "background-size": "cover",
+            }}
+            class="flex flex-col items-center h-screen justify-center text-white"
+          >
+            <div class="flex flex-col items-center bg-gray-950 p-10 rounded-lg border-2 border-neutral-900">
+              <img
+                style={{
+                  "border-radius": "25px",
+                  border: "2.5px solid black",
+                  width: "90px",
+                  height: "90px",
+                }}
+                src="./logo.jpg"
+              />
+              <div class="text-2xl mt-3 mb-2">Sign in/up with</div>
+              <div class="flex gap-2 items-start">
+                {/* <button
             class="flex justify-center p-3 bg-black w-32 rounded-md active:translate-y-0.5"
             style={{
               filter: "drop-shadow(1.5px 4.5px 3px #151515)",
@@ -29,20 +47,20 @@ export default function Auth() {
           >
             <Icon name="GitHub" />
           </button> */}
-          <button
-            class="flex justify-center p-3 bg-black w-32 rounded-md active:translate-y-0.5"
-            style={{
-              filter: "drop-shadow(1.5px 4.5px 3px #151515)",
-            }}
-            onClick={() => {
-              GoogleClient.signinRedirect()
-            }}
-          >
-            <Icon name="Google" />
-          </button>
-        </div>
-        {/* TODO: add email later (with magic link?) */}
-        {/* <div
+                <button
+                  class="flex justify-center p-3 bg-black w-32 rounded-md active:translate-y-0.5"
+                  style={{
+                    filter: "drop-shadow(1.5px 4.5px 3px #151515)",
+                  }}
+                  onClick={() => {
+                    GoogleClient.signinRedirect()
+                  }}
+                >
+                  <Icon name="Google" />
+                </button>
+              </div>
+              {/* TODO: add email later (with magic link?) */}
+              {/* <div
           style={{
             "margin-top": "35px",
             "border-top": "1px solid black",
@@ -77,6 +95,9 @@ export default function Auth() {
             <div>Continue</div>
           </button>
         </div> */}
+            </div>
+          </div>
+        </div>
       </div>
     </>
   )
