@@ -309,23 +309,38 @@ export default function Page() {
           () => {
             const focusedTodoValue = global.focusedTodo()
             if (focusedTodoValue) {
+              // batch(() =>
+              //   global.todosState.updateTodo(props.todo.key, (p) => ({
+              //     ...p,
+              //     title: title(),
+              //     note: note(),
+              //     priority: priority(),
+              //     starred: starred(),
+              //     dueDate: showCalendar() && !dueDate() ? todayDate() : dueDate(),
+              //   }))
+              //   global.setEditingTodo(false)
+              // })
               // update subtask
               // TODO: does not work
-              // if ("parent" in global.flatTasks()[global.focusedTodo()!]) {
-              //   global.todosState.updateSubtask(
-              //     focusedTodoValue,
-              //     (s: ClientSubtask) => ({
-              //       ...s,
-              //       priority: i,
-              //     })
-              //   )
-              // } else {
-              //   // update task
-              //   global.todosState.updateTodo(focusedTodoValue, (todo) => ({
-              //     ...todo,
-              //     priority: i,
-              //   }))
-              // }
+              console.log(global.focusedTodo())
+              console.log(global.flatTasks()[global.focusedTodo()!])
+              if ("parent" in global.flatTasks()[global.focusedTodo()!]) {
+                console.log("this runs..")
+                global.todosState.updateSubtask(
+                  focusedTodoValue,
+                  (s: ClientSubtask) => ({
+                    ...s,
+                    priority: i,
+                  })
+                )
+              } else {
+                console.log("update task..")
+                // update task
+                global.todosState.updateTodo(focusedTodoValue, (todo) => ({
+                  ...todo,
+                  priority: i,
+                }))
+              }
             }
           },
           { preventDefault: false }

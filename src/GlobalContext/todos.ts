@@ -1,20 +1,16 @@
-import { Accessor, createEffect, mapArray, onCleanup } from "solid-js"
-import {
-  StoreSetter,
-  createStore,
-  produce,
-  reconcile,
-  unwrap,
-} from "solid-js/store"
+import { createEffect, mapArray, onCleanup } from "solid-js"
+import { StoreSetter, createStore, produce, unwrap } from "solid-js/store"
+import { SubtaskUpdateDocument } from "~/graphql/schema"
+import { SubtaskDeleteDocument } from "~/graphql/schema"
 import {
   CreateTodoDocument,
   Query,
-  Subtask,
   SubtaskConnection,
   TodoDeleteDocument,
   TodoUpdateDocument,
   TodoUpdateInput,
   TodosDocument,
+  SubtaskUpdateInput,
 } from "~/graphql/schema"
 import { grafbase } from "~/lib/graphql"
 
@@ -144,6 +140,21 @@ export function createTodosState() {
             dueDate: todo.dueDate,
           }
 
+          todo.subtasks.map((s) => {
+            const subtaskUpdatePayload: SubtaskUpdateInput = {
+              title: s.title,
+              done: s.done,
+              starred: s.starred,
+              priority: { set: s.priority },
+              note: s.note,
+              dueDate: s.dueDate,
+            }
+            grafbase.request(SubtaskUpdateDocument, {
+              id: s.id,
+              subtask: subtaskUpdatePayload,
+            })
+          })
+
           // if the todo was added, we need to create it in the database
           if (added) {
             added = false
@@ -209,19 +220,20 @@ export function createTodosState() {
     removeTodo: (key: number) => {
       setTodos((p) => p.filter((t) => t.key !== key))
     },
-    // TODO: not sure how to make this work
     updateSubtask: (
       todoKey: number,
       subtaskKey: number,
-      subtask: ClientSubtask
+      setter: StoreSetter<ClientSubtask, any[]>
     ) => {
-      // setTodos((t) => {})
-      // console.log(foundSubtask)
-      // let newSubtask = { ...foundSubtask, subtask }
-      // console.log(newSubtask, "new subtask")
-      // setTodos((t) => {
-      //   // t.subtasks.find((s) => s.key === key)
-      // })
+      // not sure what is happening here
+      // but somehow mutates locally at least
+      setTodos(
+        (t) => t.key === todoKey,
+        "subtasks",
+        (t) => t.key === subtaskKey,
+        setter
+      )
+      console.log(todos)
     },
     // a windcard setter if you want to share that 🤷‍♂️
     // setTodos,

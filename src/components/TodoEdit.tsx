@@ -15,7 +15,6 @@ import {
   useGlobalContext,
 } from "../GlobalContext/store"
 import Icon from "./Icon"
-import { isSubtask } from "~/lib/lib"
 
 interface Props {
   todo: ClientTodo | ClientSubtask
@@ -58,20 +57,27 @@ export default function TodoEdit(props: Props) {
       return
     }
 
-    // global.flatTasks()
-
     // UPDATE SUBTASK
-    // batch(() => {
-    //   global.todosState.updateSubtask(props.todo.key, 2, {
-    //     ...p,
-    //     title: title(),
-    //     note: note(),
-    //     priority: priority(),
-    //     starred: starred(),
-    //     dueDate: showCalendar() && !dueDate() ? todayDate() : dueDate(),
-    //   }
-    //   global.setEditingTodo(false)
-    // })
+    batch(() => {
+      global.todosState.updateSubtask(
+        // TODO: not sure how to avoid ts-ignore..
+        // @ts-ignore
+        global.flatTasks()[props.todo.key].parent.key,
+        props.todo.key,
+        // somehow id, key and parent need to be on the type
+        // but they have to be derived, don't know how..
+        (p) => ({
+          ...p,
+          title: title(),
+          note: note(),
+          priority: priority(),
+          starred: starred(),
+          dueDate: showCalendar() && !dueDate() ? todayDate() : dueDate(),
+          done: false,
+        })
+      )
+      global.setEditingTodo(false)
+    })
   })
 
   let titleRef!: HTMLInputElement,
