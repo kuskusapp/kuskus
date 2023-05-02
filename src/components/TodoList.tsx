@@ -14,6 +14,7 @@ import {
 } from "@solid-primitives/event-listener"
 import { createTodosForDev } from "~/lib/local"
 import SuggestedTodos from "./SuggestedTodos"
+import { GoogleClient } from "~/lib/auth"
 
 export default function Page() {
   const global = useGlobalContext()
@@ -110,8 +111,15 @@ export default function Page() {
 
         const urlEncodedTask = global.flatTasks()[global.focusedTodo()!].title
 
+        const googleToken = (await GoogleClient.getUser())?.id_token
+
         const res = await fetch(
-          `http://127.0.0.1:3001/?request=${urlEncodedTask}`
+          `http://127.0.0.1:3001/subtasks?request=${urlEncodedTask}`,
+          {
+            headers: {
+              Authorization: "Bearer " + googleToken,
+            },
+          }
         )
         const resJson = await res.json()
         // not sure why I can't do .Success right after `res.json()`, whole thing is a hack to get it working for now
