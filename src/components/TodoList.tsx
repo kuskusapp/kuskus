@@ -94,7 +94,12 @@ export default function Page() {
   createShortcut(
     ["A"],
     async () => {
-      if (global.newTodo() || global.editingTodo()) return
+      if (
+        global.newTodo() ||
+        global.editingTodo() ||
+        global.loadingSuggestedTodos()
+      )
+        return
 
       if (global.focusedTodo() !== null && !isSubtask(global.focusedTodo()!)) {
         global.setLoadingSuggestedTodos(true)
@@ -306,21 +311,21 @@ export default function Page() {
             if (focusedTodoValue) {
               // update subtask
               // TODO: does not work
-              if ("parent" in global.flatTasks()[global.focusedTodo()!]) {
-                global.todosState.updateSubtask(
-                  focusedTodoValue,
-                  (s: ClientSubtask) => ({
-                    ...s,
-                    priority: i,
-                  })
-                )
-              } else {
-                // update task
-                global.todosState.updateTodo(focusedTodoValue, (todo) => ({
-                  ...todo,
-                  priority: i,
-                }))
-              }
+              // if ("parent" in global.flatTasks()[global.focusedTodo()!]) {
+              //   global.todosState.updateSubtask(
+              //     focusedTodoValue,
+              //     (s: ClientSubtask) => ({
+              //       ...s,
+              //       priority: i,
+              //     })
+              //   )
+              // } else {
+              //   // update task
+              //   global.todosState.updateTodo(focusedTodoValue, (todo) => ({
+              //     ...todo,
+              //     priority: i,
+              //   }))
+              // }
             }
           },
           { preventDefault: false }

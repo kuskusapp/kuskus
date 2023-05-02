@@ -57,18 +57,21 @@ export default function TodoEdit(props: Props) {
       })
       return
     }
+
+    // global.flatTasks()
+
     // UPDATE SUBTASK
-    batch(() => {
-      global.todosState.updateSubtask(props.todo.key, (p) => ({
-        ...p,
-        title: title(),
-        note: note(),
-        priority: priority(),
-        starred: starred(),
-        dueDate: showCalendar() && !dueDate() ? todayDate() : dueDate(),
-      }))
-      global.setEditingTodo(false)
-    })
+    // batch(() => {
+    //   global.todosState.updateSubtask(props.todo.key, 2, {
+    //     ...p,
+    //     title: title(),
+    //     note: note(),
+    //     priority: priority(),
+    //     starred: starred(),
+    //     dueDate: showCalendar() && !dueDate() ? todayDate() : dueDate(),
+    //   }
+    //   global.setEditingTodo(false)
+    // })
   })
 
   let titleRef!: HTMLInputElement,

@@ -1,5 +1,11 @@
-import { createEffect, mapArray, onCleanup } from "solid-js"
-import { StoreSetter, createStore, produce, unwrap } from "solid-js/store"
+import { Accessor, createEffect, mapArray, onCleanup } from "solid-js"
+import {
+  StoreSetter,
+  createStore,
+  produce,
+  reconcile,
+  unwrap,
+} from "solid-js/store"
 import {
   CreateTodoDocument,
   Query,
@@ -205,8 +211,9 @@ export function createTodosState() {
     },
     // TODO: not sure how to make this work
     updateSubtask: (
-      key: number,
-      setter: StoreSetter<ClientSubtask, [number]>
+      todoKey: number,
+      subtaskKey: number,
+      subtask: ClientSubtask
     ) => {
       // setTodos((t) => {})
       // console.log(foundSubtask)
@@ -220,3 +227,24 @@ export function createTodosState() {
     // setTodos,
   }
 }
+
+// how to edit subtasks
+// - pass the whole path (todoKey: number, subtaskKey: number, subtask: ClientSubtask)
+//     setTodos((t) => t.key === todoKey, "subtasks", t => t.key === subtaskKey, setter)
+// - "hidden lens feature" - createStore(nested_object_ref)
+// updateSubtask: (
+//   subtask: ClientSubtask,
+//   setter: StoreSetter<ClientSubtask, []>
+// ) => {
+// const [, setSubtask] = createStore(subtask)
+// setSubtask(setter)
+
+// TODO: potential undo API, once merged into solid-primitives use it
+// export type HistorySource<T> = [source: Accessor<T>, setter: (value: T) => void]
+// export type UndoHistoryReturn<T> = {
+//   undo: VoidFunction
+//   redo: VoidFunction
+// }
+// declare function createUndoHistory<T extends readonly HistorySource<any>[]>(
+//   sources: T
+// ): UndoHistoryReturn<ReturnType<T[number][0]>>
