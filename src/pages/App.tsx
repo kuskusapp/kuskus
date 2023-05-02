@@ -1,7 +1,9 @@
 import { createShortcut } from "@solid-primitives/keyboard"
 import { Show, batch } from "solid-js"
 import { PageType, useGlobalContext } from "~/GlobalContext/store"
+import Help from "~/components/Help"
 import Modal from "~/components/Modal"
+import Settings from "~/components/Settings"
 import Sidebar from "~/components/Sidebar"
 import TodoList from "~/components/TodoList"
 import { todayDate } from "~/lib/lib"
@@ -66,10 +68,10 @@ export default function App() {
       <Sidebar />
       <TodoList />
       <Show when={global.showHelp()}>
-        <Modal children={<div>show settings</div>} />
+        <Modal children={<Help />} />
       </Show>
       <Show when={global.showSettings()}>
-        <Modal children={<div>show help</div>} />
+        <Modal children={<Settings />} />
       </Show>
     </div>
   )
