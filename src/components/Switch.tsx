@@ -5,7 +5,7 @@ export default function Switch() {
   const [check, setCheck] = createSignal(false)
   return (
     <>
-      <Checkbox checked={false} />
+      <Checkbox checked={true} />
       {/* <div
         class="bg-white relative h-6 w-12 border-2 border-black transition-all"
         style={{ "border-radius": "50px" }}

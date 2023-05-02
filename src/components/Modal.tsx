@@ -39,9 +39,9 @@ export default function Modal(props: Props) {
           style={{
             "border-radius": "10px",
           }}
-          class="bg-white h-1/2 flex w-1/2"
+          class=" bg-gray-100 dark:bg-stone-900 h-1/2 flex w-1/2"
         >
-          <div class="w-full">
+          <div class="w-full flex flex-col">
             <nav
               style={{
                 "border-radius": "10px 10px 0 0",
@@ -55,7 +55,7 @@ export default function Modal(props: Props) {
                 <Icon name="Cross" />
               </div>
             </nav>
-            <div>{props.children}</div>
+            <div class="h-full w-full">{props.children}</div>
           </div>
         </div>
       </div>
