@@ -37,6 +37,7 @@ type Subtask @model {
 
 type Settings @model {
   hideActionBar: Boolean! @default(value: false)
+  iconOnlySidebar: Boolean! @default(value: false)
   openAiGptModel: Int! @default(value: 3) # 3 or 4
   gpt3MonthlyTokensUsed: Int
   gpt4MonthlyTokensUsed: Int

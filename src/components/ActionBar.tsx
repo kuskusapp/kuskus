@@ -12,9 +12,18 @@ export default function ActionBar() {
           global.setShowHelp(true)
         }}
       >
-        <span class="tooltip rounded shadow-lg p-1 bg-gray-100 -mt-8 dark:text-black">
-          Learn KusKus
-        </span>
+        <div
+          class="tooltip shadow-lg p-1 bg-stone-900 -mt-8 text-white text-sm flex items-center px-3 gap-1 font-bold"
+          style={{
+            "border-radius": "25px",
+            "transition-delay": "0.5s",
+          }}
+        >
+          {/* TODO: change to ? */}
+          {/* TODO: add icon + button bind */}
+          <span>Learn KusKus</span>
+          <Icon name="N key" />
+        </div>
         <Icon name="Question" />
       </div>
       <div
@@ -46,14 +55,23 @@ export default function ActionBar() {
         <Icon name="Plus" />
       </div>
       <div
-        class="has-tooltip cursor-pointer"
+        class="has-tooltip cursor-pointer relative"
         onClick={() => {
           global.setShowSettings(true)
         }}
       >
-        <span class="tooltip rounded shadow-lg p-1 bg-gray-100 -mt-8 dark:text-black">
-          Settings
-        </span>
+        <div
+          class="tooltip shadow-lg p-1 bg-stone-900 -mt-8 text-white text-sm flex items-center px-3 gap-1 font-bold top-3 right-4"
+          style={{
+            "border-radius": "25px",
+            "transition-delay": "0.5s",
+          }}
+        >
+          <span>Settings</span>
+          {/* TODO: change to cmd+, */}
+          {/* TODO: add icon + button bind */}
+          <Icon name="N key" />
+        </div>
         <Icon name="Settings" />
       </div>
     </div>

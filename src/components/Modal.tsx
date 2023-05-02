@@ -1,10 +1,13 @@
 import { useGlobalContext } from "~/GlobalContext/store"
 import Icon from "./Icon"
 import { createEventListener } from "@solid-primitives/event-listener"
+import type { JSX } from "solid-js"
 
 // TODO: should contain JSX passed in
 // find a type for JSX.element..
-interface Props {}
+interface Props {
+  children: JSX.Element
+}
 
 export default function Modal(props: Props) {
   const global = useGlobalContext()
@@ -52,7 +55,7 @@ export default function Modal(props: Props) {
                 <Icon name="Cross" />
               </div>
             </nav>
-            <div class=""></div>
+            <div>{props.children}</div>
           </div>
         </div>
       </div>

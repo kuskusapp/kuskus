@@ -108,8 +108,10 @@ async fn subtasks_request(Query(request_data): Query<JsonRequestWithModel>) -> i
     }
     let mut con = con.unwrap();
 
-    // TODO: also dash separate the request string
-    // so key is of form make-a-game for a request with `make a game`
+    // TODO: also dash separate the request string (remove extra spaces)
+    // also force lowercase. remove the final full stops too.
+    // try to make the caches that are super similar, cache to one value to not make repeated requests.
+    // i.e. for request: `Make a game`. redis key is `gpt-3-subtasks-make-a-game`
 
     // key for redis is of form `gpt-3-subtasks-request`, where gpt-3 and request are variables coming from request
     // TODO: code below does not look great, but I don't know rust, this is solution I found
@@ -120,7 +122,7 @@ async fn subtasks_request(Query(request_data): Query<JsonRequestWithModel>) -> i
     let request = &request_data.request;
     redis_key.push_str(request);
 
-    if let Ok(data) = con.get(&format!("cache:{}", redis_key)) {
+    if let Ok(data) = con.get(&format!("{}", redis_key)) {
         let s: String = data;
         return (
             StatusCode::OK,
@@ -180,7 +182,7 @@ async fn subtasks_request(Query(request_data): Query<JsonRequestWithModel>) -> i
     let response = JsonSubtasksResponse { subtasks };
 
     if let Ok(s) = con.set(
-        &format!("cache:{}", redis_key),
+        &format!("{}", redis_key),
         serde_json::to_string(&response).unwrap(),
     ) {
         let s: String = s;

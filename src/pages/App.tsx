@@ -66,10 +66,10 @@ export default function App() {
       <Sidebar />
       <TodoList />
       <Show when={global.showHelp()}>
-        <Modal />
+        <Modal children={<div>show settings</div>} />
       </Show>
       <Show when={global.showSettings()}>
-        <Modal />
+        <Modal children={<div>show help</div>} />
       </Show>
     </div>
   )
