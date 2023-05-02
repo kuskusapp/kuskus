@@ -217,9 +217,15 @@ export default function Page() {
       return
 
     const currentIndex = global.focusedTodoIndex()
-
-    if (currentIndex === global.flatTasks().length - 1) {
-      global.setFocusedTodo(0)
+    console.log(global.focusedTodoIndex(), "index")
+    console.log(global.focusedTodo())
+    console.log(global.flatTasks(), "flatTasks")
+    if (
+      global.focusedTodo() ===
+      global.flatTasks()[global.flatTasks().length - 1].key
+    ) {
+      console.log("run")
+      global.setFocusedTodo(global.flatTasks()[0].key)
       return
     }
 

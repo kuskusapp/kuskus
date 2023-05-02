@@ -41,7 +41,7 @@ export default function TodoEdit(props: Props) {
       return
     }
 
-    if ("subtasks" in global.flatTasks()[props.todo.key]) {
+    if ("subtasks" in global.flatTasks()[global.focusedTodoIndex()]) {
       // UPDATE TASK
       batch(() => {
         global.todosState.updateTodo(props.todo.key, (p) => ({
@@ -62,7 +62,7 @@ export default function TodoEdit(props: Props) {
       global.todosState.updateSubtask(
         // TODO: not sure how to avoid ts-ignore..
         // @ts-ignore
-        global.flatTasks()[props.todo.key].parent.key,
+        global.flatTasks()[global.focusedTodoIndex()].parent.key,
         props.todo.key,
         // somehow id, key and parent need to be on the type
         // but they have to be derived, don't know how..

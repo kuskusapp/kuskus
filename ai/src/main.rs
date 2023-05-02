@@ -262,7 +262,6 @@ async fn explain_request(Query(request_data): Query<JsonRequestWithModel>) -> im
         println!("set cache: {}", s);
     }
 
-    // TODO: not sure how to go from `Output` to `JsonSubtaskResponse` nicely in rust too
     (
         StatusCode::OK,
         Json(ExplainResponse::Success(explain_response)),
