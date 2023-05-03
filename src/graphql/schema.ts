@@ -29,6 +29,12 @@ export type IntOperationsInput = {
 
 export type Mutation = {
   __typename?: "Mutation"
+  /** Create a Settings */
+  settingsCreate?: Maybe<SettingsCreatePayload>
+  /** Delete a Settings by ID or unique field */
+  settingsDelete?: Maybe<SettingsDeletePayload>
+  /** Update a Settings */
+  settingsUpdate?: Maybe<SettingsUpdatePayload>
   /** Create a Subtask */
   subtaskCreate?: Maybe<SubtaskCreatePayload>
   /** Delete a Subtask by ID or unique field */
@@ -47,6 +53,19 @@ export type Mutation = {
   userDelete?: Maybe<UserDeletePayload>
   /** Update a User */
   userUpdate?: Maybe<UserUpdatePayload>
+}
+
+export type MutationSettingsCreateArgs = {
+  input: SettingsCreateInput
+}
+
+export type MutationSettingsDeleteArgs = {
+  by: SettingsByInput
+}
+
+export type MutationSettingsUpdateArgs = {
+  by: SettingsByInput
+  input: SettingsUpdateInput
 }
 
 export type MutationSubtaskCreateArgs = {
@@ -103,6 +122,10 @@ export type PageInfo = {
 
 export type Query = {
   __typename?: "Query"
+  /** Query a single Settings by an ID or a unique field */
+  settings?: Maybe<Settings>
+  /** Paginated query to fetch the whole list of `Settings`. */
+  settingsCollection?: Maybe<SettingsConnection>
   /** Query a single Subtask by an ID or a unique field */
   subtask?: Maybe<Subtask>
   /** Paginated query to fetch the whole list of `Subtask`. */
@@ -115,6 +138,18 @@ export type Query = {
   user?: Maybe<User>
   /** Paginated query to fetch the whole list of `User`. */
   userCollection?: Maybe<UserConnection>
+}
+
+export type QuerySettingsArgs = {
+  by: SettingsByInput
+}
+
+export type QuerySettingsCollectionArgs = {
+  after?: InputMaybe<Scalars["String"]>
+  before?: InputMaybe<Scalars["String"]>
+  first?: InputMaybe<Scalars["Int"]>
+  last?: InputMaybe<Scalars["Int"]>
+  orderBy?: InputMaybe<SettingsOrderByInput>
 }
 
 export type QuerySubtaskArgs = {
@@ -151,6 +186,75 @@ export type QueryUserCollectionArgs = {
   first?: InputMaybe<Scalars["Int"]>
   last?: InputMaybe<Scalars["Int"]>
   orderBy?: InputMaybe<UserOrderByInput>
+}
+
+export type Settings = {
+  __typename?: "Settings"
+  /** when the model was created */
+  createdAt: Scalars["DateTime"]
+  gpt3MonthlyTokensUsed?: Maybe<Scalars["Int"]>
+  gpt4MonthlyTokensUsed?: Maybe<Scalars["Int"]>
+  hideActionBar: Scalars["Boolean"]
+  iconOnlySidebar: Scalars["Boolean"]
+  /** Unique identifier */
+  id: Scalars["ID"]
+  openAiGptModel: Scalars["Int"]
+  /** when the model was updated */
+  updatedAt: Scalars["DateTime"]
+}
+
+export type SettingsByInput = {
+  id?: InputMaybe<Scalars["ID"]>
+}
+
+export type SettingsConnection = {
+  __typename?: "SettingsConnection"
+  edges?: Maybe<Array<Maybe<SettingsEdge>>>
+  /** Information to aid in pagination */
+  pageInfo: PageInfo
+}
+
+/** Input to create a Settings */
+export type SettingsCreateInput = {
+  gpt3MonthlyTokensUsed?: InputMaybe<Scalars["Int"]>
+  gpt4MonthlyTokensUsed?: InputMaybe<Scalars["Int"]>
+  hideActionBar?: Scalars["Boolean"]
+  iconOnlySidebar?: Scalars["Boolean"]
+  openAiGptModel?: Scalars["Int"]
+}
+
+export type SettingsCreatePayload = {
+  __typename?: "SettingsCreatePayload"
+  settings?: Maybe<Settings>
+}
+
+export type SettingsDeletePayload = {
+  __typename?: "SettingsDeletePayload"
+  deletedId: Scalars["ID"]
+}
+
+export type SettingsEdge = {
+  __typename?: "SettingsEdge"
+  cursor: Scalars["String"]
+  node: Settings
+}
+
+export type SettingsOrderByInput = {
+  createdAt?: InputMaybe<OrderByDirection>
+}
+
+/** Input to update a Settings */
+export type SettingsUpdateInput = {
+  gpt3MonthlyTokensUsed?: InputMaybe<IntOperationsInput>
+  gpt4MonthlyTokensUsed?: InputMaybe<IntOperationsInput>
+  hideActionBar?: InputMaybe<Scalars["Boolean"]>
+  iconOnlySidebar?: InputMaybe<Scalars["Boolean"]>
+  openAiGptModel?: InputMaybe<IntOperationsInput>
+}
+
+export type SettingsUpdatePayload = {
+  __typename?: "SettingsUpdatePayload"
+  settings?: Maybe<Settings>
 }
 
 export type Subtask = {
@@ -506,6 +610,18 @@ export type SubtasksQuery = {
       __typename?: "SubtaskEdge"
       node: { __typename?: "Subtask"; id: string; title: string }
     } | null> | null
+  } | null
+}
+
+export type CreateSubtaskMutationVariables = Exact<{
+  subtask: SubtaskCreateInput
+}>
+
+export type CreateSubtaskMutation = {
+  __typename?: "Mutation"
+  subtaskCreate?: {
+    __typename?: "SubtaskCreatePayload"
+    subtask?: { __typename?: "Subtask"; id: string } | null
   } | null
 }
 
@@ -1091,6 +1207,69 @@ export const SubtasksDocument = {
     },
   ],
 } as unknown as DocumentNode<SubtasksQuery, SubtasksQueryVariables>
+export const CreateSubtaskDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "CreateSubtask" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "subtask" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "SubtaskCreateInput" },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "subtaskCreate" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "input" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "subtask" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "subtask" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  CreateSubtaskMutation,
+  CreateSubtaskMutationVariables
+>
 export const SubtaskUpdateDocument = {
   kind: "Document",
   definitions: [

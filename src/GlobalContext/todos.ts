@@ -1,6 +1,6 @@
 import { createEffect, mapArray, onCleanup } from "solid-js"
 import { StoreSetter, createStore, produce, unwrap } from "solid-js/store"
-import { SubtaskUpdateDocument } from "~/graphql/schema"
+import { SubtaskCreateDocument, SubtaskUpdateDocument } from "~/graphql/schema"
 import { SubtaskDeleteDocument } from "~/graphql/schema"
 import {
   CreateTodoDocument,
@@ -82,6 +82,7 @@ const parseDbSubtasks = (
 
 export function createTodosState() {
   const [todos, setTodos] = createStore<ClientTodo[]>([])
+  const [subtasks, setSubtasks] = createStore<ClientSubtask[]>([])
 
   // fetch initial todos from the database
   // not using resource because we don't need to interact with Suspense
@@ -129,6 +130,62 @@ export function createTodosState() {
         // unwrapping because todo is a proxy
         let added = !ignoreAdded.has(unwrap(todo))
 
+        let subtasksUpdated = false
+        createEffect(() => {
+          subtasksUpdated = true
+          syncSubtasks()
+          subtasksUpdated = false
+        })
+
+        const syncSubtasks = mapArray(
+          () => todo.subtasks,
+          async (subtask) => {
+            // track changes to subtasks
+            const updatePayload: SubtaskUpdateInput = {
+              title: subtask.title,
+              done: subtask.done,
+              starred: subtask.starred,
+              priority: { set: subtask.priority },
+              note: subtask.note,
+              dueDate: subtask.dueDate,
+            }
+
+            // if subtask was added, we need to create it in the database
+            // TODO: not sure what this `added` should be for subtask, something new?
+            if (added) {
+              added = false
+              const res = await grafbase.request(SubtaskCreateDocument, {
+                subtask: {
+                  title: todo.title,
+                  done: todo.done,
+                  starred: todo.starred,
+                  priority: todo.priority,
+                  note: todo.note,
+                  dueDate: todo.dueDate,
+                },
+              })
+
+              const newId = res.subtaskCreate?.subtask?.id
+              newId && setTodos((t) => t === todo, "id", newId)
+            }
+            // update the todo in the database
+            // wait until it has the id set
+            else if (todo.id) {
+              grafbase.request(TodoUpdateDocument, {
+                id: todo.id,
+                todo: updatePayload,
+              })
+            }
+
+            onCleanup(() => {
+              // only update the db if subtasks changed
+              // disposing of the store shouldn't trigger a db update
+              if (subtasksUpdated && subtask.id)
+                grafbase.request(SubtaskDeleteDocument, { id: subtask.id })
+            })
+          }
+        )
+
         createEffect(async () => {
           // track changes to the todo
           const updatePayload: TodoUpdateInput = {
@@ -139,21 +196,6 @@ export function createTodosState() {
             note: todo.note,
             dueDate: todo.dueDate,
           }
-
-          todo.subtasks.map((s) => {
-            const subtaskUpdatePayload: SubtaskUpdateInput = {
-              title: s.title,
-              done: s.done,
-              starred: s.starred,
-              priority: { set: s.priority },
-              note: s.note,
-              dueDate: s.dueDate,
-            }
-            grafbase.request(SubtaskUpdateDocument, {
-              id: s.id,
-              subtask: subtaskUpdatePayload,
-            })
-          })
 
           // if the todo was added, we need to create it in the database
           if (added) {
@@ -220,10 +262,12 @@ export function createTodosState() {
     removeTodo: (key: number) => {
       setTodos((p) => p.filter((t) => t.key !== key))
     },
-    removeSubtask: (todoKey: any, subtaskKey: number) => {
-      setTodos((p): any => {
-        p[todoKey].subtasks.filter((t) => t.key !== subtaskKey)
-      })
+    removeSubtask(todoKey: number, subtaskKey: number) {
+      setTodos(
+        (t) => t.key === todoKey,
+        "subtasks",
+        (prevSubtask) => prevSubtask.filter((s) => s.key !== subtaskKey)
+      )
     },
     updateSubtask: (
       todoKey: number,

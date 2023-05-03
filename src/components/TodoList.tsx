@@ -37,13 +37,14 @@ export default function Page() {
     () => {
       if (global.newTodo()) return
 
-      // if (isSubtask(global.focusedTodo()!)) {
-      //   global.todosState.removeSubtask(
-      //     global.flatTasks()[global.focusedTodoIndex()].parent.key,
-      //     global.flatTasks()[global.focusedTodoIndex()!].key
-      //   )
-      //   return
-      // }
+      console.log(global.focusedTodo(), "focused todo")
+      if (isSubtask(global.focusedTodo()!)) {
+        global.todosState.removeSubtask(
+          global.flatTasks()[global.focusedTodo()!].parent.key,
+          global.flatTasks()[global.focusedTodo()!].key
+        )
+        return
+      }
 
       if (!global.localSearch() && !global.editingTodo()) {
         global.todosState.removeTodo(global.focusedTodo()!)
