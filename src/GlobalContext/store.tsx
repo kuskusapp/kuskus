@@ -153,8 +153,6 @@ export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
       setClickTimeStamp,
       changeFocus,
       setChangeFocus,
-      newSubtask,
-      setNewSubtask,
       focusedTodoIndex,
       localSearchResultIndex,
       setLocalSearchResultIndex,
@@ -166,6 +164,8 @@ export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
       setFocusedSuggestedTodo,
       loadingSuggestedTodos,
       setLoadingSuggestedTodos,
+      newSubtask,
+      setNewSubtask,
     } as const
   },
   // @ts-expect-error this is just to assert context as non-nullable

@@ -1,6 +1,7 @@
 import { createEventListener } from "@solid-primitives/event-listener"
 import { For, Match, Show, Switch } from "solid-js"
 import { useGlobalContext } from "~/GlobalContext/store"
+import NewSubtask from "~/components/NewSubtask"
 import NewTodo from "~/components/NewTodo"
 import Todo from "~/components/Todo"
 import TodoEdit from "~/components/TodoEdit"

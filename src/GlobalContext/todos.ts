@@ -239,6 +239,16 @@ export function createTodosState() {
     removeTodo: (key: TodoKey) => {
       setTodos((p) => p.filter((t) => t.key !== key))
     },
+    addSubtask: (subtask: ClientSubtask) => {
+      const todo = todos.find((t) =>
+        t.subtasks.find((s) => s.key === subtask.key)
+      )
+      setTodos(
+        (t) => t.key === todo?.key,
+        "subtasks",
+        (prevSubtasks) => [...prevSubtasks, subtask]
+      )
+    },
     removeSubtask(subtaskKey: TodoKey) {
       const todo = todos.find((t) =>
         t.subtasks.find((s) => s.key === subtaskKey)

@@ -31,6 +31,14 @@ export function turnHighlightsIntoSpans(str: string, match: string) {
   return <div>{result}</div>
 }
 
+export function parentOfFocusedTodo() {
+  const global = useGlobalContext()
+  if ("parent" in global.flatTasks()[global.focusedTodoIndex()]) {
+    // @ts-ignore
+    return global.flatTasks()[global.focusedTodoIndex()].parent
+  }
+}
+
 export function isSubtask(key: TodoKey) {
   const global = useGlobalContext()
   if ("subtasks" in global.flatTasks()[global.focusedTodoIndex()]) {

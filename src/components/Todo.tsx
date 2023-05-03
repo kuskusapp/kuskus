@@ -1,6 +1,6 @@
 import clsx from "clsx"
 import { Show, createSignal } from "solid-js"
-import { isToday } from "~/lib/lib"
+import { isToday, parentOfFocusedTodo } from "~/lib/lib"
 import {
   ClientSubtask,
   ClientTodo,
@@ -8,6 +8,7 @@ import {
 } from "../GlobalContext/store"
 import Icon from "./Icon"
 import Loader from "./Loader"
+import NewSubtask from "./NewSubtask"
 
 interface Props {
   todo: ClientTodo | ClientSubtask
@@ -35,6 +36,9 @@ export default function Todo(props: Props) {
         }
       `}
       </style>
+      <Show when={global.newSubtask() && !global.editingTodo()}>
+        <NewSubtask />
+      </Show>
       <div>
         <div
           class={clsx(

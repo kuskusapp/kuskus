@@ -1,20 +1,17 @@
-import { ClientSubtask, useGlobalContext } from "~/GlobalContext/store"
-import { Match, Show, Switch, batch, createEffect, onMount } from "solid-js"
-import Today from "~/pages/Today"
-import Done from "~/pages/Done"
+import { createEventListener } from "@solid-primitives/event-listener"
+import { createShortcut } from "@solid-primitives/keyboard"
+import { Match, Show, Switch, batch, createEffect } from "solid-js"
+import { useGlobalContext } from "~/GlobalContext/store"
+import { GoogleClient } from "~/lib/auth"
+import { isSubtask, parentOfFocusedTodo } from "~/lib/lib"
+import { createTodosForDev } from "~/lib/local"
 import All from "~/pages/All"
+import Done from "~/pages/Done"
 import Starred from "~/pages/Starred"
+import Today from "~/pages/Today"
 import ActionBar from "./ActionBar"
 import LocalSearch from "./LocalSearch"
-import { isSubtask } from "~/lib/lib"
-import { createShortcut } from "@solid-primitives/keyboard"
-import {
-  createEventListener,
-  preventDefault,
-} from "@solid-primitives/event-listener"
-import { createTodosForDev } from "~/lib/local"
 import SuggestedTodos from "./SuggestedTodos"
-import { GoogleClient } from "~/lib/auth"
 
 export default function Page() {
   const global = useGlobalContext()
@@ -35,7 +32,7 @@ export default function Page() {
   createShortcut(
     ["Backspace"],
     () => {
-      if (global.newTodo()) return
+      if (global.newTodo() || global.editingTodo()) return
 
       if (isSubtask(global.focusedTodo()!)) {
         global.todosState.removeSubtask(
@@ -302,10 +299,8 @@ export default function Page() {
     () => {
       if (global.editingTodo() || global.newTodo()) return
 
-      batch(() => {
-        global.setLocalSearch(true)
-        global.setFocusedTodo(null)
-      })
+      // global.todosState.addSubtask(global.flatTasks[global.focusedTodoIndex()])
+      global.setNewSubtask(true)
     },
     { preventDefault: false }
   )
