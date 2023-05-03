@@ -100,9 +100,11 @@ export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
         .flat()
     )
 
-    const focusedTodoIndex = createMemo(() =>
-      flatTasks().findIndex((t) => t.key === focusedTodo())
-    )
+    const focusedTodoIndex = createMemo(() => {
+      console.log(focusedTodo(), "focused todo")
+      console.log(flatTasks(), "flat tasks")
+      return flatTasks().findIndex((t) => t.key === focusedTodo())
+    })
 
     const getTodoIndex = (todo: ClientTodo): number => {
       return todosState.todos.findIndex((t) => t.key === todo.key)

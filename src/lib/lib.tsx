@@ -31,16 +31,9 @@ export function turnHighlightsIntoSpans(str: string, match: string) {
   return <div>{result}</div>
 }
 
-export function findIndexOfId(todos: ClientTodo[], id: number | null) {
-  return todos.findIndex((t) => t.key === id)
-}
-
 export function isSubtask(key: TodoKey) {
-  // TODO: is this good to do? it works but seems wrong..
-  // also doesn't work if run inside TodoEdit.tsx
-  // it breaks with global.flatTasks is not a function..
   const global = useGlobalContext()
-  if ("subtasks" in global.flatTasks()[key]) {
+  if ("subtasks" in global.flatTasks()[global.focusedTodoIndex()]) {
     return false
   }
   return true

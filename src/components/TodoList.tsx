@@ -37,11 +37,9 @@ export default function Page() {
     () => {
       if (global.newTodo()) return
 
-      console.log(global.focusedTodo(), "focused todo")
       if (isSubtask(global.focusedTodo()!)) {
         global.todosState.removeSubtask(
-          global.flatTasks()[global.focusedTodo()!].parent.key,
-          global.flatTasks()[global.focusedTodo()!].key
+          global.flatTasks()[global.focusedTodoIndex()].key
         )
         return
       }
@@ -118,7 +116,8 @@ export default function Page() {
         // type the response, we know the structure
         // type the response well!
 
-        const urlEncodedTask = global.flatTasks()[global.focusedTodo()!].title
+        const urlEncodedTask =
+          global.flatTasks()[global.focusedTodoIndex()!].title
 
         const googleToken = (await GoogleClient.getUser())?.id_token
 
@@ -344,7 +343,7 @@ export default function Page() {
             if (focusedTodoValue !== null) {
               // update subtask
               // TODO: does not work
-              if ("parent" in global.flatTasks()[global.focusedTodo()!]) {
+              if ("parent" in global.flatTasks()[global.focusedTodoIndex()!]) {
                 // global.todosState.updateSubtask(
                 //   focusedTodoValue,
                 //   (s: ClientSubtask) => ({
@@ -368,7 +367,7 @@ export default function Page() {
       createShortcut(
         ["4"],
         () => {
-          if (global.focusedTodo() !== 0) {
+          if (global.focusedTodoIndex() !== 0) {
             global.todosState.updateTodo(global.focusedTodo()!, (todo) => ({
               ...todo,
               starred: !todo.starred,
