@@ -2,7 +2,7 @@ export default function Features() {
   return (
     <div
       style={{ filter: "drop-shadow(-15px 0px 50px #000)" }}
-      class="flex flex-col pl-16 pt-20 gap-6 bg-white dark:bg-stone-700 h-screen"
+      class="flex flex-col pl-16 pt-20 gap-6 bg-white dark:bg-neutral-900 h-screen"
     >
       <div>
         <h1 class="text-3xl font-bold text-sky-300 mb-3">AI</h1>

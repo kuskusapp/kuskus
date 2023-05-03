@@ -1,75 +1,36 @@
-import { GoogleClient } from "./auth"
 import { GraphQLClient } from "graphql-request"
+import { useNavigate } from "solid-start"
+import { GoogleClient } from "./auth"
 
 const endpoint = import.meta.env.VITE_GRAFBASE_API_URL
 const apiKey = import.meta.env.VITE_GRAFBASE_API_KEY
 
-// for server calls I think
-export const grafbaseServer = new GraphQLClient(endpoint, {
-  headers: { "x-api-key": apiKey },
-})
-
-// for client calls I think
+// client graphql calls
 export const grafbase = new GraphQLClient(endpoint, {
   headers: {
     authorization: `Bearer ${(await GoogleClient.getUser())?.id_token}`,
+    // authorization: `Bearer 1201212`, // done for testing, uncomment to force auth error
   },
 })
 
-export async function gql(
-  query: string,
-  variables: Record<string, string> = {}
-) {
-  const res = await fetch("http://127.0.0.1:4000/graphql", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${(await GoogleClient.getUser())?.id_token}`,
-    },
-    body: JSON.stringify({
-      query: query,
-      variables: variables,
-    }),
-  })
-  return res.json()
+// TODO: need to fix 200 error token bad response
+// if you get error it should redirect to auth page
+export async function grafbase2() {
+  try {
+    return new GraphQLClient(endpoint, {
+      headers: {
+        // authorization: `Bearer ${(await GoogleClient.getUser())?.id_token}`,
+        authorization: `Bearer 1201212`,
+      },
+    })
+  } catch (error) {
+    // can't use navigate here..
+    // is there way to catch error and redirect to auth page in some place else?
+    // navigate("/auth")
+  }
 }
 
-export async function getTodos() {
-  const res = await gql(`
-    {
-      todoCollection(first: 20) {
-        edges {
-          node {
-            id
-            title
-            done
-            dueDate
-            starred
-            priority
-          }
-        }
-      }
-    }
-  `)
-  return res
-}
-
-export async function createTodo() {
-  const res = await gql(`
-      mutation {
-      todoCreate(
-        input: {
-          title: "Make KusKus"
-          done: false
-          starred: true
-          priority: 3
-        }
-      ) {
-        todo {
-          id
-        }
-      }
-    }
-  `)
-  console.log(res)
-}
+// server graphql calls
+export const grafbaseServer = new GraphQLClient(endpoint, {
+  headers: { "x-api-key": apiKey },
+})

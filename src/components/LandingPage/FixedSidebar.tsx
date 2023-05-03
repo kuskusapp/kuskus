@@ -1,4 +1,5 @@
 import { useNavigate } from "solid-start"
+import Icon from "../Icon"
 
 export default function FixedSidebar() {
   const navigate = useNavigate()
@@ -47,7 +48,7 @@ export default function FixedSidebar() {
               Download
               {/* <Icon name="" /> */}
             </button>
-            <div class="flex gap-3">
+            <div class="flex gap-3 relative">
               <button
                 class="text-white flex justify-center p-3 bg-black w-32 rounded-md active:translate-y-0.5 hover:bg-white hover:text-black"
                 style={{
@@ -73,6 +74,12 @@ export default function FixedSidebar() {
                 {/* <Icon name="" /> */}
               </button>
             </div>
+            <a
+              class="w-5 absolute bottom-3 right-49 mt-4"
+              href="https://discord.gg/f8YHjyrX3h"
+            >
+              <Icon name="Discord" />
+            </a>
           </div>
         </div>
       </div>
