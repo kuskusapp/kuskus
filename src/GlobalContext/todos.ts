@@ -82,7 +82,6 @@ const parseDbSubtasks = (
 
 export function createTodosState() {
   const [todos, setTodos] = createStore<ClientTodo[]>([])
-  const [subtasks, setSubtasks] = createStore<ClientSubtask[]>([])
 
   // fetch initial todos from the database
   // not using resource because we don't need to interact with Suspense
@@ -126,6 +125,7 @@ export function createTodosState() {
     const syncDatabase = mapArray(
       () => todos,
       (todo) => {
+        console.log(todo, "todo")
         // ignore todos that came from the database
         // unwrapping because todo is a proxy
         let added = !ignoreAdded.has(unwrap(todo))
@@ -166,7 +166,14 @@ export function createTodosState() {
               })
 
               const newId = res.subtaskCreate?.subtask?.id
-              newId && setTodos((t) => t === todo, "id", newId)
+              newId &&
+                setTodos(
+                  (t) => t === todo,
+                  "subtasks",
+                  (s) => s.key === subtask.key,
+                  "id",
+                  newId
+                )
             }
             // update the todo in the database
             // wait until it has the id set
