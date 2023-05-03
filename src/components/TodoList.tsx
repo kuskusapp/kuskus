@@ -86,6 +86,7 @@ export default function Page() {
 
     batch(() => {
       global.setNewTodo(false)
+      global.setNewSubtask(null)
       global.setLocalSearch(false)
       global.setChangeFocus(true)
       global.setEditingTodo(false)
@@ -247,7 +248,11 @@ export default function Page() {
   createShortcut(
     ["Enter"],
     () => {
-      if (global.showSuggestedTasksModal() || global.newTodo()) {
+      if (
+        global.showSuggestedTasksModal() ||
+        global.newTodo() ||
+        global.isAddingANewSubtask()
+      ) {
         return
       }
       if (!global.localSearch()) {
@@ -260,6 +265,9 @@ export default function Page() {
   createShortcut(
     ["T"],
     () => {
+      if (global.isAddingANewSubtask()) {
+        return
+      }
       if (
         global.focusedTodo() !== null &&
         !global.localSearch() &&

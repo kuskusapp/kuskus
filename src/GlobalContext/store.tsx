@@ -68,7 +68,6 @@ export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
     })
 
     const [newTodo, setNewTodo] = createSignal<boolean>(false)
-    // const [newSubtask, setNewSubtask] = createSignal<boolean>(false)
     const [newTodoType, setNewTodoType] = createSignal<string>("")
     const [todoEditInput, setTodoEditInput] = createSignal("")
     const [guard, setGuard] = createSignal(false)
@@ -250,6 +249,7 @@ export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
       isSubtask,
       isNewSubtask,
       getTodoByKey,
+      setNewSubtask,
     } as const
   },
   // @ts-expect-error this is just to assert context as non-nullable

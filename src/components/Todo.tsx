@@ -29,8 +29,10 @@ export default function Todo(props: Props) {
         @keyframes pulse {
           0% {
             opacity: 1;
+            transform: translateY(10px);
           }
           100% {
+            transform: translateY(10px);
             opacity: 0;
           }
         }
@@ -39,7 +41,7 @@ export default function Todo(props: Props) {
       <div>
         <div
           class={clsx(
-            "flex cursor-default pl-1.5 justify-between p-1 dark:border-neutral-700 mb-1",
+            "flex cursor-default pl-1.5 justify-between p-1 dark:border-neutral-700 mb-1 transition-all",
             props.todo.note && "min-h-min",
             props.subtask && "ml-4",
             global.isTodoFocused(props.todo.key) &&
@@ -77,7 +79,7 @@ export default function Todo(props: Props) {
                   setTimeout(() => {
                     global.todosState.toggleTodo(props.todo.key)
                     setTriggerAnimation(false)
-                  }, 300)
+                  }, 500)
                 }}
               >
                 <Icon name={props.todo.done ? "SquareCheck" : "Square"} />

@@ -20,11 +20,9 @@ export default function NewSubtask() {
     ["Enter"],
     async () => {
       if (title() === "") {
-        // global.newSubtaskParent()
         global.setEditingTodo(false)
         return
       }
-      let parentKey = 0
 
       const newSubtaskKey = global.todosState.addSubtask(newSubtask.parent, {
         title: title(),
@@ -36,11 +34,11 @@ export default function NewSubtask() {
         parent: global.getTodoByKey(newSubtask.parent) as ClientTodo,
       })
 
-      global.setNewTodo(false)
       global.setEditingTodo(true)
       global.setNewTodoType("")
       global.setChangeFocus(true)
-      global.setFocusedTodoKey(null)
+      global.setFocusedTodoKey(newSubtaskKey)
+      global.setNewSubtask(null)
     },
     { preventDefault: false }
   )
@@ -66,7 +64,7 @@ export default function NewSubtask() {
   })
 
   return (
-    <div class="flex justify-between cursor-default pl-1.5 pr-1.5 dark:bg-neutral-700 bg-zinc-200 rounded py-2">
+    <div class="ml-4 flex justify-between cursor-default pl-1.5 pr-1.5 dark:bg-neutral-700 bg-zinc-200 rounded py-2">
       <div class="w-full">
         <div class="flex gap-2 items-center">
           <div>

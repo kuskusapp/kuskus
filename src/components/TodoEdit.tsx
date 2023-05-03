@@ -101,7 +101,7 @@ export default function TodoEdit(props: Props) {
   })
 
   return (
-    <div class="flex justify-between cursor-default pl-1.5 pr-1.5 dark:bg-neutral-700 bg-zinc-200 rounded py-2">
+    <div class="flex justify-between cursor-default pl-1.5 pr-1.5 dark:bg-neutral-700 bg-zinc-200 rounded py-2 transition-all ">
       <div class="w-full">
         <div class="flex gap-2 items-center">
           <div>

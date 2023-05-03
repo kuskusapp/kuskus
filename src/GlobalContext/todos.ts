@@ -1,8 +1,10 @@
 import { defer } from "@solid-primitives/utils"
 import { createEffect } from "solid-js"
 import { StoreSetter, createStore, produce } from "solid-js/store"
+import { TodoLinkSubtaskDocument } from "~/graphql/schema"
 import {
   SubtaskCreateDocument,
+  SubtaskCreateInput,
   SubtaskUpdateDocument,
   TodoCreateInput,
 } from "~/graphql/schema"
@@ -191,6 +193,11 @@ export function createTodosState() {
                   "id",
                   res.subtaskCreate?.subtask?.id!
                 )
+                // TODO: do the subtask create and subtask link in 1 query..
+                grafbase.request(TodoLinkSubtaskDocument, {
+                  taskId: todo.id!,
+                  subtaskId: res.subtaskCreate?.subtask?.id!,
+                })
               })
           }
 
@@ -256,6 +263,7 @@ export function createTodosState() {
           },
         ]
       )
+      return key
     },
     removeSubtask(subtaskKey: TodoKey) {
       const todo = todos.find((t) =>
