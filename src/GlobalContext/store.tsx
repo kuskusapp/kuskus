@@ -1,11 +1,18 @@
 import {
+  batch,
   createComputed,
   createMemo,
   createSelector,
   createSignal,
 } from "solid-js"
 import { createContextProvider } from "@solid-primitives/context"
-import { ClientTodo, TodoKey, createTodosState } from "./todos"
+import {
+  ClientSubtask,
+  ClientTodo,
+  TodoKey,
+  createTodosState,
+  getNewKey,
+} from "./todos"
 import { todayDate } from "~/lib/lib"
 import { SuggestedTodos } from "~/components/SuggestedTodos"
 
@@ -16,6 +23,12 @@ export const enum PageType {
   Today = "Today",
   Done = "Done",
   Starred = "Starred",
+}
+
+export type NewSubtask = {
+  isNewSubtask: true
+  parent: TodoKey
+  key: TodoKey
 }
 
 // TODO: remove non used signals!
@@ -31,8 +44,12 @@ export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
     const [highlitedTodosFromSearch, setHighlightedTodosFromSearch] =
       createSignal([])
 
-    const [focusedTodo, setFocusedTodo] = createSignal<TodoKey | null>(null)
-    const isTodoFocused = createSelector<TodoKey | null, TodoKey>(focusedTodo)
+    const [focusedTodoKey, setFocusedTodoKey] = createSignal<TodoKey | null>(
+      null
+    )
+    const isTodoFocused = createSelector<TodoKey | null, TodoKey>(
+      focusedTodoKey
+    )
 
     const [editingTodo, setEditingTodo] = createSignal<boolean>(false)
 
@@ -46,12 +63,12 @@ export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
     // TODO: intercepting a signal setter is a better way
     // createComputed runs before other createEffects
     createComputed(() => {
-      focusedTodo()
+      focusedTodoKey()
       setEditingTodo(false)
     })
 
     const [newTodo, setNewTodo] = createSignal<boolean>(false)
-    const [newSubtask, setNewSubtask] = createSignal<boolean>(false)
+    // const [newSubtask, setNewSubtask] = createSignal<boolean>(false)
     const [newTodoType, setNewTodoType] = createSignal<string>("")
     const [todoEditInput, setTodoEditInput] = createSignal("")
     const [guard, setGuard] = createSignal(false)
@@ -94,20 +111,82 @@ export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
         .sort(compareTodos)
     )
 
+    const [newSubtask, setNewSubtask] = createSignal<NewSubtask | null>()
+    const isAddingANewSubtask = () => !!newSubtask()
+
+    function addNewSubtask(parent: TodoKey): TodoKey {
+      const key = getNewKey()
+      batch(() => {
+        setNewSubtask({ parent, key, isNewSubtask: true })
+        setFocusedTodoKey(key)
+      })
+      return key
+    }
+
     const flatTasks = createMemo(() =>
       orderedTodos()
-        .map((t) => [t, ...t.subtasks])
+        .map((t) => {
+          const list: (NewSubtask | ClientSubtask | ClientTodo)[] = [
+            t,
+            ...t.subtasks,
+          ]
+          const ns = newSubtask()
+          if (ns?.parent === t.key) {
+            list.push(ns)
+          }
+          return list
+        })
         .flat()
     )
 
-    const focusedTodoIndex = createMemo(() => {
-      console.log(focusedTodo(), "focused todo")
-      console.log(flatTasks(), "flat tasks")
-      return flatTasks().findIndex((t) => t.key === focusedTodo())
-    })
+    function getTodoByKey(
+      key: TodoKey
+    ): NewSubtask | ClientSubtask | ClientTodo | undefined {
+      return flatTasks().find((t) => t.key === key)
+    }
+
+    const focusedTodoIndex = createMemo(() =>
+      flatTasks().findIndex((t) => t.key === focusedTodoKey())
+    )
+
+    const focusedTodo = createMemo<
+      NewSubtask | ClientTodo | ClientSubtask | undefined
+    >(() => flatTasks()[focusedTodoIndex()])
 
     const getTodoIndex = (todo: ClientTodo): number => {
       return todosState.todos.findIndex((t) => t.key === todo.key)
+    }
+
+    function parentOfFocusedTodo(global: ReturnType<typeof useGlobalContext>) {
+      if ("parent" in global.flatTasks()[global.focusedTodoIndex()]) {
+        return (global.flatTasks()[global.focusedTodoIndex()] as ClientSubtask)
+          .parent
+      }
+    }
+
+    function isNewSubtask(
+      task: NewSubtask | ClientSubtask | ClientTodo
+    ): task is NewSubtask {
+      return "isNewSubtask" in task
+    }
+
+    function isSubtask(
+      task: NewSubtask | ClientSubtask | ClientTodo
+    ): task is ClientSubtask {
+      return "parent" in task
+    }
+
+    // function isSubtask(key: TodoKey) {
+    //   const global = useGlobalContext()
+    //   if ("subtasks" in global.flatTasks()[global.focusedTodoIndex()]) {
+    //     return false
+    //   }
+    //   return true
+    // }
+
+    function findTodoFromFocusedTodo() {
+      const global = useGlobalContext()
+      global.flatTasks().find((t) => t.key === global.focusedTodoKey())
     }
 
     return {
@@ -121,8 +200,9 @@ export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
       isPageActive,
       setActivePage,
       focusedTodo,
+      focusedTodoKey,
       isTodoFocused,
-      setFocusedTodo,
+      setFocusedTodoKey,
       newTodo,
       setNewTodo,
       newTodoType,
@@ -165,7 +245,11 @@ export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
       loadingSuggestedTodos,
       setLoadingSuggestedTodos,
       newSubtask,
-      setNewSubtask,
+      addNewSubtask,
+      isAddingANewSubtask,
+      isSubtask,
+      isNewSubtask,
+      getTodoByKey,
     } as const
   },
   // @ts-expect-error this is just to assert context as non-nullable

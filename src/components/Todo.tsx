@@ -1,6 +1,6 @@
 import clsx from "clsx"
 import { Show, createSignal } from "solid-js"
-import { isToday, parentOfFocusedTodo } from "~/lib/lib"
+import { isToday } from "~/lib/lib"
 import {
   ClientSubtask,
   ClientTodo,
@@ -36,9 +36,6 @@ export default function Todo(props: Props) {
         }
       `}
       </style>
-      <Show when={global.newSubtask() && !global.editingTodo()}>
-        <NewSubtask />
-      </Show>
       <div>
         <div
           class={clsx(
@@ -61,7 +58,7 @@ export default function Todo(props: Props) {
             if (global.isTodoFocused(props.todo.key)) {
               global.setEditingTodo(true)
             } else {
-              global.setFocusedTodo(props.todo.key)
+              global.setFocusedTodoKey(props.todo.key)
             }
           }}
         >
@@ -96,7 +93,7 @@ export default function Todo(props: Props) {
             <Show
               when={
                 global.loadingSuggestedTodos() &&
-                global.focusedTodo() === props.todo.key
+                global.isTodoFocused(props.todo.key)
               }
             >
               <Loader />

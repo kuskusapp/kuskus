@@ -48,7 +48,7 @@ export type ClientTodo = BaseTask & {
   subtasks: ClientSubtask[]
 }
 
-const getNewKey = (() => {
+export const getNewKey = (() => {
   let last = 0
   return (): TodoKey => `key:${last++}`
 })()
@@ -239,14 +239,22 @@ export function createTodosState() {
     removeTodo: (key: TodoKey) => {
       setTodos((p) => p.filter((t) => t.key !== key))
     },
-    addSubtask: (subtask: ClientSubtask) => {
-      const todo = todos.find((t) =>
-        t.subtasks.find((s) => s.key === subtask.key)
-      )
+    addSubtask: (
+      parentKey: TodoKey,
+      subtask: Omit<ClientSubtask, "id" | "key">
+    ) => {
+      const key = getNewKey()
       setTodos(
-        (t) => t.key === todo?.key,
+        (t) => t.key === parentKey,
         "subtasks",
-        (prevSubtasks) => [...prevSubtasks, subtask]
+        (prevSubtasks) => [
+          ...prevSubtasks,
+          {
+            ...subtask,
+            key,
+            id: null,
+          },
+        ]
       )
     },
     removeSubtask(subtaskKey: TodoKey) {

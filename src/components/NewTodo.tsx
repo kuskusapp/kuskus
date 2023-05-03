@@ -38,7 +38,7 @@ export default function NewTodo() {
       global.setEditingTodo(true)
       global.setNewTodoType("")
       global.setChangeFocus(true)
-      global.setFocusedTodo(newTodoKey)
+      global.setFocusedTodoKey(newTodoKey)
     },
     { preventDefault: false }
   )

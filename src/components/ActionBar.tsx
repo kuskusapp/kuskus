@@ -34,7 +34,7 @@ export default function ActionBar() {
             // today, all ..
 
             batch(() => {
-              global.setFocusedTodo(null)
+              global.setFocusedTodoKey(null)
               global.setNewTodoType("all")
               global.setNewTodo(true)
               global.setGuard(true)

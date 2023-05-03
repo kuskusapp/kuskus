@@ -24,7 +24,7 @@ export default function LocalSearch() {
       onKeyPress={(e) => {
         if (e.key === "Enter") {
           if (global.localSearchResultIds().length > 0) {
-            global.setFocusedTodo(global.localSearchResultId())
+            global.setFocusedTodoKey(global.localSearchResultId())
             global.setLocalSearch(false)
             global.setLocalSearchResultIds([])
             global.setLocalSearchResultId(null)

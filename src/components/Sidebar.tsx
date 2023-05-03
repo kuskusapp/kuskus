@@ -24,7 +24,7 @@ export default function Sidebar() {
     "click",
     (e) => {
       if (e.target === ref) {
-        global.setFocusedTodo(null)
+        global.setFocusedTodoKey(null)
         // global.setNewTodo(false)
       }
     },
