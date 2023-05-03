@@ -220,6 +220,11 @@ export function createTodosState() {
     removeTodo: (key: number) => {
       setTodos((p) => p.filter((t) => t.key !== key))
     },
+    removeSubtask: (todoKey: any, subtaskKey: number) => {
+      setTodos((p): any => {
+        p[todoKey].subtasks.filter((t) => t.key !== subtaskKey)
+      })
+    },
     updateSubtask: (
       todoKey: number,
       subtaskKey: number,
@@ -233,7 +238,6 @@ export function createTodosState() {
         (t) => t.key === subtaskKey,
         setter
       )
-      console.log(todos)
     },
     // a windcard setter if you want to share that 🤷‍♂️
     // setTodos,

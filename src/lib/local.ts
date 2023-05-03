@@ -57,6 +57,15 @@ export async function createTodosForDev() {
     taskId: task.todoCreate?.todo?.id,
     subtaskId: subtask.subtaskCreate?.subtask?.id,
   })
+  subtask = await grafbase.request<Mutation>(SubtaskCreateDocument, {
+    subtask: {
+      title: "subtask 3",
+    },
+  })
+  await grafbase.request<Mutation>(TodoLinkSubtaskDocument, {
+    taskId: task.todoCreate?.todo?.id,
+    subtaskId: subtask.subtaskCreate?.subtask?.id,
+  })
 
   task = await grafbase.request<Mutation>(CreateTodoDocument, {
     todo: {

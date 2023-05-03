@@ -37,6 +37,14 @@ export default function Page() {
     () => {
       if (global.newTodo()) return
 
+      // if (isSubtask(global.focusedTodo()!)) {
+      //   global.todosState.removeSubtask(
+      //     global.flatTasks()[global.focusedTodoIndex()].parent.key,
+      //     global.flatTasks()[global.focusedTodoIndex()!].key
+      //   )
+      //   return
+      // }
+
       if (!global.localSearch() && !global.editingTodo()) {
         global.todosState.removeTodo(global.focusedTodo()!)
 
@@ -217,14 +225,10 @@ export default function Page() {
       return
 
     const currentIndex = global.focusedTodoIndex()
-    console.log(global.focusedTodoIndex(), "index")
-    console.log(global.focusedTodo())
-    console.log(global.flatTasks(), "flatTasks")
     if (
       global.focusedTodo() ===
       global.flatTasks()[global.flatTasks().length - 1].key
     ) {
-      console.log("run")
       global.setFocusedTodo(global.flatTasks()[0].key)
       return
     }
@@ -293,6 +297,20 @@ export default function Page() {
     { preventDefault: false }
   )
 
+  createShortcut(
+    ["L"],
+    () => {
+      if (global.editingTodo() || global.newTodo()) return
+
+      batch(() => {
+        global.setLocalSearch(true)
+        global.setFocusedTodo(null)
+      })
+    },
+    { preventDefault: false }
+  )
+
+  // local search
   createShortcut(
     ["F"],
     () => {
