@@ -1,6 +1,11 @@
-import { createEffect, mapArray, onCleanup } from "solid-js"
-import { StoreSetter, createStore, produce, unwrap } from "solid-js/store"
-import { SubtaskCreateDocument, SubtaskUpdateDocument } from "~/graphql/schema"
+import { defer } from "@solid-primitives/utils"
+import { createEffect } from "solid-js"
+import { StoreSetter, createStore, produce } from "solid-js/store"
+import {
+  SubtaskCreateDocument,
+  SubtaskUpdateDocument,
+  TodoCreateInput,
+} from "~/graphql/schema"
 import { SubtaskDeleteDocument } from "~/graphql/schema"
 import {
   CreateTodoDocument,
@@ -10,14 +15,23 @@ import {
   TodoUpdateDocument,
   TodoUpdateInput,
   TodosDocument,
-  SubtaskUpdateInput,
 } from "~/graphql/schema"
 import { grafbase } from "~/lib/graphql"
+import { createArrayDiff } from "~/lib/primitives"
 
 export type Priority = 0 | 1 | 2 | 3
-export type TodoKey = number
+/**
+ * local unique key for todos
+ * the `key:` prefix is used to prevent collisions with database ids or other strings
+ */
+export type TodoKey = `key:${number}`
 
 export type BaseTask = {
+  /**
+   * ID in the database, todos created client side will not have an id until they are saved to the database
+   */
+  id: string | null
+  key: TodoKey
   title: string
   done: boolean
   starred: boolean
@@ -27,29 +41,16 @@ export type BaseTask = {
 }
 
 export type ClientSubtask = BaseTask & {
-  id: string
-  key: TodoKey
   parent: ClientTodo
 }
 
 export type ClientTodo = BaseTask & {
-  /**
-   * ID in the database, todos created client side will not have an id until they are saved to the database
-   */
-  id: string | null
-  /**
-   * Local unique key
-   */
-  key: TodoKey
   subtasks: ClientSubtask[]
 }
 
-const { getNewKey, getSubtaskKey } = (() => {
+export const getNewKey = (() => {
   let last = 0
-  return {
-    getNewKey: () => last++,
-    getSubtaskKey: () => last++,
-  }
+  return (): TodoKey => `key:${last++}`
 })()
 
 const parseDbPriority = (int: number): Priority => {
@@ -67,7 +68,7 @@ const parseDbSubtasks = (
       if (!edge || !edge.node) continue
       result.push({
         id: edge.node.id,
-        key: getSubtaskKey(),
+        key: getNewKey(),
         title: edge.node.title,
         done: edge.node.done,
         starred: edge.node.starred,
@@ -80,15 +81,34 @@ const parseDbSubtasks = (
   return result
 }
 
+function getTodoCreateInput(todo: BaseTask): TodoCreateInput {
+  return {
+    title: todo.title,
+    done: todo.done,
+    starred: todo.starred,
+    priority: todo.priority,
+    note: todo.note,
+    dueDate: todo.dueDate,
+  }
+}
+
+function getTodoUpdateInput(todo: BaseTask): TodoUpdateInput {
+  return {
+    title: todo.title,
+    done: todo.done,
+    starred: todo.starred,
+    priority: { set: todo.priority },
+    note: todo.note,
+    dueDate: todo.dueDate,
+  }
+}
+
 export function createTodosState() {
   const [todos, setTodos] = createStore<ClientTodo[]>([])
 
   // fetch initial todos from the database
   // not using resource because we don't need to interact with Suspense
-  const ignoreAdded = new WeakSet<ClientTodo>()
-  ;(async () => {
-    const res = await grafbase.request<Query>(TodosDocument)
-
+  grafbase.request<Query>(TodosDocument).then((res) => {
     setTodos(
       produce((state) => {
         if (res.todoCollection?.edges) {
@@ -111,174 +131,145 @@ export function createTodosState() {
               parseDbSubtasks(todo.node.subtasks, clientTodo)
             )
             state.push(clientTodo)
-            ignoreAdded.add(clientTodo)
           }
         }
       })
     )
-  })()
+  })
 
   //
   // DATABASE SYNC
   //
-  {
-    const syncDatabase = mapArray(
-      () => todos,
-      (todo) => {
-        console.log(todo, "todo")
-        // ignore todos that came from the database
-        // unwrapping because todo is a proxy
-        let added = !ignoreAdded.has(unwrap(todo))
+  createArrayDiff(
+    () => todos,
+    (todo, onTodoRemove) => {
+      // if the todo was added, we need to create it in the database
+      if (!todo.id) {
+        grafbase
+          .request(CreateTodoDocument, {
+            todo: getTodoCreateInput(todo),
+          })
+          .then((res) => {
+            // tasks get their id after being added to the db
+            setTodos((t) => t === todo, "id", res.todoCreate?.todo?.id!)
+          })
+      }
 
-        let subtasksUpdated = false
-        createEffect(() => {
-          subtasksUpdated = true
-          syncSubtasks()
-          subtasksUpdated = false
-        })
+      // update the todo in the database
+      createEffect(
+        defer(
+          () => getTodoUpdateInput(todo),
+          (payload) => {
+            if (!todo.id) return
+            grafbase.request(TodoUpdateDocument, {
+              id: todo.id,
+              todo: payload,
+            })
+          }
+        )
+      )
 
-        const syncSubtasks = mapArray(
-          () => todo.subtasks,
-          async (subtask) => {
-            // track changes to subtasks
-            const updatePayload: SubtaskUpdateInput = {
-              title: subtask.title,
-              done: subtask.done,
-              starred: subtask.starred,
-              priority: { set: subtask.priority },
-              note: subtask.note,
-              dueDate: subtask.dueDate,
-            }
+      onTodoRemove(() => {
+        todo.id && grafbase.request(TodoDeleteDocument, { id: todo.id })
+      })
 
-            // if subtask was added, we need to create it in the database
-            // TODO: not sure what this `added` should be for subtask, something new?
-            if (added) {
-              added = false
-              const res = await grafbase.request(SubtaskCreateDocument, {
-                subtask: {
-                  title: todo.title,
-                  done: todo.done,
-                  starred: todo.starred,
-                  priority: todo.priority,
-                  note: todo.note,
-                  dueDate: todo.dueDate,
-                },
+      createArrayDiff(
+        () => todo.subtasks,
+        (subtask, onSubtaskRemove) => {
+          // if the subtask was added, we need to create it in the database
+          if (!subtask.id) {
+            grafbase
+              .request(SubtaskCreateDocument, {
+                subtask: getTodoCreateInput(subtask),
               })
-
-              const newId = res.subtaskCreate?.subtask?.id
-              newId &&
+              .then((res) => {
+                // tasks get their id after being added to the db
                 setTodos(
                   (t) => t === todo,
                   "subtasks",
                   (s) => s.key === subtask.key,
                   "id",
-                  newId
+                  res.subtaskCreate?.subtask?.id!
                 )
-            }
-            // update the todo in the database
-            // wait until it has the id set
-            else if (todo.id) {
-              grafbase.request(TodoUpdateDocument, {
-                id: todo.id,
-                todo: updatePayload,
               })
-            }
-
-            onCleanup(() => {
-              // only update the db if subtasks changed
-              // disposing of the store shouldn't trigger a db update
-              if (subtasksUpdated && subtask.id)
-                grafbase.request(SubtaskDeleteDocument, { id: subtask.id })
-            })
-          }
-        )
-
-        createEffect(async () => {
-          // track changes to the todo
-          const updatePayload: TodoUpdateInput = {
-            title: todo.title,
-            done: todo.done,
-            starred: todo.starred,
-            priority: { set: todo.priority },
-            note: todo.note,
-            dueDate: todo.dueDate,
           }
 
-          // if the todo was added, we need to create it in the database
-          if (added) {
-            added = false
-            const res = await grafbase.request(CreateTodoDocument, {
-              todo: {
-                title: todo.title,
-                done: todo.done,
-                starred: todo.starred,
-                priority: todo.priority,
-                note: todo.note,
-                dueDate: todo.dueDate,
-              },
-            })
-            const newId = res.todoCreate?.todo?.id
-            newId && setTodos((t) => t === todo, "id", newId)
-          }
-          // update the todo in the database
-          // wait until it has the id set
-          else if (todo.id) {
-            grafbase.request(TodoUpdateDocument, {
-              id: todo.id,
-              todo: updatePayload,
-            })
-          }
-        })
+          // update the subtask in the database
+          createEffect(
+            defer(
+              () => getTodoUpdateInput(subtask),
+              (payload) => {
+                if (!subtask.id) return
+                grafbase.request(SubtaskUpdateDocument, {
+                  id: subtask.id,
+                  subtask: payload,
+                })
+              }
+            )
+          )
 
-        onCleanup(() => {
-          // only update the db if the todos changed
-          // disposing of the store shouldn't trigger a db update
-          if (todosUpdated && todo.id)
-            grafbase.request(TodoDeleteDocument, { id: todo.id })
-        })
-      }
-    )
-
-    let todosUpdated = false
-    createEffect(() => {
-      todosUpdated = true
-      syncDatabase()
-      todosUpdated = false
-    })
-  }
+          onSubtaskRemove(() => {
+            subtask.id &&
+              grafbase.request(SubtaskDeleteDocument, { id: subtask.id })
+          })
+        }
+      )
+    }
+  )
 
   return {
     // state
     todos,
     // actions
-    addTodo: (fields: Omit<ClientTodo, "id" | "key">): number => {
+    addTodo: (fields: Omit<ClientTodo, "id" | "key">): TodoKey => {
       const key = getNewKey()
       setTodos(todos.length, { ...fields, id: null, key })
       return key
     },
-    toggleTodo: (key: number) => {
+    toggleTodo: (key: TodoKey) => {
       setTodos(
         (t) => t.key === key,
         "done",
         (d) => !d
       )
     },
-    updateTodo: (key: number, setter: StoreSetter<ClientTodo, [number]>) => {
+    updateTodo: (key: TodoKey, setter: StoreSetter<ClientTodo, [number]>) => {
       setTodos((t) => t.key === key, setter)
     },
-    removeTodo: (key: number) => {
+    removeTodo: (key: TodoKey) => {
       setTodos((p) => p.filter((t) => t.key !== key))
     },
-    removeSubtask(todoKey: number, subtaskKey: number) {
+    addSubtask: (
+      parentKey: TodoKey,
+      subtask: Omit<ClientSubtask, "id" | "key">
+    ) => {
+      const key = getNewKey()
       setTodos(
-        (t) => t.key === todoKey,
+        (t) => t.key === parentKey,
         "subtasks",
-        (prevSubtask) => prevSubtask.filter((s) => s.key !== subtaskKey)
+        (prevSubtasks) => [
+          ...prevSubtasks,
+          {
+            ...subtask,
+            key,
+            id: null,
+          },
+        ]
+      )
+    },
+    removeSubtask(subtaskKey: TodoKey) {
+      const todo = todos.find((t) =>
+        t.subtasks.find((s) => s.key === subtaskKey)
+      )
+      setTodos(
+        (t) => t.key === todo?.key,
+        "subtasks",
+        (prevSubtasks) => prevSubtasks.filter((s) => s.key !== subtaskKey)
       )
     },
     updateSubtask: (
-      todoKey: number,
-      subtaskKey: number,
+      todoKey: TodoKey,
+      subtaskKey: TodoKey,
       setter: StoreSetter<ClientSubtask, any[]>
     ) => {
       // not sure what is happening here

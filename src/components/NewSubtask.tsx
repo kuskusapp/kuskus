@@ -1,11 +1,11 @@
 import { autofocus } from "@solid-primitives/autofocus"
 import { createShortcut } from "@solid-primitives/keyboard"
-import { Show, createEffect, createSignal, onMount } from "solid-js"
+import { Show, createEffect, createSignal } from "solid-js"
 import { todayDate } from "~/lib/lib"
-import { useGlobalContext } from "../GlobalContext/store"
+import { ClientTodo, useGlobalContext } from "../GlobalContext/store"
 import Icon from "./Icon"
 
-export default function NewTodo() {
+export default function NewSubtask() {
   const global = useGlobalContext()
   const [title, setTitle] = createSignal("")
   const [note, setNote] = createSignal("")
@@ -14,31 +14,33 @@ export default function NewTodo() {
   const [showSelectPriority, setShowSelectPriority] = createSignal(true)
   const [priority, setPriority] = createSignal<0 | 1 | 2 | 3>(0)
   const [starred, setStarred] = createSignal(false)
+  const newSubtask = global.newSubtask()!
 
   createShortcut(
     ["Enter"],
     async () => {
       if (title() === "") {
-        global.setNewTodo(false)
+        // global.newSubtaskParent()
         global.setEditingTodo(false)
         return
       }
+      let parentKey = 0
 
-      const newTodoKey = global.todosState.addTodo({
+      const newSubtaskKey = global.todosState.addSubtask(newSubtask.parent, {
         title: title(),
         note: note(),
         done: false,
         starred: starred(),
         priority: priority(),
         dueDate: dueDate(),
-        subtasks: [],
+        parent: global.getTodoByKey(newSubtask.parent) as ClientTodo,
       })
 
       global.setNewTodo(false)
       global.setEditingTodo(true)
       global.setNewTodoType("")
       global.setChangeFocus(true)
-      global.setFocusedTodoKey(newTodoKey)
+      global.setFocusedTodoKey(null)
     },
     { preventDefault: false }
   )

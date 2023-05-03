@@ -1,20 +1,16 @@
-import { ClientSubtask, useGlobalContext } from "~/GlobalContext/store"
-import { Match, Show, Switch, batch, createEffect, onMount } from "solid-js"
-import Today from "~/pages/Today"
-import Done from "~/pages/Done"
+import { createEventListener } from "@solid-primitives/event-listener"
+import { createShortcut } from "@solid-primitives/keyboard"
+import { Match, Show, Switch, batch, createEffect } from "solid-js"
+import { useGlobalContext } from "~/GlobalContext/store"
+import { GoogleClient } from "~/lib/auth"
+import { createTodosForDev } from "~/lib/local"
 import All from "~/pages/All"
+import Done from "~/pages/Done"
 import Starred from "~/pages/Starred"
+import Today from "~/pages/Today"
 import ActionBar from "./ActionBar"
 import LocalSearch from "./LocalSearch"
-import { isSubtask } from "~/lib/lib"
-import { createShortcut } from "@solid-primitives/keyboard"
-import {
-  createEventListener,
-  preventDefault,
-} from "@solid-primitives/event-listener"
-import { createTodosForDev } from "~/lib/local"
 import SuggestedTodos from "./SuggestedTodos"
-import { GoogleClient } from "~/lib/auth"
 
 export default function Page() {
   const global = useGlobalContext()
@@ -25,7 +21,7 @@ export default function Page() {
     "click",
     (e) => {
       if (e.target === ref) {
-        global.setFocusedTodo(null)
+        global.setFocusedTodoKey(null)
         // global.setNewTodo(false)
       }
     },
@@ -35,29 +31,27 @@ export default function Page() {
   createShortcut(
     ["Backspace"],
     () => {
-      if (global.newTodo()) return
+      if (global.newTodo() || global.editingTodo()) return
 
-      console.log(global.focusedTodo(), "focused todo")
-      if (isSubtask(global.focusedTodo()!)) {
+      if (global.isSubtask(global.focusedTodo()!)) {
         global.todosState.removeSubtask(
-          global.flatTasks()[global.focusedTodo()!].parent.key,
-          global.flatTasks()[global.focusedTodo()!].key
+          global.flatTasks()[global.focusedTodoIndex()].key
         )
         return
       }
 
       if (!global.localSearch() && !global.editingTodo()) {
-        global.todosState.removeTodo(global.focusedTodo()!)
+        global.todosState.removeTodo(global.focusedTodoKey()!)
 
         let todoIdToFocus =
           global
             .orderedTodos()
-            .findIndex((todo) => todo.key === global.focusedTodo()) + 1
+            .findIndex((todo) => todo.key === global.focusedTodoKey()) + 1
 
         if (global.orderedTodos().length === 0) {
-          global.setFocusedTodo(null)
+          global.setFocusedTodoKey(null)
         } else {
-          global.setFocusedTodo(global.orderedTodos()[todoIdToFocus].key)
+          global.setFocusedTodoKey(global.orderedTodos()[todoIdToFocus].key)
         }
       }
     },
@@ -70,7 +64,7 @@ export default function Page() {
       if (global.newTodo() || global.editingTodo()) return
 
       batch(() => {
-        global.setFocusedTodo(null)
+        global.setFocusedTodoKey(null)
         // TODO: change depending of where you create todo
         global.setNewTodoType("all")
         global.setNewTodo(true)
@@ -111,14 +105,20 @@ export default function Page() {
       )
         return
 
-      if (global.focusedTodo() !== null && !isSubtask(global.focusedTodo()!)) {
+      const focused = global.focusedTodo()
+
+      if (
+        focused &&
+        !global.isNewSubtask(focused) &&
+        !global.isSubtask(focused)
+      ) {
         global.setLoadingSuggestedTodos(true)
         // TODO: use https://github.com/solidjs-community/solid-primitives/tree/main/packages/fetch#readme
         // maybe do it in `createRequest`?
         // type the response, we know the structure
         // type the response well!
 
-        const urlEncodedTask = global.flatTasks()[global.focusedTodo()!].title
+        const urlEncodedTask = focused.title
 
         const googleToken = (await GoogleClient.getUser())?.id_token
 
@@ -174,14 +174,14 @@ export default function Page() {
       return
 
     const currentIndex = global.focusedTodoIndex()
-    if (global.focusedTodo() === global.flatTasks()[0].key) {
-      global.setFocusedTodo(
+    if (currentIndex === 0) {
+      global.setFocusedTodoKey(
         global.flatTasks()[global.flatTasks().length - 1].key
       )
       return
     }
 
-    global.setFocusedTodo(
+    global.setFocusedTodoKey(
       global.flatTasks()[
         Math.max(
           0,
@@ -226,15 +226,12 @@ export default function Page() {
       return
 
     const currentIndex = global.focusedTodoIndex()
-    if (
-      global.focusedTodo() ===
-      global.flatTasks()[global.flatTasks().length - 1].key
-    ) {
-      global.setFocusedTodo(global.flatTasks()[0].key)
+    if (currentIndex === global.flatTasks().length - 1) {
+      global.setFocusedTodoKey(global.flatTasks()[0].key)
       return
     }
 
-    global.setFocusedTodo(
+    global.setFocusedTodoKey(
       global.flatTasks()[
         Math.max(
           0,
@@ -261,23 +258,6 @@ export default function Page() {
   )
 
   createShortcut(
-    ["O"],
-    () => {
-      if (global.newSubtask()) return
-
-      batch(() => {
-        global.setNewSubtask(true)
-        // global.setFocusedTodo(0)
-        // global.setNewTodoType("all")
-        // global.setNewTodo(true)
-        // global.setChangeFocus(false)
-        // global.setGuard(true)
-      })
-    },
-    { preventDefault: false }
-  )
-
-  createShortcut(
     ["T"],
     () => {
       if (
@@ -292,7 +272,6 @@ export default function Page() {
           global.setEditingTodo(true)
           global.setEditNoteInTodo(true)
         }
-        // global.setTodoToEdit(null)
       }
     },
     { preventDefault: false }
@@ -301,12 +280,20 @@ export default function Page() {
   createShortcut(
     ["L"],
     () => {
-      if (global.editingTodo() || global.newTodo()) return
+      const focused = global.focusedTodo()
 
-      batch(() => {
-        global.setLocalSearch(true)
-        global.setFocusedTodo(null)
-      })
+      if (
+        !focused ||
+        global.isNewSubtask(focused) ||
+        global.editingTodo() ||
+        global.newTodo() ||
+        global.newSubtask()
+      )
+        return
+
+      global.addNewSubtask(
+        global.isSubtask(focused) ? focused.parent.key : focused.key
+      )
     },
     { preventDefault: false }
   )
@@ -319,7 +306,7 @@ export default function Page() {
 
       batch(() => {
         global.setLocalSearch(true)
-        global.setFocusedTodo(null)
+        global.setFocusedTodoKey(null)
       })
     },
     { preventDefault: false }
@@ -340,11 +327,11 @@ export default function Page() {
         createShortcut(
           [`${i}`],
           () => {
-            const focusedTodoValue = global.focusedTodo()
+            const focusedTodoValue = global.focusedTodoKey()
             if (focusedTodoValue !== null) {
               // update subtask
               // TODO: does not work
-              if ("parent" in global.flatTasks()[global.focusedTodo()!]) {
+              if ("parent" in global.flatTasks()[global.focusedTodoIndex()!]) {
                 // global.todosState.updateSubtask(
                 //   focusedTodoValue,
                 //   (s: ClientSubtask) => ({
@@ -368,8 +355,8 @@ export default function Page() {
       createShortcut(
         ["4"],
         () => {
-          if (global.focusedTodo() !== 0) {
-            global.todosState.updateTodo(global.focusedTodo()!, (todo) => ({
+          if (global.focusedTodoIndex() !== 0) {
+            global.todosState.updateTodo(global.focusedTodoKey()!, (todo) => ({
               ...todo,
               starred: !todo.starred,
             }))

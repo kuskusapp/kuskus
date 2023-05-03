@@ -17,7 +17,7 @@ export default function App() {
       batch(() => {
         global.setActivePage(PageType.All)
         if (global.orderedTodos().length > 0) {
-          global.setFocusedTodo(global.orderedTodos()[0].key)
+          global.setFocusedTodoKey(global.orderedTodos()[0].key)
         }
       })
     },
@@ -30,7 +30,7 @@ export default function App() {
       batch(() => {
         global.setActivePage(PageType.Today)
         if (global.orderedTodos().length > 0) {
-          global.setFocusedTodo(global.orderedTodos()[0].key)
+          global.setFocusedTodoKey(global.orderedTodos()[0].key)
         }
       })
     },
@@ -43,7 +43,7 @@ export default function App() {
       batch(() => {
         global.setActivePage(PageType.Starred)
         if (global.orderedTodos().length > 0) {
-          global.setFocusedTodo(global.orderedTodos()[0].key)
+          global.setFocusedTodoKey(global.orderedTodos()[0].key)
         }
       })
     },
@@ -56,7 +56,7 @@ export default function App() {
       batch(() => {
         global.setActivePage(PageType.Done)
         if (global.orderedTodos().length > 0) {
-          global.setFocusedTodo(global.orderedTodos()[0].key)
+          global.setFocusedTodoKey(global.orderedTodos()[0].key)
         }
       })
     },

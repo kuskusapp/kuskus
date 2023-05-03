@@ -8,6 +8,7 @@ import {
 } from "../GlobalContext/store"
 import Icon from "./Icon"
 import Loader from "./Loader"
+import NewSubtask from "./NewSubtask"
 
 interface Props {
   todo: ClientTodo | ClientSubtask
@@ -57,7 +58,7 @@ export default function Todo(props: Props) {
             if (global.isTodoFocused(props.todo.key)) {
               global.setEditingTodo(true)
             } else {
-              global.setFocusedTodo(props.todo.key)
+              global.setFocusedTodoKey(props.todo.key)
             }
           }}
         >
@@ -92,7 +93,7 @@ export default function Todo(props: Props) {
             <Show
               when={
                 global.loadingSuggestedTodos() &&
-                global.focusedTodo() === props.todo.key
+                global.isTodoFocused(props.todo.key)
               }
             >
               <Loader />
