@@ -47,7 +47,9 @@ export default function SuggestedTodos() {
         style={{ "border-radius": "25px 25px 0 0" }}
         class="text-xs dark:bg-stone-900 bg-gray-100 drop-shadow-lg w-full p-1 text-center"
       >
-        Suggested tasks for {global.flatTasks()[global.focusedTodo()!].title}
+        {/* TODO: fix this ts-ignore as well as all others.. */}
+        Suggested tasks for {/* @ts-ignore */}
+        {global.flatTasks()[global.focusedTodoIndex()].title}
       </div>
       <div class="grid-cols-5 col-span-5">
         <For each={global.suggestedTodos()}>
