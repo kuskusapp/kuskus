@@ -13,7 +13,7 @@ export default function Sidebar() {
   onMount(() => {
     Split(["#sidebar", "#page"], {
       gutterSize: 6,
-      sizes: [15, 85],
+      sizes: [10, 90],
       snapOffset: 15,
     })
   })
