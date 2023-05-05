@@ -21,18 +21,18 @@ export default function Settings() {
       <div>
         <Switch>
           <Match when={show() === "Keyboard"}>
-            <h1 class="text-lg bold mb-1">Keyboard shortcuts</h1>
+            <h1 class="text-lg font-bold mb-1">Keyboard shortcuts</h1>
             <div>n = create new todo</div>
             <div>return = edit todo</div>
             <div>f = search todos for current view (All/Today/Starred)</div>
           </Match>
           <Match when={show() === "Account"}>
-            <h1 class="text-lg bold mb-1">Account</h1>
+            <h1 class="text-lg font-bold mb-1">Account</h1>
             {/* TODO: load user into store, so no need to  */}
             <div>Username: {}</div>
           </Match>
           <Match when={show() === "About"}>
-            <h1 class="text-lg bold mb-1">About</h1>
+            <h1 class="text-lg font-bold mb-1">About</h1>
             <div>Fast todo app with AI</div>
           </Match>
         </Switch>

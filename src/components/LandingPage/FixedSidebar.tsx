@@ -101,10 +101,6 @@ export default function FixedSidebar() {
                   }}
                   style={{
                     opacity: "0.8",
-                    "background-image": `linear-gradient(
-                      32deg in oklab,
-                      oklch(0% 0.00 340) -53% -53%, oklch(90% 0.50 200 / 0%) 78% 78%
-                    )`,
                   }}
                 >
                   Log In
@@ -117,10 +113,6 @@ export default function FixedSidebar() {
                   }}
                   style={{
                     opacity: "0.8",
-                    "background-image": `linear-gradient(
-                    32deg in oklab,
-                    oklch(0% 0.00 340) -53% -53%, oklch(90% 0.50 200 / 0%) 78% 78%
-                  )`,
                   }}
                 >
                   Sign Up
