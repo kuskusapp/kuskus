@@ -17,7 +17,7 @@ export default function Home() {
   return (
     <main>
       <Suspense fallback={<></>}>
-        <Show when={false} fallback={LandingPage()}>
+        <Show when={user()} fallback={LandingPage()}>
           <GlobalContextProvider>
             <App />
           </GlobalContextProvider>
