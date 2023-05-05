@@ -5,6 +5,7 @@ import NewSubtask from "~/components/NewSubtask"
 import NewTodo from "~/components/NewTodo"
 import Todo from "~/components/Todo"
 import TodoEdit from "~/components/TodoEdit"
+import TopBar from "~/components/TopBar"
 
 export default function All() {
   const global = useGlobalContext()
@@ -23,24 +24,13 @@ export default function All() {
   )
 
   return (
-    <div class="" ref={ref}>
-      <div
-        class="p-5 flex justify-between"
-        style={{ "border-bottom": "solid 1px rgba(200,200,200,0.5)" }}
-      >
-        <h1 class="font-bold text-xl">All</h1>
-        <div class="flex gap-3">
-          <div>icon</div>
-          <div>search</div>
-          <div>settings</div>
-        </div>
-      </div>
+    <div ref={ref}>
+      <TopBar title="All" />
       <For each={global.flatTasks()}>
         {(todo) => {
           if (global.isNewSubtask(todo)) {
             return <NewSubtask />
           }
-
           return (
             <Switch>
               <Match

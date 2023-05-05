@@ -1,11 +1,10 @@
+import { createEventListener } from "@solid-primitives/event-listener"
 import clsx from "clsx"
-import { batch, createEffect, createSignal, onMount } from "solid-js"
+import { onMount } from "solid-js"
 import Split from "split.js"
 import { PageType, useGlobalContext } from "~/GlobalContext/store"
-import Icon from "./Icon"
 import { todayDate } from "~/lib/lib"
-import { GoogleClient } from "~/lib/auth"
-import { createEventListener } from "@solid-primitives/event-listener"
+import Icon from "./Icon"
 
 export default function Sidebar() {
   const global = useGlobalContext()
@@ -59,7 +58,10 @@ export default function Sidebar() {
           }
           #TitleWrapper {
             display: flex;
-            flex-direction: column;
+            justify-content: space-between;
+          }
+          #Number {
+            width: auto;
           }
           @container sidebar (min-width: 70px){
             #Title {
@@ -69,6 +71,10 @@ export default function Sidebar() {
               display: flex;
               flex-direction: row;
             }
+            #Number {
+              margin-left: auto;
+            }
+
           }
           `}
       </style>
@@ -91,7 +97,7 @@ export default function Sidebar() {
               <span id="Title" class="pl-1 overflow-hidden">
                 All
               </span>
-              <div class="opacity-40 text-xs ml-auto">
+              <div id="Number" class="opacity-40 text-xs">
                 {global.todos.filter((t) => !t.done).length > 0 &&
                   global.todos.filter((t) => !t.done).length}
               </div>
@@ -112,7 +118,7 @@ export default function Sidebar() {
               <span id="Title" class="pl-1 overflow-hidden ">
                 Today
               </span>
-              <div class="opacity-40 text-xs ml-auto">
+              <div id="Number" class="opacity-40 text-xs">
                 {/* TODO: fix this. should not run filter twice */}
                 {/* maybe make it a runnable function inside the JSX */}
                 {/* save first filter computation, then check if it's > 0 */}
@@ -150,9 +156,9 @@ export default function Sidebar() {
               </div>
             </div>
             <div
-              id="TitleWrapper"
+              id=""
               class={clsx(
-                "flex px-2 cursor-pointer items-center",
+                "flex px-2 cursor-pointer items-center justify-start ",
                 global.isPageActive(PageType.Done) &&
                   "rounded dark:bg-neutral-700 bg-zinc-200"
               )}
