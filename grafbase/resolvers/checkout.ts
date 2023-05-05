@@ -8,7 +8,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 export default async function Resolver(_: any, { input }: any) {
   const { lineItems } = input
 
-  const { data } = await stripe.checkout.sessions.create({
+  const data = await stripe.checkout.sessions.create({
     success_url: "https://example.com/success",
     line_items: lineItems,
     mode: "payment",
