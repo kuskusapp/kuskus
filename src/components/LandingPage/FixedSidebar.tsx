@@ -54,6 +54,8 @@ export default function FixedSidebar() {
         <div class="lg:top-0 lg:left-0 lg:fixed flex justify-center items-center h-screen w-screen lg:w-1/2">
           <div class="flex flex-col justify-center items-center">
             <div class="flex items-center gap-3">
+              {/* TODO: not sure why it wants fetchpriority.. */}
+              {/* @ts-ignore */}
               <img
                 style={{
                   "border-radius": "17px",
@@ -61,7 +63,6 @@ export default function FixedSidebar() {
                   height: "60px",
                 }}
                 src="./logo.jpg"
-                // src="./wat.svg"
               />
               <div
                 class="text-white text-4xl font-bold"
@@ -77,7 +78,7 @@ export default function FixedSidebar() {
               </span>
             </h1>
             <p
-              class="mt-4 text-sm/6 text-gray-300 w-96 text-center text-neutral-200"
+              class="mt-4 text-sm/6 w-96 text-center text-neutral-200"
               style={{ opacity: "0.5" }}
             >
               KusKus is a todo app that uses AI to help you get things done.
@@ -140,7 +141,7 @@ export default function FixedSidebar() {
                 <a
                   id="Twitter"
                   class="w-5 mt-4"
-                  href="https://twitter.com/nikitavoloboev"
+                  href="https://twitter.com/kuskusapp"
                 >
                   <Icon name="Twitter" />
                 </a>

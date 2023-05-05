@@ -9,8 +9,8 @@ export default function LandingPage() {
         <div
           class="lg:flex lg:justify-end"
           style={{
-            "background-image": `      radial-gradient(
-              farthest-corner circle at 120% 50% in oklab, 
+            "background-image": `radial-gradient(
+              farthest-corner circle at 120% 50% in oklab,
               hsl(220 75% 10%) 0%, oklch(90% 0.50 200 / 0%) 100%
             )`,
           }}

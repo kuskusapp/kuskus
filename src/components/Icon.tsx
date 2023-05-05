@@ -78,7 +78,6 @@ export default function Icon(props: Props) {
           ></g>
           <g id="SVGRepo_iconCarrier">
             {" "}
-            <title>twitter [#333333]</title> <desc>Created with Sketch.</desc>{" "}
             <defs> </defs>{" "}
             <g
               id="Page-1"
@@ -91,7 +90,7 @@ export default function Icon(props: Props) {
               <g
                 id="Dribbble-Light-Preview"
                 transform="translate(-60.000000, -7521.000000)"
-                fill="#333333"
+                fill="#919191"
               >
                 {" "}
                 <g id="icons" transform="translate(56.000000, 160.000000)">
