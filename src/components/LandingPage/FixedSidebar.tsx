@@ -28,6 +28,21 @@ export default function FixedSidebar() {
                 transform: rotate(360deg);
                 transition: all 0.3s ease-in-out 0s;
               }
+              #AnimationTop {
+                animation: 1s linear 0s 1 slideInFromTop;
+              }
+              @keyframes slideInFromTop {
+                0% {
+                    transform: translateY(20px);
+                    opacity: 0;
+                }
+                70% {
+                  transform: translateY(0);
+                }
+                100% {
+                    opacity: 1;
+                }
+            }
         `}
       </style>
       <div
@@ -36,12 +51,7 @@ export default function FixedSidebar() {
         }}
         class="h-screen"
       >
-        <div
-          style={{
-            width: "47vw",
-          }}
-          class="top-0 left-0 fixed flex justify-center items-center h-screen "
-        >
+        <div class="lg:top-0 lg:left-0 lg:fixed flex justify-center items-center h-screen w-screen lg:w-1/2">
           <div class="flex flex-col justify-center items-center">
             <div class="flex items-center gap-3">
               <img
@@ -116,7 +126,10 @@ export default function FixedSidebar() {
                   {/* <Icon name="" /> */}
                 </button>
               </div>
-              <div class=" absolute bottom-3 right-50 flex gap-3">
+              <div
+                id="AnimationTop"
+                class=" absolute bottom-3 right-50 flex gap-3"
+              >
                 <a
                   id="Discord"
                   class="w-5 mt-4"

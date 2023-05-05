@@ -12,9 +12,10 @@ export default function Sidebar() {
 
   onMount(() => {
     Split(["#sidebar", "#page"], {
-      gutterSize: 6,
+      gutterSize: 4,
       sizes: [10, 90],
-      snapOffset: 15,
+      snapOffset: 0,
+      minSize: 80,
     })
   })
 
@@ -42,21 +43,43 @@ export default function Sidebar() {
           .gutter {
             background-color: ##1c1917;
             background-repeat: no-repeat;
-            background-position: 50%;
+            background-position: 100%;
+
             }
           .gutter.gutter-horizontal {
             cursor: col-resize;
-            margin-right: -12px;
+
+          }
+          #sidebar {
+            container-type: inline-size;
+            container-name: sidebar;
+          }
+          #Title {
+            display: none
+          }
+          #TitleWrapper {
+            display: flex;
+            flex-direction: column;
+          }
+          @container sidebar (min-width: 70px){
+            #Title {
+              display: inline;
+            }
+            #TitleWrapper {
+              display: flex;
+              flex-direction: row;
+            }
           }
           `}
       </style>
       <div
-        class="w-screen dark:bg-stone-900 bg-gray-100 mt-3 p-2 text-xs"
+        class="w-screen dark:bg-stone-900 bg-gray-100 pt-4 p-3 text-xs pl-4"
         id="sidebar"
       >
         <div class="flex flex-col gap-1 justify-between h-full" ref={ref}>
           <div class="flex flex-col gap-1">
             <div
+              id="TitleWrapper"
               class={clsx(
                 "flex px-2 cursor-pointer items-center",
                 global.isPageActive(PageType.All) &&
@@ -65,13 +88,16 @@ export default function Sidebar() {
               onClick={() => global.setActivePage(PageType.All)}
             >
               <Icon name="Inbox" />
-              <span class="pl-1 overflow-hidden">All</span>
+              <span id="Title" class="pl-1 overflow-hidden">
+                All
+              </span>
               <div class="opacity-40 text-xs ml-auto">
                 {global.todos.filter((t) => !t.done).length > 0 &&
                   global.todos.filter((t) => !t.done).length}
               </div>
             </div>
             <div
+              id="TitleWrapper"
               class={clsx(
                 "flex px-2 cursor-pointer items-center",
                 global.isPageActive(PageType.Today) &&
@@ -79,8 +105,13 @@ export default function Sidebar() {
               )}
               onClick={() => global.setActivePage(PageType.Today)}
             >
-              <Icon name="Calendar" />
-              <span class="pl-1 overflow-hidden">Today</span>
+              <div>
+                <Icon name="Calendar" />
+              </div>
+
+              <span id="Title" class="pl-1 overflow-hidden ">
+                Today
+              </span>
               <div class="opacity-40 text-xs ml-auto">
                 {/* TODO: fix this. should not run filter twice */}
                 {/* maybe make it a runnable function inside the JSX */}
@@ -95,6 +126,7 @@ export default function Sidebar() {
               </div>
             </div>
             <div
+              id="TitleWrapper"
               class={clsx(
                 "flex px-2 cursor-pointer items-center",
                 global.isPageActive(PageType.Starred) &&
@@ -102,8 +134,12 @@ export default function Sidebar() {
               )}
               onClick={() => global.setActivePage(PageType.Starred)}
             >
-              <Icon name="Star" />
-              <span class="pl-1 overflow-hidden">Starred</span>
+              <div>
+                <Icon name="Star" />
+              </div>
+              <span id="Title" class="pl-1 overflow-hidden">
+                Starred
+              </span>
               <div class="opacity-40 text-xs ml-auto">
                 {/* TODO: not good, should not run filter twice */}
                 {global.todos.filter((t) => {
@@ -114,6 +150,7 @@ export default function Sidebar() {
               </div>
             </div>
             <div
+              id="TitleWrapper"
               class={clsx(
                 "flex px-2 cursor-pointer items-center",
                 global.isPageActive(PageType.Done) &&
@@ -122,7 +159,9 @@ export default function Sidebar() {
               onClick={() => global.setActivePage(PageType.Done)}
             >
               <Icon name="Done" />
-              <span class="pl-1 overflow-hidden">Done</span>
+              <span id="Title" class="pl-1 overflow-hidden">
+                Done
+              </span>
             </div>
           </div>
           {/* TODO: move this to settings */}

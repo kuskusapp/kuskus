@@ -23,8 +23,18 @@ export default function All() {
   )
 
   return (
-    <div class="p-16 pt-6" ref={ref}>
-      <h1 class="font-bold text-3xl mb-8">All</h1>
+    <div class="" ref={ref}>
+      <div
+        class="p-5 flex justify-between"
+        style={{ "border-bottom": "solid 1px rgba(200,200,200,0.5)" }}
+      >
+        <h1 class="font-bold text-xl">All</h1>
+        <div class="flex gap-3">
+          <div>icon</div>
+          <div>search</div>
+          <div>settings</div>
+        </div>
+      </div>
       <For each={global.flatTasks()}>
         {(todo) => {
           if (global.isNewSubtask(todo)) {

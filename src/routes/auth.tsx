@@ -4,26 +4,49 @@ import { GoogleClient } from "~/lib/auth"
 export default function Auth() {
   return (
     <>
+      <style>
+        {`
+        #Auth:hover {
+          transform: translateY(-4px);
+          transition: all 0.3s linear;
+        }
+        #Auth {
+          transition: all 0.3s linear
+        }
+        #text {
+          opacity: 0.7;
+          font-weight: bold;
+        }
+      `}
+      </style>
       <div
         style={{
-          "background-image": "url('./red-gradient-background.svg')",
-          "background-size": "cover",
+          "background-color": "#02050e",
         }}
       >
         <div
           style={{
-            "background-image": "url('./red-left.svg')",
+            "background-image": "url('./blue-left.svg')",
             "background-size": "cover",
           }}
         >
           <div
             style={{
-              "background-image": "url('./red-right.svg')",
+              "background-image": "url('./blue-right.svg')",
               "background-size": "cover",
             }}
             class="flex flex-col items-center h-screen justify-center text-white"
           >
-            <div class="flex flex-col items-center bg-gray-950 p-10 rounded-lg border-2 border-neutral-900">
+            <div
+              style={{
+                border: "solid 1px rgba(13, 19, 39, 0.5)",
+                "background-image": `linear-gradient(
+                  34deg in oklab, 
+                  rgb(1% 2% 5% / 86%) 0%, rgb(7, 12, 25) 50%, rgb(1% 2% 5% / 86%) 100%
+                )`,
+              }}
+              class="flex flex-col items-center p-10 rounded-lg border-2 border-neutral-900"
+            >
               <img
                 style={{
                   "border-radius": "25px",
@@ -33,7 +56,9 @@ export default function Auth() {
                 }}
                 src="./logo.jpg"
               />
-              <div class="text-2xl mt-3 mb-2">Sign in/up with</div>
+              <div id="text" class="text-2xl mt-3 mb-2">
+                Sign in/up with
+              </div>
               <div class="flex gap-2 items-start">
                 {/* <button
             class="flex justify-center p-3 bg-black w-32 rounded-md active:translate-y-0.5"
@@ -48,10 +73,8 @@ export default function Auth() {
             <Icon name="GitHub" />
           </button> */}
                 <button
+                  id="Auth"
                   class="flex justify-center p-3 bg-black w-32 rounded-md active:translate-y-0.5"
-                  style={{
-                    filter: "drop-shadow(1.5px 4.5px 3px #151515)",
-                  }}
                   onClick={() => {
                     GoogleClient.signinRedirect()
                   }}

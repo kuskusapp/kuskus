@@ -378,11 +378,8 @@ export default function Page() {
   return (
     <div
       id="page"
-      style={{
-        "border-radius": "20px",
-        height: "96vh",
-      }}
-      class="flex m-3 w-full rounded bg-white dark:bg-neutral-800 grow overflow-auto justify-between relative "
+      class="flex w-full  bg-white dark:bg-stone-900 grow overflow-auto justify-between relative "
+      style={{ "border-left": "solid 1px rgba(200, 200, 200, 0.5)" }}
     >
       <style>
         {`
@@ -392,7 +389,7 @@ export default function Page() {
         }`}
       </style>
       <div
-        class="flex flex-col m-3 mb-1 justify-between rounded overflow-auto relative w-full mt-6 drop"
+        class="flex flex-col justify-between rounded overflow-auto relative w-full drop"
         ref={ref}
       >
         <div
@@ -420,7 +417,7 @@ export default function Page() {
           </Show>
         </div>
 
-        <div
+        {/* <div
           style={{
             "border-radius": "20px",
           }}
@@ -429,7 +426,7 @@ export default function Page() {
           <Show when={global.localSearch()} fallback={<ActionBar />}>
             <LocalSearch />
           </Show>
-        </div>
+        </div> */}
       </div>
     </div>
   )
