@@ -379,7 +379,7 @@ export default function Page() {
     <div
       id="page"
       class="flex w-full  bg-white dark:bg-stone-900 grow overflow-auto justify-between relative "
-      style={{ "border-left": "solid 1px rgba(200, 200, 200, 0.25)" }}
+      style={{ "border-left": "solid 1px rgba(200, 200, 200, 0.2)" }}
     >
       <style>
         {`
@@ -419,9 +419,9 @@ export default function Page() {
 
         <div
           style={{
-            "border-radius": "20px",
+            "border-top": "solid 1px rgba(200,200,200,0.2)",
           }}
-          class="flex sticky bottom-2 right-0 p-1 dark:bg-stone-900 ml-1 mr-1 bg-gray-100"
+          class="flex sticky bottom-0 right-0 p-2 dark:bg-stone-900  bg-gray-100"
         >
           <Show when={global.localSearch()} fallback={<ActionBar />}>
             <LocalSearch />

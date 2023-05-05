@@ -3,11 +3,11 @@
     "beforeDevCommand": "pnpm dev",
     "beforeBuildCommand": "pnpm build",
     "devPath": "http://localhost:3000",
-    "distDir": "../dist",
+    "distDir": "https://kuskus.app",
     "withGlobalTauri": false
   },
   "package": {
-    "productName": "kuskus",
+    "productName": "KusKus",
     "version": "0.0.0"
   },
   "tauri": {
