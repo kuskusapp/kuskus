@@ -13,17 +13,11 @@ schema
 }
 
 extend type Mutation {
-  checkout(input: CheckoutSessionInput!): CheckoutSession!
-    @resolver(name: "checkout")
+  checkout(input: CheckoutInput!): CheckoutSession! @resolver(name: "checkout")
 }
 
-input CheckoutSessionInput {
-  lineItems: [CheckoutLineItem]
-}
-
-input CheckoutLineItem {
-  price: String!
-  quantity: Int!
+input CheckoutInput {
+  customerId: String # JWT sub from auth
 }
 
 type CheckoutSession {
