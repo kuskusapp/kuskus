@@ -50,7 +50,7 @@ export default function Features() {
           </div>
           <div>
             <h1 id="Animation" class="text-3xl font-bold text-sky-300 mb-3">
-              <span class="text-white">KeyBoard</span> Shortcuts
+              <span class="text-white">Keyboard</span> Shortcuts
             </h1>
             <div>Everything in the app is one hotkey away.</div>
           </div>
