@@ -49,6 +49,7 @@
     "solid-start": "^0.2.26",
     "solid-start-cloudflare-pages": "^0.2.26",
     "split.js": "^1.6.5",
+    "stripe": "^12.4.0",
     "zod": "^3.21.4"
   },
   "prettier": {
