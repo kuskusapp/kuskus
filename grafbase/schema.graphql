@@ -12,6 +12,26 @@ schema
   query: Query
 }
 
+extend type Mutation {
+  checkout(input: CheckoutSessionInput!): CheckoutSession!
+    @resolver(name: "checkout")
+}
+
+input CheckoutSessionInput {
+  lineItems: [CheckoutLineItem]
+}
+
+input CheckoutLineItem {
+  price: String!
+  quantity: Int!
+}
+
+type CheckoutSession {
+  url: String!
+}
+
+# TODO: not used yet, use it for user profile pages
+# to show public todos of users
 type User @model {
   username: String! @unique
 }
