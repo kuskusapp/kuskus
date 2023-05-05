@@ -17,7 +17,12 @@ extend type Mutation {
 }
 
 input CheckoutInput {
-  customerId: String # JWT sub from auth
+  lineItems: [CheckoutLineItem]
+}
+
+input CheckoutLineItem {
+  price: String!
+  quantity: Int = 1
 }
 
 type CheckoutSession {

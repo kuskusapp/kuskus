@@ -7,13 +7,16 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 })
 
 export default async function Resolver(_: any, { input }: any) {
-  const { customerId } = input
+  const { lineItems } = input
 
   try {
     const data = await stripe.checkout.sessions.create({
       success_url: "https://kuskus.app/success",
+      line_items: lineItems,
       mode: "subscription",
-      customer: customerId,
+      subscription_data: {
+        trial_period_days: 7,
+      },
     })
     return { url: data.url }
   } catch (error) {
