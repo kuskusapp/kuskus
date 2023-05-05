@@ -68,10 +68,18 @@ export default function App() {
       <Sidebar />
       <TodoList />
       <Show when={global.showHelp()}>
-        <Modal children={<Help />} />
+        <Modal
+          title="Help"
+          onClose={() => global.setShowHelp(false)}
+          children={<Help />}
+        />
       </Show>
       <Show when={global.showSettings()}>
-        <Modal children={<Settings />} />
+        <Modal
+          title="Settings"
+          onClose={() => global.setShowSettings(false)}
+          children={<Settings />}
+        />
       </Show>
     </div>
   )

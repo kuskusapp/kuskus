@@ -101,7 +101,7 @@ export default function FixedSidebar() {
                   style={{
                     opacity: "0.8",
                     "background-image": `linear-gradient(
-                      32deg in oklab, 
+                      32deg in oklab,
                       oklch(0% 0.00 340) -53% -53%, oklch(90% 0.50 200 / 0%) 78% 78%
                     )`,
                   }}
@@ -117,7 +117,7 @@ export default function FixedSidebar() {
                   style={{
                     opacity: "0.8",
                     "background-image": `linear-gradient(
-                    32deg in oklab, 
+                    32deg in oklab,
                     oklch(0% 0.00 340) -53% -53%, oklch(90% 0.50 200 / 0%) 78% 78%
                   )`,
                   }}
@@ -138,16 +138,9 @@ export default function FixedSidebar() {
                   <Icon name="Discord" />
                 </a>
                 <a
-                  id="Github"
-                  class="w-5 mt-4"
-                  href="https://discord.gg/f8YHjyrX3h"
-                >
-                  <Icon name="Github" />
-                </a>
-                <a
                   id="Twitter"
                   class="w-5 mt-4"
-                  href="https://discord.gg/f8YHjyrX3h"
+                  href="https://twitter.com/nikitavoloboev"
                 >
                   <Icon name="Twitter" />
                 </a>

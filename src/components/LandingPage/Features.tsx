@@ -37,9 +37,9 @@ export default function Features() {
         class=" h-screen lg:border-l-4"
       >
         <div id="NavContainer" class="flex justify-between px-40 p-5">
-          <div id="Nav">Price</div>
+          <div id="Nav">Pricing</div>
           <div id="Nav">Features</div>
-          <div id="Nav">Changelogs</div>
+          <div id="Nav">Changelog</div>
         </div>
         <div class="flex flex-col pl-16 pt-20 gap-6">
           <div>

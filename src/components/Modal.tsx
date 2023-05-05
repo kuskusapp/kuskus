@@ -7,6 +7,8 @@ import type { JSX } from "solid-js"
 // find a type for JSX.element..
 interface Props {
   children: JSX.Element
+  title: string
+  onClose: () => void
 }
 
 export default function Modal(props: Props) {
@@ -41,17 +43,16 @@ export default function Modal(props: Props) {
           }}
           class=" bg-gray-100 dark:bg-stone-900 h-1/2 flex w-1/2"
         >
-          <div class="w-full flex flex-col">
+          <div class="w-full h-full flex flex-col">
             <nav
               style={{
                 "border-radius": "10px 10px 0 0",
               }}
-              class="flex items-end justify-end pr-3 pb-1 pt-3"
+              class="flex items-end justify-between pl-4 pr-3 pb-1 pt-1"
             >
-              <div
-                class="cursor-pointer"
-                onClick={() => global.setShowHelp(false)}
-              >
+              <div></div>
+              <div>{props.title}</div>
+              <div class="cursor-pointer" onClick={() => props.onClose()}>
                 <Icon name="Cross" />
               </div>
             </nav>
