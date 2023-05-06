@@ -56,7 +56,7 @@ export default function Settings() {
           <Match when={show() === "Keyboard"}>
             <div class="h-full">
               <div class="h-full w-full overflow-scroll">
-                <h1 class="bg-neutral-300 font-semibold p-1">
+                <h1 class="bg-neutral-300 font-semibold p-1 dark:bg-neutral-700">
                   General keybinds
                 </h1>
                 <Keybind action="Create new todo" keybind="n" />
@@ -72,7 +72,7 @@ export default function Settings() {
                 <Keybind action="Change to Today" keybind="Control + 2" />
                 <Keybind action="Change to Starred" keybind="Control + 3" />
                 <Keybind action="Change to Done" keybind="Control + 4" />
-                <h1 class="bg-neutral-300 font-semibold p-1">
+                <h1 class="bg-neutral-300 font-semibold p-1 dark:bg-neutral-700">
                   Inside suggested tasks view
                 </h1>
                 <Keybind
