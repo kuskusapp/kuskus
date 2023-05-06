@@ -12,7 +12,7 @@ export default function Settings() {
         style={{ "border-radius": "0px 0px 0px 10px" }}
       >
         <div>
-          <div class="p-2 pl-3">
+          <div class="p-2 pl-3 flex flex-col gap-1">
             <div
               class={clsx(
                 "cursor-pointer",
@@ -32,10 +32,10 @@ export default function Settings() {
               Account
             </div>
             <div
-              class={clsx("cursor-pointer", show() === "About" && "font-bold")}
-              onClick={() => setShow("About")}
+              class={clsx("cursor-pointer", show() === "Help" && "font-bold")}
+              onClick={() => setShow("Help")}
             >
-              About
+              Help
             </div>
           </div>
         </div>
@@ -83,11 +83,18 @@ export default function Settings() {
             </div>
           </Match>
           <Match when={show() === "Account"}>
-            {/* TODO: load user into store, so no need to  */}
-            <div>Username: {}</div>
+            {/* TODO: load user into store, so no need to await here to get user details */}
+            {/* TODO: be able to change or set username */}
+            {/* and set profile picture */}
+            {/* <div>Username: {}</div> */}
           </Match>
-          <Match when={show() === "About"}>
-            <div>Fast todo app with AI</div>
+          <Match when={show() === "Help"}>
+            <div>
+              Ask questions on{" "}
+              <a class="text-blue-500" href="https://discord.gg/f8YHjyrX3h">
+                Discord
+              </a>
+            </div>
           </Match>
         </Switch>
       </div>
