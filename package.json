@@ -5,7 +5,8 @@
     "build": "solid-start build",
     "start": "solid-start start",
     "graphql": "graphql-codegen --config ./src/graphql/codegen.ts -r dotenv/config",
-    "tauri": "tauri"
+    "tauri": "tauri",
+    "grafbase": "grafbase dev"
   },
   "type": "module",
   "devDependencies": {

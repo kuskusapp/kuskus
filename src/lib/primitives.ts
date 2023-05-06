@@ -1,4 +1,5 @@
 import { Accessor, createEffect, mapArray, onCleanup } from "solid-js"
+import { createShortcut } from "@solid-primitives/keyboard"
 
 /**
  * For diffing a reactive array with mapArray
@@ -23,4 +24,10 @@ export function createArrayDiff<T>(
     runDiff()
     updating = false
   })
+}
+
+export function createShortcuts(map: Record<string, VoidFunction>): void {
+  for (const [keys, fn] of Object.entries(map)) {
+    createShortcut(keys.split("+"), fn)
+  }
 }

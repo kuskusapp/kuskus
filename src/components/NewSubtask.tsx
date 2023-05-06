@@ -24,21 +24,13 @@ export default function NewSubtask() {
         return
       }
 
-      const newSubtaskKey = global.todosState.addSubtask(newSubtask.parent, {
+      global.addSubtask({
         title: title(),
         note: note(),
-        done: false,
         starred: starred(),
         priority: priority(),
         dueDate: dueDate(),
-        parent: global.getTodoByKey(newSubtask.parent) as ClientTodo,
       })
-
-      global.setEditingTodo(true)
-      global.setNewTodoType("")
-      global.setChangeFocus(true)
-      global.setFocusedTodoKey(newSubtaskKey)
-      global.setNewSubtask(null)
     },
     { preventDefault: false }
   )
