@@ -19,8 +19,8 @@ export default function LocalSearch() {
 
   return (
     <input
-      style={{ outline: "none", "border-radius": "25px", margin: "-4px" }}
-      class="w-full p-2 px-4 grow"
+      style={{ outline: "none", "border-radius": "10px", margin: "-4px" }}
+      class="w-full p-2 px-4 grow dark:bg-stone-900 bg-gray-100"
       onKeyPress={(e) => {
         if (e.key === "Enter") {
           if (global.localSearchResultIds().length > 0) {

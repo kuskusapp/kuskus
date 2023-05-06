@@ -31,7 +31,8 @@ export default function Page() {
   createShortcut(
     ["Backspace"],
     () => {
-      if (global.newTodo() || global.editingTodo()) return
+      if (global.newTodo() || global.editingTodo() || global.localSearch())
+        return
 
       if (global.isSubtask(global.focusedTodo()!)) {
         global.todosState.removeSubtask(
