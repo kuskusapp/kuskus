@@ -8,12 +8,6 @@ export default function Settings() {
   const global = useGlobalContext()
   const [show, setShow] = createSignal("Keyboard")
 
-  onMount(() => {
-    if (global.settingsState.checkSettings()) {
-      console.log(global.settingsState.settings, "settings")
-    }
-  })
-
   return (
     <div class="flex h-full w-full">
       <div

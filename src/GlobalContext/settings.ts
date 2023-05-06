@@ -1,4 +1,4 @@
-import { createEffect } from "solid-js"
+import { createEffect, onMount } from "solid-js"
 import { createStore, produce } from "solid-js/store"
 import {
   Mutation,
@@ -11,6 +11,7 @@ import { grafbase } from "~/lib/graphql"
 import { createArrayDiff } from "~/lib/primitives"
 
 export type Settings = {
+  id?: string
   hideActionBar: Boolean
   iconOnlySidebar: Boolean
   openAiGptModel: string
@@ -23,37 +24,34 @@ export function createSettingsState() {
     openAiGptModel: "gpt-3",
   })
 
-  // grafbase.request<Query>(SettingsDocument).then((res) => {
-  //   setSettings(
-  //     produce((state) => {
-  //       if (res.settings) {
-  //         state.hideActionBar = res.settings.hideActionBar
-  //         state.iconOnlySidebar = res.settings.iconOnlySidebar
-  //         state.openAiGptModel = res.settings.openAiGptModel
-  //       }
-  //     })
-  //   )
-  // })
+  onMount(() => {
+    grafbase.request<Query>(SettingsDocument).then(async (res) => {
+      // if we don't have settings for user, create them
+      if (!settings.id) {
+        if (res.settingsCollection?.edges?.length! < 1) {
+          const res = await grafbase.request(SettingsCreateDocument, {
+            settings: {}, // use default values
+          })
+          setSettings({ ...settings, id: res.settingsCreate?.settings?.id! })
+        }
+      }
+    })
+    return settings
+  })
 
-  // createEffect(() => {
-  //   if (settings) {
-  //     console.log(settings)
-  //   }
-  // })
-
-  // // db sync
-  // const dbSyncSettings = () => {
-  //   grafbase.request<Mutation>(SettingsUpdateDocument, {}).then((res) => {
-  //     console.log(res)
-  //   })
-  // }
-
-  // let updating = false
-  // createEffect(() => {
-  //   updating = true
-  //   dbSyncSettings()
-  //   updating = false
-  // })
+  createEffect(() => {
+    // if settings change, update db
+    if (settings) {
+      grafbase.request<Mutation>(SettingsUpdateDocument, {
+        id: settings.id,
+        settings: {
+          hideActionBar: settings.hideActionBar,
+          iconOnlySidebar: settings.iconOnlySidebar,
+          openAiGptModel: settings.openAiGptModel,
+        },
+      })
+    }
+  })
 
   return {
     // state
@@ -65,17 +63,5 @@ export function createSettingsState() {
       setSettings({ iconOnlySidebar: !settings.iconOnlySidebar }),
     setOpenAiGptModel: (model: string) =>
       setSettings({ openAiGptModel: model }),
-    checkSettings: () => {
-      grafbase.request<Query>(SettingsDocument).then(async (res) => {
-        console.log(res.settingsCollection?.edges)
-        // if we don't have settings for user, create them
-        if (res.settingsCollection?.edges?.length === 0) {
-          const id = await grafbase.request(SettingsCreateDocument)
-          console.log(id, "id of setting")
-        }
-        return settings
-      })
-      return false
-    },
   }
 }
