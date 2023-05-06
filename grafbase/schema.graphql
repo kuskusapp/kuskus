@@ -32,7 +32,7 @@ type CheckoutSession {
 # TODO: not used yet, use it for user profile pages
 # to show public todos of users
 type User @model {
-  username: String! @unique
+  username: String! @unique # set by a user, this will be a route to show public todos
   freeAiSuggestionsLimit: Int! @default(value: 5) # how many times user can use AI suggestions for free
 }
 

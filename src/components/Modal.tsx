@@ -56,7 +56,7 @@ export default function Modal(props: Props) {
                 <Icon name="Cross" />
               </div>
             </nav>
-            <div class="h-full w-full">{props.children}</div>
+            <div class="h-full w-full overflow-hidden">{props.children}</div>
           </div>
         </div>
       </div>

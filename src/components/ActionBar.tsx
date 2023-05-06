@@ -9,7 +9,10 @@ export default function ActionBar() {
       <div
         class="has-tooltip cursor-pointer"
         onClick={() => {
-          global.setShowHelp(true)
+          batch(() => {
+            global.setLocalSearch(true)
+            global.setFocusedTodoKey(null)
+          })
         }}
       >
         <div
@@ -18,12 +21,10 @@ export default function ActionBar() {
             "transition-delay": "0.5s",
           }}
         >
-          {/* TODO: change to ? */}
-          {/* TODO: add icon + button bind */}
-          <span>Learn KusKus</span>
-          <Icon name="N key" />
+          <span>Search todos</span>
+          <Icon name="F key" />
         </div>
-        <Icon name="Question" />
+        <Icon name="Search" />
       </div>
       <div
         class="has-tooltip cursor-pointer pl-24 pt-2 pb-2 pr-24 rounded dark:border-stone-800"

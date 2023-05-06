@@ -170,22 +170,6 @@ export default function Sidebar() {
               </span>
             </div>
           </div>
-          {/* TODO: move this to settings */}
-          {/* <div class="flex justify-between justify-self-end">
-            <div
-              class="has-tooltip cursor-pointer"
-              onClick={() => {
-                GoogleClient.signoutRedirect({
-                  post_logout_redirect_uri: "http://localhost:3000",
-                })
-              }}
-            >
-              <span class="tooltip rounded shadow-lg p-1 bg-gray-100 -mt-8 dark:text-black">
-                Sign Out
-              </span>
-              <Icon name="SignOut" />
-            </div>
-          </div> */}
         </div>
       </div>
     </>

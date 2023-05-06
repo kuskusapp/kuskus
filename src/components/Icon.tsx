@@ -22,7 +22,9 @@ interface Props {
     | "Cross"
     | "Bug"
     | "Discord"
+    | "Search"
     | "N key"
+    | "F key"
     | "Github"
     | "Twitter"
 }
@@ -588,6 +590,18 @@ export default function Icon(props: Props) {
             d="M63.2184 32.2727V65H57.2418L43.0036 44.4016H42.7638V65H35.8445V32.2727H41.9169L56.0433 52.8551H56.331V32.2727H63.2184Z"
             fill="black"
           />
+        </svg>
+      )
+    case "Search":
+      return (
+        <svg width="20" height="20" fill="none" viewBox="0 0 24 24">
+          <path
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.5"
+            d="M19.25 19.25L15.5 15.5M4.75 11C4.75 7.54822 7.54822 4.75 11 4.75C14.4518 4.75 17.25 7.54822 17.25 11C17.25 14.4518 14.4518 17.25 11 17.25C7.54822 17.25 4.75 14.4518 4.75 11Z"
+          ></path>
         </svg>
       )
     default:
