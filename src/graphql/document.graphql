@@ -21,7 +21,7 @@ fragment Subtask on Subtask {
 fragment Settings on Settings {
   hideActionBar
   iconOnlySidebar
-  openAiGptModel
+  languageModelUsed
 }
 
 query Todos {

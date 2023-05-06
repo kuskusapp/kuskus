@@ -215,7 +215,7 @@ export type Settings = {
   iconOnlySidebar: Scalars["Boolean"]
   /** Unique identifier */
   id: Scalars["ID"]
-  openAiGptModel: Scalars["String"]
+  languageModelUsed: Scalars["String"]
   /** when the model was updated */
   updatedAt: Scalars["DateTime"]
 }
@@ -235,7 +235,7 @@ export type SettingsConnection = {
 export type SettingsCreateInput = {
   hideActionBar?: Scalars["Boolean"]
   iconOnlySidebar?: Scalars["Boolean"]
-  openAiGptModel?: Scalars["String"]
+  languageModelUsed?: Scalars["String"]
 }
 
 export type SettingsCreatePayload = {
@@ -262,7 +262,7 @@ export type SettingsOrderByInput = {
 export type SettingsUpdateInput = {
   hideActionBar?: InputMaybe<Scalars["Boolean"]>
   iconOnlySidebar?: InputMaybe<Scalars["Boolean"]>
-  openAiGptModel?: InputMaybe<Scalars["String"]>
+  languageModelUsed?: InputMaybe<Scalars["String"]>
 }
 
 export type SettingsUpdatePayload = {
@@ -548,7 +548,7 @@ export type SettingsFragment = {
   __typename?: "Settings"
   hideActionBar: boolean
   iconOnlySidebar: boolean
-  openAiGptModel: string
+  languageModelUsed: string
 }
 
 export type TodosQueryVariables = Exact<{ [key: string]: never }>
@@ -698,7 +698,7 @@ export type SettingsQuery = {
         __typename?: "Settings"
         hideActionBar: boolean
         iconOnlySidebar: boolean
-        openAiGptModel: string
+        languageModelUsed: string
       }
     } | null> | null
   } | null
@@ -794,7 +794,7 @@ export const SettingsFragmentDoc = {
         selections: [
           { kind: "Field", name: { kind: "Name", value: "hideActionBar" } },
           { kind: "Field", name: { kind: "Name", value: "iconOnlySidebar" } },
-          { kind: "Field", name: { kind: "Name", value: "openAiGptModel" } },
+          { kind: "Field", name: { kind: "Name", value: "languageModelUsed" } },
         ],
       },
     },
@@ -1520,7 +1520,7 @@ export const SettingsDocument = {
               {
                 kind: "Argument",
                 name: { kind: "Name", value: "first" },
-                value: { kind: "IntValue", value: "100" },
+                value: { kind: "IntValue", value: "1" },
               },
             ],
             selectionSet: {
@@ -1566,7 +1566,7 @@ export const SettingsDocument = {
         selections: [
           { kind: "Field", name: { kind: "Name", value: "hideActionBar" } },
           { kind: "Field", name: { kind: "Name", value: "iconOnlySidebar" } },
-          { kind: "Field", name: { kind: "Name", value: "openAiGptModel" } },
+          { kind: "Field", name: { kind: "Name", value: "languageModelUsed" } },
         ],
       },
     },

@@ -14,14 +14,14 @@ export type Settings = {
   id?: string
   hideActionBar: Boolean
   iconOnlySidebar: Boolean
-  openAiGptModel: string
+  languageModelUsed: string
 }
 
 export function createSettingsState() {
   const [settings, setSettings] = createStore<Settings>({
     hideActionBar: false,
     iconOnlySidebar: false,
-    openAiGptModel: "gpt-3",
+    languageModelUsed: "gpt-3",
   })
 
   onMount(() => {
@@ -41,16 +41,14 @@ export function createSettingsState() {
 
   createEffect(() => {
     // if settings change, update db
-    if (settings) {
-      grafbase.request<Mutation>(SettingsUpdateDocument, {
-        id: settings.id,
-        settings: {
-          hideActionBar: settings.hideActionBar,
-          iconOnlySidebar: settings.iconOnlySidebar,
-          openAiGptModel: settings.openAiGptModel,
-        },
-      })
-    }
+    grafbase.request<Mutation>(SettingsUpdateDocument, {
+      id: settings.id,
+      settings: {
+        hideActionBar: settings.hideActionBar,
+        iconOnlySidebar: settings.iconOnlySidebar,
+        languageModelUsed: settings.languageModelUsed,
+      },
+    })
   })
 
   return {
@@ -61,7 +59,7 @@ export function createSettingsState() {
       setSettings({ hideActionBar: !settings.hideActionBar }),
     toggleIconOnlySidebar: () =>
       setSettings({ iconOnlySidebar: !settings.iconOnlySidebar }),
-    setOpenAiGptModel: (model: string) =>
-      setSettings({ openAiGptModel: model }),
+    setlanguageModelUsed: (model: string) =>
+      setSettings({ languageModelUsed: model }),
   }
 }

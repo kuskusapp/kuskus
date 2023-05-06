@@ -13,9 +13,8 @@ export const grafbase = new GraphQLClient(endpoint, {
   },
 })
 
-// TODO: need to fix 200 error token bad response
-// if you get error it should redirect to auth page
-export async function grafbase2() {
+export async function createGrafbaseClient() {
+  const navigate = useNavigate()
   try {
     return new GraphQLClient(endpoint, {
       headers: {
@@ -23,10 +22,9 @@ export async function grafbase2() {
         authorization: `Bearer 1201212`,
       },
     })
-  } catch (error) {
-    // can't use navigate here..
-    // is there way to catch error and redirect to auth page in some place else?
-    // navigate("/auth")
+  } catch (error: any) {
+    if (error.response?.errors?.[0]?.extensions?.code === "UNAUTHENTICATED")
+      navigate("/auth")
   }
 }
 
