@@ -18,6 +18,12 @@ fragment Subtask on Subtask {
   dueDate
 }
 
+fragment Settings on Settings {
+  hideActionBar
+  iconOnlySidebar
+  openAiGptModel
+}
+
 query Todos {
   todoCollection(first: 100) {
     edges {
@@ -35,7 +41,7 @@ query Todos {
   }
 }
 
-mutation CreateTodo($todo: TodoCreateInput!) {
+mutation TodoCreate($todo: TodoCreateInput!) {
   todoCreate(input: $todo) {
     todo {
       id
@@ -76,7 +82,7 @@ query Subtasks {
   }
 }
 
-mutation CreateSubtask($subtask: SubtaskCreateInput!) {
+mutation SubtaskCreate($subtask: SubtaskCreateInput!) {
   subtaskCreate(input: $subtask) {
     subtask {
       id
@@ -103,5 +109,31 @@ mutation SubtaskCreate($subtask: SubtaskCreateInput!) {
 mutation SubtaskDelete($id: ID!) {
   subtaskDelete(by: { id: $id }) {
     deletedId
+  }
+}
+
+query Settings {
+  settingsCollection(first: 1) {
+    edges {
+      node {
+        ...Settings
+      }
+    }
+  }
+}
+
+mutation SettingsCreate($settings: SettingsCreateInput!) {
+  settingsCreate(input: $settings) {
+    settings {
+      id
+    }
+  }
+}
+
+mutation SettingsUpdate($id: ID!, $settings: SettingsUpdateInput!) {
+  settingsUpdate(by: { id: $id }, input: $settings) {
+    settings {
+      id
+    }
   }
 }

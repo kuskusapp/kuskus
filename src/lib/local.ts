@@ -1,9 +1,9 @@
 import {
-  CreateTodoDocument,
   Mutation,
   Query,
   SubtaskCreateDocument,
   SubtaskDeleteDocument,
+  TodoCreateDocument,
   TodoDeleteDocument,
   TodoLinkSubtaskDocument,
   TodosDocument,
@@ -29,7 +29,7 @@ export async function createTodosForDev() {
   })
 
   // create new todos and subtasks
-  let task = await grafbase.request<Mutation>(CreateTodoDocument, {
+  let task = await grafbase.request<Mutation>(TodoCreateDocument, {
     todo: {
       title: "Fix all bugs",
       starred: true,
@@ -67,7 +67,7 @@ export async function createTodosForDev() {
     subtaskId: subtask.subtaskCreate?.subtask?.id,
   })
 
-  task = await grafbase.request<Mutation>(CreateTodoDocument, {
+  task = await grafbase.request<Mutation>(TodoCreateDocument, {
     todo: {
       title: "Make Kuskus",
       starred: true,
@@ -86,7 +86,7 @@ export async function createTodosForDev() {
     subtaskId: subtask.subtaskCreate?.subtask?.id,
   })
 
-  task = await grafbase.request<Mutation>(CreateTodoDocument, {
+  task = await grafbase.request<Mutation>(TodoCreateDocument, {
     todo: {
       title: "Release KusKus",
       starred: true,
@@ -94,7 +94,7 @@ export async function createTodosForDev() {
       done: false,
     },
   })
-  task = await grafbase.request<Mutation>(CreateTodoDocument, {
+  task = await grafbase.request<Mutation>(TodoCreateDocument, {
     todo: {
       title: "Polish",
       starred: true,

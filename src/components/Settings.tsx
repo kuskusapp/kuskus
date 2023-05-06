@@ -1,10 +1,19 @@
 import clsx from "clsx"
-import { Match, Switch, createSignal } from "solid-js"
+import { Match, Switch, createSignal, onMount } from "solid-js"
 import { GoogleClient } from "~/lib/auth"
 import Keybind from "./Keybind"
+import { useGlobalContext } from "~/GlobalContext/store"
 
 export default function Settings() {
+  const global = useGlobalContext()
   const [show, setShow] = createSignal("Keyboard")
+
+  onMount(() => {
+    if (global.settingsState.checkSettings()) {
+      console.log(global.settingsState.settings, "settings")
+    }
+  })
+
   return (
     <div class="flex h-full w-full">
       <div
@@ -13,6 +22,15 @@ export default function Settings() {
       >
         <div>
           <div class="p-2 pl-3 flex flex-col gap-1">
+            <div
+              class={clsx(
+                "cursor-pointer",
+                show() === "Preferences" && "font-bold"
+              )}
+              onClick={() => setShow("Preferences")}
+            >
+              Preferences
+            </div>
             <div
               class={clsx(
                 "cursor-pointer",
@@ -53,6 +71,14 @@ export default function Settings() {
       </div>
       <div class="p-4 h-full w-full">
         <Switch>
+          <Match when={show() === "Preferences"}>
+            <div
+              class="cursor-pointer"
+              onClick={() => global.settingsState.toggleHideActionBar()}
+            >
+              Hide action bar
+            </div>
+          </Match>
           <Match when={show() === "Keyboard"}>
             <div class="h-full">
               <div class="h-full w-full overflow-scroll">
@@ -66,6 +92,10 @@ export default function Settings() {
                   keybind="f"
                 />
                 <Keybind action="Delete todo" keybind="Backspace" />
+                <Keybind action="Change priority to 1" keybind="1" />
+                <Keybind action="Change priority to 2" keybind="2" />
+                <Keybind action="Change priority to 3" keybind="3" />
+                <Keybind action="Star/Unstar" keybind="4" />
                 <Keybind action="Create subtasks from a task" keybind="a" />
                 <Keybind action="Focus on task below" keybind="Down arrow" />
                 <Keybind action="Change to All" keybind="Control + 1" />

@@ -1,19 +1,16 @@
 import { defer } from "@solid-primitives/utils"
 import { createEffect } from "solid-js"
 import { StoreSetter, createStore, produce } from "solid-js/store"
-import { TodoLinkSubtaskDocument } from "~/graphql/schema"
 import {
-  SubtaskCreateDocument,
-  SubtaskCreateInput,
-  SubtaskUpdateDocument,
-  TodoCreateInput,
-} from "~/graphql/schema"
-import { SubtaskDeleteDocument } from "~/graphql/schema"
-import {
-  CreateTodoDocument,
   Query,
   SubtaskConnection,
+  SubtaskCreateDocument,
+  SubtaskDeleteDocument,
+  SubtaskUpdateDocument,
+  TodoCreateDocument,
+  TodoCreateInput,
   TodoDeleteDocument,
+  TodoLinkSubtaskDocument,
   TodoUpdateDocument,
   TodoUpdateInput,
   TodosDocument,
@@ -148,7 +145,7 @@ export function createTodosState() {
       // if the todo was added, we need to create it in the database
       if (!todo.id) {
         grafbase
-          .request(CreateTodoDocument, {
+          .request(TodoCreateDocument, {
             todo: getTodoCreateInput(todo),
           })
           .then((res) => {

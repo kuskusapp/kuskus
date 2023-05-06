@@ -20,6 +20,20 @@ export type Scalars = {
   DateTime: any
 }
 
+export type CheckoutInput = {
+  lineItems?: InputMaybe<Array<InputMaybe<CheckoutLineItem>>>
+}
+
+export type CheckoutLineItem = {
+  price: Scalars["String"]
+  quantity?: InputMaybe<Scalars["Int"]>
+}
+
+export type CheckoutSession = {
+  __typename?: "CheckoutSession"
+  url: Scalars["String"]
+}
+
 /** Possible operations for an Int field */
 export type IntOperationsInput = {
   decrement?: InputMaybe<Scalars["Int"]>
@@ -29,6 +43,7 @@ export type IntOperationsInput = {
 
 export type Mutation = {
   __typename?: "Mutation"
+  checkout: CheckoutSession
   /** Create a Settings */
   settingsCreate?: Maybe<SettingsCreatePayload>
   /** Delete a Settings by ID or unique field */
@@ -53,6 +68,10 @@ export type Mutation = {
   userDelete?: Maybe<UserDeletePayload>
   /** Update a User */
   userUpdate?: Maybe<UserUpdatePayload>
+}
+
+export type MutationCheckoutArgs = {
+  input: CheckoutInput
 }
 
 export type MutationSettingsCreateArgs = {
@@ -192,13 +211,11 @@ export type Settings = {
   __typename?: "Settings"
   /** when the model was created */
   createdAt: Scalars["DateTime"]
-  gpt3MonthlyTokensUsed?: Maybe<Scalars["Int"]>
-  gpt4MonthlyTokensUsed?: Maybe<Scalars["Int"]>
   hideActionBar: Scalars["Boolean"]
   iconOnlySidebar: Scalars["Boolean"]
   /** Unique identifier */
   id: Scalars["ID"]
-  openAiGptModel: Scalars["Int"]
+  openAiGptModel: Scalars["String"]
   /** when the model was updated */
   updatedAt: Scalars["DateTime"]
 }
@@ -216,11 +233,9 @@ export type SettingsConnection = {
 
 /** Input to create a Settings */
 export type SettingsCreateInput = {
-  gpt3MonthlyTokensUsed?: InputMaybe<Scalars["Int"]>
-  gpt4MonthlyTokensUsed?: InputMaybe<Scalars["Int"]>
   hideActionBar?: Scalars["Boolean"]
   iconOnlySidebar?: Scalars["Boolean"]
-  openAiGptModel?: Scalars["Int"]
+  openAiGptModel?: Scalars["String"]
 }
 
 export type SettingsCreatePayload = {
@@ -245,11 +260,9 @@ export type SettingsOrderByInput = {
 
 /** Input to update a Settings */
 export type SettingsUpdateInput = {
-  gpt3MonthlyTokensUsed?: InputMaybe<IntOperationsInput>
-  gpt4MonthlyTokensUsed?: InputMaybe<IntOperationsInput>
   hideActionBar?: InputMaybe<Scalars["Boolean"]>
   iconOnlySidebar?: InputMaybe<Scalars["Boolean"]>
-  openAiGptModel?: InputMaybe<IntOperationsInput>
+  openAiGptModel?: InputMaybe<Scalars["String"]>
 }
 
 export type SettingsUpdatePayload = {
@@ -259,6 +272,7 @@ export type SettingsUpdatePayload = {
 
 export type Subtask = {
   __typename?: "Subtask"
+  cached?: Maybe<Scalars["String"]>
   /** when the model was created */
   createdAt: Scalars["DateTime"]
   done: Scalars["Boolean"]
@@ -286,6 +300,7 @@ export type SubtaskConnection = {
 
 /** Input to create a Subtask */
 export type SubtaskCreateInput = {
+  cached?: InputMaybe<Scalars["String"]>
   done?: Scalars["Boolean"]
   dueDate?: InputMaybe<Scalars["String"]>
   note?: InputMaybe<Scalars["String"]>
@@ -316,6 +331,7 @@ export type SubtaskOrderByInput = {
 
 /** Input to create a Subtask for the SubtaskToTodo relation of Todo */
 export type SubtaskToTodoCreateSubtask = {
+  cached?: InputMaybe<Scalars["String"]>
   done?: Scalars["Boolean"]
   dueDate?: InputMaybe<Scalars["String"]>
   note?: InputMaybe<Scalars["String"]>
@@ -339,6 +355,7 @@ export type SubtaskToTodoUpdateSubtaskRelation = {
 
 /** Input to update a Subtask */
 export type SubtaskUpdateInput = {
+  cached?: InputMaybe<Scalars["String"]>
   done?: InputMaybe<Scalars["Boolean"]>
   dueDate?: InputMaybe<Scalars["String"]>
   note?: InputMaybe<Scalars["String"]>
@@ -354,6 +371,7 @@ export type SubtaskUpdatePayload = {
 
 export type Todo = {
   __typename?: "Todo"
+  cached?: Maybe<Scalars["String"]>
   /** when the model was created */
   createdAt: Scalars["DateTime"]
   done: Scalars["Boolean"]
@@ -390,6 +408,7 @@ export type TodoConnection = {
 
 /** Input to create a Todo */
 export type TodoCreateInput = {
+  cached?: InputMaybe<Scalars["String"]>
   done?: Scalars["Boolean"]
   dueDate?: InputMaybe<Scalars["String"]>
   note?: InputMaybe<Scalars["String"]>
@@ -421,6 +440,7 @@ export type TodoOrderByInput = {
 
 /** Input to update a Todo */
 export type TodoUpdateInput = {
+  cached?: InputMaybe<Scalars["String"]>
   done?: InputMaybe<Scalars["Boolean"]>
   dueDate?: InputMaybe<Scalars["String"]>
   note?: InputMaybe<Scalars["String"]>
@@ -439,6 +459,9 @@ export type User = {
   __typename?: "User"
   /** when the model was created */
   createdAt: Scalars["DateTime"]
+  freeAiSuggestionsLimit: Scalars["Int"]
+  gpt3MonthlyTokensUsed?: Maybe<Scalars["Int"]>
+  gpt4MonthlyTokensUsed?: Maybe<Scalars["Int"]>
   /** Unique identifier */
   id: Scalars["ID"]
   /** when the model was updated */
@@ -460,6 +483,9 @@ export type UserConnection = {
 
 /** Input to create a User */
 export type UserCreateInput = {
+  freeAiSuggestionsLimit?: Scalars["Int"]
+  gpt3MonthlyTokensUsed?: InputMaybe<Scalars["Int"]>
+  gpt4MonthlyTokensUsed?: InputMaybe<Scalars["Int"]>
   username: Scalars["String"]
 }
 
@@ -485,6 +511,9 @@ export type UserOrderByInput = {
 
 /** Input to update a User */
 export type UserUpdateInput = {
+  freeAiSuggestionsLimit?: InputMaybe<IntOperationsInput>
+  gpt3MonthlyTokensUsed?: InputMaybe<IntOperationsInput>
+  gpt4MonthlyTokensUsed?: InputMaybe<IntOperationsInput>
   username?: InputMaybe<Scalars["String"]>
 }
 
@@ -513,6 +542,13 @@ export type SubtaskFragment = {
   priority: number
   note?: string | null
   dueDate?: string | null
+}
+
+export type SettingsFragment = {
+  __typename?: "Settings"
+  hideActionBar: boolean
+  iconOnlySidebar: boolean
+  openAiGptModel: string
 }
 
 export type TodosQueryVariables = Exact<{ [key: string]: never }>
@@ -553,11 +589,11 @@ export type TodosQuery = {
   } | null
 }
 
-export type CreateTodoMutationVariables = Exact<{
+export type TodoCreateMutationVariables = Exact<{
   todo: TodoCreateInput
 }>
 
-export type CreateTodoMutation = {
+export type TodoCreateMutation = {
   __typename?: "Mutation"
   todoCreate?: {
     __typename?: "TodoCreatePayload"
@@ -613,11 +649,11 @@ export type SubtasksQuery = {
   } | null
 }
 
-export type CreateSubtaskMutationVariables = Exact<{
+export type SubtaskCreateMutationVariables = Exact<{
   subtask: SubtaskCreateInput
 }>
 
-export type CreateSubtaskMutation = {
+export type SubtaskCreateMutation = {
   __typename?: "Mutation"
   subtaskCreate?: {
     __typename?: "SubtaskCreatePayload"
@@ -638,18 +674,6 @@ export type SubtaskUpdateMutation = {
   } | null
 }
 
-export type SubtaskCreateMutationVariables = Exact<{
-  subtask: SubtaskCreateInput
-}>
-
-export type SubtaskCreateMutation = {
-  __typename?: "Mutation"
-  subtaskCreate?: {
-    __typename?: "SubtaskCreatePayload"
-    subtask?: { __typename?: "Subtask"; id: string } | null
-  } | null
-}
-
 export type SubtaskDeleteMutationVariables = Exact<{
   id: Scalars["ID"]
 }>
@@ -659,6 +683,49 @@ export type SubtaskDeleteMutation = {
   subtaskDelete?: {
     __typename?: "SubtaskDeletePayload"
     deletedId: string
+  } | null
+}
+
+export type SettingsQueryVariables = Exact<{ [key: string]: never }>
+
+export type SettingsQuery = {
+  __typename?: "Query"
+  settingsCollection?: {
+    __typename?: "SettingsConnection"
+    edges?: Array<{
+      __typename?: "SettingsEdge"
+      node: {
+        __typename?: "Settings"
+        hideActionBar: boolean
+        iconOnlySidebar: boolean
+        openAiGptModel: string
+      }
+    } | null> | null
+  } | null
+}
+
+export type SettingsCreateMutationVariables = Exact<{
+  settings: SettingsCreateInput
+}>
+
+export type SettingsCreateMutation = {
+  __typename?: "Mutation"
+  settingsCreate?: {
+    __typename?: "SettingsCreatePayload"
+    settings?: { __typename?: "Settings"; id: string } | null
+  } | null
+}
+
+export type SettingsUpdateMutationVariables = Exact<{
+  id: Scalars["ID"]
+  settings: SettingsUpdateInput
+}>
+
+export type SettingsUpdateMutation = {
+  __typename?: "Mutation"
+  settingsUpdate?: {
+    __typename?: "SettingsUpdatePayload"
+    settings?: { __typename?: "Settings"; id: string } | null
   } | null
 }
 
@@ -712,6 +779,27 @@ export const SubtaskFragmentDoc = {
     },
   ],
 } as unknown as DocumentNode<SubtaskFragment, unknown>
+export const SettingsFragmentDoc = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "Settings" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "Settings" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "hideActionBar" } },
+          { kind: "Field", name: { kind: "Name", value: "iconOnlySidebar" } },
+          { kind: "Field", name: { kind: "Name", value: "openAiGptModel" } },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<SettingsFragment, unknown>
 export const TodosDocument = {
   kind: "Document",
   definitions: [
@@ -846,13 +934,13 @@ export const TodosDocument = {
     },
   ],
 } as unknown as DocumentNode<TodosQuery, TodosQueryVariables>
-export const CreateTodoDocument = {
+export const TodoCreateDocument = {
   kind: "Document",
   definitions: [
     {
       kind: "OperationDefinition",
       operation: "mutation",
-      name: { kind: "Name", value: "CreateTodo" },
+      name: { kind: "Name", value: "TodoCreate" },
       variableDefinitions: [
         {
           kind: "VariableDefinition",
@@ -902,7 +990,7 @@ export const CreateTodoDocument = {
       },
     },
   ],
-} as unknown as DocumentNode<CreateTodoMutation, CreateTodoMutationVariables>
+} as unknown as DocumentNode<TodoCreateMutation, TodoCreateMutationVariables>
 export const TodoUpdateDocument = {
   kind: "Document",
   definitions: [
@@ -1207,13 +1295,13 @@ export const SubtasksDocument = {
     },
   ],
 } as unknown as DocumentNode<SubtasksQuery, SubtasksQueryVariables>
-export const CreateSubtaskDocument = {
+export const SubtaskCreateDocument = {
   kind: "Document",
   definitions: [
     {
       kind: "OperationDefinition",
       operation: "mutation",
-      name: { kind: "Name", value: "CreateSubtask" },
+      name: { kind: "Name", value: "SubtaskCreate" },
       variableDefinitions: [
         {
           kind: "VariableDefinition",
@@ -1267,8 +1355,8 @@ export const CreateSubtaskDocument = {
     },
   ],
 } as unknown as DocumentNode<
-  CreateSubtaskMutation,
-  CreateSubtaskMutationVariables
+  SubtaskCreateMutation,
+  SubtaskCreateMutationVariables
 >
 export const SubtaskUpdateDocument = {
   kind: "Document",
@@ -1358,69 +1446,6 @@ export const SubtaskUpdateDocument = {
   SubtaskUpdateMutation,
   SubtaskUpdateMutationVariables
 >
-export const SubtaskCreateDocument = {
-  kind: "Document",
-  definitions: [
-    {
-      kind: "OperationDefinition",
-      operation: "mutation",
-      name: { kind: "Name", value: "SubtaskCreate" },
-      variableDefinitions: [
-        {
-          kind: "VariableDefinition",
-          variable: {
-            kind: "Variable",
-            name: { kind: "Name", value: "subtask" },
-          },
-          type: {
-            kind: "NonNullType",
-            type: {
-              kind: "NamedType",
-              name: { kind: "Name", value: "SubtaskCreateInput" },
-            },
-          },
-        },
-      ],
-      selectionSet: {
-        kind: "SelectionSet",
-        selections: [
-          {
-            kind: "Field",
-            name: { kind: "Name", value: "subtaskCreate" },
-            arguments: [
-              {
-                kind: "Argument",
-                name: { kind: "Name", value: "input" },
-                value: {
-                  kind: "Variable",
-                  name: { kind: "Name", value: "subtask" },
-                },
-              },
-            ],
-            selectionSet: {
-              kind: "SelectionSet",
-              selections: [
-                {
-                  kind: "Field",
-                  name: { kind: "Name", value: "subtask" },
-                  selectionSet: {
-                    kind: "SelectionSet",
-                    selections: [
-                      { kind: "Field", name: { kind: "Name", value: "id" } },
-                    ],
-                  },
-                },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<
-  SubtaskCreateMutation,
-  SubtaskCreateMutationVariables
->
 export const SubtaskDeleteDocument = {
   kind: "Document",
   definitions: [
@@ -1477,4 +1502,224 @@ export const SubtaskDeleteDocument = {
 } as unknown as DocumentNode<
   SubtaskDeleteMutation,
   SubtaskDeleteMutationVariables
+>
+export const SettingsDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "Settings" },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "settingsCollection" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "first" },
+                value: { kind: "IntValue", value: "100" },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "edges" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "node" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "FragmentSpread",
+                              name: { kind: "Name", value: "Settings" },
+                            },
+                          ],
+                        },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+    {
+      kind: "FragmentDefinition",
+      name: { kind: "Name", value: "Settings" },
+      typeCondition: {
+        kind: "NamedType",
+        name: { kind: "Name", value: "Settings" },
+      },
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          { kind: "Field", name: { kind: "Name", value: "hideActionBar" } },
+          { kind: "Field", name: { kind: "Name", value: "iconOnlySidebar" } },
+          { kind: "Field", name: { kind: "Name", value: "openAiGptModel" } },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<SettingsQuery, SettingsQueryVariables>
+export const SettingsCreateDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "SettingsCreate" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "settings" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "SettingsCreateInput" },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "settingsCreate" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "input" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "settings" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "settings" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  SettingsCreateMutation,
+  SettingsCreateMutationVariables
+>
+export const SettingsUpdateDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "SettingsUpdate" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: { kind: "Variable", name: { kind: "Name", value: "id" } },
+          type: {
+            kind: "NonNullType",
+            type: { kind: "NamedType", name: { kind: "Name", value: "ID" } },
+          },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "settings" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "SettingsUpdateInput" },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "settingsUpdate" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "by" },
+                value: {
+                  kind: "ObjectValue",
+                  fields: [
+                    {
+                      kind: "ObjectField",
+                      name: { kind: "Name", value: "id" },
+                      value: {
+                        kind: "Variable",
+                        name: { kind: "Name", value: "id" },
+                      },
+                    },
+                  ],
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "input" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "settings" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "settings" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  SettingsUpdateMutation,
+  SettingsUpdateMutationVariables
 >

@@ -15,6 +15,7 @@ import {
 } from "./todos"
 import { todayDate } from "~/lib/lib"
 import { SuggestedTodos } from "~/components/SuggestedTodos"
+import { createSettingsState } from "./settings"
 
 export type { ClientSubtask, ClientTodo } from "./todos"
 
@@ -35,6 +36,7 @@ export type NewSubtask = {
 export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
   () => {
     const todosState = createTodosState()
+    const settingsState = createSettingsState()
 
     const [activePage, setActivePage] = createSignal(PageType.All)
     const isPageActive = createSelector<PageType | null, PageType>(activePage)
@@ -190,6 +192,7 @@ export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
 
     return {
       todosState,
+      settingsState,
       getTodoIndex,
       flatTasks,
       // all the todosState state and methods can be available top level

@@ -11,7 +11,6 @@ export default function Home() {
    * user - user
    */
   const [user] = createResource(async () => {
-    console.log(await getUser())
     return await getUser()
   })
 
