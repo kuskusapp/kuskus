@@ -258,6 +258,26 @@ export type SettingsOrderByInput = {
   createdAt?: InputMaybe<OrderByDirection>
 }
 
+/** Input to create a Settings for the SettingsToUser relation of User */
+export type SettingsToUserCreateSettings = {
+  hideActionBar?: Scalars["Boolean"]
+  iconOnlySidebar?: Scalars["Boolean"]
+  languageModelUsed?: Scalars["String"]
+}
+
+/** Input to link to or create a Settings for the SettingsToUser relation of User */
+export type SettingsToUserCreateSettingsRelation = {
+  create?: InputMaybe<SettingsToUserCreateSettings>
+  link?: InputMaybe<Scalars["ID"]>
+}
+
+/** Input to link/unlink to or create a Settings for the SettingsToUser relation of User */
+export type SettingsToUserUpdateSettingsRelation = {
+  create?: InputMaybe<SettingsToUserCreateSettings>
+  link?: InputMaybe<Scalars["ID"]>
+  unlink?: InputMaybe<Scalars["ID"]>
+}
+
 /** Input to update a Settings */
 export type SettingsUpdateInput = {
   hideActionBar?: InputMaybe<Scalars["Boolean"]>
@@ -438,6 +458,31 @@ export type TodoOrderByInput = {
   createdAt?: InputMaybe<OrderByDirection>
 }
 
+/** Input to create a Todo for the TodoToUser relation of User */
+export type TodoToUserCreateTodo = {
+  cached?: InputMaybe<Scalars["String"]>
+  done?: Scalars["Boolean"]
+  dueDate?: InputMaybe<Scalars["String"]>
+  note?: InputMaybe<Scalars["String"]>
+  priority?: Scalars["Int"]
+  starred?: Scalars["Boolean"]
+  subtasks?: InputMaybe<Array<InputMaybe<SubtaskToTodoCreateSubtaskRelation>>>
+  title: Scalars["String"]
+}
+
+/** Input to link to or create a Todo for the TodoToUser relation of User */
+export type TodoToUserCreateTodoRelation = {
+  create?: InputMaybe<TodoToUserCreateTodo>
+  link?: InputMaybe<Scalars["ID"]>
+}
+
+/** Input to link/unlink to or create a Todo for the TodoToUser relation of User */
+export type TodoToUserUpdateTodoRelation = {
+  create?: InputMaybe<TodoToUserCreateTodo>
+  link?: InputMaybe<Scalars["ID"]>
+  unlink?: InputMaybe<Scalars["ID"]>
+}
+
 /** Input to update a Todo */
 export type TodoUpdateInput = {
   cached?: InputMaybe<Scalars["String"]>
@@ -457,6 +502,7 @@ export type TodoUpdatePayload = {
 
 export type User = {
   __typename?: "User"
+  audienceToken?: Maybe<Scalars["String"]>
   /** when the model was created */
   createdAt: Scalars["DateTime"]
   freeAiSuggestionsLimit: Scalars["Int"]
@@ -464,9 +510,19 @@ export type User = {
   gpt4MonthlyTokensUsed?: Maybe<Scalars["Int"]>
   /** Unique identifier */
   id: Scalars["ID"]
+  settings?: Maybe<Settings>
+  todos?: Maybe<TodoConnection>
   /** when the model was updated */
   updatedAt: Scalars["DateTime"]
   username: Scalars["String"]
+}
+
+export type UserTodosArgs = {
+  after?: InputMaybe<Scalars["String"]>
+  before?: InputMaybe<Scalars["String"]>
+  first?: InputMaybe<Scalars["Int"]>
+  last?: InputMaybe<Scalars["Int"]>
+  orderBy?: InputMaybe<UserOrderByInput>
 }
 
 export type UserByInput = {
@@ -483,9 +539,12 @@ export type UserConnection = {
 
 /** Input to create a User */
 export type UserCreateInput = {
+  audienceToken?: InputMaybe<Scalars["String"]>
   freeAiSuggestionsLimit?: Scalars["Int"]
   gpt3MonthlyTokensUsed?: InputMaybe<Scalars["Int"]>
   gpt4MonthlyTokensUsed?: InputMaybe<Scalars["Int"]>
+  settings?: InputMaybe<SettingsToUserCreateSettingsRelation>
+  todos?: InputMaybe<Array<InputMaybe<TodoToUserCreateTodoRelation>>>
   username: Scalars["String"]
 }
 
@@ -511,9 +570,12 @@ export type UserOrderByInput = {
 
 /** Input to update a User */
 export type UserUpdateInput = {
+  audienceToken?: InputMaybe<Scalars["String"]>
   freeAiSuggestionsLimit?: InputMaybe<IntOperationsInput>
   gpt3MonthlyTokensUsed?: InputMaybe<IntOperationsInput>
   gpt4MonthlyTokensUsed?: InputMaybe<IntOperationsInput>
+  settings?: InputMaybe<SettingsToUserUpdateSettingsRelation>
+  todos?: InputMaybe<Array<InputMaybe<TodoToUserUpdateTodoRelation>>>
   username?: InputMaybe<Scalars["String"]>
 }
 
@@ -719,6 +781,18 @@ export type SettingsUpdateMutation = {
   settingsUpdate?: {
     __typename?: "SettingsUpdatePayload"
     settings?: { __typename?: "Settings"; id: string } | null
+  } | null
+}
+
+export type UserCreateMutationVariables = Exact<{
+  user: UserCreateInput
+}>
+
+export type UserCreateMutation = {
+  __typename?: "Mutation"
+  userCreate?: {
+    __typename?: "UserCreatePayload"
+    user?: { __typename?: "User"; id: string } | null
   } | null
 }
 
@@ -1687,3 +1761,60 @@ export const SettingsUpdateDocument = {
   SettingsUpdateMutation,
   SettingsUpdateMutationVariables
 >
+export const UserCreateDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "UserCreate" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: { kind: "Variable", name: { kind: "Name", value: "user" } },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "UserCreateInput" },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "userCreate" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "input" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "user" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "user" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<UserCreateMutation, UserCreateMutationVariables>

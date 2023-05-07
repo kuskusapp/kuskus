@@ -1,6 +1,6 @@
 import { onMount } from "solid-js"
 import { useNavigate } from "solid-start"
-import { GoogleClient } from "~/lib/auth"
+import { GoogleClient, getUser } from "~/lib/auth"
 
 export default function GoogleCallback() {
   const navigate = useNavigate()
@@ -9,7 +9,10 @@ export default function GoogleCallback() {
       console.error(error)
       return null
     })
-    navigate("/")
+
+    // console.log("GoogleCallback")
+    console.log(await getUser())
+    // navigate("/")
   })
   return <></>
 }

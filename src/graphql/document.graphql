@@ -133,3 +133,11 @@ mutation SettingsUpdate($id: ID!, $settings: SettingsUpdateInput!) {
     }
   }
 }
+
+mutation UserCreate($user: UserCreateInput!) {
+  userCreate(input: $user) {
+    user {
+      id
+    }
+  }
+}
