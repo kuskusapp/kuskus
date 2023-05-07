@@ -33,7 +33,7 @@ type CheckoutSession {
 # to show public todos of users
 type User @model {
   freeAiSuggestionsLimit: Int! @default(value: 5) # how many times user can use AI suggestions for free
-  username: String @unique # set by a user, this will be a route to show public todos
+  username: String! @unique # set by a user, this will be a route to show public todos TODO: if unique, it can't be null, solve this :(
   gpt3MonthlyTokensUsed: Int # how many gpt-3 tokens user used this month (for billing)
   gpt4MonthlyTokensUsed: Int # how many gpt-4 tokens user used this month (for billing)
 }

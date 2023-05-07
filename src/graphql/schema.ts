@@ -544,13 +544,6 @@ export type SubtaskFragment = {
   dueDate?: string | null
 }
 
-export type SettingsFragment = {
-  __typename?: "Settings"
-  hideActionBar: boolean
-  iconOnlySidebar: boolean
-  languageModelUsed: string
-}
-
 export type TodosQueryVariables = Exact<{ [key: string]: never }>
 
 export type TodosQuery = {
@@ -696,9 +689,9 @@ export type SettingsQuery = {
       __typename?: "SettingsEdge"
       node: {
         __typename?: "Settings"
+        id: string
         hideActionBar: boolean
         iconOnlySidebar: boolean
-        languageModelUsed: string
       }
     } | null> | null
   } | null
@@ -779,27 +772,6 @@ export const SubtaskFragmentDoc = {
     },
   ],
 } as unknown as DocumentNode<SubtaskFragment, unknown>
-export const SettingsFragmentDoc = {
-  kind: "Document",
-  definitions: [
-    {
-      kind: "FragmentDefinition",
-      name: { kind: "Name", value: "Settings" },
-      typeCondition: {
-        kind: "NamedType",
-        name: { kind: "Name", value: "Settings" },
-      },
-      selectionSet: {
-        kind: "SelectionSet",
-        selections: [
-          { kind: "Field", name: { kind: "Name", value: "hideActionBar" } },
-          { kind: "Field", name: { kind: "Name", value: "iconOnlySidebar" } },
-          { kind: "Field", name: { kind: "Name", value: "languageModelUsed" } },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<SettingsFragment, unknown>
 export const TodosDocument = {
   kind: "Document",
   definitions: [
@@ -1539,8 +1511,16 @@ export const SettingsDocument = {
                           kind: "SelectionSet",
                           selections: [
                             {
-                              kind: "FragmentSpread",
-                              name: { kind: "Name", value: "Settings" },
+                              kind: "Field",
+                              name: { kind: "Name", value: "id" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "hideActionBar" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "iconOnlySidebar" },
                             },
                           ],
                         },
@@ -1551,22 +1531,6 @@ export const SettingsDocument = {
               ],
             },
           },
-        ],
-      },
-    },
-    {
-      kind: "FragmentDefinition",
-      name: { kind: "Name", value: "Settings" },
-      typeCondition: {
-        kind: "NamedType",
-        name: { kind: "Name", value: "Settings" },
-      },
-      selectionSet: {
-        kind: "SelectionSet",
-        selections: [
-          { kind: "Field", name: { kind: "Name", value: "hideActionBar" } },
-          { kind: "Field", name: { kind: "Name", value: "iconOnlySidebar" } },
-          { kind: "Field", name: { kind: "Name", value: "languageModelUsed" } },
         ],
       },
     },

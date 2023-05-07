@@ -14,9 +14,10 @@ export type Settings = {
   id?: string
   hideActionBar: Boolean
   iconOnlySidebar: Boolean
-  languageModelUsed: string
+  languageModelUsed: string // TODO: for some reason this is giving an error with grafbase..
 }
 
+// TODO: sync languageModelUsed too, gives grafbase errors..
 export function createSettingsState() {
   const [settings, setSettings] = createStore<Settings>({
     hideActionBar: false,
@@ -24,31 +25,47 @@ export function createSettingsState() {
     languageModelUsed: "gpt-3",
   })
 
+  // TODO: this is really dumb, there has to be a better way to do this
+  // all users have settings by default with default values
+  // you shouldn't have to create them in front end code like this...
   onMount(() => {
     grafbase.request<Query>(SettingsDocument).then(async (res) => {
-      // if we don't have settings for user, create them
-      if (!settings.id) {
-        if (res.settingsCollection?.edges?.length! < 1) {
-          const res = await grafbase.request(SettingsCreateDocument, {
-            settings: {}, // use default values
-          })
-          setSettings({ ...settings, id: res.settingsCreate?.settings?.id! })
-        }
+      // if there are no settings, create them and put id in local store
+      if (res.settingsCollection?.edges?.length === 0) {
+        const res = await grafbase.request(SettingsCreateDocument, {
+          settings: {}, // use default values
+        })
+        setSettings({ ...settings, id: res.settingsCreate?.settings?.id! })
+        return
+      } else {
+        setSettings({
+          ...settings,
+          id: res.settingsCollection?.edges![0]?.node.id,
+        })
       }
     })
     return settings
   })
 
+  // TODO: not sure how good this is..
+  // should sync settings to grafbase when settings local store changes..
   createEffect(() => {
-    // if settings change, update db
-    grafbase.request<Mutation>(SettingsUpdateDocument, {
-      id: settings.id,
-      settings: {
-        hideActionBar: settings.hideActionBar,
-        iconOnlySidebar: settings.iconOnlySidebar,
-        languageModelUsed: settings.languageModelUsed,
-      },
-    })
+    console.log("settings changed")
+    console.log(settings)
+    // TODO: should not run on first load of the app..
+    if (settings.id) {
+      // if settings change, update db
+      console.log("mutation run..")
+      console.log(settings.hideActionBar, "hideActionBar")
+      grafbase.request<Mutation>(SettingsUpdateDocument, {
+        id: settings.id,
+        settings: {
+          hideActionBar: settings.hideActionBar,
+          iconOnlySidebar: settings.iconOnlySidebar,
+          languageModelUsed: settings.languageModelUsed,
+        },
+      })
+    }
   })
 
   return {

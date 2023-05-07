@@ -18,12 +18,6 @@ fragment Subtask on Subtask {
   dueDate
 }
 
-fragment Settings on Settings {
-  hideActionBar
-  iconOnlySidebar
-  languageModelUsed
-}
-
 query Todos {
   todoCollection(first: 100) {
     edges {
@@ -116,7 +110,9 @@ query Settings {
   settingsCollection(first: 1) {
     edges {
       node {
-        ...Settings
+        id
+        hideActionBar
+        iconOnlySidebar
       }
     }
   }
