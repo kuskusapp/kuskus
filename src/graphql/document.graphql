@@ -134,6 +134,16 @@ mutation SettingsUpdate($id: ID!, $settings: SettingsUpdateInput!) {
   }
 }
 
+query Users {
+  userCollection(first: 1) {
+    edges {
+      node {
+
+      }
+    }
+  }
+}
+
 mutation UserCreate($user: UserCreateInput!) {
   userCreate(input: $user) {
     user {

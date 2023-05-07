@@ -30,9 +30,9 @@ type CheckoutSession {
 }
 
 type User @model {
-  audienceToken: String # TODO: not sure if needed..
+  audienceToken: String # TODO: not sure if it should be used or something else
+  settings: Settings!
   todos: [Todo]
-  settings: Settings
   username: String! @unique # set by a user, this will be a route to show public todos TODO: if unique, it can't be null, solve this :(
   freeAiSuggestionsLimit: Int! @default(value: 5) # how many times user can use AI suggestions for free
   gpt3MonthlyTokensUsed: Int # how many gpt-3 tokens user used this month (for billing)
