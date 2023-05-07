@@ -30,11 +30,11 @@ type CheckoutSession {
 }
 
 type User @model {
-  audienceToken: String # TODO: not sure if it should be used or something else
-  settings: Settings!
+  audienceToken: String! @unique
+  settings: Settings
   todos: [Todo]
-  username: String! @unique # set by a user, this will be a route to show public todos TODO: if unique, it can't be null, solve this :(
-  freeAiSuggestionsLimit: Int! @default(value: 5) # how many times user can use AI suggestions for free
+  username: String # set by a user, this will be a route to show public todos TODO: if unique, it can't be null, solve this :(
+  freeAiSuggestionsLimit: Int @default(value: 5) # how many times user can use AI suggestions for free
   gpt3MonthlyTokensUsed: Int # how many gpt-3 tokens user used this month (for billing)
   gpt4MonthlyTokensUsed: Int # how many gpt-4 tokens user used this month (for billing)
 }
@@ -47,6 +47,7 @@ type Todo @model {
   note: String
   dueDate: String
   subtasks: [Subtask]
+  labels: [String]
   cached: String # 'gpt-3' | 'gpt-4'
 }
 

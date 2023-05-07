@@ -1,3 +1,4 @@
+import { useGlobal } from "~/GlobalContext/global"
 import {
   Mutation,
   Query,
@@ -8,9 +9,11 @@ import {
   TodoLinkSubtaskDocument,
   TodosDocument,
 } from "~/graphql/schema"
-import { grafbase } from "./graphql"
 
 export async function createTodosForDev() {
+  const global = useGlobal()
+  const grafbase = global.grafbase()!
+
   // delete all todos and subtasks in db
   const existingTodos = await grafbase.request<Query>(TodosDocument)
   let todoIdsToDelete = <string[]>[]

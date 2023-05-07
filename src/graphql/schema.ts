@@ -502,10 +502,10 @@ export type TodoUpdatePayload = {
 
 export type User = {
   __typename?: "User"
-  audienceToken?: Maybe<Scalars["String"]>
+  audienceToken: Scalars["String"]
   /** when the model was created */
   createdAt: Scalars["DateTime"]
-  freeAiSuggestionsLimit: Scalars["Int"]
+  freeAiSuggestionsLimit?: Maybe<Scalars["Int"]>
   gpt3MonthlyTokensUsed?: Maybe<Scalars["Int"]>
   gpt4MonthlyTokensUsed?: Maybe<Scalars["Int"]>
   /** Unique identifier */
@@ -514,7 +514,7 @@ export type User = {
   todos?: Maybe<TodoConnection>
   /** when the model was updated */
   updatedAt: Scalars["DateTime"]
-  username: Scalars["String"]
+  username?: Maybe<Scalars["String"]>
 }
 
 export type UserTodosArgs = {
@@ -526,8 +526,8 @@ export type UserTodosArgs = {
 }
 
 export type UserByInput = {
+  audienceToken?: InputMaybe<Scalars["String"]>
   id?: InputMaybe<Scalars["ID"]>
-  username?: InputMaybe<Scalars["String"]>
 }
 
 export type UserConnection = {
@@ -539,13 +539,13 @@ export type UserConnection = {
 
 /** Input to create a User */
 export type UserCreateInput = {
-  audienceToken?: InputMaybe<Scalars["String"]>
-  freeAiSuggestionsLimit?: Scalars["Int"]
+  audienceToken: Scalars["String"]
+  freeAiSuggestionsLimit?: InputMaybe<Scalars["Int"]>
   gpt3MonthlyTokensUsed?: InputMaybe<Scalars["Int"]>
   gpt4MonthlyTokensUsed?: InputMaybe<Scalars["Int"]>
   settings?: InputMaybe<SettingsToUserCreateSettingsRelation>
   todos?: InputMaybe<Array<InputMaybe<TodoToUserCreateTodoRelation>>>
-  username: Scalars["String"]
+  username?: InputMaybe<Scalars["String"]>
 }
 
 export type UserCreatePayload = {
@@ -782,6 +782,15 @@ export type SettingsUpdateMutation = {
     __typename?: "SettingsUpdatePayload"
     settings?: { __typename?: "Settings"; id: string } | null
   } | null
+}
+
+export type UserExistsQueryVariables = Exact<{
+  audienceToken: Scalars["String"]
+}>
+
+export type UserExistsQuery = {
+  __typename?: "Query"
+  user?: { __typename?: "User"; id: string } | null
 }
 
 export type UserCreateMutationVariables = Exact<{
@@ -1761,6 +1770,66 @@ export const SettingsUpdateDocument = {
   SettingsUpdateMutation,
   SettingsUpdateMutationVariables
 >
+export const UserExistsDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "UserExists" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "audienceToken" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "String" },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "user" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "by" },
+                value: {
+                  kind: "ObjectValue",
+                  fields: [
+                    {
+                      kind: "ObjectField",
+                      name: { kind: "Name", value: "audienceToken" },
+                      value: {
+                        kind: "Variable",
+                        name: { kind: "Name", value: "audienceToken" },
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "id" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<UserExistsQuery, UserExistsQueryVariables>
 export const UserCreateDocument = {
   kind: "Document",
   definitions: [

@@ -7,8 +7,8 @@ import {
   SettingsDocument,
   SettingsUpdateDocument,
 } from "~/graphql/schema"
-import { grafbase } from "~/lib/graphql"
 import { createArrayDiff } from "~/lib/primitives"
+import { useGlobal } from "./global"
 
 export type Settings = {
   id?: string
@@ -24,6 +24,8 @@ export function createSettingsState() {
     iconOnlySidebar: false,
     languageModelUsed: "gpt-3",
   })
+  const global = useGlobal()
+  const grafbase = global.grafbase()!
 
   // TODO: this is really dumb, there has to be a better way to do this
   // all users have settings by default with default values

@@ -15,8 +15,8 @@ import {
   TodoUpdateInput,
   TodosDocument,
 } from "~/graphql/schema"
-import { grafbase } from "~/lib/graphql"
 import { createArrayDiff } from "~/lib/primitives"
+import { useGlobal } from "./global"
 
 export type Priority = 0 | 1 | 2 | 3
 /**
@@ -37,6 +37,12 @@ export type BaseTask = {
   priority: Priority
   note: string | null
   dueDate: string | null
+  labels?: Label[]
+}
+
+export type Label = {
+  id?: string | null
+  name: string
 }
 
 export type ClientSubtask = BaseTask & {
@@ -104,6 +110,8 @@ function getTodoUpdateInput(todo: BaseTask): TodoUpdateInput {
 
 export function createTodosState() {
   const [todos, setTodos] = createStore<ClientTodo[]>([])
+  const global = useGlobal()
+  const grafbase = global.grafbase()!
 
   // fetch initial todos from the database
   // not using resource because we don't need to interact with Suspense

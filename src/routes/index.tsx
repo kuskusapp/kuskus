@@ -1,28 +1,20 @@
-import { Show, Suspense, createResource } from "solid-js"
+import { Show } from "solid-js"
+import { useGlobal } from "~/GlobalContext/global"
 import { GlobalContextProvider } from "~/GlobalContext/store"
-import { getUser } from "~/lib/auth"
 import App from "~/pages/App"
 import LandingPage from "~/pages/LandingPage"
 
 export default function Home() {
-  /**
-   * undefined - loading
-   * null - not-logged in
-   * user - user
-   */
-  const [user] = createResource(async () => {
-    return await getUser()
-  })
+  const global = useGlobal()
 
+  // TODO: fix flashing lp screen
   return (
     <main>
-      <Suspense fallback={<></>}>
-        <Show when={user()} fallback={LandingPage()}>
-          <GlobalContextProvider>
-            <App />
-          </GlobalContextProvider>
-        </Show>
-      </Suspense>
+      <Show when={global.state.user} fallback={<LandingPage />}>
+        <GlobalContextProvider>
+          <App />
+        </GlobalContextProvider>
+      </Show>
     </main>
   )
 }

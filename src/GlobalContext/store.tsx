@@ -16,7 +16,6 @@ import {
 import { todayDate } from "~/lib/lib"
 import { SuggestedTodos } from "~/components/SuggestedTodos"
 import { createSettingsState } from "./settings"
-import { createUserState } from "./user"
 
 export type { ClientSubtask, ClientTodo } from "./todos"
 
@@ -38,7 +37,6 @@ export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
   () => {
     const todosState = createTodosState()
     const settingsState = createSettingsState()
-    const userState = createUserState()
 
     const [activePage, setActivePage] = createSignal(PageType.All)
     const isPageActive = createSelector<PageType | null, PageType>(activePage)
@@ -195,7 +193,6 @@ export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
     return {
       todosState,
       settingsState,
-      userState,
       getTodoIndex,
       flatTasks,
       // all the todosState state and methods can be available top level

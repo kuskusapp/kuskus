@@ -136,6 +136,13 @@ export default function FixedSidebar() {
                   href="https://twitter.com/kuskusapp"
                 >
                   <Icon name="Twitter" />
+                </a>{" "}
+                <a
+                  id="Github"
+                  class="w-5 mt-4"
+                  href="https://github.com/kuskusapp/kuskus"
+                >
+                  <Icon name="Github" />
                 </a>
               </div>
             </div>
