@@ -17,11 +17,11 @@ export default function Home() {
   return (
     <main>
       <Suspense fallback={<></>}>
-        <Show when={user()} fallback={LandingPage()}>
-          <GlobalContextProvider>
-            <App />
-          </GlobalContextProvider>
-        </Show>
+        {/* <Show when={user()} fallback={LandingPage()}> */}
+        <GlobalContextProvider>
+          <App />
+        </GlobalContextProvider>
+        {/* </Show> */}
       </Suspense>
     </main>
   )

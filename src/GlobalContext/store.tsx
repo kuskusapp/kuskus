@@ -1,4 +1,10 @@
-import { batch, createMemo, createSelector, createSignal } from "solid-js"
+import {
+  Setter,
+  batch,
+  createMemo,
+  createSelector,
+  createSignal,
+} from "solid-js"
 import { createContextProvider } from "@solid-primitives/context"
 import {
   ClientSubtask,
@@ -8,8 +14,8 @@ import {
   getNewKey,
 } from "./todos"
 import { todayDate } from "~/lib/lib"
-import { SuggestedTodos } from "~/components/SuggestedTodos"
 import { createSettingsState } from "./settings"
+import { SetterParam } from "@solid-primitives/utils"
 
 export type { ClientSubtask, ClientTodo } from "./todos"
 
@@ -32,11 +38,12 @@ export const enum TodoListMode {
   NewTodo,
   NewSubtask,
   Search,
-  Suggested,
+  Suggest,
 }
 
 type TodoListModeDataMap = {
   [TodoListMode.NewSubtask]: NewSubtask
+  [TodoListMode.Edit]: { initEditingNote: boolean }
 }
 
 type TodoListModeState = {
@@ -65,11 +72,17 @@ export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
       focusedTodoKey
     )
 
-    const [todoListModeState, setTodoListMode] =
+    const [todoListModeState, _setTodoListMode] =
       createSignal<TodoListModeState>(
         { type: TodoListMode.Default },
         { equals: (a, b) => a.type === b.type && a.data === b.data }
       )
+    const setTodoListMode = <T extends TodoListMode>(
+      ..._: T extends keyof TodoListModeDataMap
+        ? [mode: T, data: TodoListModeDataMap[T]]
+        : [mode: T]
+    ) => _setTodoListMode({ type: _[0], data: _[1] } as any)
+
     const todoListMode = createMemo(() => todoListModeState().type)
     const isTodoListMode = createSelector<TodoListMode, TodoListMode>(
       () => todoListModeState().type
@@ -79,13 +92,13 @@ export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
       batch(() => {
         setFocusedTodoKey(key)
         // focusing a different todo should reset viewing mode
-        setTodoListMode({ type: TodoListMode.Default })
+        setTodoListMode(TodoListMode.Default)
       })
     }
 
     function addNewTask() {
       batch(() => {
-        setTodoListMode({ type: TodoListMode.NewTodo })
+        setTodoListMode(TodoListMode.NewTodo)
         setFocusedTodoKey(null)
       })
     }
@@ -98,9 +111,10 @@ export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
     function addNewSubtask(parent: TodoKey): TodoKey {
       const key = getNewKey()
       batch(() => {
-        setTodoListMode({
-          type: TodoListMode.NewSubtask,
-          data: { parent, key, isNewSubtask: true },
+        setTodoListMode(TodoListMode.NewSubtask, {
+          parent,
+          key,
+          isNewSubtask: true,
         })
         setFocusedTodoKey(key)
       })
@@ -120,17 +134,10 @@ export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
           done: false,
           parent: getTodoByKey(parent) as ClientTodo,
         })
-        setTodoListMode({ type: TodoListMode.Edit })
+        setTodoListMode(TodoListMode.Edit, { initEditingNote: false })
         setFocusedTodoKey(key)
       })
     }
-
-    const [suggestedTodos, setSuggestedTodos] = createSignal<SuggestedTodos[]>(
-      []
-    )
-
-    const [focusedSuggestedTodo, setFocusedSuggestedTodo] =
-      createSignal<number>(0)
 
     const [todoEditInput, setTodoEditInput] = createSignal("")
     const [localSearchResultIds, setLocalSearchResultIds] = createSignal<
@@ -144,10 +151,6 @@ export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
     const [clickTimeStamp, setClickTimeStamp] = createSignal(0)
     const [localSearchResultIndex, setLocalSearchResultIndex] =
       createSignal<number>(0)
-    const [showSuggestedTasksModal, setShowSuggestedTasksModal] =
-      createSignal<boolean>(false)
-    const [loadingSuggestedTodos, setLoadingSuggestedTodos] =
-      createSignal(false)
 
     const compareTodos = (a: ClientTodo, b: ClientTodo): number => {
       if (b.starred && !a.starred) {
@@ -195,8 +198,11 @@ export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
       flatTasks().findIndex((t) => t.key === focusedTodoKey())
     )
 
-    function setFocusedTodoIndex(index: number) {
-      const todo = flatTasks()[index]
+    function setFocusedTodoIndex(index: SetterParam<number>) {
+      const todo =
+        flatTasks()[
+          typeof index === "function" ? index(focusedTodoIndex()) : index
+        ]
       if (todo) setFocusedTodoKey(todo.key)
     }
 
@@ -260,14 +266,6 @@ export const [GlobalContextProvider, useGlobalContext] = createContextProvider(
       setClickTimeStamp,
       localSearchResultIndex,
       setLocalSearchResultIndex,
-      showSuggestedTasksModal,
-      setShowSuggestedTasksModal,
-      suggestedTodos,
-      setSuggestedTodos,
-      focusedSuggestedTodo,
-      setFocusedSuggestedTodo,
-      loadingSuggestedTodos,
-      setLoadingSuggestedTodos,
       addNewTask,
       newSubtask,
       addNewSubtask,

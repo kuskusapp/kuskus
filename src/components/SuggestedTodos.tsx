@@ -1,7 +1,32 @@
-import { For } from "solid-js"
+import { For, createResource, createSignal } from "solid-js"
 import { useGlobalContext } from "~/GlobalContext/store"
-import SuggestedTodo from "./SuggestedTodo"
 import { createShortcut } from "@solid-primitives/keyboard"
+import clsx from "clsx"
+import { GoogleClient } from "~/lib/auth"
+import { wrapIndex } from "~/lib/lib"
+
+function SuggestedTodo(props: {
+  title: string
+  index: number
+  note?: string
+  isFocused: boolean
+  onClick: () => void
+}) {
+  return (
+    <div
+      class={clsx(
+        "p-2 m-2 mb-2 grid-cols-5 col-span-5",
+        props.isFocused && "bg-zinc-200 dark:bg-neutral-800 rounded-lg"
+      )}
+      onClick={props.onClick}
+    >
+      <div>{props.title.split(":")[0]}</div>
+      <div class="opacity-60 text-sm pl-5 text-start text-ellipsis">
+        {props.title.split(":")[1]}
+      </div>
+    </div>
+  )
+}
 
 // TODO: best move this someplace else
 // this is temporary
@@ -12,6 +37,36 @@ export type SuggestedTodos = {
 
 export default function SuggestedTodos() {
   const global = useGlobalContext()
+
+  // TODO: use https://github.com/solidjs-community/solid-primitives/tree/main/packages/fetch#readme
+  // maybe do it in `createRequest`?
+  // type the response, we know the structure
+  // type the response well!
+  const [suggestions] = createResource<SuggestedTodos[]>(async () => {
+    const focused = global.focusedTodo()
+
+    if (!focused || global.isNewSubtask(focused) || global.isSubtask(focused))
+      return
+
+    const urlEncodedTask = focused.title
+
+    const googleToken = (await GoogleClient.getUser())?.id_token
+
+    const res = await fetch(
+      `http://127.0.0.1:3001/subtasks?request=${urlEncodedTask}`,
+      {
+        headers: {
+          Authorization: "Bearer " + googleToken,
+        },
+      }
+    )
+    const resJson = await res.json()
+    // not sure why I can't do .Success right after `res.json()`, whole thing is a hack to get it working for now
+
+    return resJson.Success.subtasks
+  })
+
+  const [focusedSuggestion, setFocusedSuggestion] = createSignal(0)
 
   // createShortcut(["Enter"], () => {
   //   global.todosState.updateTodo(global.focusedTodo()!, (p) => ({
@@ -24,18 +79,11 @@ export default function SuggestedTodos() {
   // })
 
   createShortcut(["ArrowDown"], () => {
-    global.setFocusedSuggestedTodo(
-      (global.focusedSuggestedTodo()! + 1) % global.suggestedTodos().length
-    )
+    setFocusedSuggestion((p) => wrapIndex(global.flatTasks().length, p + 1))
   })
 
   createShortcut(["ArrowUp"], () => {
-    if (global.focusedSuggestedTodo() === 0) {
-      global.setFocusedSuggestedTodo(global.suggestedTodos().length)
-    }
-    global.setFocusedSuggestedTodo(
-      (global.focusedSuggestedTodo()! - 1) % global.suggestedTodos().length
-    )
+    setFocusedSuggestion((p) => wrapIndex(global.flatTasks().length, p - 1))
   })
 
   return (
@@ -52,11 +100,14 @@ export default function SuggestedTodos() {
         {global.flatTasks()[global.focusedTodoIndex()].title}
       </div>
       <div class="grid-cols-5 col-span-5">
-        <For each={global.suggestedTodos()}>
-          {(todo, index) => (
-            <SuggestedTodo title={todo.title} index={index()} />
-          )}
-        </For>
+        {suggestions()?.map((todo, index) => (
+          <SuggestedTodo
+            title={todo.title}
+            index={index}
+            isFocused={index === focusedSuggestion()}
+            onClick={() => setFocusedSuggestion(index)}
+          />
+        ))}
       </div>
 
       {/* <div>chat</div> */}

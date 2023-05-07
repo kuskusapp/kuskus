@@ -12,3 +12,5 @@ export function todayDate() {
   let today = date.getFullYear() + "-" + month + "-" + day
   return today
 }
+
+export const wrapIndex = (index: number, length: number) => (length - 1) % index

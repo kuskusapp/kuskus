@@ -18,19 +18,6 @@ export default function Sidebar() {
     })
   })
 
-  let ref!: HTMLDivElement
-  createEventListener(
-    () => ref,
-    "click",
-    (e) => {
-      if (e.target === ref) {
-        global.setFocusedTodoKey(null)
-        // global.setNewTodo(false)
-      }
-    },
-    { passive: true }
-  )
-
   return (
     <>
       <style>
@@ -82,7 +69,19 @@ export default function Sidebar() {
         class="w-screen dark:bg-stone-900 bg-gray-100 pt-4 p-3 text-xs pl-4"
         id="sidebar"
       >
-        <div class="flex flex-col gap-1 justify-between h-full" ref={ref}>
+        <div
+          class="flex flex-col gap-1 justify-between h-full"
+          ref={(el) => {
+            createEventListener(
+              el,
+              "click",
+              (e) => {
+                e.target === el && global.setFocusedTodo(null)
+              },
+              { passive: true }
+            )
+          }}
+        >
           <div class="flex flex-col gap-1">
             <div
               id="TitleWrapper"
