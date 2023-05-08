@@ -1,16 +1,14 @@
+import { TypedDocumentNode } from "@graphql-typed-document-node/core"
 import { createContextProvider } from "@solid-primitives/context"
 import { GraphQLClient, RequestDocument, Variables } from "graphql-request"
-import { createStore } from "solid-js/store"
-import { useNavigate } from "solid-start"
-import { User as GoogleUser } from "oidc-client-ts"
-import { createMemo, createResource, onMount } from "solid-js"
-import { getUser } from "~/lib/auth"
-import { UserExistsDocument } from "~/graphql/schema"
-import { TypedDocumentNode } from "@graphql-typed-document-node/core"
 import {
   RequestOptions,
   VariablesAndRequestHeadersArgs,
 } from "graphql-request/build/esm/types"
+import { User as GoogleUser } from "oidc-client-ts"
+import { createMemo } from "solid-js"
+import { createStore } from "solid-js/store"
+import { useNavigate } from "solid-start"
 
 export type User = {
   id: string
@@ -18,6 +16,7 @@ export type User = {
   audienceToken?: string
 }
 
+// TODO: should use the one in lib/grafbase I think
 export function createGrafbaseClient(idToken: string) {
   const navigate = useNavigate()
 
