@@ -4,8 +4,8 @@ import { isToday } from "~/lib/lib"
 import {
   ClientSubtask,
   ClientTodo,
-  useGlobalContext,
-} from "../GlobalContext/store"
+  useTodoList,
+} from "../GlobalContext/todo-list"
 import Icon from "./Icon"
 import Loader from "./Loader"
 import NewSubtask from "./NewSubtask"
@@ -16,7 +16,7 @@ interface Props {
 }
 
 export default function Todo(props: Props) {
-  const global = useGlobalContext()
+  const global = useTodoList()
   const [triggerAnimation, setTriggerAnimation] = createSignal(false)
 
   return (

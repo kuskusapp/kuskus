@@ -1,5 +1,5 @@
-import { For, createResource, createSignal } from "solid-js"
-import { useGlobalContext } from "~/GlobalContext/store"
+import { For, Suspense, createResource, createSignal, untrack } from "solid-js"
+import { useTodoList } from "~/GlobalContext/todo-list"
 import { createShortcut } from "@solid-primitives/keyboard"
 import clsx from "clsx"
 import { GoogleClient } from "~/lib/auth"
@@ -36,16 +36,20 @@ export type SuggestedTodos = {
 }
 
 export default function SuggestedTodos() {
-  const global = useGlobalContext()
+  const todoList = useTodoList()
 
   // TODO: use https://github.com/solidjs-community/solid-primitives/tree/main/packages/fetch#readme
   // maybe do it in `createRequest`?
   // type the response, we know the structure
   // type the response well!
   const [suggestions] = createResource<SuggestedTodos[]>(async () => {
-    const focused = global.focusedTodo()
+    const focused = todoList.focusedTodo()
 
-    if (!focused || global.isNewSubtask(focused) || global.isSubtask(focused))
+    if (
+      !focused ||
+      todoList.isNewSubtask(focused) ||
+      todoList.isSubtask(focused)
+    )
       return
 
     const urlEncodedTask = focused.title
@@ -66,57 +70,67 @@ export default function SuggestedTodos() {
     return resJson.Success.subtasks
   })
 
-  const [focusedSuggestion, setFocusedSuggestion] = createSignal(0)
-
-  // createShortcut(["Enter"], () => {
-  //   global.todosState.updateTodo(global.focusedTodo()!, (p) => ({
-  //     ...p,
-  //     subtasks: p.subtasks.push({
-  //       title: "testing",
-  //       subutask: "subtask"
-  //     })
-  //   })
-  // })
-
-  createShortcut(["ArrowDown"], () => {
-    setFocusedSuggestion((p) => wrapIndex(global.flatTasks().length, p + 1))
-  })
-
-  createShortcut(["ArrowUp"], () => {
-    setFocusedSuggestion((p) => wrapIndex(global.flatTasks().length, p - 1))
-  })
-
   return (
-    <div
-      style={{ "border-radius": "25px", width: "45%", height: "84.6vh" }}
-      class="dark:bg-stone-900 bg-gray-100 rounded mr-2 flex flex-col justify-between items-center overflow-scroll"
-    >
-      <div
-        style={{ "border-radius": "25px 25px 0 0" }}
-        class="text-xs dark:bg-stone-900 bg-gray-100 drop-shadow-lg w-full p-1 text-center"
-      >
-        {/* TODO: fix this ts-ignore as well as all others.. */}
-        Suggested tasks for {/* @ts-ignore */}
-        {global.flatTasks()[global.focusedTodoIndex()].title}
-      </div>
-      <div class="grid-cols-5 col-span-5">
-        {suggestions()?.map((todo, index) => (
-          <SuggestedTodo
-            title={todo.title}
-            index={index}
-            isFocused={index === focusedSuggestion()}
-            onClick={() => setFocusedSuggestion(index)}
-          />
-        ))}
-      </div>
+    <Suspense>
+      {untrack(() => {
+        const [focusedSuggestion, setFocusedSuggestion] = createSignal(0)
 
-      {/* <div>chat</div> */}
-      {/* <div class="m-3 w-4/5">
+        // createShortcut(["Enter"], () => {
+        //   global.todosState.updateTodo(global.focusedTodo()!, (p) => ({
+        //     ...p,
+        //     subtasks: p.subtasks.push({
+        //       title: "testing",
+        //       subutask: "subtask"
+        //     })
+        //   })
+        // })
+
+        createShortcut(["ArrowDown"], () => {
+          setFocusedSuggestion((p) =>
+            wrapIndex(todoList.flatTasks().length, p + 1)
+          )
+        })
+
+        createShortcut(["ArrowUp"], () => {
+          setFocusedSuggestion((p) =>
+            wrapIndex(todoList.flatTasks().length, p - 1)
+          )
+        })
+
+        return (
+          <div
+            style={{ "border-radius": "25px", width: "45%", height: "84.6vh" }}
+            class="dark:bg-stone-900 bg-gray-100 rounded mr-2 flex flex-col justify-between items-center overflow-scroll"
+          >
+            <div
+              style={{ "border-radius": "25px 25px 0 0" }}
+              class="text-xs dark:bg-stone-900 bg-gray-100 drop-shadow-lg w-full p-1 text-center"
+            >
+              {/* TODO: fix this ts-ignore as well as all others.. */}
+              Suggested tasks for {/* @ts-ignore */}
+              {todoList.flatTasks()[todoList.focusedTodoIndex()].title}
+            </div>
+            <div class="grid-cols-5 col-span-5">
+              {suggestions()?.map((todo, index) => (
+                <SuggestedTodo
+                  title={todo.title}
+                  index={index}
+                  isFocused={index === focusedSuggestion()}
+                  onClick={() => setFocusedSuggestion(index)}
+                />
+              ))}
+            </div>
+
+            {/* <div>chat</div> */}
+            {/* <div class="m-3 w-4/5">
         <input
           class="w-full rounded p-2 text-sm pl-4 dark:bg-neutral-800 bg-white"
           placeholder="Ask"
         ></input>
       </div> */}
-    </div>
+          </div>
+        )
+      })}
+    </Suspense>
   )
 }

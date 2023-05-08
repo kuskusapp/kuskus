@@ -1,4 +1,4 @@
-import { useGlobalContext } from "~/GlobalContext/store"
+import { useTodoList } from "~/GlobalContext/todo-list"
 import Icon from "./Icon"
 import { createEventListener } from "@solid-primitives/event-listener"
 import type { JSX } from "solid-js"
@@ -12,7 +12,7 @@ interface Props {
 }
 
 export default function Modal(props: Props) {
-  const global = useGlobalContext()
+  const global = useTodoList()
 
   let ref!: HTMLDivElement
   createEventListener(

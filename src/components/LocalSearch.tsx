@@ -1,10 +1,10 @@
 import { autofocus } from "@solid-primitives/autofocus"
 import Fuse from "fuse.js"
 import { createSignal, onMount } from "solid-js"
-import { useGlobalContext } from "~/GlobalContext/store"
+import { useTodoList } from "~/GlobalContext/todo-list"
 
 export default function LocalSearch() {
-  const global = useGlobalContext()
+  const global = useTodoList()
   const [index, setIndex] = createSignal<any>()
 
   // TODO: probably not the best place for this

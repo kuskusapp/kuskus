@@ -2,11 +2,11 @@ import { autofocus } from "@solid-primitives/autofocus"
 import { createShortcut } from "@solid-primitives/keyboard"
 import { Show, createEffect, createSignal } from "solid-js"
 import { todayDate } from "~/lib/lib"
-import { ClientTodo, useGlobalContext } from "../GlobalContext/store"
+import { ClientTodo, useTodoList } from "../GlobalContext/todo-list"
 import Icon from "./Icon"
 
 export default function NewSubtask() {
-  const global = useGlobalContext()
+  const global = useTodoList()
   const [title, setTitle] = createSignal("")
   const [note, setNote] = createSignal("")
   const [dueDate, setDueDate] = createSignal("")

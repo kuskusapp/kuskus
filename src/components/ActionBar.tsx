@@ -1,9 +1,9 @@
-import { useGlobalContext } from "~/GlobalContext/store"
+import { useTodoList } from "~/GlobalContext/todo-list"
 import Icon from "./Icon"
 import { batch } from "solid-js"
 
 export default function ActionBar() {
-  const global = useGlobalContext()
+  const global = useTodoList()
   return (
     <div class="flex justify-between w-full items-center pl-3 pr-3">
       <div

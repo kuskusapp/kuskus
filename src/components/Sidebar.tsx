@@ -1,13 +1,14 @@
-import { createEventListener } from "@solid-primitives/event-listener"
 import clsx from "clsx"
 import { onMount } from "solid-js"
 import Split from "split.js"
-import { PageType, useGlobalContext } from "~/GlobalContext/store"
+import { useTodoList } from "~/GlobalContext/todo-list"
 import { todayDate } from "~/lib/lib"
 import Icon from "./Icon"
+import { PageType, useActivePage } from "~/pages/App"
 
 export default function Sidebar() {
-  const global = useGlobalContext()
+  const global = useTodoList()
+  const [activePage, setActivePage] = useActivePage()
 
   onMount(() => {
     Split(["#sidebar", "#page"], {
@@ -69,28 +70,16 @@ export default function Sidebar() {
         class="w-screen dark:bg-stone-900 bg-gray-100 pt-4 p-3 text-xs pl-4"
         id="sidebar"
       >
-        <div
-          class="flex flex-col gap-1 justify-between h-full"
-          ref={(el) => {
-            createEventListener(
-              el,
-              "click",
-              (e) => {
-                e.target === el && global.setFocusedTodo(null)
-              },
-              { passive: true }
-            )
-          }}
-        >
+        <div class="flex flex-col gap-1 justify-between h-full">
           <div class="flex flex-col gap-1">
             <div
               id="TitleWrapper"
               class={clsx(
                 "flex px-2 cursor-pointer items-center",
-                global.isPageActive(PageType.All) &&
+                activePage() === PageType.All &&
                   "rounded dark:bg-neutral-700 bg-zinc-200"
               )}
-              onClick={() => global.setActivePage(PageType.All)}
+              onClick={() => setActivePage(PageType.All)}
             >
               <Icon name="Inbox" />
               <span id="Title" class="pl-1 overflow-hidden">
@@ -105,10 +94,10 @@ export default function Sidebar() {
               id="TitleWrapper"
               class={clsx(
                 "flex px-2 cursor-pointer items-center",
-                global.isPageActive(PageType.Today) &&
+                activePage() === PageType.Today &&
                   "rounded dark:bg-neutral-700 bg-zinc-200"
               )}
-              onClick={() => global.setActivePage(PageType.Today)}
+              onClick={() => setActivePage(PageType.Today)}
             >
               <div>
                 <Icon name="Calendar" />
@@ -134,10 +123,10 @@ export default function Sidebar() {
               id="TitleWrapper"
               class={clsx(
                 "flex px-2 cursor-pointer items-center",
-                global.isPageActive(PageType.Starred) &&
+                activePage() === PageType.Starred &&
                   "rounded dark:bg-neutral-700 bg-zinc-200"
               )}
-              onClick={() => global.setActivePage(PageType.Starred)}
+              onClick={() => setActivePage(PageType.Starred)}
             >
               <div>
                 <Icon name="Star" />
@@ -158,10 +147,10 @@ export default function Sidebar() {
               id=""
               class={clsx(
                 "flex px-2 cursor-pointer items-center justify-start ",
-                global.isPageActive(PageType.Done) &&
+                activePage() === PageType.Done &&
                   "rounded dark:bg-neutral-700 bg-zinc-200"
               )}
-              onClick={() => global.setActivePage(PageType.Done)}
+              onClick={() => setActivePage(PageType.Done)}
             >
               <Icon name="Done" />
               <span id="Title" class="pl-1 overflow-hidden">

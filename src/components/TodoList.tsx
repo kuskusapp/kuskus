@@ -1,21 +1,28 @@
 import { createEventListener } from "@solid-primitives/event-listener"
 import { createShortcut } from "@solid-primitives/keyboard"
-import { Match, Show, Switch, batch, createEffect, on } from "solid-js"
-import { TodoListMode, useGlobalContext } from "~/GlobalContext/store"
+import { For, Match, Show, Switch, batch, createEffect } from "solid-js"
+import {
+  TodoListMode,
+  TodoListProvider,
+  createTodoListState,
+} from "~/GlobalContext/todo-list"
 import { createTodosForDev } from "~/lib/local"
-import All from "~/pages/All"
-import Done from "~/pages/Done"
-import Starred from "~/pages/Starred"
-import Today from "~/pages/Today"
 import ActionBar from "./ActionBar"
 import LocalSearch from "./LocalSearch"
 import SuggestedTodos from "./SuggestedTodos"
 import { createShortcuts } from "~/lib/primitives"
 import { Priority } from "~/GlobalContext/todos"
 import { wrapIndex } from "~/lib/lib"
+import NewSubtask from "~/components/NewSubtask"
+import NewTodo from "~/components/NewTodo"
+import Todo from "~/components/Todo"
+import TodoEdit from "~/components/TodoEdit"
+import TopBar from "~/components/TopBar"
+import { PageType, useActivePage } from "~/pages/App"
 
-export default function Page() {
-  const global = useGlobalContext()
+export default function TodoList() {
+  const todoList = createTodoListState()
+  const [activePage] = useActivePage()
 
   let ref!: HTMLDivElement
   createEventListener(
@@ -23,7 +30,7 @@ export default function Page() {
     "click",
     (e) => {
       if (e.target === ref) {
-        global.setFocusedTodo(null)
+        todoList.setFocusedTodo(null)
         // global.setNewTodo(false)
       }
     },
@@ -31,12 +38,12 @@ export default function Page() {
   )
 
   function setPrority(i: Priority) {
-    const focusedTodoValue = global.focusedTodoKey()
+    const focusedTodoValue = todoList.focusedTodoKey()
     if (!focusedTodoValue) return
 
     // update subtask
     // TODO: does not work
-    if ("parent" in global.flatTasks()[global.focusedTodoIndex()!]) {
+    if ("parent" in todoList.flatTasks()[todoList.focusedTodoIndex()!]) {
       // global.todosState.updateSubtask(
       //   focusedTodoValue,
       //   (s: ClientSubtask) => ({
@@ -46,7 +53,7 @@ export default function Page() {
       // )
     } else {
       // update task
-      global.todosState.updateTodo(focusedTodoValue, (todo) => ({
+      todoList.todosState.updateTodo(focusedTodoValue, (todo) => ({
         ...todo,
         priority: i,
       }))
@@ -55,53 +62,53 @@ export default function Page() {
 
   createEffect(() => {
     createShortcuts(
-      global.isTodoListMode(TodoListMode.Default)
+      todoList.inTodoListMode(TodoListMode.Default)
         ? {
             // Edit focused todo
             Enter() {
-              if (global.focusedTodo()) {
-                global.setTodoListMode(TodoListMode.Edit, {
+              if (todoList.focusedTodo()) {
+                todoList.setTodoListMode(TodoListMode.Edit, {
                   initEditingNote: false,
                 })
               }
             },
             // Edit focused todo note
             T() {
-              if (global.focusedTodo()) {
-                global.setTodoListMode(TodoListMode.Edit, {
+              if (todoList.focusedTodo()) {
+                todoList.setTodoListMode(TodoListMode.Edit, {
                   initEditingNote: true,
                 })
               }
             },
             // Focus todo up
             ArrowUp() {
-              global.setFocusedTodoIndex((p) =>
-                wrapIndex(global.flatTasks().length, p - 1)
+              todoList.setFocusedTodoIndex((p) =>
+                wrapIndex(todoList.flatTasks().length, p - 1)
               )
             },
             // Focus todo down
             ArrowDown() {
-              global.setFocusedTodoIndex((p) =>
-                wrapIndex(global.flatTasks().length, p + 1)
+              todoList.setFocusedTodoIndex((p) =>
+                wrapIndex(todoList.flatTasks().length, p + 1)
               )
             },
             // Remove focused todo
             Backspace() {
-              const focused = global.focusedTodo(),
-                index = global.focusedTodoIndex()
+              const focused = todoList.focusedTodo(),
+                index = todoList.focusedTodoIndex()
               if (!focused) return
 
               batch(() => {
-                if (global.isSubtask(focused)) {
-                  global.todosState.removeSubtask(
+                if (todoList.isSubtask(focused)) {
+                  todoList.todosState.removeSubtask(
                     focused.parent.key,
                     focused.key
                   )
                 } else {
-                  global.todosState.removeTodo(focused.key)
+                  todoList.todosState.removeTodo(focused.key)
                 }
                 // keep focus on the same index
-                global.setFocusedTodoIndex(index)
+                todoList.setFocusedTodoIndex(index)
               })
             },
             0() {
@@ -117,50 +124,50 @@ export default function Page() {
               setPrority(3)
             },
             4() {
-              const focused = global.focusedTodoKey()
+              const focused = todoList.focusedTodoKey()
               if (focused) {
-                global.todosState.updateTodo(focused, (todo) => ({
+                todoList.todosState.updateTodo(focused, (todo) => ({
                   starred: !todo.starred,
                 }))
               }
             },
             // Add a new todo
             N() {
-              global.addNewTask()
+              todoList.addNewTask()
             },
             // Create new subtask
             L() {
-              const focused = global.focusedTodo()
+              const focused = todoList.focusedTodo()
 
-              if (!focused || global.isNewSubtask(focused)) return
+              if (!focused || todoList.isNewSubtask(focused)) return
 
-              global.addNewSubtask(
-                global.isSubtask(focused) ? focused.parent.key : focused.key
+              todoList.addNewSubtask(
+                todoList.isSubtask(focused) ? focused.parent.key : focused.key
               )
             },
             // local search
             F() {
               batch(() => {
-                global.setTodoListMode(TodoListMode.Search)
-                global.setFocusedTodo(null)
+                todoList.setTodoListMode(TodoListMode.Search)
+                todoList.setFocusedTodo(null)
               })
             },
             // Suggestions
             A() {
-              const focused = global.focusedTodo()
+              const focused = todoList.focusedTodo()
 
               if (
                 focused &&
-                !global.isNewSubtask(focused) &&
-                !global.isSubtask(focused)
+                !todoList.isNewSubtask(focused) &&
+                !todoList.isSubtask(focused)
               ) {
-                global.setTodoListMode(TodoListMode.Suggest)
+                todoList.setTodoListMode(TodoListMode.Suggest)
               }
             },
           }
         : {
             Escape() {
-              global.setTodoListMode(TodoListMode.Default)
+              todoList.setTodoListMode(TodoListMode.Default)
             },
           }
     )
@@ -176,58 +183,92 @@ export default function Page() {
   )
 
   return (
-    <div
-      id="page"
-      class="flex w-full  bg-white dark:bg-stone-900 grow overflow-auto justify-between relative "
-      style={{ "border-left": "solid 1px rgba(200, 200, 200, 0.2)" }}
-    >
-      <style>
-        {`
-
-        ::-webkit-scrollbar {
-          display: none
-        }`}
-      </style>
+    <TodoListProvider {...todoList}>
       <div
-        class="flex flex-col justify-between rounded overflow-auto relative w-full drop"
-        ref={ref}
+        id="page"
+        class="flex w-full  bg-white dark:bg-stone-900 grow overflow-auto justify-between relative "
+        style={{ "border-left": "solid 1px rgba(200, 200, 200, 0.2)" }}
       >
+        <style>
+          {`
+::-webkit-scrollbar {
+  display: none
+}`}
+        </style>
         <div
-          class="grow flex justify-between"
-          style={{ "margin-bottom": "21.5px" }}
+          class="flex flex-col justify-between rounded overflow-auto relative w-full drop"
+          ref={ref}
         >
-          <div class="grow">
-            <Switch>
-              <Match when={global.activePage() === "All"}>
-                <All />
-              </Match>
-              <Match when={global.activePage() === "Today"}>
-                <Today />
-              </Match>
-              <Match when={global.activePage() === "Starred"}>
-                <Starred />
-              </Match>
-              <Match when={global.activePage() === "Done"}>
-                <Done />
-              </Match>
-            </Switch>
+          <div
+            class="grow flex justify-between"
+            style={{ "margin-bottom": "21.5px" }}
+          >
+            <div class="grow">
+              <div
+                ref={(el) => {
+                  createEventListener(
+                    el,
+                    "click",
+                    (e) => {
+                      if (e.target === el) todoList.setFocusedTodo(null)
+                    },
+                    { passive: true }
+                  )
+                }}
+              >
+                <TopBar title={PageType[activePage()]} />
+                <For each={todoList.flatTasks()}>
+                  {(todo) => {
+                    if (todoList.isNewSubtask(todo)) {
+                      return <NewSubtask />
+                    }
+                    return (
+                      <Switch>
+                        <Match
+                          when={
+                            todoList.isTodoFocused(todo.key) &&
+                            todoList.inTodoListMode(TodoListMode.Edit)
+                          }
+                        >
+                          <TodoEdit todo={todo} />
+                        </Match>
+                        <Match when={true}>
+                          <Todo todo={todo} subtask={"parent" in todo} />
+                        </Match>
+                      </Switch>
+                    )
+                  }}
+                </For>
+                <Show
+                  when={
+                    todoList.inTodoListMode(TodoListMode.NewTodo) &&
+                    !todoList.inTodoListMode(TodoListMode.Edit)
+                  }
+                >
+                  <NewTodo />
+                </Show>
+              </div>
+            </div>
+            <Show when={todoList.inTodoListMode(TodoListMode.Suggest)}>
+              <SuggestedTodos />
+            </Show>
           </div>
-          <Show when={global.showSuggestedTasksModal()}>
-            <SuggestedTodos />
-          </Show>
-        </div>
 
-        <div
-          style={{
-            "border-top": "solid 1px rgba(200,200,200,0.2)",
-          }}
-          class="flex sticky bottom-0 right-0 p-2 dark:bg-stone-900  bg-gray-100"
-        >
-          <Show when={global.localSearch()} fallback={<ActionBar />}>
-            <LocalSearch />
-          </Show>
+          <div
+            style={{
+              "border-top": "solid 1px rgba(200,200,200,0.2)",
+            }}
+            class="flex sticky bottom-0 right-0 p-2 dark:bg-stone-900  bg-gray-100"
+          >
+            <Show
+              when={todoList.inTodoListMode(TodoListMode.Search)}
+              fallback={<ActionBar />}
+            >
+              <LocalSearch />
+            </Show>
+          </div>
         </div>
       </div>
-    </div>
+    </TodoListProvider>
   )
 }
