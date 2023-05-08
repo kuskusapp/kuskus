@@ -1,6 +1,13 @@
 import { createEventListener } from "@solid-primitives/event-listener"
 import { createShortcut } from "@solid-primitives/keyboard"
-import { Match, Show, Switch, batch, createEffect } from "solid-js"
+import {
+  createSignal,
+  Match,
+  Show,
+  Switch,
+  batch,
+  createEffect,
+} from "solid-js"
 import { useGlobalContext } from "~/GlobalContext/store"
 import { GoogleClient } from "~/lib/auth"
 import { createTodosForDev } from "~/lib/local"
@@ -11,10 +18,11 @@ import Today from "~/pages/Today"
 import ActionBar from "./ActionBar"
 import LocalSearch from "./LocalSearch"
 import SuggestedTodos from "./SuggestedTodos"
+import { Motion, Presence } from "@motionone/solid"
 
 export default function Page() {
   const global = useGlobalContext()
-
+  const [test, setTest] = createSignal(false)
   let ref!: HTMLDivElement
   createEventListener(
     () => ref,
@@ -100,6 +108,7 @@ export default function Page() {
   createShortcut(
     ["A"],
     async () => {
+      setTest(!test())
       if (
         global.newTodo() ||
         global.editingTodo() ||
@@ -393,10 +402,7 @@ export default function Page() {
         class="flex flex-col justify-between rounded overflow-auto relative w-full drop"
         ref={ref}
       >
-        <div
-          class="grow flex justify-between"
-          style={{ "margin-bottom": "21.5px" }}
-        >
+        <div class="grow flex justify-between">
           <div class="grow">
             <Switch>
               <Match when={global.activePage() === "All"}>
@@ -413,9 +419,12 @@ export default function Page() {
               </Match>
             </Switch>
           </div>
-          <Show when={global.showSuggestedTasksModal()}>
-            <SuggestedTodos />
-          </Show>
+
+          <Presence exitBeforeEnter>
+            <Show when={global.showSuggestedTasksModal()}>
+              <SuggestedTodos />
+            </Show>
+          </Presence>
         </div>
 
         <div
