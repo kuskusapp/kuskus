@@ -1,3 +1,4 @@
+import { Motion } from "@motionone/solid"
 import clsx from "clsx"
 import { Show, createSignal } from "solid-js"
 import { isToday } from "~/lib/lib"
@@ -8,8 +9,6 @@ import {
 } from "../GlobalContext/store"
 import Icon from "./Icon"
 import Loader from "./Loader"
-import NewSubtask from "./NewSubtask"
-import { Motion } from "@motionone/solid"
 
 interface Props {
   todo: ClientTodo | ClientSubtask

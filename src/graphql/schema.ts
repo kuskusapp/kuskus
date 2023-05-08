@@ -398,6 +398,7 @@ export type Todo = {
   dueDate?: Maybe<Scalars["String"]>
   /** Unique identifier */
   id: Scalars["ID"]
+  labels?: Maybe<Array<Maybe<Scalars["String"]>>>
   note?: Maybe<Scalars["String"]>
   priority: Scalars["Int"]
   starred: Scalars["Boolean"]
@@ -431,6 +432,7 @@ export type TodoCreateInput = {
   cached?: InputMaybe<Scalars["String"]>
   done?: Scalars["Boolean"]
   dueDate?: InputMaybe<Scalars["String"]>
+  labels?: InputMaybe<Array<InputMaybe<Scalars["String"]>>>
   note?: InputMaybe<Scalars["String"]>
   priority?: Scalars["Int"]
   starred?: Scalars["Boolean"]
@@ -463,6 +465,7 @@ export type TodoToUserCreateTodo = {
   cached?: InputMaybe<Scalars["String"]>
   done?: Scalars["Boolean"]
   dueDate?: InputMaybe<Scalars["String"]>
+  labels?: InputMaybe<Array<InputMaybe<Scalars["String"]>>>
   note?: InputMaybe<Scalars["String"]>
   priority?: Scalars["Int"]
   starred?: Scalars["Boolean"]
@@ -488,6 +491,7 @@ export type TodoUpdateInput = {
   cached?: InputMaybe<Scalars["String"]>
   done?: InputMaybe<Scalars["Boolean"]>
   dueDate?: InputMaybe<Scalars["String"]>
+  labels?: InputMaybe<Array<InputMaybe<Scalars["String"]>>>
   note?: InputMaybe<Scalars["String"]>
   priority?: InputMaybe<IntOperationsInput>
   starred?: InputMaybe<Scalars["Boolean"]>
@@ -656,6 +660,19 @@ export type TodoCreateMutation = {
   } | null
 }
 
+export type TodoLinkMutationVariables = Exact<{
+  userId: Scalars["ID"]
+  taskId: Scalars["ID"]
+}>
+
+export type TodoLinkMutation = {
+  __typename?: "Mutation"
+  userUpdate?: {
+    __typename?: "UserUpdatePayload"
+    user?: { __typename?: "User"; id: string } | null
+  } | null
+}
+
 export type TodoUpdateMutationVariables = Exact<{
   id: Scalars["ID"]
   todo: TodoUpdateInput
@@ -678,12 +695,12 @@ export type TodoDeleteMutation = {
   todoDelete?: { __typename?: "TodoDeletePayload"; deletedId: string } | null
 }
 
-export type TodoLinkSubtaskMutationVariables = Exact<{
+export type SubtaskLinkMutationVariables = Exact<{
   taskId: Scalars["ID"]
   subtaskId: Scalars["ID"]
 }>
 
-export type TodoLinkSubtaskMutation = {
+export type SubtaskLinkMutation = {
   __typename?: "Mutation"
   todoUpdate?: {
     __typename?: "TodoUpdatePayload"
@@ -1046,6 +1063,114 @@ export const TodoCreateDocument = {
     },
   ],
 } as unknown as DocumentNode<TodoCreateMutation, TodoCreateMutationVariables>
+export const TodoLinkDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "TodoLink" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "userId" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: { kind: "NamedType", name: { kind: "Name", value: "ID" } },
+          },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "taskId" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: { kind: "NamedType", name: { kind: "Name", value: "ID" } },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "userUpdate" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "by" },
+                value: {
+                  kind: "ObjectValue",
+                  fields: [
+                    {
+                      kind: "ObjectField",
+                      name: { kind: "Name", value: "id" },
+                      value: {
+                        kind: "Variable",
+                        name: { kind: "Name", value: "userId" },
+                      },
+                    },
+                  ],
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "input" },
+                value: {
+                  kind: "ObjectValue",
+                  fields: [
+                    {
+                      kind: "ObjectField",
+                      name: { kind: "Name", value: "todos" },
+                      value: {
+                        kind: "ListValue",
+                        values: [
+                          {
+                            kind: "ObjectValue",
+                            fields: [
+                              {
+                                kind: "ObjectField",
+                                name: { kind: "Name", value: "link" },
+                                value: {
+                                  kind: "Variable",
+                                  name: { kind: "Name", value: "taskId" },
+                                },
+                              },
+                            ],
+                          },
+                        ],
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "user" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "id" } },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<TodoLinkMutation, TodoLinkMutationVariables>
 export const TodoUpdateDocument = {
   kind: "Document",
   definitions: [
@@ -1182,13 +1307,13 @@ export const TodoDeleteDocument = {
     },
   ],
 } as unknown as DocumentNode<TodoDeleteMutation, TodoDeleteMutationVariables>
-export const TodoLinkSubtaskDocument = {
+export const SubtaskLinkDocument = {
   kind: "Document",
   definitions: [
     {
       kind: "OperationDefinition",
       operation: "mutation",
-      name: { kind: "Name", value: "TodoLinkSubtask" },
+      name: { kind: "Name", value: "SubtaskLink" },
       variableDefinitions: [
         {
           kind: "VariableDefinition",
@@ -1289,10 +1414,7 @@ export const TodoLinkSubtaskDocument = {
       },
     },
   ],
-} as unknown as DocumentNode<
-  TodoLinkSubtaskMutation,
-  TodoLinkSubtaskMutationVariables
->
+} as unknown as DocumentNode<SubtaskLinkMutation, SubtaskLinkMutationVariables>
 export const SubtasksDocument = {
   kind: "Document",
   definitions: [

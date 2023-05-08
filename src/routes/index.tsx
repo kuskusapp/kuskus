@@ -29,7 +29,7 @@ export default function Home() {
           audienceToken: user?.profile.aud as string,
         })
         const id = foundUser?.user?.id
-        // TODO: save to local storage or pass it in to <App />
+        // TODO: save to local storage maybe?
         return { userId: id, googleUser: user }
       } catch (error) {
         return null

@@ -34,10 +34,10 @@ export function createGrafbaseClient(idToken: string) {
 export const [GlobalProvider, useGlobal] = createContextProvider(
   (props: { userId: string; googleUser: GoogleUser }) => {
     const [state, setState] = createStore<{
-      user: string
+      userId: string
       googleUser: GoogleUser | null
     }>({
-      user: props.userId,
+      userId: props.userId,
       googleUser: props.googleUser,
     })
 
@@ -47,8 +47,7 @@ export const [GlobalProvider, useGlobal] = createContextProvider(
     })
 
     return {
-      state,
-      setState,
+      userId: state.userId,
       grafbase,
     }
   },

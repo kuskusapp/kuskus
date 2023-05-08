@@ -2,15 +2,15 @@ import { defer } from "@solid-primitives/utils"
 import { createEffect, onMount } from "solid-js"
 import { StoreSetter, createStore, produce } from "solid-js/store"
 import {
-  Query,
   SubtaskConnection,
   SubtaskCreateDocument,
   SubtaskDeleteDocument,
+  SubtaskLinkDocument,
   SubtaskUpdateDocument,
   TodoCreateDocument,
   TodoCreateInput,
   TodoDeleteDocument,
-  TodoLinkSubtaskDocument,
+  TodoLinkDocument,
   TodoUpdateDocument,
   TodoUpdateInput,
   TodosDocument,
@@ -158,9 +158,15 @@ export function createTodosState() {
           .request(TodoCreateDocument, {
             todo: getTodoCreateInput(todo),
           })
-          .then((res) => {
+          .then(async (res) => {
             // tasks get their id after being added to the db
             setTodos((t) => t === todo, "id", res.todoCreate?.todo?.id!)
+
+            // do in one request.. should be no need for manual link..
+            await grafbase.request(TodoLinkDocument, {
+              userId: global.userId,
+              taskId: res.todoCreate?.todo?.id,
+            })
           })
       }
 
@@ -201,7 +207,7 @@ export function createTodosState() {
                   res.subtaskCreate?.subtask?.id!
                 )
                 // TODO: do the subtask create and subtask link in 1 query..
-                grafbase.request(TodoLinkSubtaskDocument, {
+                grafbase.request(SubtaskLinkDocument, {
                   taskId: todo.id!,
                   subtaskId: res.subtaskCreate?.subtask?.id!,
                 })

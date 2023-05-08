@@ -7,7 +7,6 @@ import {
   SettingsDocument,
   SettingsUpdateDocument,
 } from "~/graphql/schema"
-import { createArrayDiff } from "~/lib/primitives"
 import { useGlobal } from "./global"
 
 export type Settings = {
@@ -32,8 +31,6 @@ export function createSettingsState() {
   // you shouldn't have to create them in front end code like this...
   onMount(() => {
     grafbase.request(SettingsDocument).then(async (res) => {
-      console.log(grafbase, "grafbase")
-      console.log
       // if there are no settings, create them and put id in local store
       if (res.settingsCollection?.edges?.length === 0) {
         const res = await grafbase.request(SettingsCreateDocument, {
