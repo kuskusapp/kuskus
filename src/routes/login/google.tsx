@@ -1,12 +1,10 @@
 import { onMount } from "solid-js"
 import { useNavigate } from "solid-start"
-import { useGlobal } from "~/GlobalContext/global"
+import { createGrafbaseClient } from "~/GlobalContext/global"
 import { UserCreateDocument, UserExistsDocument } from "~/graphql/schema"
 import { GoogleClient, getUser } from "~/lib/auth"
 
 export default function GoogleCallback() {
-  const global = useGlobal()
-
   const navigate = useNavigate()
   onMount(async () => {
     await GoogleClient.signinCallback().catch((error) => {
@@ -15,34 +13,34 @@ export default function GoogleCallback() {
     })
 
     const user = await getUser()
+    const token = user?.id_token
 
-    global.setState("googleUser", user)
-
-    const grafbase = global.grafbase()
-
-    if (grafbase) {
-      // check does the user already exist given the audience token
-      const foundUser = await grafbase.request(UserExistsDocument, {
-        audienceToken: user?.profile.aud as string,
-      })
-
-      let id = foundUser?.user?.id
-
-      if (!id) {
-        // create user in grafbase
-        const res = await grafbase.request(UserCreateDocument, {
-          user: {
-            audienceToken: user?.profile.aud as string,
-          },
-        })
-        id = res?.userCreate?.user?.id
-      }
-
-      if (id) global.setState("user", { id })
-
+    if (!token) {
       navigate("/")
-    } else {
-      navigate("/auth")
+      return null
+    }
+
+    const grafbaseClient = createGrafbaseClient(token)
+
+    if (grafbaseClient) {
+      try {
+        // check if user already exists in db with this audienceToken
+        const foundUser = await grafbaseClient.request(UserExistsDocument, {
+          audienceToken: user?.profile.aud as string,
+        })
+        let id = foundUser?.user?.id
+        // if user is not found in db, create user
+        if (!id) {
+          await grafbaseClient.request(UserCreateDocument, {
+            user: {
+              audienceToken: user?.profile.aud as string,
+            },
+          })
+          navigate("/")
+        }
+      } catch (error) {
+        navigate("/")
+      }
     }
   })
   return <></>

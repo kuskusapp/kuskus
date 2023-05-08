@@ -1,19 +1,10 @@
-import { GraphQLClient } from "graphql-request"
 import { Show, Suspense, createResource } from "solid-js"
-import { GlobalProvider } from "~/GlobalContext/global"
+import { GlobalProvider, createGrafbaseClient } from "~/GlobalContext/global"
 import { GlobalContextProvider } from "~/GlobalContext/store"
 import { UserExistsDocument } from "~/graphql/schema"
 import { getUser } from "~/lib/auth"
 import App from "~/pages/App"
 import LandingPage from "~/pages/LandingPage"
-
-export function createGrafbaseClient(idToken: string) {
-  return new GraphQLClient(import.meta.env.VITE_GRAFBASE_API_URL, {
-    headers: {
-      authorization: `Bearer ${idToken}`,
-    },
-  })
-}
 
 export default function Home() {
   /**
