@@ -1,5 +1,5 @@
-import { Show, Suspense, createResource } from "solid-js"
 import { User as GoogleUser } from "oidc-client-ts"
+import { Show, Suspense, createResource } from "solid-js"
 import { GlobalProvider } from "~/GlobalContext/global"
 import { GlobalContextProvider } from "~/GlobalContext/store"
 import { UserExistsDocument } from "~/graphql/schema"

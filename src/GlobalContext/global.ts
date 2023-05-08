@@ -1,10 +1,5 @@
-import { TypedDocumentNode } from "@graphql-typed-document-node/core"
 import { createContextProvider } from "@solid-primitives/context"
-import { GraphQLClient, RequestDocument, Variables } from "graphql-request"
-import {
-  RequestOptions,
-  VariablesAndRequestHeadersArgs,
-} from "graphql-request/build/esm/types"
+import { GraphQLClient } from "graphql-request"
 import { User as GoogleUser } from "oidc-client-ts"
 import { createMemo } from "solid-js"
 import { createStore } from "solid-js/store"

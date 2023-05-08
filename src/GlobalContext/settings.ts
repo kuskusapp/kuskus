@@ -8,7 +8,7 @@ import {
   SettingsUpdateDocument,
 } from "~/graphql/schema"
 import { createArrayDiff } from "~/lib/primitives"
-import { useGlobal } from "./user"
+import { useGlobal } from "./global"
 
 export type Settings = {
   id?: string
