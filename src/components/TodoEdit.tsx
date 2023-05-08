@@ -15,6 +15,7 @@ import {
   useGlobalContext,
 } from "../GlobalContext/store"
 import Icon from "./Icon"
+import { Motion } from "@motionone/solid"
 
 interface Props {
   todo: ClientTodo | ClientSubtask
@@ -101,7 +102,7 @@ export default function TodoEdit(props: Props) {
   })
 
   return (
-    <div class="flex justify-between cursor-default pl-1.5 pr-1.5 dark:bg-neutral-700 bg-zinc-200 rounded py-2 transition-all ">
+    <Motion.div class="flex justify-between cursor-default pl-1.5 pr-1.5 dark:bg-neutral-700 bg-zinc-200 py-2 transition-all ">
       <div class="w-full">
         <div class="flex gap-2 items-center">
           <div>
@@ -233,6 +234,6 @@ export default function TodoEdit(props: Props) {
           </Show>
         </div>
       </div>
-    </div>
+    </Motion.div>
   )
 }

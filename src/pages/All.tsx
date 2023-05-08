@@ -6,6 +6,7 @@ import NewTodo from "~/components/NewTodo"
 import Todo from "~/components/Todo"
 import TodoEdit from "~/components/TodoEdit"
 import TopBar from "~/components/TopBar"
+import { Motion, Presence } from "@motionone/solid"
 
 export default function All() {
   const global = useGlobalContext()
@@ -45,9 +46,11 @@ export default function All() {
           )
         }}
       </For>
-      <Show when={global.newTodo() && !global.editingTodo()}>
-        <NewTodo />
-      </Show>
+      <Presence exitBeforeEnter>
+        <Show when={global.newTodo() && !global.editingTodo()}>
+          <NewTodo />
+        </Show>
+      </Presence>
     </div>
   )
 }

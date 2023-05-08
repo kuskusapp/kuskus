@@ -4,6 +4,7 @@ import { Show, createEffect, createSignal, onMount } from "solid-js"
 import { todayDate } from "~/lib/lib"
 import { useGlobalContext } from "../GlobalContext/store"
 import Icon from "./Icon"
+import { Motion, Presence } from "@motionone/solid"
 
 export default function NewTodo() {
   const global = useGlobalContext()
@@ -64,7 +65,7 @@ export default function NewTodo() {
   })
 
   return (
-    <div class="flex justify-between cursor-default pl-1.5 pr-1.5 dark:bg-neutral-700 bg-zinc-200 rounded py-2">
+    <Motion.div class="flex justify-between cursor-default pl-1.5 pr-1.5 dark:bg-neutral-700 bg-zinc-200 py-2">
       <div class="w-full">
         <div class="flex gap-2 items-center">
           <div>
@@ -195,6 +196,6 @@ export default function NewTodo() {
           </Show>
         </div>
       </div>
-    </div>
+    </Motion.div>
   )
 }

@@ -8,6 +8,8 @@ import {
 } from "../GlobalContext/store"
 import Icon from "./Icon"
 import Loader from "./Loader"
+import NewSubtask from "./NewSubtask"
+import { Motion } from "@motionone/solid"
 
 interface Props {
   todo: ClientTodo | ClientSubtask
@@ -37,10 +39,10 @@ export default function Todo(props: Props) {
         }
       `}
       </style>
-      <div>
+      <Motion.div>
         <div
           class={clsx(
-            "flex cursor-default pl-1.5 justify-between p-2 dark:border-neutral-700 mb-1 transition-all",
+            "flex cursor-default pl-1.5 justify-between p-2 dark:border-neutral-700 mb-1",
             props.todo.note && "min-h-min",
             props.subtask && "ml-4",
             global.isTodoFocused(props.todo.key) &&
@@ -127,7 +129,7 @@ export default function Todo(props: Props) {
             </Show>
           </div>
         </div>
-      </div>
+      </Motion.div>
     </>
   )
 }
