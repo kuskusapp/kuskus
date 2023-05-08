@@ -26,13 +26,6 @@ export function createGrafbaseClient(idToken: string) {
     },
   })
 
-  async function request<T, V extends Variables = Variables>(
-    document: RequestDocument | TypedDocumentNode<T, V>,
-    ...variablesAndRequestHeaders: VariablesAndRequestHeadersArgs<V>
-  ): Promise<T | undefined>
-  async function request<T, V extends Variables = Variables>(
-    options: RequestOptions<V, T>
-  ): Promise<T | undefined>
   async function request(...args: any[]): Promise<any> {
     try {
       return await client.request(...(args as [any]))

@@ -31,7 +31,9 @@ export function createSettingsState() {
   // all users have settings by default with default values
   // you shouldn't have to create them in front end code like this...
   onMount(() => {
-    grafbase.request<Query>(SettingsDocument).then(async (res) => {
+    grafbase.request(SettingsDocument).then(async (res) => {
+      console.log(grafbase, "grafbase")
+      console.log
       // if there are no settings, create them and put id in local store
       if (res.settingsCollection?.edges?.length === 0) {
         const res = await grafbase.request(SettingsCreateDocument, {
@@ -55,7 +57,7 @@ export function createSettingsState() {
     // TODO: should not run on first load of the app..
     if (settings.id) {
       // if settings change, update db
-      grafbase.request<Mutation>(SettingsUpdateDocument, {
+      grafbase.request(SettingsUpdateDocument, {
         id: settings.id,
         settings: {
           hideActionBar: settings.hideActionBar,

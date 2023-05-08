@@ -8,7 +8,6 @@ import {
 } from "../GlobalContext/store"
 import Icon from "./Icon"
 import Loader from "./Loader"
-import NewSubtask from "./NewSubtask"
 
 interface Props {
   todo: ClientTodo | ClientSubtask

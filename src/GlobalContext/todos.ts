@@ -16,7 +16,7 @@ import {
   TodosDocument,
 } from "~/graphql/schema"
 import { createArrayDiff } from "~/lib/primitives"
-import { useGlobal } from "./user"
+import { useGlobal } from "./global"
 
 export type Priority = 0 | 1 | 2 | 3
 /**
@@ -116,8 +116,7 @@ export function createTodosState() {
   onMount(() => {
     // fetch initial todos from the database
     // not using resource because we don't need to interact with Suspense
-    grafbase.request<Query>(TodosDocument).then((res) => {
-      console.log(grafbase, "graf")
+    grafbase.request(TodosDocument).then((res) => {
       setTodos(
         produce((state) => {
           if (res.todoCollection?.edges) {
