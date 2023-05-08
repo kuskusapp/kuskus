@@ -14,7 +14,6 @@ import {
   Title,
 } from "solid-start"
 import "./root.css"
-// import { GlobalProvider } from "./GlobalContext/global"
 
 export default function Root() {
   const location = useLocation()
@@ -38,11 +37,9 @@ export default function Root() {
       <Body>
         <Suspense>
           <ErrorBoundary>
-            {/* <GlobalProvider> */}
             <Routes>
               <FileRoutes />
             </Routes>
-            {/* </GlobalProvider> */}
           </ErrorBoundary>
         </Suspense>
         <Scripts />
