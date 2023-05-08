@@ -1,11 +1,12 @@
 import { onMount } from "solid-js"
 import { useNavigate } from "solid-start"
-import { createGrafbaseClient } from "~/GlobalContext/global"
 import { UserCreateDocument, UserExistsDocument } from "~/graphql/schema"
 import { GoogleClient, getUser } from "~/lib/auth"
+import { createGrafbaseClient } from "~/lib/grafbase"
 
 export default function GoogleCallback() {
   const navigate = useNavigate()
+
   onMount(async () => {
     await GoogleClient.signinCallback().catch((error) => {
       console.error(error)
@@ -38,6 +39,7 @@ export default function GoogleCallback() {
           })
           navigate("/")
         }
+        navigate("/")
       } catch (error) {
         navigate("/")
       }
