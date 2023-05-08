@@ -1,5 +1,5 @@
 import { defer } from "@solid-primitives/utils"
-import { createEffect } from "solid-js"
+import { createEffect, onMount } from "solid-js"
 import { StoreSetter, createStore, produce } from "solid-js/store"
 import {
   Query,
@@ -113,35 +113,37 @@ export function createTodosState() {
   const global = useGlobal()
   const grafbase = global.grafbase()!
 
-  // fetch initial todos from the database
-  // not using resource because we don't need to interact with Suspense
-  grafbase.request<Query>(TodosDocument).then((res) => {
-    setTodos(
-      produce((state) => {
-        if (res.todoCollection?.edges) {
-          for (const todo of res.todoCollection.edges) {
-            if (!todo?.node) continue
-            const subtasks: ClientTodo["subtasks"] = []
-            const clientTodo: ClientTodo = {
-              id: todo.node.id,
-              key: getNewKey(),
-              done: todo.node.done,
-              starred: todo.node.starred,
-              title: todo.node.title,
-              priority: parseDbPriority(todo.node.priority),
-              note: todo.node.note ?? null,
-              dueDate: todo.node.dueDate ?? null,
-              subtasks,
+  onMount(() => {
+    // fetch initial todos from the database
+    // not using resource because we don't need to interact with Suspense
+    grafbase.request<Query>(TodosDocument).then((res) => {
+      setTodos(
+        produce((state) => {
+          if (res.todoCollection?.edges) {
+            for (const todo of res.todoCollection.edges) {
+              if (!todo?.node) continue
+              const subtasks: ClientTodo["subtasks"] = []
+              const clientTodo: ClientTodo = {
+                id: todo.node.id,
+                key: getNewKey(),
+                done: todo.node.done,
+                starred: todo.node.starred,
+                title: todo.node.title,
+                priority: parseDbPriority(todo.node.priority),
+                note: todo.node.note ?? null,
+                dueDate: todo.node.dueDate ?? null,
+                subtasks,
+              }
+              subtasks.push.apply(
+                subtasks,
+                parseDbSubtasks(todo.node.subtasks, clientTodo)
+              )
+              state.push(clientTodo)
             }
-            subtasks.push.apply(
-              subtasks,
-              parseDbSubtasks(todo.node.subtasks, clientTodo)
-            )
-            state.push(clientTodo)
           }
-        }
-      })
-    )
+        })
+      )
+    })
   })
 
   //

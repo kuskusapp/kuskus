@@ -52,13 +52,9 @@ export function createSettingsState() {
   // TODO: not sure how good this is..
   // should sync settings to grafbase when settings local store changes..
   createEffect(() => {
-    console.log("settings changed")
-    console.log(settings)
     // TODO: should not run on first load of the app..
     if (settings.id) {
       // if settings change, update db
-      console.log("mutation run..")
-      console.log(settings.hideActionBar, "hideActionBar")
       grafbase.request<Mutation>(SettingsUpdateDocument, {
         id: settings.id,
         settings: {

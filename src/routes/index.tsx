@@ -1,4 +1,5 @@
 import { Show, Suspense, createResource } from "solid-js"
+import { User as GoogleUser } from "oidc-client-ts"
 import { GlobalProvider } from "~/GlobalContext/global"
 import { GlobalContextProvider } from "~/GlobalContext/store"
 import { UserExistsDocument } from "~/graphql/schema"
@@ -13,7 +14,7 @@ export default function Home() {
    * null - not-logged in
    * userId - id of user
    */
-  const [userId] = createResource(async () => {
+  const [user] = createResource(async () => {
     const user = await getUser()
     const token = user?.id_token
 
@@ -29,7 +30,7 @@ export default function Home() {
         })
         const id = foundUser?.user?.id
         // TODO: save to local storage or pass it in to <App />
-        return id
+        return { userId: id, googleUser: user }
       } catch (error) {
         return null
       }
@@ -40,8 +41,11 @@ export default function Home() {
   return (
     <main>
       <Suspense fallback={<></>}>
-        <Show when={userId()} fallback={<LandingPage />}>
-          <GlobalProvider userId={userId() as string}>
+        <Show when={user()?.userId} fallback={<LandingPage />}>
+          <GlobalProvider
+            userId={user()?.userId as string}
+            googleUser={user()?.googleUser as GoogleUser}
+          >
             <GlobalContextProvider>
               <App />
             </GlobalContextProvider>

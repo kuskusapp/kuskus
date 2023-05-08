@@ -41,30 +41,22 @@ export function createGrafbaseClient(idToken: string) {
       navigate("/auth")
     }
   }
-
   return { request }
 }
 
 export const [GlobalProvider, useGlobal] = createContextProvider(
-  (props: { userId: string }) => {
+  (props: { userId: string; googleUser: GoogleUser }) => {
     const [state, setState] = createStore<{
       user: string
       googleUser: GoogleUser | null
     }>({
       user: props.userId,
-      googleUser: null,
+      googleUser: props.googleUser,
     })
 
     const grafbase = createMemo(() => {
       const token = state.googleUser?.id_token
       return token ? createGrafbaseClient(token) : undefined
-    })
-
-    // maybe avoid doing this, and pass the user as props from routes/index
-    // from resource alongside the userId
-    onMount(async () => {
-      const user = await getUser()
-      setState("googleUser", user)
     })
 
     return {
