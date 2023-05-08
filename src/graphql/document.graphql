@@ -43,6 +43,14 @@ mutation TodoCreate($todo: TodoCreateInput!) {
   }
 }
 
+mutation TodoLink($userId: ID!, $taskId: ID!) {
+  userUpdate(by: { id: $userId }, input: { todos: [{ link: $taskId }] }) {
+    user {
+      id
+    }
+  }
+}
+
 mutation TodoUpdate($id: ID!, $todo: TodoUpdateInput!) {
   todoUpdate(by: { id: $id }, input: $todo) {
     todo {
@@ -57,7 +65,7 @@ mutation TodoDelete($id: ID!) {
   }
 }
 
-mutation TodoLinkSubtask($taskId: ID!, $subtaskId: ID!) {
+mutation SubtaskLink($taskId: ID!, $subtaskId: ID!) {
   todoUpdate(by: { id: $taskId }, input: { subtasks: [{ link: $subtaskId }] }) {
     todo {
       id

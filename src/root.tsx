@@ -1,8 +1,6 @@
 // @refresh reload
 import { Suspense } from "solid-js"
 import {
-  useLocation,
-  A,
   Body,
   ErrorBoundary,
   FileRoutes,
@@ -14,16 +12,8 @@ import {
   Title,
 } from "solid-start"
 import "./root.css"
-import { GlobalProvider } from "./GlobalContext/global"
 
 export default function Root() {
-  const location = useLocation()
-  // TODO: not used?
-  const active = (path: string) =>
-    path == location.pathname
-      ? "border-sky-600"
-      : "border-transparent hover:border-sky-600"
-
   return (
     <Html lang="en">
       <Head>
@@ -38,11 +28,9 @@ export default function Root() {
       <Body>
         <Suspense>
           <ErrorBoundary>
-            <GlobalProvider>
-              <Routes>
-                <FileRoutes />
-              </Routes>
-            </GlobalProvider>
+            <Routes>
+              <FileRoutes />
+            </Routes>
           </ErrorBoundary>
         </Suspense>
         <Scripts />

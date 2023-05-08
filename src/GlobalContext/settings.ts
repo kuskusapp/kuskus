@@ -7,7 +7,6 @@ import {
   SettingsDocument,
   SettingsUpdateDocument,
 } from "~/graphql/schema"
-import { createArrayDiff } from "~/lib/primitives"
 import { useGlobal } from "./global"
 
 export type Settings = {
@@ -31,7 +30,7 @@ export function createSettingsState() {
   // all users have settings by default with default values
   // you shouldn't have to create them in front end code like this...
   onMount(() => {
-    grafbase.request<Query>(SettingsDocument).then(async (res) => {
+    grafbase.request(SettingsDocument).then(async (res) => {
       // if there are no settings, create them and put id in local store
       if (res.settingsCollection?.edges?.length === 0) {
         const res = await grafbase.request(SettingsCreateDocument, {
@@ -52,14 +51,10 @@ export function createSettingsState() {
   // TODO: not sure how good this is..
   // should sync settings to grafbase when settings local store changes..
   createEffect(() => {
-    console.log("settings changed")
-    console.log(settings)
     // TODO: should not run on first load of the app..
     if (settings.id) {
       // if settings change, update db
-      console.log("mutation run..")
-      console.log(settings.hideActionBar, "hideActionBar")
-      grafbase.request<Mutation>(SettingsUpdateDocument, {
+      grafbase.request(SettingsUpdateDocument, {
         id: settings.id,
         settings: {
           hideActionBar: settings.hideActionBar,
