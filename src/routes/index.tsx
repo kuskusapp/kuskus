@@ -40,11 +40,9 @@ export default function Home() {
         // TODO: save to local storage or pass it in to <App />
         return id
       } catch (error) {
-        console.log(error)
         return null
       }
     }
-
     return await getUser()
   })
 
@@ -52,12 +50,12 @@ export default function Home() {
   return (
     <main>
       <Suspense fallback={<></>}>
-        <Show when={user} fallback={<LandingPage />}>
-          {/* <GlobalProvider>
+        <Show when={!user} fallback={<LandingPage />}>
+          <GlobalProvider>
             <GlobalContextProvider>
               <App />
             </GlobalContextProvider>
-          </GlobalProvider> */}
+          </GlobalProvider>
         </Show>
       </Suspense>
     </main>
