@@ -1,8 +1,9 @@
 import { Show, Suspense, createResource } from "solid-js"
-import { GlobalProvider, createGrafbaseClient } from "~/GlobalContext/global"
+import { GlobalProvider } from "~/GlobalContext/global"
 import { GlobalContextProvider } from "~/GlobalContext/store"
 import { UserExistsDocument } from "~/graphql/schema"
 import { getUser } from "~/lib/auth"
+import { createGrafbaseClient } from "~/lib/grafbase"
 import App from "~/pages/App"
 import LandingPage from "~/pages/LandingPage"
 
@@ -10,9 +11,9 @@ export default function Home() {
   /**
    * undefined - loading
    * null - not-logged in
-   * user - user
+   * userId - id of user
    */
-  const [user] = createResource(async () => {
+  const [userId] = createResource(async () => {
     const user = await getUser()
     const token = user?.id_token
 
@@ -20,7 +21,6 @@ export default function Home() {
       return null
     }
     const grafbaseClient = createGrafbaseClient(token)
-
     if (grafbaseClient) {
       try {
         // check if user already exists in db with this audienceToken
@@ -34,15 +34,14 @@ export default function Home() {
         return null
       }
     }
-    return await getUser()
   })
 
   // TODO: fix flashing lp screen
   return (
     <main>
       <Suspense fallback={<></>}>
-        <Show when={user} fallback={<LandingPage />}>
-          <GlobalProvider user={user}>
+        <Show when={userId()} fallback={<LandingPage />}>
+          <GlobalProvider userId={userId() as string}>
             <GlobalContextProvider>
               <App />
             </GlobalContextProvider>
