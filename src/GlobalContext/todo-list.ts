@@ -20,7 +20,7 @@ import { PageType, useActivePage } from "~/pages/App"
 export type { ClientSubtask, ClientTodo } from "./todos"
 
 export type NewSubtask = {
-  isNewSubtask: true
+  type: "new-subtask"
   parent: TodoKey
   key: TodoKey
 }
@@ -36,8 +36,11 @@ export const enum TodoListMode {
 
 type TodoListModeDataMap = {
   [TodoListMode.NewSubtask]: NewSubtask
-  [TodoListMode.Edit]: { initEditingNote: boolean }
+  [TodoListMode.Edit]: { initEditingNote?: true }
 }
+
+export type TodoListModeData<T extends TodoListMode> =
+  T extends keyof TodoListModeDataMap ? TodoListModeDataMap[T] : void
 
 type TodoListModeState = {
   [K in TodoListMode]: { type: K } & (K extends keyof TodoListModeDataMap
@@ -56,52 +59,57 @@ export function createTodoListState() {
   const [focusedTodoKey, setFocusedTodoKey] = createSignal<TodoKey | null>(null)
   const isTodoFocused = createSelector<TodoKey | null, TodoKey>(focusedTodoKey)
 
-  const [todoListModeState, _setTodoListMode] = createSignal<TodoListModeState>(
+  const [modeState, _setMode] = createSignal<TodoListModeState>(
     { type: TodoListMode.Default },
     { equals: (a, b) => a.type === b.type && a.data === b.data }
   )
-  const setTodoListMode = <T extends TodoListMode>(
+  const setMode = <T extends TodoListMode>(
     ..._: T extends keyof TodoListModeDataMap
       ? [mode: T, data: TodoListModeDataMap[T]]
       : [mode: T]
-  ) => _setTodoListMode({ type: _[0], data: _[1] } as any)
+  ) => _setMode({ type: _[0], data: _[1] } as any)
 
-  const todoListMode = createMemo(() => todoListModeState().type)
-  const inTodoListMode = createSelector<TodoListMode, TodoListMode>(
-    () => todoListModeState().type
+  const mode = createMemo(() => modeState().type)
+  const inMode = createSelector<TodoListMode, TodoListMode>(
+    () => modeState().type
   )
+  const getModeData = <T extends TodoListMode>(mode: T) =>
+    modeState().type === mode
+      ? (modeState().data as TodoListModeData<T>)
+      : undefined
 
   function setFocusedTodo(key: TodoKey | null) {
     batch(() => {
       setFocusedTodoKey(key)
       // focusing a different todo should reset viewing mode
-      setTodoListMode(TodoListMode.Default)
+      setMode(TodoListMode.Default)
     })
   }
 
   function addNewTask() {
     batch(() => {
-      setTodoListMode(TodoListMode.NewTodo)
+      setMode(TodoListMode.NewTodo)
       setFocusedTodoKey(null)
     })
   }
 
   const newSubtask = createMemo(() => {
-    const mode = todoListModeState()
+    const mode = modeState()
     return mode.type === TodoListMode.NewSubtask ? mode.data : null
   })
 
-  function addNewSubtask(parent: TodoKey): TodoKey {
+  function addNewSubtask(): void {
     const key = getNewKey()
+    const focused = focusedTodo()
+    if (!focused) return
     batch(() => {
-      setTodoListMode(TodoListMode.NewSubtask, {
-        parent,
+      setMode(TodoListMode.NewSubtask, {
+        parent: focused.type === "subtask" ? focused.parent.key : focused.key,
         key,
-        isNewSubtask: true,
+        type: "new-subtask",
       })
       setFocusedTodoKey(key)
     })
-    return key
   }
 
   function addSubtask(
@@ -114,10 +122,11 @@ export function createTodoListState() {
       const { parent } = newSubtask()!
       const key = todosState.addSubtask(parent, {
         ...subtask,
+        type: "subtask",
         done: false,
         parent: getTodoByKey(parent) as ClientTodo,
       })
-      setTodoListMode(TodoListMode.Edit, { initEditingNote: false })
+      setMode(TodoListMode.Edit, {})
       setFocusedTodoKey(key)
     })
   }
@@ -199,18 +208,6 @@ export function createTodoListState() {
     return todosState.todos.findIndex((t) => t.key === todo.key)
   }
 
-  function isNewSubtask(
-    task: NewSubtask | ClientSubtask | ClientTodo
-  ): task is NewSubtask {
-    return "isNewSubtask" in task
-  }
-
-  function isSubtask(
-    task: NewSubtask | ClientSubtask | ClientTodo
-  ): task is ClientSubtask {
-    return "parent" in task
-  }
-
   return {
     todosState,
     getTodoIndex,
@@ -224,9 +221,10 @@ export function createTodoListState() {
     isTodoFocused,
     setFocusedTodo,
     setFocusedTodoIndex,
-    todoListMode,
-    inTodoListMode,
-    setTodoListMode,
+    mode,
+    getModeData,
+    inMode,
+    setMode,
     todoEditInput,
     setTodoEditInput,
     focusedTodoFromSearch,
@@ -242,12 +240,8 @@ export function createTodoListState() {
     localSearchResultIndex,
     setLocalSearchResultIndex,
     addNewTask,
-    newSubtask,
     addNewSubtask,
     addSubtask,
-    isSubtask,
-    isNewSubtask,
-    getTodoByKey,
   } as const
 }
 

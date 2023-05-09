@@ -17,11 +17,10 @@ import {
 } from "../GlobalContext/todo-list"
 import Icon from "./Icon"
 
-interface Props {
+export default function TodoEdit(props: {
   todo: ClientTodo | ClientSubtask
-}
-
-export default function TodoEdit(props: Props) {
+  initialEditNote?: true
+}) {
   const todoList = useTodoList()
   const [title, setTitle] = createSignal(props.todo.title)
   const [note, setNote] = createSignal(props.todo.note)
@@ -53,7 +52,7 @@ export default function TodoEdit(props: Props) {
           starred: starred(),
           dueDate: showCalendar() && !dueDate() ? todayDate() : dueDate(),
         }))
-        todoList.setTodoListMode(TodoListMode.Default)
+        todoList.setMode(TodoListMode.Default)
       })
       return
     }
@@ -77,7 +76,7 @@ export default function TodoEdit(props: Props) {
           done: false,
         })
       )
-      todoList.setTodoListMode(TodoListMode.Default)
+      todoList.setMode(TodoListMode.Default)
     })
   })
 
@@ -85,7 +84,9 @@ export default function TodoEdit(props: Props) {
     noteRef!: HTMLInputElement,
     datePickerRef!: HTMLInputElement
 
-  const [editNoteInTodo, setEditNoteInTodo] = createSignal(false)
+  const [editNoteInTodo, setEditNoteInTodo] = createSignal(
+    !!props.initialEditNote
+  )
 
   createEffect(() => {
     if (editNoteInTodo()) {

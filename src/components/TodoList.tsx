@@ -62,20 +62,18 @@ export default function TodoList() {
 
   createEffect(() => {
     createShortcuts(
-      todoList.inTodoListMode(TodoListMode.Default)
+      todoList.inMode(TodoListMode.Default)
         ? {
             // Edit focused todo
             Enter() {
               if (todoList.focusedTodo()) {
-                todoList.setTodoListMode(TodoListMode.Edit, {
-                  initEditingNote: false,
-                })
+                todoList.setMode(TodoListMode.Edit, {})
               }
             },
             // Edit focused todo note
             T() {
               if (todoList.focusedTodo()) {
-                todoList.setTodoListMode(TodoListMode.Edit, {
+                todoList.setMode(TodoListMode.Edit, {
                   initEditingNote: true,
                 })
               }
@@ -99,7 +97,7 @@ export default function TodoList() {
               if (!focused) return
 
               batch(() => {
-                if (todoList.isSubtask(focused)) {
+                if (focused.type === "subtask") {
                   todoList.todosState.removeSubtask(
                     focused.parent.key,
                     focused.key
@@ -137,18 +135,12 @@ export default function TodoList() {
             },
             // Create new subtask
             L() {
-              const focused = todoList.focusedTodo()
-
-              if (!focused || todoList.isNewSubtask(focused)) return
-
-              todoList.addNewSubtask(
-                todoList.isSubtask(focused) ? focused.parent.key : focused.key
-              )
+              todoList.addNewSubtask()
             },
             // local search
             F() {
               batch(() => {
-                todoList.setTodoListMode(TodoListMode.Search)
+                todoList.setMode(TodoListMode.Search)
                 todoList.setFocusedTodo(null)
               })
             },
@@ -156,18 +148,14 @@ export default function TodoList() {
             A() {
               const focused = todoList.focusedTodo()
 
-              if (
-                focused &&
-                !todoList.isNewSubtask(focused) &&
-                !todoList.isSubtask(focused)
-              ) {
-                todoList.setTodoListMode(TodoListMode.Suggest)
+              if (focused && focused.type === "todo") {
+                todoList.setMode(TodoListMode.Suggest)
               }
             },
           }
         : {
             Escape() {
-              todoList.setTodoListMode(TodoListMode.Default)
+              todoList.setMode(TodoListMode.Default)
             },
           }
     )
@@ -219,37 +207,38 @@ export default function TodoList() {
                 <TopBar title={PageType[activePage()]} />
                 <For each={todoList.flatTasks()}>
                   {(todo) => {
-                    if (todoList.isNewSubtask(todo)) {
+                    if (todo.type === "new-subtask") {
                       return <NewSubtask />
                     }
                     return (
                       <Switch>
                         <Match
                           when={
-                            todoList.isTodoFocused(todo.key) &&
-                            todoList.inTodoListMode(TodoListMode.Edit)
+                            todoList.inMode(TodoListMode.Edit) &&
+                            todoList.isTodoFocused(todo.key)
                           }
                         >
-                          <TodoEdit todo={todo} />
+                          <TodoEdit
+                            todo={todo}
+                            initialEditNote={
+                              todoList.getModeData(TodoListMode.Edit)!
+                                .initEditingNote
+                            }
+                          />
                         </Match>
                         <Match when={true}>
-                          <Todo todo={todo} subtask={"parent" in todo} />
+                          <Todo todo={todo} subtask={todo.type === "subtask"} />
                         </Match>
                       </Switch>
                     )
                   }}
                 </For>
-                <Show
-                  when={
-                    todoList.inTodoListMode(TodoListMode.NewTodo) &&
-                    !todoList.inTodoListMode(TodoListMode.Edit)
-                  }
-                >
+                <Show when={todoList.inMode(TodoListMode.NewTodo)}>
                   <NewTodo />
                 </Show>
               </div>
             </div>
-            <Show when={todoList.inTodoListMode(TodoListMode.Suggest)}>
+            <Show when={todoList.inMode(TodoListMode.Suggest)}>
               <SuggestedTodos />
             </Show>
           </div>
@@ -261,7 +250,7 @@ export default function TodoList() {
             class="flex sticky bottom-0 right-0 p-2 dark:bg-stone-900  bg-gray-100"
           >
             <Show
-              when={todoList.inTodoListMode(TodoListMode.Search)}
+              when={todoList.inMode(TodoListMode.Search)}
               fallback={<ActionBar />}
             >
               <LocalSearch />

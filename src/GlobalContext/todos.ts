@@ -39,12 +39,14 @@ export type BaseTask = {
   dueDate: string | null
 }
 
-export type ClientSubtask = BaseTask & {
-  parent: ClientTodo
+export type ClientTodo = BaseTask & {
+  type: "todo"
+  subtasks: ClientSubtask[]
 }
 
-export type ClientTodo = BaseTask & {
-  subtasks: ClientSubtask[]
+export type ClientSubtask = BaseTask & {
+  type: "subtask"
+  parent: ClientTodo
 }
 
 export const getNewKey = (() => {
@@ -66,6 +68,7 @@ const parseDbSubtasks = (
     for (const edge of subtasks.edges) {
       if (!edge || !edge.node) continue
       result.push({
+        type: "subtask",
         id: edge.node.id,
         key: getNewKey(),
         title: edge.node.title,
@@ -115,6 +118,7 @@ export function createTodosState() {
             if (!todo?.node) continue
             const subtasks: ClientTodo["subtasks"] = []
             const clientTodo: ClientTodo = {
+              type: "todo",
               id: todo.node.id,
               key: getNewKey(),
               done: todo.node.done,
@@ -225,9 +229,9 @@ export function createTodosState() {
     // state
     todos,
     // actions
-    addTodo: (fields: Omit<ClientTodo, "id" | "key">): TodoKey => {
+    addTodo: (fields: Omit<ClientTodo, "id" | "key" | "type">): TodoKey => {
       const key = getNewKey()
-      setTodos(todos.length, { ...fields, id: null, key })
+      setTodos((p) => [...p, { ...fields, id: null, key, type: "todo" }])
       return key
     },
     toggleTodo: (key: TodoKey) => {

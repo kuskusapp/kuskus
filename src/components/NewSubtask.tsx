@@ -2,56 +2,48 @@ import { autofocus } from "@solid-primitives/autofocus"
 import { createShortcut } from "@solid-primitives/keyboard"
 import { Show, createEffect, createSignal } from "solid-js"
 import { todayDate } from "~/lib/lib"
-import { ClientTodo, useTodoList } from "../GlobalContext/todo-list"
+import { TodoListMode, useTodoList } from "../GlobalContext/todo-list"
 import Icon from "./Icon"
+import { Priority } from "~/GlobalContext/todos"
 
 export default function NewSubtask() {
-  const global = useTodoList()
+  const todoList = useTodoList()
   const [title, setTitle] = createSignal("")
   const [note, setNote] = createSignal("")
   const [dueDate, setDueDate] = createSignal("")
   const [showCalendar, setShowCalendar] = createSignal(false)
   const [showSelectPriority, setShowSelectPriority] = createSignal(true)
-  const [priority, setPriority] = createSignal<0 | 1 | 2 | 3>(0)
+  const [priority, setPriority] = createSignal<Priority>(0)
   const [starred, setStarred] = createSignal(false)
-  const newSubtask = global.newSubtask()!
 
-  createShortcut(
-    ["Enter"],
-    async () => {
-      if (title() === "") {
-        global.setEditingTodo(false)
-        return
-      }
+  createShortcut(["Enter"], () => {
+    if (title() === "") {
+      todoList.setMode(TodoListMode.Default)
+      return
+    }
 
-      global.addSubtask({
-        title: title(),
-        note: note(),
-        starred: starred(),
-        priority: priority(),
-        dueDate: dueDate(),
-      })
-    },
-    { preventDefault: false }
-  )
+    todoList.addSubtask({
+      title: title(),
+      note: note(),
+      starred: starred(),
+      priority: priority(),
+      dueDate: dueDate(),
+    })
+  })
 
   let titleRef!: HTMLInputElement,
     noteRef!: HTMLInputElement,
     datePickerRef!: HTMLInputElement
 
-  createEffect(() => {
-    if (global.editNoteInTodo()) {
-      autofocus(noteRef)
+  const [editNoteInTodo, setEditNoteInTodo] = createSignal(false)
 
-      createShortcut(["ArrowUp"], () => {
-        global.setEditNoteInTodo(false)
-      })
+  createEffect(() => {
+    if (editNoteInTodo()) {
+      autofocus(noteRef)
+      createShortcut(["ArrowUp"], () => setEditNoteInTodo(false))
     } else {
       autofocus(titleRef)
-
-      createShortcut(["ArrowDown"], () => {
-        global.setEditNoteInTodo(true)
-      })
+      createShortcut(["ArrowDown"], () => setEditNoteInTodo(true))
     }
   })
 

@@ -14,11 +14,10 @@ export default function NewTodo() {
   const [showSelectPriority, setShowSelectPriority] = createSignal(true)
   const [priority, setPriority] = createSignal<0 | 1 | 2 | 3>(0)
   const [starred, setStarred] = createSignal(false)
-  const [editNoteInTodo, setEditNoteInTodo] = createSignal(false)
 
   createShortcut(["Enter"], () => {
     if (title() === "") {
-      todoList.setTodoListMode(TodoListMode.Default)
+      todoList.setMode(TodoListMode.Default)
       return
     }
 
@@ -33,13 +32,15 @@ export default function NewTodo() {
         subtasks: [],
       })
       todoList.setFocusedTodo(newTodoKey)
-      todoList.setTodoListMode(TodoListMode.Edit, { initEditingNote: false })
+      todoList.setMode(TodoListMode.Edit, {})
     })
   })
 
   let titleRef!: HTMLInputElement,
     noteRef!: HTMLInputElement,
     datePickerRef!: HTMLInputElement
+
+  const [editNoteInTodo, setEditNoteInTodo] = createSignal(false)
 
   createEffect(() => {
     if (editNoteInTodo()) {

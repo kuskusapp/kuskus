@@ -45,12 +45,7 @@ export default function SuggestedTodos() {
   const [suggestions] = createResource<SuggestedTodos[]>(async () => {
     const focused = todoList.focusedTodo()
 
-    if (
-      !focused ||
-      todoList.isNewSubtask(focused) ||
-      todoList.isSubtask(focused)
-    )
-      return
+    if (!focused || focused.type !== "todo") return
 
     const urlEncodedTask = focused.title
 

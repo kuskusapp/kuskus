@@ -4,11 +4,11 @@ import { isToday } from "~/lib/lib"
 import {
   ClientSubtask,
   ClientTodo,
+  TodoListMode,
   useTodoList,
 } from "../GlobalContext/todo-list"
 import Icon from "./Icon"
 import Loader from "./Loader"
-import NewSubtask from "./NewSubtask"
 
 interface Props {
   todo: ClientTodo | ClientSubtask
@@ -56,11 +56,10 @@ export default function Todo(props: Props) {
             "user-select": "none",
           }}
           onClick={(e) => {
-            global.setNewTodo(false)
             if (global.isTodoFocused(props.todo.key)) {
-              global.setEditingTodo(true)
+              global.setMode(TodoListMode.Edit, {})
             } else {
-              global.setFocusedTodoKey(props.todo.key)
+              global.setFocusedTodo(props.todo.key)
             }
           }}
         >
