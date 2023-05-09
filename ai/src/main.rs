@@ -1,4 +1,7 @@
-use axum::{extract::Query, http::StatusCode, response::IntoResponse, routing::get, Json, Router};
+use axum::{
+    debug_handler, extract::Query, http::StatusCode, response::IntoResponse, routing::get, Json,
+    Router,
+};
 use dotenvy::dotenv;
 use http::Method;
 use jwt_authorizer::{JwtAuthorizer, JwtClaims, Validation};
@@ -81,6 +84,7 @@ enum SubtasksResponse {
 
 struct AppState {}
 
+#[debug_handler]
 async fn subtasks_request(
     Query(request_data): Query<JsonRequestWithModel>,
     JwtClaims(_claims): JwtClaims<User>,
@@ -194,6 +198,7 @@ enum ExplainResponse {
     Error(String),
 }
 
+#[debug_handler]
 async fn explain_request(Query(request_data): Query<JsonRequestWithModel>) -> impl IntoResponse {
     let client = redis::Client::open(
         std::env::var("UPSTASH_REDIS_CONNECTION").expect("UPSTASH_REDIS_CONNECTION not found"),

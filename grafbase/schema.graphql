@@ -12,6 +12,14 @@ schema
   query: Query
 }
 
+extend type Query {
+  suggestions(query: String!): [SuggestedTask] @resolver(name: "suggestions")
+}
+
+type SuggestedTask {
+  task: String
+}
+
 extend type Mutation {
   checkout(input: CheckoutInput!): CheckoutSession! @resolver(name: "checkout")
 }
@@ -34,7 +42,7 @@ type User @model {
   settings: Settings
   todos: [Todo]
   username: String # set by a user, this will be a route to show public todos TODO: if unique, it can't be null, solve this :(
-  freeAiSuggestionsLimit: Int @default(value: 5) # how many times user can use AI suggestions for free
+  aiTasksAvailable: Int @default(value: 5) # times user can use gpt-3 AI suggestions
   gpt3MonthlyTokensUsed: Int # how many gpt-3 tokens user used this month (for billing)
   gpt4MonthlyTokensUsed: Int # how many gpt-4 tokens user used this month (for billing)
 }
