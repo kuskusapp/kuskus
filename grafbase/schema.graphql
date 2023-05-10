@@ -13,18 +13,21 @@ schema
 }
 
 extend type Query {
-  suggestions(task: String!): SuggestedTasksOrStripeCheckoutUrl
-    @resolver(name: "suggestions")
+  suggestions(task: String!): SuggestionsPayload @resolver(name: "suggestions")
 }
 
-type SuggestedTasksOrStripeCheckoutUrl {
-  tasks: [SuggestedTask]
-  stripeCheckoutUrl: String
+type SuggestionsPayload {
+  suggestedTasks: [SuggestedTask]
+  stripeCheckoutUrl: CheckoutSession
 }
 
 type SuggestedTask {
   title: String!
   note: String!
+}
+
+type CheckoutSession {
+  url: String!
 }
 
 type User @model {

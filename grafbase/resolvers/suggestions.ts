@@ -24,7 +24,7 @@ type SuggestedTasks = {
 export default async function Resolver(
   _: any,
   { task }: { task: string },
-  { request }: any
+  context: any
 ) {
   // cache string purpose is to make semantically same task requests
   // hit the cache
@@ -67,7 +67,7 @@ export default async function Resolver(
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",
-      "x-api-key": request.headers["x-api-key"],
+      "x-api-key": context.request.headers["x-api-key"],
     },
     body: JSON.stringify({
       query,
@@ -77,9 +77,12 @@ export default async function Resolver(
     // not sure if I should throw here or return an error
     throw new Error(`HTTP error! status: ${res.status}`)
   }
-  console.log(res)
+  console.log(res, "res")
   console.log(JSON.stringify(res), "res")
-  console.log(await res.json())
+  // console.log(res)
+  // console.log(await res.json())
+
+  // const tasksAvailable = await res.json().data.userCollection.edges[0].node.aiTasksAvailable
 
   return {}
   const suggestions = await fetch(
