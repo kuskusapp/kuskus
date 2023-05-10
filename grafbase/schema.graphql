@@ -13,28 +13,18 @@ schema
 }
 
 extend type Query {
-  suggestions(query: String!): [SuggestedTask] @resolver(name: "suggestions")
+  suggestions(task: String!): SuggestedTasksOrStripeCheckoutUrl
+    @resolver(name: "suggestions")
+}
+
+type SuggestedTasksOrStripeCheckoutUrl {
+  tasks: [SuggestedTask]
+  stripeCheckoutUrl: String
 }
 
 type SuggestedTask {
-  task: String
-}
-
-extend type Mutation {
-  checkout(input: CheckoutInput!): CheckoutSession! @resolver(name: "checkout")
-}
-
-input CheckoutInput {
-  lineItems: [CheckoutLineItem]
-}
-
-input CheckoutLineItem {
-  price: String!
-  quantity: Int = 1
-}
-
-type CheckoutSession {
-  url: String!
+  title: String!
+  note: String!
 }
 
 type User @model {

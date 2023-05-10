@@ -13,13 +13,13 @@ use tower_http::cors::{Any, CorsLayer};
 
 #[derive(Debug, Deserialize, Clone)]
 struct User {
-    // sub: String // is the user id
+    sub: String, // is the user id
 }
 
 #[tokio::main]
 async fn main() {
     // load environment variables from .env file
-    dotenv().expect(".env file not found");
+    // dotenv().expect(".env file not found");
 
     let cors = CorsLayer::new()
         .allow_methods([Method::GET])
