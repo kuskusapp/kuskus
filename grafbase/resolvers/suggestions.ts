@@ -30,12 +30,12 @@ export default async function Resolver(
   // hit the cache
   // TODO: expand to add more cases
   // like different panctuation should not avoid hitting the cache
-  // const cacheString = task
-  //   .replace(" a ", "-") // remove all `a` and `an` from the task to put in cache
-  //   .replace(" an ", "-") // do it in a better way, regex?
-  //   .split(" ")
-  //   .join("-")
-  //   .toLowerCase()
+  const cacheString = task
+    .replace(" a ", "-") // remove all `a` and `an` from the task to put in cache
+    .replace(" an ", "-") // do it in a better way, regex?
+    .split(" ")
+    .join("-")
+    .toLowerCase()
 
   // const cachedTask: CachedTask | null = await redis.get(
   //   `gpt-3-subtasks-${cacheString}`
@@ -49,7 +49,7 @@ export default async function Resolver(
   // TODO: there should probably be a better way than userCollection
   // but for that I need to know the specific user id, maybe pass it?
   // in theory userCollection should work too though but is probably slower
-  const query = `
+  let query = `
     {
       userCollection(first: 1) {
         edges {
@@ -77,24 +77,33 @@ export default async function Resolver(
     // not sure if I should throw here or return an error
     throw new Error(`HTTP error! status: ${res.status}`)
   }
-  console.log(res, "res")
-  console.log(JSON.stringify(res), "res")
-  // console.log(res)
-  // console.log(await res.json())
 
-  // const tasksAvailable = await res.json().data.userCollection.edges[0].node.aiTasksAvailable
+  const tasksAvailable = (await res.json()).data.userCollection.edges[0].node
+    .aiTasksAvailable
 
-  return {}
-  const suggestions = await fetch(
-    `${process.env.AI_ENDPOINT}/subtasks?request=${task}`,
-    {
-      headers: {
-        OPENAI_KEY: process.env.OPENAI_API_KEY!,
-      },
+  if (tasksAvailable > 0) {
+    // decrement aiTasksAvailable by 1
+    // query = ``
+
+    const suggestions = await fetch(
+      `${process.env.AI_ENDPOINT}/subtasks?request=${task}`,
+      {
+        headers: {
+          OPENAI_KEY: process.env.OPENAI_API_KEY!,
+        },
+      }
+    )
+
+    // update cache
+    // await redis.set(cacheString, suggestions.json())
+    // console.log(JSON.stringify(suggestions.json()))
+    return {
+      tasks: suggestions.json(),
     }
-  )
-  console.log(JSON.stringify(suggestions.json()))
-  return []
+  }
+  return {}
+
+  // return []
 
   // return []
   // check if current user `aiTasksAvailable` is greater than 0

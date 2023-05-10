@@ -108,6 +108,10 @@ export async function createTodosForDev() {
       done: false,
     },
   })
+  await grafbase.request(TodoLinkDocument, {
+    userId: global.userId,
+    taskId: task.todoCreate?.todo?.id,
+  })
   task = await grafbase.request(TodoCreateDocument, {
     todo: {
       title: "Polish",

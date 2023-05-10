@@ -8,6 +8,7 @@ netlify
 .env
 .env.prod
 functions
+ai
 
 # dependencies
 /node_modules
