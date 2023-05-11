@@ -30,14 +30,17 @@ type CheckoutSession {
   url: String!
 }
 
-type User @model {
-  audienceToken: String! @unique
-  settings: Settings
-  todos: [Todo]
+type UserDetails @model {
   username: String # set by a user, this will be a route to show public todos TODO: if unique, it can't be null, solve this :(
   aiTasksAvailable: Int @default(value: 5) # times user can use gpt-3 AI suggestions
-  gpt3MonthlyTokensUsed: Int # how many gpt-3 tokens user used this month (for billing)
-  gpt4MonthlyTokensUsed: Int # how many gpt-4 tokens user used this month (for billing)
+  # gpt3MonthlyTokensUsed: Int # how many gpt-3 tokens user used this month (for billing)
+  # gpt4MonthlyTokensUsed: Int # how many gpt-4 tokens user used this month (for billing)
+}
+
+type Settings @model {
+  hideActionBar: Boolean! @default(value: false)
+  iconOnlySidebar: Boolean! @default(value: false)
+  languageModelUsed: String! @default(value: "gpt-3") # gpt-3 | gpt-4 | llama
 }
 
 type Todo @model {
@@ -60,10 +63,4 @@ type Subtask @model {
   note: String
   dueDate: String
   cached: String # 'gpt-3' | 'gpt-4'
-}
-
-type Settings @model {
-  hideActionBar: Boolean! @default(value: false)
-  iconOnlySidebar: Boolean! @default(value: false)
-  languageModelUsed: String! @default(value: "gpt-3") # gpt-3 | gpt-4 | llama
 }

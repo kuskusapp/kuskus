@@ -29,7 +29,7 @@ Important bits defined below.
 - [src](src) - Code for website built with [Solid](https://www.solidjs.com/) (on top of [Solid Start](https://github.com/solidjs/solid-start) starter)
   - [GlobalContext](src/GlobalContext)
     - [store.tsx](src/GlobalContext/store.tsx) - Global state. signals defined then exposed via context
-    - [todos.ts](src/GlobalContext/todos.ts) - Defines `todosState` which exposes a store of todos. When first run, loads todos signal with data from grafbase, can then [modify a signal and it sends mutations to grafbase in background for persistance](https://twitter.com/nikitavoloboev/status/1651358480526106624). There are more stores, each store is synced with Grafbase where needed. The goal is to keep state management local. Polling to be added later.
+    - [todos.ts](src/GlobalContext/todos.ts) - Defines `todosState` which exposes a store of todos. When first run, loads todos signal with data from grafbase, can then [modify the store via exposed methods and it sends mutations to grafbase in background for persistance](https://twitter.com/nikitavoloboev/status/1651358480526106624). There are more stores, each store is synced with Grafbase where needed. The goal is to keep state management local. Polling to be added later.
   - [components](src/components) - Solid components
   - [graphql](src/graphql) - GraphQL utils
   - [lib](src/lib) - Generic utils

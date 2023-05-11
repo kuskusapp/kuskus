@@ -18,6 +18,10 @@ fragment Subtask on Subtask {
   dueDate
 }
 
+# TODO: should not just be first: 100
+# but should return **all** the todos
+# also all the subtasks for the todos
+# pagination?
 query Todos {
   todoCollection(first: 100) {
     edges {
@@ -43,14 +47,6 @@ mutation TodoCreate($todo: TodoCreateInput!) {
   }
 }
 
-mutation TodoLink($userId: ID!, $taskId: ID!) {
-  userUpdate(by: { id: $userId }, input: { todos: [{ link: $taskId }] }) {
-    user {
-      id
-    }
-  }
-}
-
 mutation TodoUpdate($id: ID!, $todo: TodoUpdateInput!) {
   todoUpdate(by: { id: $id }, input: $todo) {
     todo {
@@ -65,6 +61,8 @@ mutation TodoDelete($id: ID!) {
   }
 }
 
+# TODO: this should be part of `SubtaskCreate`...
+# super annoying having to link it manually every time
 mutation SubtaskLink($taskId: ID!, $subtaskId: ID!) {
   todoUpdate(by: { id: $taskId }, input: { subtasks: [{ link: $subtaskId }] }) {
     todo {
@@ -73,6 +71,7 @@ mutation SubtaskLink($taskId: ID!, $subtaskId: ID!) {
   }
 }
 
+# same as Todos query, should return all the subtasks..
 query Subtasks {
   subtaskCollection(first: 100) {
     edges {
@@ -100,17 +99,37 @@ mutation SubtaskUpdate($id: ID!, $subtask: SubtaskUpdateInput!) {
   }
 }
 
-mutation SubtaskCreate($subtask: SubtaskCreateInput!) {
-  subtaskCreate(input: $subtask) {
-    subtask {
+mutation SubtaskDelete($id: ID!) {
+  subtaskDelete(by: { id: $id }) {
+    deletedId
+  }
+}
+
+query UserDetails {
+  userDetailsCollection(first: 1) {
+    edges {
+      node {
+        id
+        username
+        aiTasksAvailable
+      }
+    }
+  }
+}
+
+mutation UserDetailsCreate($userDetails: UserDetailsCreateInput!) {
+  userDetailsCreate(input: $userDetails) {
+    userDetails {
       id
     }
   }
 }
 
-mutation SubtaskDelete($id: ID!) {
-  subtaskDelete(by: { id: $id }) {
-    deletedId
+mutation UserDetailsUpdate($id: ID!, $userDetails: UserDetailsUpdateInput!) {
+  userDetailsUpdate(by: { id: $id }, input: $userDetails) {
+    userDetails {
+      id
+    }
   }
 }
 
@@ -121,6 +140,7 @@ query Settings {
         id
         hideActionBar
         iconOnlySidebar
+        languageModelUsed
       }
     }
   }
@@ -137,20 +157,6 @@ mutation SettingsCreate($settings: SettingsCreateInput!) {
 mutation SettingsUpdate($id: ID!, $settings: SettingsUpdateInput!) {
   settingsUpdate(by: { id: $id }, input: $settings) {
     settings {
-      id
-    }
-  }
-}
-
-query UserExists($audienceToken: String!) {
-  user(by: { audienceToken: $audienceToken }) {
-    id
-  }
-}
-
-mutation UserCreate($user: UserCreateInput!) {
-  userCreate(input: $user) {
-    user {
       id
     }
   }

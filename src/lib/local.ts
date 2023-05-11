@@ -5,13 +5,14 @@ import {
   SubtaskLinkDocument,
   TodoCreateDocument,
   TodoDeleteDocument,
-  TodoLinkDocument,
   TodosDocument,
 } from "~/graphql/schema"
 
 export async function createTodosForDev() {
   const global = useGlobal()
   const grafbase = global.grafbase()!
+
+  return
 
   // delete all todos and subtasks in db
   const existingTodos = await grafbase.request(TodosDocument)

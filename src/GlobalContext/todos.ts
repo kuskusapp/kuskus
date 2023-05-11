@@ -10,7 +10,6 @@ import {
   TodoCreateDocument,
   TodoCreateInput,
   TodoDeleteDocument,
-  TodoLinkDocument,
   TodoUpdateDocument,
   TodoUpdateInput,
   TodosDocument,
@@ -161,12 +160,6 @@ export function createTodosState() {
           .then(async (res) => {
             // tasks get their id after being added to the db
             setTodos((t) => t === todo, "id", res.todoCreate?.todo?.id!)
-
-            // do in one request.. should be no need for manual link..
-            await grafbase.request(TodoLinkDocument, {
-              userId: global.userId,
-              taskId: res.todoCreate?.todo?.id,
-            })
           })
       }
 

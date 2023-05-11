@@ -37,9 +37,9 @@ export default async function Resolver(
     .join("-")
     .toLowerCase()
 
-  // const cachedTask: CachedTask | null = await redis.get(
-  //   `gpt-3-subtasks-${cacheString}`
-  // )
+  const cachedTask: CachedTask | null = await redis.get(
+    `gpt-3-subtasks-${cacheString}`
+  )
   // if (cachedTask) {
   //   return {
   //     tasks: cachedTask.subtasks,
@@ -51,7 +51,7 @@ export default async function Resolver(
   // in theory userCollection should work too though but is probably slower
   let query = `
     {
-      userCollection(first: 1) {
+      userDetailsCollection(first: 1) {
         edges {
           node {
             aiTasksAvailable
