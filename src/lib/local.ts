@@ -8,11 +8,13 @@ import {
   TodosDocument,
 } from "~/graphql/schema"
 
+// function to seed the database with todos/subtasks
+// used for development only
+// TODO: there is weird issue sometimes grafbase does not add all the todos/subtasks but only some of them
+// not sure why..
 export async function createTodosForDev() {
   const global = useGlobal()
   const grafbase = global.grafbase()!
-
-  return
 
   // delete all todos and subtasks in db
   const existingTodos = await grafbase.request(TodosDocument)
@@ -24,15 +26,13 @@ export async function createTodosForDev() {
       subtaskIdsToDelete.push(subtask?.node.id!)
     })
   })
+
   todoIdsToDelete.map((id) => {
     grafbase.request(TodoDeleteDocument, { id: id })
   })
   subtaskIdsToDelete.map((id) => {
     grafbase.request(SubtaskDeleteDocument, { id: id })
   })
-
-  // TODO: make it so creating todo and linking it to user
-  // is one request!
 
   // create new todos
   let task = await grafbase.request(TodoCreateDocument, {
@@ -43,17 +43,13 @@ export async function createTodosForDev() {
       done: false,
     },
   })
-  // link it..
-  await grafbase.request(TodoLinkDocument, {
-    userId: global.userId,
-    taskId: task.todoCreate?.todo?.id,
-  })
 
   let subtask = await grafbase.request(SubtaskCreateDocument, {
     subtask: {
       title: "subtask 1",
     },
   })
+  // TODO: hope this manual linking goes away..
   await grafbase.request(SubtaskLinkDocument, {
     taskId: task.todoCreate?.todo?.id,
     subtaskId: subtask.subtaskCreate?.subtask?.id,
@@ -86,10 +82,6 @@ export async function createTodosForDev() {
       note: "cover all important use cases",
     },
   })
-  await grafbase.request(TodoLinkDocument, {
-    userId: global.userId,
-    taskId: task.todoCreate?.todo?.id,
-  })
 
   subtask = await grafbase.request(SubtaskCreateDocument, {
     subtask: {
@@ -100,7 +92,6 @@ export async function createTodosForDev() {
     taskId: task.todoCreate?.todo?.id,
     subtaskId: subtask.subtaskCreate?.subtask?.id,
   })
-
   task = await grafbase.request(TodoCreateDocument, {
     todo: {
       title: "Release KusKus",
@@ -109,10 +100,6 @@ export async function createTodosForDev() {
       done: false,
     },
   })
-  await grafbase.request(TodoLinkDocument, {
-    userId: global.userId,
-    taskId: task.todoCreate?.todo?.id,
-  })
   task = await grafbase.request(TodoCreateDocument, {
     todo: {
       title: "Polish",
@@ -120,10 +107,6 @@ export async function createTodosForDev() {
       priority: 0,
       done: false,
     },
-  })
-  await grafbase.request(TodoLinkDocument, {
-    userId: global.userId,
-    taskId: task.todoCreate?.todo?.id,
   })
 
   subtask = await grafbase.request(SubtaskCreateDocument, {

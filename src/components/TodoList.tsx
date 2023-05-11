@@ -330,11 +330,14 @@ export default function Page() {
     { preventDefault: false }
   )
 
-  // TODO: don't use in production, only for development
   createShortcut(
     ["Control", "I"],
     async () => {
-      createTodosForDev()
+      // seed the database with todos/subtasks
+      // only works in dev mode
+      if (!import.meta.env.PROD) {
+        createTodosForDev()
+      }
     },
     { preventDefault: false }
   )
