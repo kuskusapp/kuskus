@@ -99,7 +99,9 @@ export default function TodoList() {
                   todoList.todosState.removeTodo(focused.key)
                 }
                 // keep focus on the same index
-                todoList.setFocusedTodoIndex(index)
+                todoList.setFocusedTodoIndex(
+                  Math.min(todoList.flatTasks().length - 1, index)
+                )
               })
             },
             0() {
@@ -200,6 +202,15 @@ export default function TodoList() {
           )
         }}
       >
+        <TopBar
+          title={
+            isDev
+              ? `${PageType[todoList.activePage()]} mode:${
+                  TodoListMode[todoList.mode()]
+                } (dev)`
+              : PageType[todoList.activePage()]
+          }
+        />
         <div class="grow flex justify-between overflow-scroll">
           <div class="grow">
             <div
@@ -214,15 +225,6 @@ export default function TodoList() {
                 )
               }}
             >
-              <TopBar
-                title={
-                  isDev
-                    ? `${PageType[todoList.activePage()]} mode:${
-                        TodoListMode[todoList.mode()]
-                      } (dev)`
-                    : PageType[todoList.activePage()]
-                }
-              />
               <For each={todoList.flatTasks()}>
                 {(todo) => {
                   if (todo.type === "new-subtask") {

@@ -73,7 +73,7 @@ export default function SuggestedTodos(props: {
         width: "40%",
         height: "100%",
       }}
-      class="dark:bg-stone-900 bg-gray-100 flex flex-col justify-between items-center overflow-scroll"
+      class="dark:bg-stone-900 bg-gray-100 flex flex-col justify-between items-center "
     >
       <Motion.div
         initial={{ "font-size": "0px" }}
@@ -91,7 +91,7 @@ export default function SuggestedTodos(props: {
         Suggested tasks for {/* @ts-ignore */}
         {todoList.focusedTodo()!.title}
       </Motion.div>
-      <div class="grid-cols-5 col-span-5">
+      <div class="grid-cols-5 col-span-5 overflow-scroll">
         {props.suggestions.map((todo, index) => (
           <SuggestedTodo
             title={todo.title}

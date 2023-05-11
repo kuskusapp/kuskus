@@ -1,11 +1,11 @@
+import { Motion } from "@motionone/solid"
 import { autofocus } from "@solid-primitives/autofocus"
+import { createEventListener } from "@solid-primitives/event-listener"
 import { createShortcut } from "@solid-primitives/keyboard"
 import { Show, batch, createEffect, createSignal } from "solid-js"
 import { todayDate } from "~/lib/lib"
 import { TodoListMode, useTodoList } from "../GlobalContext/todo-list"
 import Icon from "./Icon"
-import { createEventListener } from "@solid-primitives/event-listener"
-import { Motion, Presence } from "@motionone/solid"
 
 export default function NewTodo() {
   const todoList = useTodoList()
