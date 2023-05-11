@@ -41,9 +41,9 @@ export default function SuggestedTodos() {
 
   return (
     <Motion.div
-      initial={{ width: "0px", "font-size": "0px" }}
-      animate={{ width: "40%", "font-size": "18px" }}
-      transition={{ duration: 1 }}
+      initial={{ width: "0px", "font-size": "0px", opacity: 0 }}
+      animate={{ width: "40%", "font-size": "18px", opacity: 1 }}
+      transition={{ duration: 0.5 }}
       exit={{ width: "0px" }}
       style={{
         "border-left": "solid 1px rgba(200, 200, 200, 0.2)",
@@ -53,10 +53,11 @@ export default function SuggestedTodos() {
       class="dark:bg-stone-900 bg-gray-100 flex flex-col justify-between items-center overflow-scroll"
     >
       <Motion.div
-        initial={{ "font-size": "0px", opacity: 0 }}
-        animate={{ "font-size": "18px", opacity: 1 }}
-        transition={{ duration: 0.3 }}
-        exit={{ "font-size": "0px", opacity: 0 }}
+        initial={{ "font-size": "0px" }}
+        animate={{ "font-size": "18px" }}
+        transition={{ duration: 0 }}
+        // TODO: improve the animation on showing the text, text appears squished..
+        exit={{ display: "none" }}
         style={{
           "border-bottom": "solid 1px rgba(200, 200, 200, 0.2)",
           color: "rgba(255, 255, 255, 0.5)",
