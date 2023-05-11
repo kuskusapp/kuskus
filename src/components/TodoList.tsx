@@ -1,15 +1,8 @@
+import { Presence } from "@motionone/solid"
 import { createEventListener } from "@solid-primitives/event-listener"
 import { createShortcut } from "@solid-primitives/keyboard"
-import {
-  createSignal,
-  Match,
-  Show,
-  Switch,
-  batch,
-  createEffect,
-} from "solid-js"
+import { Match, Show, Switch, batch, createEffect } from "solid-js"
 import { useGlobalContext } from "~/GlobalContext/store"
-import { GoogleClient } from "~/lib/auth"
 import { createTodosForDev } from "~/lib/local"
 import All from "~/pages/All"
 import Done from "~/pages/Done"
@@ -18,11 +11,19 @@ import Today from "~/pages/Today"
 import ActionBar from "./ActionBar"
 import LocalSearch from "./LocalSearch"
 import SuggestedTodos from "./SuggestedTodos"
-import { Motion, Presence } from "@motionone/solid"
+import { useGlobal } from "~/GlobalContext/global"
+import { SuggestedTasksDocument } from "~/graphql/schema"
 
 export default function Page() {
+  // TODO: grafbase cannot be undefined here, I think..
   const global = useGlobalContext()
-  const [test, setTest] = createSignal(false)
+  // TODO: doing it in this stupid way
+  // because when I tried to do it like this:
+  // const { grafbase } = useGlobal()
+  // destructuring did not work, I was getting back a signal, grafbase request did not complete..
+  const global2 = useGlobal()
+  const grafbase = global2.grafbase()!
+
   let ref!: HTMLDivElement
   createEventListener(
     () => ref,
@@ -108,47 +109,33 @@ export default function Page() {
   createShortcut(
     ["A"],
     async () => {
-      setTest(!test())
       if (
         global.newTodo() ||
         global.editingTodo() ||
         global.loadingSuggestedTodos()
       )
         return
-
       const focused = global.focusedTodo()
-
       if (
         focused &&
         !global.isNewSubtask(focused) &&
         !global.isSubtask(focused)
       ) {
         global.setLoadingSuggestedTodos(true)
-        // TODO: use https://github.com/solidjs-community/solid-primitives/tree/main/packages/fetch#readme
-        // maybe do it in `createRequest`?
-        // type the response, we know the structure
-        // type the response well!
 
-        const urlEncodedTask = focused.title
+        // TODO: not good, fix this..
+        // it thinks its undefined, in theory, it cannot be..
+        // @ts-ignore
+        const res = await grafbase.request(SuggestedTasksDocument, {
+          // TODO: fix this, it thinks it can be NewSubtask
+          // but at this point it cannot be, it should always have a title..
+          task: global.flatTasks()[global.focusedTodoIndex()].title,
+        })
 
-        const googleToken = (await GoogleClient.getUser())?.id_token
-
-        const res = await fetch(
-          `http://127.0.0.1:3001/subtasks?request=${urlEncodedTask}`,
-          {
-            headers: {
-              Authorization: "Bearer " + googleToken,
-            },
-          }
-        )
-        const resJson = await res.json()
-        // not sure why I can't do .Success right after `res.json()`, whole thing is a hack to get it working for now
-        const suggestedTodos = resJson.Success.subtasks
-
-        // TODO: requires more thought on error handling, things can go wrong..
+        const suggestions = res.suggestions.suggestedTasks
         global.setLoadingSuggestedTodos(false)
-        if (suggestedTodos.length > 0) {
-          global.setSuggestedTodos(suggestedTodos)
+        if (suggestions.length > 0) {
+          // global.setSuggestedTodos(suggestedTodos)
           global.setShowSuggestedTasksModal(true)
         }
       }

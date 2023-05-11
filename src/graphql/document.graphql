@@ -161,3 +161,12 @@ mutation SettingsUpdate($id: ID!, $settings: SettingsUpdateInput!) {
     }
   }
 }
+
+query SuggestedTasks($task: String!) {
+  suggestions(task: $task) {
+    suggestedTasks {
+      title
+      note
+    }
+  }
+}

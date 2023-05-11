@@ -765,6 +765,22 @@ export type SettingsUpdateMutation = {
   } | null
 }
 
+export type SuggestedTasksQueryVariables = Exact<{
+  task: Scalars["String"]
+}>
+
+export type SuggestedTasksQuery = {
+  __typename?: "Query"
+  suggestions?: {
+    __typename?: "SuggestionsPayload"
+    suggestedTasks?: Array<{
+      __typename?: "SuggestedTask"
+      title: string
+      note: string
+    } | null> | null
+  } | null
+}
+
 export const TodoFragmentDoc = {
   kind: "Document",
   definitions: [
@@ -1946,3 +1962,61 @@ export const SettingsUpdateDocument = {
   SettingsUpdateMutation,
   SettingsUpdateMutationVariables
 >
+export const SuggestedTasksDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "SuggestedTasks" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: { kind: "Variable", name: { kind: "Name", value: "task" } },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "String" },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "suggestions" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "task" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "task" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "suggestedTasks" },
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      { kind: "Field", name: { kind: "Name", value: "title" } },
+                      { kind: "Field", name: { kind: "Name", value: "note" } },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<SuggestedTasksQuery, SuggestedTasksQueryVariables>

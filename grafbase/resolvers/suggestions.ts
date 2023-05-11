@@ -40,11 +40,18 @@ export default async function Resolver(
   const cachedTask: CachedTask | null = await redis.get(
     `gpt-3-subtasks-${cacheString}`
   )
-  // if (cachedTask) {
-  //   return {
-  //     tasks: cachedTask.subtasks,
-  //   }
-  // }
+  if (cachedTask) {
+    console.log(JSON.stringify(cachedTask.subtasks))
+    return {
+      suggestedTasks: cachedTask.subtasks,
+      stripeCheckoutUrl: null,
+    }
+  }
+
+  // TODO: fix below
+  // ai should work
+  // stripe return page should work too
+  return {}
 
   // TODO: there should probably be a better way than userCollection
   // but for that I need to know the specific user id, maybe pass it?

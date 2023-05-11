@@ -43,7 +43,7 @@ export default function SuggestedTodos() {
     <Motion.div
       initial={{ width: "0px", "font-size": "0px" }}
       animate={{ width: "40%", "font-size": "18px" }}
-      transition={{ delay: 0.3, duration: 0.8 }}
+      transition={{ duration: 1 }}
       exit={{ width: "0px" }}
       style={{
         "border-left": "solid 1px rgba(200, 200, 200, 0.2)",
@@ -61,7 +61,7 @@ export default function SuggestedTodos() {
           "border-bottom": "solid 1px rgba(200, 200, 200, 0.2)",
           color: "rgba(255, 255, 255, 0.5)",
         }}
-        class="text-xs dark:bg-stone-900 bg-gray-100 w-full p-3 text-lg text-center"
+        class="dark:bg-stone-900 bg-gray-100 w-full p-3 text-lg text-center"
       >
         {/* TODO: fix this ts-ignore as well as all others.. */}
         Suggested tasks for {/* @ts-ignore */}
