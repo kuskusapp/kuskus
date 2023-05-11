@@ -1,3 +1,4 @@
+import { Presence } from "@motionone/solid"
 import { createEventListener } from "@solid-primitives/event-listener"
 import { For, Match, Show, Switch } from "solid-js"
 import { useGlobalContext } from "~/GlobalContext/store"
@@ -5,8 +6,6 @@ import NewSubtask from "~/components/NewSubtask"
 import NewTodo from "~/components/NewTodo"
 import Todo from "~/components/Todo"
 import TodoEdit from "~/components/TodoEdit"
-import TopBar from "~/components/TopBar"
-import { Motion, Presence } from "@motionone/solid"
 
 export default function All() {
   const global = useGlobalContext()
@@ -26,7 +25,6 @@ export default function All() {
 
   return (
     <div ref={ref}>
-      {/* <TopBar title="All" /> */}
       <div class="overflow-scroll" style={{ height: "100%" }}>
         <For each={global.flatTasks()}>
           {(todo) => {

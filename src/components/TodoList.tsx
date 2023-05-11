@@ -54,6 +54,9 @@ export default function Page() {
           .flatTasks()
           .findIndex((todo) => todo.key === global.focusedTodoKey()) - 1
 
+      if (todoIdToFocus === -1) {
+        todoIdToFocus = 0
+      }
       // TODO: improve this code..
       if (global.isSubtask(global.focusedTodo()!)) {
         global.todosState.removeSubtask(
@@ -135,8 +138,7 @@ export default function Page() {
         global.setLoadingSuggestedTodos(true)
 
         // TODO: not good, fix this..
-        // it thinks its undefined, in theory, it cannot be..
-        // @ts-ignore
+        // it thinks it can be undefined, in theory, it cannot be..
         const res = await grafbase.request(SuggestedTasksDocument, {
           // TODO: fix this, it thinks it can be NewSubtask
           // but at this point it cannot be, it should always have a title..
@@ -146,7 +148,7 @@ export default function Page() {
         const suggestions = res.suggestions.suggestedTasks
         global.setLoadingSuggestedTodos(false)
         if (suggestions.length > 0) {
-          // global.setSuggestedTodos(suggestedTodos)
+          global.setSuggestedTodos(suggestions)
           global.setShowSuggestedTasksModal(true)
         }
       }

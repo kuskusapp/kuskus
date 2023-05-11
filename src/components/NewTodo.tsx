@@ -1,10 +1,10 @@
+import { Motion } from "@motionone/solid"
 import { autofocus } from "@solid-primitives/autofocus"
 import { createShortcut } from "@solid-primitives/keyboard"
-import { Show, createEffect, createSignal, onMount } from "solid-js"
+import { Show, createEffect, createSignal } from "solid-js"
 import { todayDate } from "~/lib/lib"
 import { useGlobalContext } from "../GlobalContext/store"
 import Icon from "./Icon"
-import { Motion, Presence } from "@motionone/solid"
 
 export default function NewTodo() {
   const global = useGlobalContext()
