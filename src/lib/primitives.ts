@@ -1,5 +1,5 @@
 import { Accessor, createEffect, mapArray, onCleanup } from "solid-js"
-import { createShortcut } from "@solid-primitives/keyboard"
+import { createEventListener } from "@solid-primitives/event-listener"
 
 /**
  * For diffing a reactive array with mapArray
@@ -26,8 +26,15 @@ export function createArrayDiff<T>(
   })
 }
 
+// TODO fix keyboard primitive in solid-primitives or use a different one
 export function createShortcuts(map: Record<string, VoidFunction>): void {
-  for (const [keys, fn] of Object.entries(map)) {
-    createShortcut(keys.split("+"), fn)
+  for (const [key, fn] of Object.entries(map)) {
+    const lowerKey = key.toLowerCase()
+    createEventListener(window, "keydown", (e) => {
+      if (e.key.toLowerCase() === lowerKey) {
+        e.preventDefault()
+        fn()
+      }
+    })
   }
 }

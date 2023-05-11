@@ -1,12 +1,16 @@
 import { autofocus } from "@solid-primitives/autofocus"
 import { createShortcut } from "@solid-primitives/keyboard"
-import { Show, createEffect, createSignal } from "solid-js"
+import { Show, batch, createEffect, createSignal } from "solid-js"
 import { todayDate } from "~/lib/lib"
-import { TodoListMode, useTodoList } from "../GlobalContext/todo-list"
+import {
+  type NewSubtask,
+  TodoListMode,
+  useTodoList,
+} from "../GlobalContext/todo-list"
 import Icon from "./Icon"
-import { Priority } from "~/GlobalContext/todos"
+import { ClientTodo, Priority } from "~/GlobalContext/todos"
 
-export default function NewSubtask() {
+export default function NewSubtask(props: { subtask: NewSubtask }) {
   const todoList = useTodoList()
   const [title, setTitle] = createSignal("")
   const [note, setNote] = createSignal("")
@@ -17,17 +21,23 @@ export default function NewSubtask() {
   const [starred, setStarred] = createSignal(false)
 
   createShortcut(["Enter"], () => {
-    if (title() === "") {
+    batch(() => {
       todoList.setMode(TodoListMode.Default)
-      return
-    }
 
-    todoList.addSubtask({
-      title: title(),
-      note: note(),
-      starred: starred(),
-      priority: priority(),
-      dueDate: dueDate(),
+      if (title() === "") return
+
+      const { parent } = props.subtask
+      const key = todoList.addSubtask(parent, {
+        type: "subtask",
+        title: title(),
+        note: note(),
+        starred: starred(),
+        priority: priority(),
+        dueDate: dueDate(),
+        done: false,
+        parent: todoList.getTodoByKey(parent) as ClientTodo,
+      })
+      todoList.setFocusedTodo(key)
     })
   })
 

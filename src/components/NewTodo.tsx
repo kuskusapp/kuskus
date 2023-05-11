@@ -4,6 +4,7 @@ import { Show, batch, createEffect, createSignal } from "solid-js"
 import { todayDate } from "~/lib/lib"
 import { TodoListMode, useTodoList } from "../GlobalContext/todo-list"
 import Icon from "./Icon"
+import { createEventListener } from "@solid-primitives/event-listener"
 
 export default function NewTodo() {
   const todoList = useTodoList()
@@ -15,25 +16,25 @@ export default function NewTodo() {
   const [priority, setPriority] = createSignal<0 | 1 | 2 | 3>(0)
   const [starred, setStarred] = createSignal(false)
 
-  createShortcut(["Enter"], () => {
-    if (title() === "") {
-      todoList.setMode(TodoListMode.Default)
-      return
-    }
+  createEventListener(window, "keydown", (e) => {
+    if (e.code === "Enter") {
+      batch(() => {
+        if (title() !== "") {
+          const newTodoKey = todoList.todosState.addTodo({
+            title: title(),
+            note: note(),
+            done: false,
+            starred: starred(),
+            priority: priority(),
+            dueDate: dueDate(),
+            subtasks: [],
+          })
+          todoList.setFocusedTodo(newTodoKey)
+        }
 
-    batch(() => {
-      const newTodoKey = todoList.todosState.addTodo({
-        title: title(),
-        note: note(),
-        done: false,
-        starred: starred(),
-        priority: priority(),
-        dueDate: dueDate(),
-        subtasks: [],
+        todoList.setMode(TodoListMode.Default)
       })
-      todoList.setFocusedTodo(newTodoKey)
-      todoList.setMode(TodoListMode.Edit, {})
-    })
+    }
   })
 
   let titleRef!: HTMLInputElement,

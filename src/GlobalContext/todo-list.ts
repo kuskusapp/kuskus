@@ -1,9 +1,9 @@
 import {
   batch,
-  createComputed,
   createMemo,
   createSelector,
   createSignal,
+  untrack,
 } from "solid-js"
 import { createContextProvider } from "@solid-primitives/context"
 import {
@@ -15,7 +15,6 @@ import {
 } from "./todos"
 import { todayDate } from "~/lib/lib"
 import { SetterParam } from "@solid-primitives/utils"
-import { PageType, useActivePage } from "~/pages/App"
 
 export type { ClientSubtask, ClientTodo } from "./todos"
 
@@ -25,6 +24,13 @@ export type NewSubtask = {
   key: TodoKey
 }
 
+export enum PageType {
+  All = "All",
+  Today = "Today",
+  Done = "Done",
+  Starred = "Starred",
+}
+
 export const enum TodoListMode {
   Default,
   Edit,
@@ -32,6 +38,7 @@ export const enum TodoListMode {
   NewSubtask,
   Search,
   Suggest,
+  Settings,
 }
 
 type TodoListModeDataMap = {
@@ -50,7 +57,8 @@ type TodoListModeState = {
 
 export function createTodoListState() {
   const todosState = createTodosState()
-  const [activePage] = useActivePage()
+
+  const [activePage, setActivePage] = createSignal(PageType.All)
 
   const [focusedTodoFromSearch, setFocusedTodoFromSearch] = createSignal(0)
   const [highlitedTodosFromSearch, setHighlightedTodosFromSearch] =
@@ -108,25 +116,6 @@ export function createTodoListState() {
         key,
         type: "new-subtask",
       })
-      setFocusedTodoKey(key)
-    })
-  }
-
-  function addSubtask(
-    subtask: Pick<
-      ClientSubtask,
-      "title" | "note" | "starred" | "priority" | "dueDate"
-    >
-  ) {
-    batch(() => {
-      const { parent } = newSubtask()!
-      const key = todosState.addSubtask(parent, {
-        ...subtask,
-        type: "subtask",
-        done: false,
-        parent: getTodoByKey(parent) as ClientTodo,
-      })
-      setMode(TodoListMode.Edit, {})
       setFocusedTodoKey(key)
     })
   }
@@ -193,13 +182,6 @@ export function createTodoListState() {
     if (todo) setFocusedTodoKey(todo.key)
   }
 
-  // replace with memo/intercapt setter later
-  // Focus the first todo every time the page changes
-  createComputed(() => {
-    activePage()
-    setFocusedTodoIndex(0)
-  })
-
   const focusedTodo = createMemo<
     NewSubtask | ClientTodo | ClientSubtask | undefined
   >(() => flatTasks()[focusedTodoIndex()])
@@ -214,10 +196,20 @@ export function createTodoListState() {
     flatTasks,
     // all the todosState state and methods can be available top level
     ...todosState,
+    activePage,
+    updateActivePage(page: PageType) {
+      if (page === untrack(activePage)) return
+
+      batch(() => {
+        setActivePage(page)
+        setFocusedTodoIndex(0)
+      })
+    },
     orderedTodos,
     focusedTodo,
     focusedTodoKey,
     focusedTodoIndex,
+    getTodoByKey,
     isTodoFocused,
     setFocusedTodo,
     setFocusedTodoIndex,
@@ -241,7 +233,6 @@ export function createTodoListState() {
     setLocalSearchResultIndex,
     addNewTask,
     addNewSubtask,
-    addSubtask,
   } as const
 }
 

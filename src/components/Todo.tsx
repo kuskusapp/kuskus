@@ -93,7 +93,7 @@ export default function Todo(props: Props) {
           >
             <Show
               when={
-                global.loadingSuggestedTodos() &&
+                // global.loadingSuggestedTodos() &&
                 global.isTodoFocused(props.todo.key)
               }
             >

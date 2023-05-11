@@ -1,9 +1,13 @@
-import { For, Suspense, createResource, createSignal, untrack } from "solid-js"
+import { Suspense, createResource, createSignal, untrack } from "solid-js"
 import { useTodoList } from "~/GlobalContext/todo-list"
 import { createShortcut } from "@solid-primitives/keyboard"
 import clsx from "clsx"
 import { GoogleClient } from "~/lib/auth"
 import { wrapIndex } from "~/lib/lib"
+import {
+  SuggestedTodosResponse,
+  fetchSubtaskSuggestions,
+} from "~/lib/suggestions"
 
 function SuggestedTodo(props: {
   title: string
@@ -28,13 +32,6 @@ function SuggestedTodo(props: {
   )
 }
 
-// TODO: best move this someplace else
-// this is temporary
-export type SuggestedTodos = {
-  title: string
-  note: string
-}
-
 export default function SuggestedTodos() {
   const todoList = useTodoList()
 
@@ -42,28 +39,21 @@ export default function SuggestedTodos() {
   // maybe do it in `createRequest`?
   // type the response, we know the structure
   // type the response well!
-  const [suggestions] = createResource<SuggestedTodos[]>(async () => {
-    const focused = todoList.focusedTodo()
+  const [suggestions] = createResource<SuggestedTodosResponse[] | undefined>(
+    async () => {
+      const focused = todoList.focusedTodo()
 
-    if (!focused || focused.type !== "todo") return
+      if (!focused || focused.type !== "todo") return
 
-    const urlEncodedTask = focused.title
+      const urlEncodedTask = focused.title
 
-    const googleToken = (await GoogleClient.getUser())?.id_token
+      const googleToken = (await GoogleClient.getUser())?.id_token
 
-    const res = await fetch(
-      `http://127.0.0.1:3001/subtasks?request=${urlEncodedTask}`,
-      {
-        headers: {
-          Authorization: "Bearer " + googleToken,
-        },
-      }
-    )
-    const resJson = await res.json()
-    // not sure why I can't do .Success right after `res.json()`, whole thing is a hack to get it working for now
-
-    return resJson.Success.subtasks
-  })
+      return googleToken
+        ? fetchSubtaskSuggestions(urlEncodedTask, googleToken)
+        : undefined
+    }
+  )
 
   return (
     <Suspense>

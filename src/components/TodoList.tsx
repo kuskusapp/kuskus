@@ -1,11 +1,7 @@
 import { createEventListener } from "@solid-primitives/event-listener"
 import { createShortcut } from "@solid-primitives/keyboard"
 import { For, Match, Show, Switch, batch, createEffect } from "solid-js"
-import {
-  TodoListMode,
-  TodoListProvider,
-  createTodoListState,
-} from "~/GlobalContext/todo-list"
+import { PageType, TodoListMode, useTodoList } from "~/GlobalContext/todo-list"
 import { createTodosForDev } from "~/lib/local"
 import ActionBar from "./ActionBar"
 import LocalSearch from "./LocalSearch"
@@ -18,11 +14,9 @@ import NewTodo from "~/components/NewTodo"
 import Todo from "~/components/Todo"
 import TodoEdit from "~/components/TodoEdit"
 import TopBar from "~/components/TopBar"
-import { PageType, useActivePage } from "~/pages/App"
 
 export default function TodoList() {
-  const todoList = createTodoListState()
-  const [activePage] = useActivePage()
+  const todoList = useTodoList()
 
   let ref!: HTMLDivElement
   createEventListener(
@@ -171,93 +165,91 @@ export default function TodoList() {
   )
 
   return (
-    <TodoListProvider {...todoList}>
-      <div
-        id="page"
-        class="flex w-full  bg-white dark:bg-stone-900 grow overflow-auto justify-between relative "
-        style={{ "border-left": "solid 1px rgba(200, 200, 200, 0.2)" }}
-      >
-        <style>
-          {`
+    <div
+      id="page"
+      class="flex w-full  bg-white dark:bg-stone-900 grow overflow-auto justify-between relative "
+      style={{ "border-left": "solid 1px rgba(200, 200, 200, 0.2)" }}
+    >
+      <style>
+        {`
 ::-webkit-scrollbar {
   display: none
 }`}
-        </style>
+      </style>
+      <div
+        class="flex flex-col justify-between rounded overflow-auto relative w-full drop"
+        ref={ref}
+      >
         <div
-          class="flex flex-col justify-between rounded overflow-auto relative w-full drop"
-          ref={ref}
+          class="grow flex justify-between"
+          style={{ "margin-bottom": "21.5px" }}
         >
-          <div
-            class="grow flex justify-between"
-            style={{ "margin-bottom": "21.5px" }}
-          >
-            <div class="grow">
-              <div
-                ref={(el) => {
-                  createEventListener(
-                    el,
-                    "click",
-                    (e) => {
-                      if (e.target === el) todoList.setFocusedTodo(null)
-                    },
-                    { passive: true }
+          <div class="grow">
+            <div
+              ref={(el) => {
+                createEventListener(
+                  el,
+                  "click",
+                  (e) => {
+                    if (e.target === el) todoList.setFocusedTodo(null)
+                  },
+                  { passive: true }
+                )
+              }}
+            >
+              <TopBar title={PageType[todoList.activePage()]} />
+              <For each={todoList.flatTasks()}>
+                {(todo) => {
+                  if (todo.type === "new-subtask") {
+                    return <NewSubtask subtask={todo} />
+                  }
+                  return (
+                    <Switch>
+                      <Match
+                        when={
+                          todoList.inMode(TodoListMode.Edit) &&
+                          todoList.isTodoFocused(todo.key)
+                        }
+                      >
+                        <TodoEdit
+                          todo={todo}
+                          initialEditNote={
+                            todoList.getModeData(TodoListMode.Edit)!
+                              .initEditingNote
+                          }
+                        />
+                      </Match>
+                      <Match when={true}>
+                        <Todo todo={todo} subtask={todo.type === "subtask"} />
+                      </Match>
+                    </Switch>
                   )
                 }}
-              >
-                <TopBar title={PageType[activePage()]} />
-                <For each={todoList.flatTasks()}>
-                  {(todo) => {
-                    if (todo.type === "new-subtask") {
-                      return <NewSubtask />
-                    }
-                    return (
-                      <Switch>
-                        <Match
-                          when={
-                            todoList.inMode(TodoListMode.Edit) &&
-                            todoList.isTodoFocused(todo.key)
-                          }
-                        >
-                          <TodoEdit
-                            todo={todo}
-                            initialEditNote={
-                              todoList.getModeData(TodoListMode.Edit)!
-                                .initEditingNote
-                            }
-                          />
-                        </Match>
-                        <Match when={true}>
-                          <Todo todo={todo} subtask={todo.type === "subtask"} />
-                        </Match>
-                      </Switch>
-                    )
-                  }}
-                </For>
-                <Show when={todoList.inMode(TodoListMode.NewTodo)}>
-                  <NewTodo />
-                </Show>
-              </div>
+              </For>
+              <Show when={todoList.inMode(TodoListMode.NewTodo)}>
+                <NewTodo />
+              </Show>
             </div>
-            <Show when={todoList.inMode(TodoListMode.Suggest)}>
-              <SuggestedTodos />
-            </Show>
           </div>
+          <Show when={todoList.inMode(TodoListMode.Suggest)}>
+            <SuggestedTodos />
+          </Show>
+        </div>
 
-          <div
-            style={{
-              "border-top": "solid 1px rgba(200,200,200,0.2)",
-            }}
-            class="flex sticky bottom-0 right-0 p-2 dark:bg-stone-900  bg-gray-100"
+        <div
+          style={{
+            "border-top": "solid 1px rgba(200,200,200,0.2)",
+          }}
+          class="flex sticky bottom-0 right-0 p-2 dark:bg-stone-900  bg-gray-100"
+        >
+          <Show
+            when={todoList.inMode(TodoListMode.Search)}
+            fallback={<ActionBar />}
           >
-            <Show
-              when={todoList.inMode(TodoListMode.Search)}
-              fallback={<ActionBar />}
-            >
-              <LocalSearch />
-            </Show>
-          </div>
+            <LocalSearch />
+          </Show>
         </div>
       </div>
-    </TodoListProvider>
+    </div>
   )
 }

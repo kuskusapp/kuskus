@@ -16,6 +16,7 @@ import {
   useTodoList,
 } from "../GlobalContext/todo-list"
 import Icon from "./Icon"
+import { createEventListener } from "@solid-primitives/event-listener"
 
 export default function TodoEdit(props: {
   todo: ClientTodo | ClientSubtask
@@ -78,6 +79,26 @@ export default function TodoEdit(props: {
       )
       todoList.setMode(TodoListMode.Default)
     })
+  })
+
+  createEventListener(window, "keydown", (e) => {
+    if (e.code === "Enter") {
+      batch(() => {
+        if (title() === "") {
+          todoList.removeTodo(props.todo.key)
+        } else {
+          todoList.updateTodo(props.todo.key, {
+            title: title(),
+            note: note(),
+            starred: starred(),
+            priority: priority(),
+            dueDate: dueDate(),
+          })
+        }
+
+        todoList.setMode(TodoListMode.Default)
+      })
+    }
   })
 
   let titleRef!: HTMLInputElement,
