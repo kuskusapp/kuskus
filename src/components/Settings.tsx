@@ -68,7 +68,9 @@ export default function Settings() {
           <Match when={show() === "Preferences"}>
             <div
               class="cursor-pointer"
-              onClick={() => global.settingsState.toggleHideActionBar()}
+              onClick={() => {
+                global.settingsState.toggleHideActionBar()
+              }}
             >
               Hide action bar
             </div>

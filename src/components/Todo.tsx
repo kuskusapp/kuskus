@@ -1,3 +1,4 @@
+import { Motion } from "@motionone/solid"
 import clsx from "clsx"
 import { Show, createSignal } from "solid-js"
 import { isToday } from "~/lib/lib"
@@ -37,10 +38,10 @@ export default function Todo(props: {
         }
       `}
       </style>
-      <div>
+      <Motion.div>
         <div
           class={clsx(
-            "flex cursor-default pl-1.5 justify-between p-2 dark:border-neutral-700 mb-1 transition-all",
+            "flex cursor-default pl-1.5 justify-between p-2 dark:border-neutral-700 mb-1",
             props.todo.note && "min-h-min",
             props.subtask && "ml-4",
             global.isTodoFocused(props.todo.key) &&
@@ -116,7 +117,7 @@ export default function Todo(props: {
             </Show>
           </div>
         </div>
-      </div>
+      </Motion.div>
     </>
   )
 }

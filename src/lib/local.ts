@@ -1,35 +1,41 @@
+import { useGlobal } from "~/GlobalContext/global"
 import {
-  Mutation,
-  Query,
   SubtaskCreateDocument,
   SubtaskDeleteDocument,
+  SubtaskLinkDocument,
   TodoCreateDocument,
   TodoDeleteDocument,
-  TodoLinkSubtaskDocument,
   TodosDocument,
 } from "~/graphql/schema"
-import { grafbase } from "./graphql"
 
+// function to seed the database with todos/subtasks
+// used for development only
+// TODO: there is weird issue sometimes grafbase does not add all the todos/subtasks but only some of them
+// not sure why..
 export async function createTodosForDev() {
+  const global = useGlobal()
+  const grafbase = global.grafbase()!
+
   // delete all todos and subtasks in db
-  const existingTodos = await grafbase.request<Query>(TodosDocument)
+  const existingTodos = await grafbase.request(TodosDocument)
   let todoIdsToDelete = <string[]>[]
   let subtaskIdsToDelete = <string[]>[]
-  existingTodos.todoCollection?.edges?.map((todo) => {
+  existingTodos.todoCollection?.edges?.map((todo: any) => {
     todoIdsToDelete.push(todo?.node.id!)
-    todo?.node.subtasks?.edges?.map((subtask) => {
+    todo?.node.subtasks?.edges?.map((subtask: any) => {
       subtaskIdsToDelete.push(subtask?.node.id!)
     })
   })
+
   todoIdsToDelete.map((id) => {
-    grafbase.request<Mutation>(TodoDeleteDocument, { id: id })
+    grafbase.request(TodoDeleteDocument, { id: id })
   })
   subtaskIdsToDelete.map((id) => {
-    grafbase.request<Mutation>(SubtaskDeleteDocument, { id: id })
+    grafbase.request(SubtaskDeleteDocument, { id: id })
   })
 
-  // create new todos and subtasks
-  let task = await grafbase.request<Mutation>(TodoCreateDocument, {
+  // create new todos
+  let task = await grafbase.request(TodoCreateDocument, {
     todo: {
       title: "Fix all bugs",
       starred: true,
@@ -38,36 +44,36 @@ export async function createTodosForDev() {
     },
   })
 
-  let subtask = await grafbase.request<Mutation>(SubtaskCreateDocument, {
+  let subtask = await grafbase.request(SubtaskCreateDocument, {
     subtask: {
       title: "subtask 1",
     },
   })
-  await grafbase.request<Mutation>(TodoLinkSubtaskDocument, {
+  // TODO: hope this manual linking goes away..
+  await grafbase.request(SubtaskLinkDocument, {
     taskId: task.todoCreate?.todo?.id,
     subtaskId: subtask.subtaskCreate?.subtask?.id,
   })
-
-  subtask = await grafbase.request<Mutation>(SubtaskCreateDocument, {
+  subtask = await grafbase.request(SubtaskCreateDocument, {
     subtask: {
       title: "subtask 2",
     },
   })
-  await grafbase.request<Mutation>(TodoLinkSubtaskDocument, {
+  await grafbase.request(SubtaskLinkDocument, {
     taskId: task.todoCreate?.todo?.id,
     subtaskId: subtask.subtaskCreate?.subtask?.id,
   })
-  subtask = await grafbase.request<Mutation>(SubtaskCreateDocument, {
+  subtask = await grafbase.request(SubtaskCreateDocument, {
     subtask: {
       title: "subtask 3",
     },
   })
-  await grafbase.request<Mutation>(TodoLinkSubtaskDocument, {
+  await grafbase.request(SubtaskLinkDocument, {
     taskId: task.todoCreate?.todo?.id,
     subtaskId: subtask.subtaskCreate?.subtask?.id,
   })
 
-  task = await grafbase.request<Mutation>(TodoCreateDocument, {
+  task = await grafbase.request(TodoCreateDocument, {
     todo: {
       title: "Make Kuskus",
       starred: true,
@@ -76,17 +82,17 @@ export async function createTodosForDev() {
       note: "cover all important use cases",
     },
   })
-  subtask = await grafbase.request<Mutation>(SubtaskCreateDocument, {
+
+  subtask = await grafbase.request(SubtaskCreateDocument, {
     subtask: {
       title: "subtask",
     },
   })
-  await grafbase.request<Mutation>(TodoLinkSubtaskDocument, {
+  await grafbase.request(SubtaskLinkDocument, {
     taskId: task.todoCreate?.todo?.id,
     subtaskId: subtask.subtaskCreate?.subtask?.id,
   })
-
-  task = await grafbase.request<Mutation>(TodoCreateDocument, {
+  task = await grafbase.request(TodoCreateDocument, {
     todo: {
       title: "Release KusKus",
       starred: true,
@@ -94,7 +100,7 @@ export async function createTodosForDev() {
       done: false,
     },
   })
-  task = await grafbase.request<Mutation>(TodoCreateDocument, {
+  task = await grafbase.request(TodoCreateDocument, {
     todo: {
       title: "Polish",
       starred: true,
@@ -102,12 +108,13 @@ export async function createTodosForDev() {
       done: false,
     },
   })
-  subtask = await grafbase.request<Mutation>(SubtaskCreateDocument, {
+
+  subtask = await grafbase.request(SubtaskCreateDocument, {
     subtask: {
       title: "do it well",
     },
   })
-  await grafbase.request<Mutation>(TodoLinkSubtaskDocument, {
+  await grafbase.request(SubtaskLinkDocument, {
     taskId: task.todoCreate?.todo?.id,
     subtaskId: subtask.subtaskCreate?.subtask?.id,
   })

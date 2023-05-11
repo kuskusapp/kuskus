@@ -1,22 +1,21 @@
 import { defer } from "@solid-primitives/utils"
-import { createEffect } from "solid-js"
+import { createEffect, onMount } from "solid-js"
 import { StoreSetter, createStore, produce } from "solid-js/store"
 import {
-  Query,
   SubtaskConnection,
   SubtaskCreateDocument,
   SubtaskDeleteDocument,
+  SubtaskLinkDocument,
   SubtaskUpdateDocument,
   TodoCreateDocument,
   TodoCreateInput,
   TodoDeleteDocument,
-  TodoLinkSubtaskDocument,
   TodoUpdateDocument,
   TodoUpdateInput,
   TodosDocument,
 } from "~/graphql/schema"
-import { grafbase } from "~/lib/graphql"
 import { createArrayDiff } from "~/lib/primitives"
+import { useGlobal } from "./global"
 
 export type Priority = 0 | 1 | 2 | 3
 /**
@@ -107,6 +106,8 @@ function getTodoUpdateInput(todo: BaseTask): TodoUpdateInput {
 
 export function createTodosState() {
   const [todos, setTodos] = createStore<ClientTodo[]>([])
+  const global = useGlobal()
+  const grafbase = global.grafbase()!
 
   // fetch initial todos from the database
   // not using resource because we don't need to interact with Suspense
@@ -152,7 +153,7 @@ export function createTodosState() {
           .request(TodoCreateDocument, {
             todo: getTodoCreateInput(todo),
           })
-          .then((res) => {
+          .then(async (res) => {
             // tasks get their id after being added to the db
             setTodos((t) => t === todo, "id", res.todoCreate?.todo?.id!)
           })
@@ -195,7 +196,7 @@ export function createTodosState() {
                   res.subtaskCreate?.subtask?.id!
                 )
                 // TODO: do the subtask create and subtask link in 1 query..
-                grafbase.request(TodoLinkSubtaskDocument, {
+                grafbase.request(SubtaskLinkDocument, {
                   taskId: todo.id!,
                   subtaskId: res.subtaskCreate?.subtask?.id!,
                 })

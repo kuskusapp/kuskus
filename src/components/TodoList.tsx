@@ -1,3 +1,4 @@
+import { Presence } from "@motionone/solid"
 import { createEventListener } from "@solid-primitives/event-listener"
 import { createShortcut } from "@solid-primitives/keyboard"
 import {
@@ -157,7 +158,11 @@ export default function TodoList() {
   createShortcut(
     ["Control", "I"],
     async () => {
-      createTodosForDev()
+      // seed the database with todos/subtasks
+      // only works in dev mode
+      if (!import.meta.env.PROD) {
+        createTodosForDev()
+      }
     },
     { preventDefault: false }
   )
@@ -181,7 +186,7 @@ export default function TodoList() {
       style={{ "border-left": "solid 1px rgba(200, 200, 200, 0.2)" }}
     >
       <div
-        class="flex flex-col justify-between rounded overflow-auto relative w-full drop"
+        class="flex flex-col justify-between rounded overflow-auto relative w-full drop h-screen"
         ref={(el) => {
           createEventListener(
             el,
@@ -195,10 +200,7 @@ export default function TodoList() {
           )
         }}
       >
-        <div
-          class="grow flex justify-between"
-          style={{ "margin-bottom": "21.5px" }}
-        >
+        <div class="grow flex justify-between overflow-scroll">
           <div class="grow">
             <div
               ref={(el) => {
@@ -261,18 +263,22 @@ export default function TodoList() {
               </Show>
             </div>
           </div>
-          <Suspense>
-            <Show when={todoList.inMode(TodoListMode.Suggest) && suggestions()}>
-              {(list) => <SuggestedTodos suggestions={list()} />}
-            </Show>
-          </Suspense>
+          <Presence>
+            <Suspense>
+              <Show
+                when={todoList.inMode(TodoListMode.Suggest) && suggestions()}
+              >
+                {(list) => <SuggestedTodos suggestions={list()} />}
+              </Show>
+            </Suspense>
+          </Presence>
         </div>
 
         <div
           style={{
             "border-top": "solid 1px rgba(200,200,200,0.2)",
           }}
-          class="flex sticky bottom-0 right-0 p-2 dark:bg-stone-900  bg-gray-100"
+          class="flex p-2 dark:bg-stone-900  bg-gray-100"
         >
           <Show
             when={todoList.inMode(TodoListMode.Search)}

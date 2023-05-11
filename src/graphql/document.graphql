@@ -18,12 +18,10 @@ fragment Subtask on Subtask {
   dueDate
 }
 
-fragment Settings on Settings {
-  hideActionBar
-  iconOnlySidebar
-  languageModelUsed
-}
-
+# TODO: should not just be first: 100
+# but should return **all** the todos
+# also all the subtasks for the todos
+# pagination?
 query Todos {
   todoCollection(first: 100) {
     edges {
@@ -63,7 +61,9 @@ mutation TodoDelete($id: ID!) {
   }
 }
 
-mutation TodoLinkSubtask($taskId: ID!, $subtaskId: ID!) {
+# TODO: this should be part of `SubtaskCreate`...
+# super annoying having to link it manually every time
+mutation SubtaskLink($taskId: ID!, $subtaskId: ID!) {
   todoUpdate(by: { id: $taskId }, input: { subtasks: [{ link: $subtaskId }] }) {
     todo {
       id
@@ -71,6 +71,7 @@ mutation TodoLinkSubtask($taskId: ID!, $subtaskId: ID!) {
   }
 }
 
+# same as Todos query, should return all the subtasks..
 query Subtasks {
   subtaskCollection(first: 100) {
     edges {
@@ -98,17 +99,37 @@ mutation SubtaskUpdate($id: ID!, $subtask: SubtaskUpdateInput!) {
   }
 }
 
-mutation SubtaskCreate($subtask: SubtaskCreateInput!) {
-  subtaskCreate(input: $subtask) {
-    subtask {
+mutation SubtaskDelete($id: ID!) {
+  subtaskDelete(by: { id: $id }) {
+    deletedId
+  }
+}
+
+query UserDetails {
+  userDetailsCollection(first: 1) {
+    edges {
+      node {
+        id
+        username
+        aiTasksAvailable
+      }
+    }
+  }
+}
+
+mutation UserDetailsCreate($userDetails: UserDetailsCreateInput!) {
+  userDetailsCreate(input: $userDetails) {
+    userDetails {
       id
     }
   }
 }
 
-mutation SubtaskDelete($id: ID!) {
-  subtaskDelete(by: { id: $id }) {
-    deletedId
+mutation UserDetailsUpdate($id: ID!, $userDetails: UserDetailsUpdateInput!) {
+  userDetailsUpdate(by: { id: $id }, input: $userDetails) {
+    userDetails {
+      id
+    }
   }
 }
 
@@ -116,7 +137,10 @@ query Settings {
   settingsCollection(first: 1) {
     edges {
       node {
-        ...Settings
+        id
+        hideActionBar
+        iconOnlySidebar
+        languageModelUsed
       }
     }
   }
@@ -134,6 +158,15 @@ mutation SettingsUpdate($id: ID!, $settings: SettingsUpdateInput!) {
   settingsUpdate(by: { id: $id }, input: $settings) {
     settings {
       id
+    }
+  }
+}
+
+query SuggestedTasks($task: String!) {
+  suggestions(task: $task) {
+    suggestedTasks {
+      title
+      note
     }
   }
 }
