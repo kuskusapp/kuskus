@@ -24,8 +24,9 @@ import NewTodo from "~/components/NewTodo"
 import Todo from "~/components/Todo"
 import TodoEdit from "~/components/TodoEdit"
 import TopBar from "~/components/TopBar"
-import { fetchSubtaskSuggestions } from "~/lib/suggestions"
 import { isDev } from "solid-js/web"
+import { useGlobal } from "~/GlobalContext/global"
+import { SuggestedTasksDocument } from "~/graphql/schema"
 
 export default function TodoList() {
   const todoList = useTodoList()
@@ -169,6 +170,9 @@ export default function TodoList() {
     { preventDefault: false }
   )
 
+  const global = useGlobal()
+  const grafbase = global.grafbase()!
+
   const [suggestions] = createResource(
     () => {
       if (!todoList.inMode(TodoListMode.Suggest)) return
@@ -176,7 +180,11 @@ export default function TodoList() {
       return focused && focused.type === "todo" && focused
     },
     async (todo) => {
-      const suggestions = await fetchSubtaskSuggestions(todo.title)
+      const res = await grafbase.request(SuggestedTasksDocument, {
+        task: todo.title,
+      })
+
+      const suggestions = res.suggestions.suggestedTasks
       return suggestions && suggestions.length ? suggestions : undefined
     }
   )

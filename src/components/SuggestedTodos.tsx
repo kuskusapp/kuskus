@@ -55,11 +55,11 @@ export default function SuggestedTodos(props: {
   // })
 
   createShortcut(["ArrowDown"], () => {
-    setFocusedSuggestion((p) => wrapIndex(todoList.flatTasks().length, p + 1))
+    setFocusedSuggestion((p) => wrapIndex(props.suggestions.length, p + 1))
   })
 
   createShortcut(["ArrowUp"], () => {
-    setFocusedSuggestion((p) => wrapIndex(todoList.flatTasks().length, p - 1))
+    setFocusedSuggestion((p) => wrapIndex(props.suggestions.length, p - 1))
   })
 
   return (

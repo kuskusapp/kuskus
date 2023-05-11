@@ -13,4 +13,7 @@ export function todayDate() {
   return today
 }
 
-export const wrapIndex = (index: number, length: number) => (length - 1) % index
+export const wrapIndex = (index: number, length: number) => {
+  const v = index % length
+  return v < 0 ? v + length : v
+}
