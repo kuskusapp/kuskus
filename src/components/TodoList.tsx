@@ -74,15 +74,22 @@ export default function TodoList() {
             },
             // Focus todo up
             ArrowUp() {
-              todoList.setFocusedTodoIndex((p) =>
-                wrapIndex(todoList.flatTasks().length, p - 1)
-              )
+              todoList.setFocusedTodoIndex((p) => {
+                const n = p - 1
+                if (n < 0) return todoList.flatTasks().length - 1
+                return n
+                // TODO: for some reason wrapIndex no work
+                // wrapIndex(todoList.flatTasks().length, p - 1)
+              })
             },
             // Focus todo down
             ArrowDown() {
-              todoList.setFocusedTodoIndex((p) =>
-                wrapIndex(todoList.flatTasks().length, p + 1)
-              )
+              todoList.setFocusedTodoIndex((p) => {
+                const n = p + 1
+                if (n > todoList.flatTasks().length - 1) return 0
+                return n
+                // wrapIndex(todoList.flatTasks().length, p + 1)
+              })
             },
             // Remove focused todo
             Backspace() {
@@ -137,7 +144,7 @@ export default function TodoList() {
             F() {
               batch(() => {
                 todoList.setMode(TodoListMode.Search)
-                todoList.setFocusedTodo(null)
+                todoList.setFocusedTodoKey(null)
               })
             },
             // Suggestions
@@ -203,7 +210,7 @@ export default function TodoList() {
             "click",
             (e) => {
               if (e.target === el) {
-                todoList.setFocusedTodo(null)
+                todoList.setFocusedTodoKey(null)
               }
             },
             { passive: true }
@@ -227,7 +234,7 @@ export default function TodoList() {
                   el,
                   "click",
                   (e) => {
-                    if (e.target === el) todoList.setFocusedTodo(null)
+                    if (e.target === el) todoList.setFocusedTodoKey(null)
                   },
                   { passive: true }
                 )

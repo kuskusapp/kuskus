@@ -2,6 +2,7 @@ import { Show, createSignal } from "solid-js"
 import { createSettingsState } from "~/GlobalContext/settings"
 import {
   PageType,
+  TodoListMode,
   TodoListProvider,
   createTodoListState,
 } from "~/GlobalContext/todo-list"
@@ -17,7 +18,6 @@ export default function App() {
   const todoList = createTodoListState()
 
   const [showHelp, setShowHelp] = createSignal(false)
-  const [showSettings, setShowSettings] = createSignal(false)
 
   createShortcuts({
     "Control+1"() {
@@ -46,10 +46,10 @@ export default function App() {
             children={<Help />}
           />
         </Show>
-        <Show when={showSettings()}>
+        <Show when={todoList.inMode(TodoListMode.Settings)}>
           <Modal
             title="Settings"
-            onClose={() => setShowSettings(false)}
+            onClose={() => todoList.setMode(TodoListMode.Default)}
             children={<Settings />}
           />
         </Show>

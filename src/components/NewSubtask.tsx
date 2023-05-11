@@ -37,7 +37,7 @@ export default function NewSubtask(props: { subtask: NewSubtask }) {
         done: false,
         parent: todoList.getTodoByKey(parent) as ClientTodo,
       })
-      todoList.setFocusedTodo(key)
+      todoList.setFocusedTodoKey(key)
     })
   })
 

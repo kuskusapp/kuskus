@@ -86,14 +86,6 @@ export function createTodoListState() {
       ? (modeState().data as TodoListModeData<T>)
       : undefined
 
-  function setFocusedTodo(key: TodoKey | null) {
-    batch(() => {
-      setFocusedTodoKey(key)
-      // focusing a different todo should reset viewing mode
-      setMode(TodoListMode.Default)
-    })
-  }
-
   function addNewTask() {
     batch(() => {
       setMode(TodoListMode.NewTodo)
@@ -211,7 +203,7 @@ export function createTodoListState() {
     focusedTodoIndex,
     getTodoByKey,
     isTodoFocused,
-    setFocusedTodo,
+    setFocusedTodoKey,
     setFocusedTodoIndex,
     mode,
     getModeData,

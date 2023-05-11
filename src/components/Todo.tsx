@@ -59,7 +59,7 @@ export default function Todo(props: {
             if (global.isTodoFocused(props.todo.key)) {
               global.setMode(TodoListMode.Edit, {})
             } else {
-              global.setFocusedTodo(props.todo.key)
+              global.setFocusedTodoKey(props.todo.key)
             }
           }}
         >

@@ -2,9 +2,12 @@ import { createEffect, createSignal, onCleanup } from "solid-js"
 import { ClientTodo, useTodoList } from "~/GlobalContext/todo-list"
 import { createShortcut } from "@solid-primitives/keyboard"
 import clsx from "clsx"
-import { wrapIndex } from "~/lib/lib"
-import { type SuggestedTodo } from "~/lib/suggestions"
 import { Motion } from "@motionone/solid"
+
+type SuggestedTodo = {
+  title: string
+  note: string
+}
 
 function SuggestedTodo(props: {
   title: string
@@ -60,11 +63,19 @@ export default function SuggestedTodos(props: {
   })
 
   createShortcut(["ArrowDown"], () => {
-    setFocusedSuggestion((p) => wrapIndex(props.suggestions.length, p + 1))
+    setFocusedSuggestion((p) => {
+      const n = p + 1
+      if (n > props.suggestions.length - 1) return 0
+      return n
+    })
   })
 
   createShortcut(["ArrowUp"], () => {
-    setFocusedSuggestion((p) => wrapIndex(props.suggestions.length, p - 1))
+    setFocusedSuggestion((p) => {
+      const n = p - 1
+      if (n < 0) return props.suggestions.length - 1
+      return n
+    })
   })
 
   return (

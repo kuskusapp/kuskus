@@ -30,7 +30,7 @@ export default function NewTodo() {
             dueDate: dueDate(),
             subtasks: [],
           })
-          todoList.setFocusedTodo(newTodoKey)
+          todoList.setFocusedTodoKey(newTodoKey)
         }
 
         todoList.setMode(TodoListMode.Default)
