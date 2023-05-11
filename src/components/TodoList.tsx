@@ -1,6 +1,15 @@
 import { createEventListener } from "@solid-primitives/event-listener"
 import { createShortcut } from "@solid-primitives/keyboard"
-import { For, Match, Show, Switch, batch, createEffect } from "solid-js"
+import {
+  For,
+  Match,
+  Show,
+  Suspense,
+  Switch,
+  batch,
+  createEffect,
+  createResource,
+} from "solid-js"
 import { PageType, TodoListMode, useTodoList } from "~/GlobalContext/todo-list"
 import { createTodosForDev } from "~/lib/local"
 import ActionBar from "./ActionBar"
@@ -14,22 +23,11 @@ import NewTodo from "~/components/NewTodo"
 import Todo from "~/components/Todo"
 import TodoEdit from "~/components/TodoEdit"
 import TopBar from "~/components/TopBar"
+import { fetchSubtaskSuggestions } from "~/lib/suggestions"
+import { isDev } from "solid-js/web"
 
 export default function TodoList() {
   const todoList = useTodoList()
-
-  let ref!: HTMLDivElement
-  createEventListener(
-    () => ref,
-    "click",
-    (e) => {
-      if (e.target === ref) {
-        todoList.setFocusedTodo(null)
-        // global.setNewTodo(false)
-      }
-    },
-    { passive: true }
-  )
 
   function setPrority(i: Priority) {
     const focusedTodoValue = todoList.focusedTodoKey()
@@ -164,21 +162,38 @@ export default function TodoList() {
     { preventDefault: false }
   )
 
+  const [suggestions] = createResource(
+    () => {
+      if (!todoList.inMode(TodoListMode.Suggest)) return
+      const focused = todoList.focusedTodo()
+      return focused && focused.type === "todo" && focused
+    },
+    async (todo) => {
+      const suggestions = await fetchSubtaskSuggestions(todo.title)
+      return suggestions && suggestions.length ? suggestions : undefined
+    }
+  )
+
   return (
     <div
       id="page"
       class="flex w-full  bg-white dark:bg-stone-900 grow overflow-auto justify-between relative "
       style={{ "border-left": "solid 1px rgba(200, 200, 200, 0.2)" }}
     >
-      <style>
-        {`
-::-webkit-scrollbar {
-  display: none
-}`}
-      </style>
       <div
         class="flex flex-col justify-between rounded overflow-auto relative w-full drop"
-        ref={ref}
+        ref={(el) => {
+          createEventListener(
+            el,
+            "click",
+            (e) => {
+              if (e.target === el) {
+                todoList.setFocusedTodo(null)
+              }
+            },
+            { passive: true }
+          )
+        }}
       >
         <div
           class="grow flex justify-between"
@@ -197,7 +212,15 @@ export default function TodoList() {
                 )
               }}
             >
-              <TopBar title={PageType[todoList.activePage()]} />
+              <TopBar
+                title={
+                  isDev
+                    ? `${PageType[todoList.activePage()]} mode:${
+                        TodoListMode[todoList.mode()]
+                      } (dev)`
+                    : PageType[todoList.activePage()]
+                }
+              />
               <For each={todoList.flatTasks()}>
                 {(todo) => {
                   if (todo.type === "new-subtask") {
@@ -220,7 +243,14 @@ export default function TodoList() {
                         />
                       </Match>
                       <Match when={true}>
-                        <Todo todo={todo} subtask={todo.type === "subtask"} />
+                        <Todo
+                          todo={todo}
+                          subtask={todo.type === "subtask"}
+                          loadingSuggestions={
+                            suggestions.loading &&
+                            todoList.isTodoFocused(todo.key)
+                          }
+                        />
                       </Match>
                     </Switch>
                   )
@@ -231,9 +261,11 @@ export default function TodoList() {
               </Show>
             </div>
           </div>
-          <Show when={todoList.inMode(TodoListMode.Suggest)}>
-            <SuggestedTodos />
-          </Show>
+          <Suspense>
+            <Show when={todoList.inMode(TodoListMode.Suggest) && suggestions()}>
+              {(list) => <SuggestedTodos suggestions={list()} />}
+            </Show>
+          </Suspense>
         </div>
 
         <div

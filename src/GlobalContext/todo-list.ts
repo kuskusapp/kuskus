@@ -31,7 +31,7 @@ export enum PageType {
   Starred = "Starred",
 }
 
-export const enum TodoListMode {
+export enum TodoListMode {
   Default,
   Edit,
   NewTodo,

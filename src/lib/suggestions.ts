@@ -1,15 +1,19 @@
-export type SuggestedTodosResponse = {
+import { GoogleClient } from "./auth"
+
+export type SuggestedTodo = {
   title: string
   note: string
 }
 
 const MOCK_SUGGESTIONS: boolean = true
 
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
+
 export async function fetchSubtaskSuggestions(
-  taskTitle: string,
-  googleToken: string
-): Promise<SuggestedTodosResponse[]> {
+  taskTitle: string
+): Promise<SuggestedTodo[] | undefined> {
   if (MOCK_SUGGESTIONS) {
+    await sleep(1000)
     return [
       {
         title: "Subtask 1",
@@ -25,6 +29,10 @@ export async function fetchSubtaskSuggestions(
       },
     ]
   }
+
+  const googleToken = (await GoogleClient.getUser())?.id_token
+
+  if (!googleToken) return
 
   const res = await fetch(
     `http://127.0.0.1:3001/subtasks?request=${taskTitle}`,
