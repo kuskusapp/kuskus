@@ -13,6 +13,7 @@ import LocalSearch from "./LocalSearch"
 import SuggestedTodos from "./SuggestedTodos"
 import { useGlobal } from "~/GlobalContext/global"
 import { SuggestedTasksDocument } from "~/graphql/schema"
+import TopBar from "./TopBar"
 
 export default function Page() {
   // TODO: grafbase cannot be undefined here, I think..
@@ -40,29 +41,39 @@ export default function Page() {
   createShortcut(
     ["Backspace"],
     () => {
-      if (global.newTodo() || global.editingTodo() || global.localSearch())
+      if (
+        global.newTodo() ||
+        global.editingTodo() ||
+        global.localSearch() ||
+        global.focusedTodoKey() === null
+      )
         return
 
+      let todoIdToFocus =
+        global
+          .flatTasks()
+          .findIndex((todo) => todo.key === global.focusedTodoKey()) - 1
+
+      // TODO: improve this code..
       if (global.isSubtask(global.focusedTodo()!)) {
         global.todosState.removeSubtask(
           global.flatTasks()[global.focusedTodoIndex()].key
         )
+        if (global.orderedTodos().length === 0) {
+          global.setFocusedTodoKey(null)
+        } else {
+          global.setFocusedTodoKey(global.flatTasks()[todoIdToFocus].key)
+        }
         return
       }
 
       if (!global.localSearch() && !global.editingTodo()) {
         global.todosState.removeTodo(global.focusedTodoKey()!)
-
-        let todoIdToFocus =
-          global
-            .orderedTodos()
-            .findIndex((todo) => todo.key === global.focusedTodoKey()) + 1
-
-        if (global.orderedTodos().length === 0) {
-          global.setFocusedTodoKey(null)
-        } else {
-          global.setFocusedTodoKey(global.orderedTodos()[todoIdToFocus].key)
-        }
+      }
+      if (global.orderedTodos().length === 0) {
+        global.setFocusedTodoKey(null)
+      } else {
+        global.setFocusedTodoKey(global.flatTasks()[todoIdToFocus].key)
       }
     },
     { preventDefault: false }
@@ -389,10 +400,11 @@ export default function Page() {
         }`}
       </style>
       <div
-        class="flex flex-col justify-between rounded overflow-auto relative w-full drop"
+        class="flex flex-col justify-between rounded overflow-auto relative w-full drop h-screen"
         ref={ref}
       >
-        <div class="grow flex justify-between">
+        <TopBar title={global.activePage()} />
+        <div class="grow flex justify-between overflow-scroll">
           <div class="grow">
             <Switch>
               <Match when={global.activePage() === "All"}>
@@ -421,7 +433,7 @@ export default function Page() {
           style={{
             "border-top": "solid 1px rgba(200,200,200,0.2)",
           }}
-          class="flex sticky bottom-0 right-0 p-2 dark:bg-stone-900  bg-gray-100"
+          class="flex p-2 dark:bg-stone-900  bg-gray-100"
         >
           <Show when={global.localSearch()} fallback={<ActionBar />}>
             <LocalSearch />

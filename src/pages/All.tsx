@@ -26,31 +26,33 @@ export default function All() {
 
   return (
     <div ref={ref}>
-      <TopBar title="All" />
-      <For each={global.flatTasks()}>
-        {(todo) => {
-          if (global.isNewSubtask(todo)) {
-            return <NewSubtask />
-          }
-          return (
-            <Switch>
-              <Match
-                when={global.isTodoFocused(todo.key) && global.editingTodo()}
-              >
-                <TodoEdit todo={todo} />
-              </Match>
-              <Match when={true}>
-                <Todo todo={todo} subtask={"parent" in todo} />
-              </Match>
-            </Switch>
-          )
-        }}
-      </For>
-      <Presence exitBeforeEnter>
-        <Show when={global.newTodo() && !global.editingTodo()}>
-          <NewTodo />
-        </Show>
-      </Presence>
+      {/* <TopBar title="All" /> */}
+      <div class="overflow-scroll" style={{ height: "100%" }}>
+        <For each={global.flatTasks()}>
+          {(todo) => {
+            if (global.isNewSubtask(todo)) {
+              return <NewSubtask />
+            }
+            return (
+              <Switch>
+                <Match
+                  when={global.isTodoFocused(todo.key) && global.editingTodo()}
+                >
+                  <TodoEdit todo={todo} />
+                </Match>
+                <Match when={true}>
+                  <Todo todo={todo} subtask={"parent" in todo} />
+                </Match>
+              </Switch>
+            )
+          }}
+        </For>
+        <Presence exitBeforeEnter>
+          <Show when={global.newTodo() && !global.editingTodo()}>
+            <NewTodo />
+          </Show>
+        </Presence>
+      </div>
     </div>
   )
 }
