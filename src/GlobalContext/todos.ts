@@ -248,6 +248,8 @@ export function createTodosState() {
     removeTodo: (key: TodoKey) => {
       setTodos((p) => p.filter((t) => t.key !== key))
     },
+    // TODO: allow only passing of required values
+    // the rest is filled by default values exactly like in schema
     addSubtask: (
       parentKey: TodoKey,
       subtask: Omit<ClientSubtask, "id" | "key">

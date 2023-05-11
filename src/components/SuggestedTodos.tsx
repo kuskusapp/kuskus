@@ -1,5 +1,5 @@
 import { createEffect, createSignal, onCleanup } from "solid-js"
-import { useTodoList } from "~/GlobalContext/todo-list"
+import { ClientTodo, useTodoList } from "~/GlobalContext/todo-list"
 import { createShortcut } from "@solid-primitives/keyboard"
 import clsx from "clsx"
 import { wrapIndex } from "~/lib/lib"
@@ -44,15 +44,20 @@ export default function SuggestedTodos(props: {
 
   const [focusedSuggestion, setFocusedSuggestion] = createSignal(0)
 
-  // createShortcut(["Enter"], () => {
-  //   global.todosState.updateTodo(global.focusedTodo()!, (p) => ({
-  //     ...p,
-  //     subtasks: p.subtasks.push({
-  //       title: "testing",
-  //       subutask: "subtask"
-  //     })
-  //   })
-  // })
+  createShortcut(["Enter"], () => {
+    const suggestion = props.suggestions[focusedSuggestion()]
+
+    todoList.todosState.addSubtask(todoList.focusedTodoKey()!, {
+      type: "subtask",
+      title: suggestion.title,
+      done: false,
+      starred: false,
+      priority: 0,
+      dueDate: "",
+      note: "",
+      parent: todoList.focusedTodo() as ClientTodo,
+    })
+  })
 
   createShortcut(["ArrowDown"], () => {
     setFocusedSuggestion((p) => wrapIndex(props.suggestions.length, p + 1))
