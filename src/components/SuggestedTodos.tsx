@@ -50,7 +50,7 @@ export default function SuggestedTodos() {
         width: "40%",
         height: "100%",
       }}
-      class="dark:bg-stone-900 bg-gray-100 flex flex-col justify-between items-center overflow-scroll"
+      class="dark:bg-stone-900 bg-gray-100 flex flex-col justify-between items-center "
     >
       <Motion.div
         initial={{ "font-size": "0px" }}
@@ -68,7 +68,7 @@ export default function SuggestedTodos() {
         Suggested tasks for {/* @ts-ignore */}
         {global.flatTasks()[global.focusedTodoIndex()].title}
       </Motion.div>
-      <div class="grid-cols-5 col-span-5">
+      <div class="grid-cols-5 col-span-5 overflow-scroll">
         <For each={global.suggestedTodos()}>
           {(todo, index) => (
             <SuggestedTodo title={todo.title} index={index()} />

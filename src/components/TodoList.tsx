@@ -405,25 +405,29 @@ export default function Page() {
         class="flex flex-col justify-between rounded overflow-auto relative w-full drop h-screen"
         ref={ref}
       >
-        <TopBar title={global.activePage()} />
-        <div class="grow flex justify-between overflow-scroll">
-          <div class="grow">
-            <Switch>
-              <Match when={global.activePage() === "All"}>
-                <All />
-              </Match>
-              <Match when={global.activePage() === "Today"}>
-                <Today />
-              </Match>
-              <Match when={global.activePage() === "Starred"}>
-                <Starred />
-              </Match>
-              <Match when={global.activePage() === "Done"}>
-                <Done />
-              </Match>
-            </Switch>
-          </div>
+        <div class="flex overflow-hidden">
+          <div class="flex flex-col grow ">
+            <TopBar title={global.activePage()} />
 
+            <div class="grow flex justify-between overflow-scroll">
+              <div class="grow">
+                <Switch>
+                  <Match when={global.activePage() === "All"}>
+                    <All />
+                  </Match>
+                  <Match when={global.activePage() === "Today"}>
+                    <Today />
+                  </Match>
+                  <Match when={global.activePage() === "Starred"}>
+                    <Starred />
+                  </Match>
+                  <Match when={global.activePage() === "Done"}>
+                    <Done />
+                  </Match>
+                </Switch>
+              </div>
+            </div>
+          </div>
           <Presence exitBeforeEnter>
             <Show when={global.showSuggestedTasksModal()}>
               <SuggestedTodos />
