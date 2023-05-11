@@ -12,17 +12,18 @@ import { todayDate } from "~/lib/lib"
 import {
   ClientSubtask,
   ClientTodo,
-  useGlobalContext,
-} from "../GlobalContext/store"
+  TodoListMode,
+  useTodoList,
+} from "../GlobalContext/todo-list"
 import Icon from "./Icon"
 import { Motion } from "@motionone/solid"
+import { createEventListener } from "@solid-primitives/event-listener"
 
-interface Props {
+export default function TodoEdit(props: {
   todo: ClientTodo | ClientSubtask
-}
-
-export default function TodoEdit(props: Props) {
-  const global = useGlobalContext()
+  initialEditNote?: true
+}) {
+  const todoList = useTodoList()
   const [title, setTitle] = createSignal(props.todo.title)
   const [note, setNote] = createSignal(props.todo.note)
   const [dueDate, setDueDate] = createSignal(props.todo.dueDate)
@@ -32,20 +33,20 @@ export default function TodoEdit(props: Props) {
   const [starred, setStarred] = createSignal(props.todo.starred)
 
   onMount(() => {
-    global.setClickTimeStamp(0)
+    todoList.setClickTimeStamp(0)
   })
 
   onCleanup(() => {
     // REMOVE
     if (title() === "") {
-      global.todosState.removeTodo(props.todo.key)
+      todoList.todosState.removeTodo(props.todo.key)
       return
     }
 
-    if ("subtasks" in global.flatTasks()[global.focusedTodoIndex()]) {
+    if ("subtasks" in todoList.flatTasks()[todoList.focusedTodoIndex()]) {
       // UPDATE TASK
       batch(() => {
-        global.todosState.updateTodo(props.todo.key, (p) => ({
+        todoList.todosState.updateTodo(props.todo.key, (p) => ({
           ...p,
           title: title(),
           note: note(),
@@ -53,17 +54,17 @@ export default function TodoEdit(props: Props) {
           starred: starred(),
           dueDate: showCalendar() && !dueDate() ? todayDate() : dueDate(),
         }))
-        global.setEditingTodo(false)
+        todoList.setMode(TodoListMode.Default)
       })
       return
     }
 
     // UPDATE SUBTASK
     batch(() => {
-      global.todosState.updateSubtask(
+      todoList.todosState.updateSubtask(
         // TODO: not sure how to avoid ts-ignore..
         // @ts-ignore
-        global.flatTasks()[global.focusedTodoIndex()].parent.key,
+        todoList.flatTasks()[todoList.focusedTodoIndex()].parent.key,
         props.todo.key,
         // somehow id, key and parent need to be on the type
         // but they have to be derived, don't know how..
@@ -77,27 +78,45 @@ export default function TodoEdit(props: Props) {
           done: false,
         })
       )
-      global.setEditingTodo(false)
+      todoList.setMode(TodoListMode.Default)
     })
+  })
+
+  createEventListener(window, "keydown", (e) => {
+    if (e.code === "Enter") {
+      batch(() => {
+        if (title() === "") {
+          todoList.removeTodo(props.todo.key)
+        } else {
+          todoList.updateTodo(props.todo.key, {
+            title: title(),
+            note: note(),
+            starred: starred(),
+            priority: priority(),
+            dueDate: dueDate(),
+          })
+        }
+
+        todoList.setMode(TodoListMode.Default)
+      })
+    }
   })
 
   let titleRef!: HTMLInputElement,
     noteRef!: HTMLInputElement,
     datePickerRef!: HTMLInputElement
 
-  createEffect(() => {
-    if (global.editNoteInTodo()) {
-      autofocus(noteRef)
+  const [editNoteInTodo, setEditNoteInTodo] = createSignal(
+    !!props.initialEditNote
+  )
 
-      createShortcut(["ArrowUp"], () => {
-        global.setEditNoteInTodo(false)
-      })
+  createEffect(() => {
+    if (editNoteInTodo()) {
+      autofocus(noteRef)
+      createShortcut(["ArrowUp"], () => setEditNoteInTodo(false))
     } else {
       autofocus(titleRef)
-
-      createShortcut(["ArrowDown"], () => {
-        global.setEditNoteInTodo(true)
-      })
+      createShortcut(["ArrowDown"], () => setEditNoteInTodo(true))
     }
   })
 

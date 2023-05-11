@@ -1,4 +1,4 @@
-import { useGlobalContext } from "~/GlobalContext/store"
+import { useTodoList } from "~/GlobalContext/todo-list"
 import Icon from "./Icon"
 
 interface Props {

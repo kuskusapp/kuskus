@@ -1,86 +1,59 @@
-import { createShortcut } from "@solid-primitives/keyboard"
-import { Show, batch } from "solid-js"
-import { PageType, useGlobalContext } from "~/GlobalContext/store"
+import { Show, createSignal } from "solid-js"
+import { createSettingsState } from "~/GlobalContext/settings"
+import {
+  PageType,
+  TodoListMode,
+  TodoListProvider,
+  createTodoListState,
+} from "~/GlobalContext/todo-list"
 import Help from "~/components/Help"
 import Modal from "~/components/Modal"
 import Settings from "~/components/Settings"
 import Sidebar from "~/components/Sidebar"
 import TodoList from "~/components/TodoList"
-import { todayDate } from "~/lib/lib"
+import { createShortcuts } from "~/lib/primitives"
 
 export default function App() {
-  const global = useGlobalContext()
+  const settingsState = createSettingsState()
+  const todoList = createTodoListState()
 
-  createShortcut(
-    ["Control", "1"],
-    () => {
-      batch(() => {
-        global.setActivePage(PageType.All)
-        if (global.orderedTodos().length > 0) {
-          global.setFocusedTodoKey(global.orderedTodos()[0].key)
-        }
-      })
-    },
-    { preventDefault: false }
-  )
+  const [showHelp, setShowHelp] = createSignal(false)
 
-  createShortcut(
-    ["Control", "2"],
-    () => {
-      batch(() => {
-        global.setActivePage(PageType.Today)
-        if (global.orderedTodos().length > 0) {
-          global.setFocusedTodoKey(global.orderedTodos()[0].key)
-        }
-      })
+  createShortcuts({
+    "Control+1"() {
+      todoList.updateActivePage(PageType.All)
     },
-    { preventDefault: false }
-  )
-
-  createShortcut(
-    ["Control", "3"],
-    () => {
-      batch(() => {
-        global.setActivePage(PageType.Starred)
-        if (global.orderedTodos().length > 0) {
-          global.setFocusedTodoKey(global.orderedTodos()[0].key)
-        }
-      })
+    "Control+2"() {
+      todoList.updateActivePage(PageType.Today)
     },
-    { preventDefault: false }
-  )
-
-  createShortcut(
-    ["Control", "4"],
-    () => {
-      batch(() => {
-        global.setActivePage(PageType.Done)
-        if (global.orderedTodos().length > 0) {
-          global.setFocusedTodoKey(global.orderedTodos()[0].key)
-        }
-      })
+    "Control+3"() {
+      todoList.updateActivePage(PageType.Starred)
     },
-    { preventDefault: false }
-  )
+    "Control+4"() {
+      todoList.updateActivePage(PageType.Done)
+    },
+  })
 
   return (
     <div class="flex min-h-screen  bg-gray-100 dark:bg-stone-900">
-      <Sidebar />
-      <TodoList />
-      <Show when={global.showHelp()}>
-        <Modal
-          title="Help"
-          onClose={() => global.setShowHelp(false)}
-          children={<Help />}
-        />
-      </Show>
-      <Show when={global.showSettings()}>
-        <Modal
-          title="Settings"
-          onClose={() => global.setShowSettings(false)}
-          children={<Settings />}
-        />
-      </Show>
+      <TodoListProvider {...todoList}>
+        <Sidebar />
+        <TodoList />
+        <Show when={showHelp()}>
+          <Modal
+            title="Help"
+            onClose={() => setShowHelp(false)}
+            children={<Help />}
+          />
+        </Show>
+        <Show when={todoList.inMode(TodoListMode.Settings)}>
+          <Modal
+            title="Settings"
+            onClose={() => todoList.setMode(TodoListMode.Default)}
+            children={<Settings />}
+          />
+        </Show>
+      </TodoListProvider>
     </div>
   )
 }

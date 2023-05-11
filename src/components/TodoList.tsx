@@ -1,335 +1,170 @@
 import { Presence } from "@motionone/solid"
 import { createEventListener } from "@solid-primitives/event-listener"
 import { createShortcut } from "@solid-primitives/keyboard"
-import { Match, Show, Switch, batch, createEffect } from "solid-js"
-import { useGlobalContext } from "~/GlobalContext/store"
+import {
+  For,
+  Match,
+  Show,
+  Suspense,
+  Switch,
+  batch,
+  createEffect,
+  createResource,
+} from "solid-js"
+import { PageType, TodoListMode, useTodoList } from "~/GlobalContext/todo-list"
 import { createTodosForDev } from "~/lib/local"
-import All from "~/pages/All"
-import Done from "~/pages/Done"
-import Starred from "~/pages/Starred"
-import Today from "~/pages/Today"
 import ActionBar from "./ActionBar"
 import LocalSearch from "./LocalSearch"
 import SuggestedTodos from "./SuggestedTodos"
+import { createShortcuts } from "~/lib/primitives"
+import { Priority } from "~/GlobalContext/todos"
+import { wrapIndex } from "~/lib/lib"
+import NewSubtask from "~/components/NewSubtask"
+import NewTodo from "~/components/NewTodo"
+import Todo from "~/components/Todo"
+import TodoEdit from "~/components/TodoEdit"
+import TopBar from "~/components/TopBar"
+import { isDev } from "solid-js/web"
 import { useGlobal } from "~/GlobalContext/global"
 import { SuggestedTasksDocument } from "~/graphql/schema"
-import TopBar from "./TopBar"
 
-export default function Page() {
-  // TODO: grafbase cannot be undefined here, I think..
-  const global = useGlobalContext()
-  // TODO: doing it in this stupid way
-  // because when I tried to do it like this:
-  // const { grafbase } = useGlobal()
-  // destructuring did not work, I was getting back a signal, grafbase request did not complete..
-  const global2 = useGlobal()
-  const grafbase = global2.grafbase()!
+export default function TodoList() {
+  const todoList = useTodoList()
 
-  let ref!: HTMLDivElement
-  createEventListener(
-    () => ref,
-    "click",
-    (e) => {
-      if (e.target === ref) {
-        global.setFocusedTodoKey(null)
-        // global.setNewTodo(false)
-      }
-    },
-    { passive: true }
-  )
+  function setPrority(i: Priority) {
+    const focusedTodoValue = todoList.focusedTodoKey()
+    if (!focusedTodoValue) return
 
-  createShortcut(
-    ["Backspace"],
-    () => {
-      if (
-        global.newTodo() ||
-        global.editingTodo() ||
-        global.localSearch() ||
-        global.focusedTodoKey() === null
-      )
-        return
-
-      let todoIdToFocus =
-        global
-          .flatTasks()
-          .findIndex((todo) => todo.key === global.focusedTodoKey()) - 1
-
-      if (todoIdToFocus === -1) {
-        todoIdToFocus = 0
-      }
-      // TODO: improve this code..
-      if (global.isSubtask(global.focusedTodo()!)) {
-        global.todosState.removeSubtask(
-          global.flatTasks()[global.focusedTodoIndex()].key
-        )
-        if (global.orderedTodos().length === 0) {
-          global.setFocusedTodoKey(null)
-        } else {
-          global.setFocusedTodoKey(global.flatTasks()[todoIdToFocus].key)
-        }
-        return
-      }
-
-      if (!global.localSearch() && !global.editingTodo()) {
-        global.todosState.removeTodo(global.focusedTodoKey()!)
-      }
-      if (global.orderedTodos().length === 0) {
-        global.setFocusedTodoKey(null)
-      } else {
-        global.setFocusedTodoKey(global.flatTasks()[todoIdToFocus].key)
-      }
-    },
-    { preventDefault: false }
-  )
-
-  createShortcut(
-    ["N"],
-    () => {
-      if (global.newTodo() || global.editingTodo()) return
-
-      batch(() => {
-        global.setFocusedTodoKey(null)
-        // TODO: change depending of where you create todo
-        global.setNewTodoType("all")
-        global.setNewTodo(true)
-        global.setChangeFocus(false)
-        global.setGuard(true)
-      })
-    },
-    { preventDefault: false }
-  )
-
-  createShortcut(["Escape"], () => {
-    if (global.showSuggestedTasksModal()) {
-      global.setShowSuggestedTasksModal(false)
-      global.setFocusedSuggestedTodo(0)
-      return
+    // update subtask
+    // TODO: does not work
+    if ("parent" in todoList.flatTasks()[todoList.focusedTodoIndex()!]) {
+      // global.todosState.updateSubtask(
+      //   focusedTodoValue,
+      //   (s: ClientSubtask) => ({
+      //     ...s,
+      //     priority: i,
+      //   })
+      // )
+    } else {
+      // update task
+      todoList.todosState.updateTodo(focusedTodoValue, (todo) => ({
+        ...todo,
+        priority: i,
+      }))
     }
-    if (!global.newTodo() && !global.localSearch() && !global.editingTodo())
-      return
+  }
 
-    batch(() => {
-      global.setNewTodo(false)
-      global.setNewSubtask(null)
-      global.setLocalSearch(false)
-      global.setChangeFocus(true)
-      global.setEditingTodo(false)
-      global.setLocalSearchResultId(null)
-      global.setLocalSearchResultIds([])
-    })
-  })
+  createEffect(() => {
+    createShortcuts(
+      todoList.inMode(TodoListMode.Default)
+        ? {
+            // Edit focused todo
+            Enter() {
+              if (todoList.focusedTodo()) {
+                todoList.setMode(TodoListMode.Edit, {})
+              }
+            },
+            // Edit focused todo note
+            T() {
+              if (todoList.focusedTodo()) {
+                todoList.setMode(TodoListMode.Edit, {
+                  initEditingNote: true,
+                })
+              }
+            },
+            // Focus todo up
+            ArrowUp() {
+              todoList.setFocusedTodoIndex((p) => {
+                const n = p - 1
+                if (n < 0) return todoList.flatTasks().length - 1
+                return n
+                // TODO: for some reason wrapIndex no work
+                // wrapIndex(todoList.flatTasks().length, p - 1)
+              })
+            },
+            // Focus todo down
+            ArrowDown() {
+              todoList.setFocusedTodoIndex((p) => {
+                const n = p + 1
+                if (n > todoList.flatTasks().length - 1) return 0
+                return n
+                // wrapIndex(todoList.flatTasks().length, p + 1)
+              })
+            },
+            // Remove focused todo
+            Backspace() {
+              const focused = todoList.focusedTodo(),
+                index = todoList.focusedTodoIndex()
+              if (!focused) return
 
-  // TODO: improve this code..
-  createShortcut(
-    ["A"],
-    async () => {
-      if (
-        global.newTodo() ||
-        global.editingTodo() ||
-        global.loadingSuggestedTodos()
-      )
-        return
-      const focused = global.focusedTodo()
-      if (
-        focused &&
-        !global.isNewSubtask(focused) &&
-        !global.isSubtask(focused)
-      ) {
-        global.setLoadingSuggestedTodos(true)
+              batch(() => {
+                if (focused.type === "subtask") {
+                  todoList.todosState.removeSubtask(
+                    focused.parent.key,
+                    focused.key
+                  )
+                } else {
+                  todoList.todosState.removeTodo(focused.key)
+                }
+                // keep focus on the same index
+                todoList.setFocusedTodoIndex(
+                  Math.min(todoList.flatTasks().length - 1, index)
+                )
+              })
+            },
+            0() {
+              setPrority(0)
+            },
+            1() {
+              setPrority(1)
+            },
+            2() {
+              setPrority(2)
+            },
+            3() {
+              setPrority(3)
+            },
+            4() {
+              const focused = todoList.focusedTodoKey()
+              if (focused) {
+                todoList.todosState.updateTodo(focused, (todo) => ({
+                  starred: !todo.starred,
+                }))
+              }
+            },
+            // Add a new todo
+            N() {
+              todoList.addNewTask()
+            },
+            // Create new subtask
+            L() {
+              todoList.addNewSubtask()
+            },
+            // local search
+            F() {
+              batch(() => {
+                todoList.setMode(TodoListMode.Search)
+                todoList.setFocusedTodoKey(null)
+              })
+            },
+            // Suggestions
+            A() {
+              const focused = todoList.focusedTodo()
 
-        // TODO: not good, fix this..
-        // it thinks it can be undefined, in theory, it cannot be..
-        const res = await grafbase.request(SuggestedTasksDocument, {
-          // TODO: fix this, it thinks it can be NewSubtask
-          // but at this point it cannot be, it should always have a title..
-          task: global.flatTasks()[global.focusedTodoIndex()].title,
-        })
-
-        const suggestions = res.suggestions.suggestedTasks
-        global.setLoadingSuggestedTodos(false)
-        if (suggestions.length > 0) {
-          global.setSuggestedTodos(suggestions)
-          global.setShowSuggestedTasksModal(true)
-        }
-      }
-    },
-    { preventDefault: false }
-  )
-
-  createShortcut(["ArrowUp"], () => {
-    if (global.showSuggestedTasksModal()) {
-      return
-    }
-    if (global.localSearch()) {
-      if (global.localSearchResultIndex() === 0) {
-        global.setLocalSearchResultIndex(
-          global.localSearchResultIds().length - 1
-        )
-        global.setLocalSearchResultId(
-          global.localSearchResultIds()[global.localSearchResultIndex()!]
-        )
-        return
-      }
-      global.setLocalSearchResultId(
-        global.localSearchResultIds()[
-          global.setLocalSearchResultIndex((e) => e! - 1)
-        ]
-      )
-      return
-    }
-    if (
-      !global.changeFocus() ||
-      global.orderedTodos().length === 0 ||
-      global.editingTodo()
-    )
-      return
-
-    const currentIndex = global.focusedTodoIndex()
-    if (currentIndex === 0) {
-      global.setFocusedTodoKey(
-        global.flatTasks()[global.flatTasks().length - 1].key
-      )
-      return
-    }
-
-    global.setFocusedTodoKey(
-      global.flatTasks()[
-        Math.max(
-          0,
-          Math.min(
-            currentIndex ? currentIndex - 1 : 0,
-            global.flatTasks().length - 1
-          )
-        )
-      ].key
+              if (focused && focused.type === "todo") {
+                todoList.setMode(TodoListMode.Suggest)
+              }
+            },
+          }
+        : {
+            Escape() {
+              todoList.setMode(TodoListMode.Default)
+            },
+          }
     )
   })
 
-  createShortcut(["ArrowDown"], () => {
-    if (global.showSuggestedTasksModal()) {
-      return
-    }
-
-    if (global.localSearch()) {
-      if (
-        global.localSearchResultIds().length - 1 ===
-        global.localSearchResultIndex()
-      ) {
-        global.setLocalSearchResultIndex(0)
-        global.setLocalSearchResultId(
-          global.localSearchResultIds()[global.localSearchResultIndex()!]
-        )
-        return
-      }
-      global.setLocalSearchResultId(
-        global.localSearchResultIds()[
-          global.setLocalSearchResultIndex((e) => e! + 1)
-        ]
-      )
-      return
-    }
-
-    if (
-      !global.changeFocus() ||
-      global.orderedTodos().length === 0 ||
-      global.editingTodo()
-    )
-      return
-
-    const currentIndex = global.focusedTodoIndex()
-    if (currentIndex === global.flatTasks().length - 1) {
-      global.setFocusedTodoKey(global.flatTasks()[0].key)
-      return
-    }
-
-    global.setFocusedTodoKey(
-      global.flatTasks()[
-        Math.max(
-          0,
-          Math.min(
-            currentIndex !== null ? currentIndex + 1 : 0,
-            global.flatTasks().length - 1
-          )
-        )
-      ].key
-    )
-  })
-
-  createShortcut(
-    ["Enter"],
-    () => {
-      if (
-        global.showSuggestedTasksModal() ||
-        global.newTodo() ||
-        global.isAddingANewSubtask()
-      ) {
-        return
-      }
-      if (!global.localSearch()) {
-        global.setEditingTodo((p) => !p)
-      }
-    },
-    { preventDefault: false }
-  )
-
-  createShortcut(
-    ["T"],
-    () => {
-      if (global.isAddingANewSubtask()) {
-        return
-      }
-      if (
-        global.focusedTodo() !== null &&
-        !global.localSearch() &&
-        !global.newTodo() &&
-        !global.editingTodo()
-      ) {
-        if (global.editingTodo()) {
-          global.setEditingTodo(false)
-        } else {
-          global.setEditingTodo(true)
-          global.setEditNoteInTodo(true)
-        }
-      }
-    },
-    { preventDefault: false }
-  )
-
-  createShortcut(
-    ["L"],
-    () => {
-      const focused = global.focusedTodo()
-
-      if (
-        !focused ||
-        global.isNewSubtask(focused) ||
-        global.editingTodo() ||
-        global.newTodo() ||
-        global.newSubtask()
-      )
-        return
-
-      global.addNewSubtask(
-        global.isSubtask(focused) ? focused.parent.key : focused.key
-      )
-    },
-    { preventDefault: false }
-  )
-
-  // local search
-  createShortcut(
-    ["F"],
-    () => {
-      if (global.editingTodo() || global.newTodo()) return
-
-      batch(() => {
-        global.setLocalSearch(true)
-        global.setFocusedTodoKey(null)
-      })
-    },
-    { preventDefault: false }
-  )
-
+  // TODO: don't use in production, only for development
   createShortcut(
     ["Control", "I"],
     async () => {
@@ -342,51 +177,24 @@ export default function Page() {
     { preventDefault: false }
   )
 
-  createEffect(() => {
-    if (!global.editingTodo()) {
-      for (const i of [0, 1, 2, 3] as const) {
-        createShortcut(
-          [`${i}`],
-          () => {
-            const focusedTodoValue = global.focusedTodoKey()
-            if (focusedTodoValue !== null) {
-              // update subtask
-              // TODO: does not work
-              if ("parent" in global.flatTasks()[global.focusedTodoIndex()!]) {
-                // global.todosState.updateSubtask(
-                //   focusedTodoValue,
-                //   (s: ClientSubtask) => ({
-                //     ...s,
-                //     priority: i,
-                //   })
-                // )
-              } else {
-                // update task
-                global.todosState.updateTodo(focusedTodoValue, (todo) => ({
-                  ...todo,
-                  priority: i,
-                }))
-              }
-            }
-          },
-          { preventDefault: false }
-        )
-      }
+  const global = useGlobal()
+  const grafbase = global.grafbase()!
 
-      createShortcut(
-        ["4"],
-        () => {
-          if (global.focusedTodoIndex() !== 0) {
-            global.todosState.updateTodo(global.focusedTodoKey()!, (todo) => ({
-              ...todo,
-              starred: !todo.starred,
-            }))
-          }
-        },
-        { preventDefault: false }
-      )
+  const [suggestions] = createResource(
+    () => {
+      if (!todoList.inMode(TodoListMode.Suggest)) return
+      const focused = todoList.focusedTodo()
+      return focused && focused.type === "todo" && focused
+    },
+    async (todo) => {
+      const res = await grafbase.request(SuggestedTasksDocument, {
+        task: todo.title,
+      })
+
+      const suggestions = res.suggestions.suggestedTasks
+      return suggestions && suggestions.length ? suggestions : undefined
     }
-  })
+  )
 
   return (
     <div
@@ -394,44 +202,92 @@ export default function Page() {
       class="flex w-full  bg-white dark:bg-stone-900 grow overflow-auto justify-between relative "
       style={{ "border-left": "solid 1px rgba(200, 200, 200, 0.2)" }}
     >
-      <style>
-        {`
-
-        ::-webkit-scrollbar {
-          display: none
-        }`}
-      </style>
       <div
         class="flex flex-col justify-between rounded overflow-auto relative w-full drop h-screen"
-        ref={ref}
+        ref={(el) => {
+          createEventListener(
+            el,
+            "click",
+            (e) => {
+              if (e.target === el) {
+                todoList.setFocusedTodoKey(null)
+              }
+            },
+            { passive: true }
+          )
+        }}
       >
-        <div class="flex overflow-hidden">
-          <div class="flex flex-col grow ">
-            <TopBar title={global.activePage()} />
-
-            <div class="grow flex justify-between overflow-scroll">
-              <div class="grow">
-                <Switch>
-                  <Match when={global.activePage() === "All"}>
-                    <All />
-                  </Match>
-                  <Match when={global.activePage() === "Today"}>
-                    <Today />
-                  </Match>
-                  <Match when={global.activePage() === "Starred"}>
-                    <Starred />
-                  </Match>
-                  <Match when={global.activePage() === "Done"}>
-                    <Done />
-                  </Match>
-                </Switch>
-              </div>
+        <TopBar
+          title={
+            isDev
+              ? `${PageType[todoList.activePage()]} mode:${
+                  TodoListMode[todoList.mode()]
+                } (dev)`
+              : PageType[todoList.activePage()]
+          }
+        />
+        <div class="grow flex justify-between overflow-scroll">
+          <div class="grow">
+            <div
+              ref={(el) => {
+                createEventListener(
+                  el,
+                  "click",
+                  (e) => {
+                    if (e.target === el) todoList.setFocusedTodoKey(null)
+                  },
+                  { passive: true }
+                )
+              }}
+            >
+              <For each={todoList.flatTasks()}>
+                {(todo) => {
+                  if (todo.type === "new-subtask") {
+                    return <NewSubtask subtask={todo} />
+                  }
+                  return (
+                    <Switch>
+                      <Match
+                        when={
+                          todoList.inMode(TodoListMode.Edit) &&
+                          todoList.isTodoFocused(todo.key)
+                        }
+                      >
+                        <TodoEdit
+                          todo={todo}
+                          initialEditNote={
+                            todoList.getModeData(TodoListMode.Edit)!
+                              .initEditingNote
+                          }
+                        />
+                      </Match>
+                      <Match when={true}>
+                        <Todo
+                          todo={todo}
+                          subtask={todo.type === "subtask"}
+                          loadingSuggestions={
+                            suggestions.loading &&
+                            todoList.isTodoFocused(todo.key)
+                          }
+                        />
+                      </Match>
+                    </Switch>
+                  )
+                }}
+              </For>
+              <Show when={todoList.inMode(TodoListMode.NewTodo)}>
+                <NewTodo />
+              </Show>
             </div>
           </div>
-          <Presence exitBeforeEnter>
-            <Show when={global.showSuggestedTasksModal()}>
-              <SuggestedTodos />
-            </Show>
+          <Presence>
+            <Suspense>
+              <Show
+                when={todoList.inMode(TodoListMode.Suggest) && suggestions()}
+              >
+                {(list) => <SuggestedTodos suggestions={list()} />}
+              </Show>
+            </Suspense>
           </Presence>
         </div>
 
@@ -441,7 +297,10 @@ export default function Page() {
           }}
           class="flex p-2 dark:bg-stone-900  bg-gray-100"
         >
-          <Show when={global.localSearch()} fallback={<ActionBar />}>
+          <Show
+            when={todoList.inMode(TodoListMode.Search)}
+            fallback={<ActionBar />}
+          >
             <LocalSearch />
           </Show>
         </div>

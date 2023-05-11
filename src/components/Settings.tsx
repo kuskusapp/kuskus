@@ -2,10 +2,10 @@ import clsx from "clsx"
 import { Match, Switch, createSignal, onMount } from "solid-js"
 import { GoogleClient } from "~/lib/auth"
 import Keybind from "./Keybind"
-import { useGlobalContext } from "~/GlobalContext/store"
+import { useTodoList } from "~/GlobalContext/todo-list"
 
 export default function Settings() {
-  const global = useGlobalContext()
+  const global = useTodoList()
   const [show, setShow] = createSignal("Keyboard")
 
   return (

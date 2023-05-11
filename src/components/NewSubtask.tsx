@@ -1,65 +1,59 @@
 import { autofocus } from "@solid-primitives/autofocus"
 import { createShortcut } from "@solid-primitives/keyboard"
-import { Show, createEffect, createSignal } from "solid-js"
+import { Show, batch, createEffect, createSignal } from "solid-js"
 import { todayDate } from "~/lib/lib"
-import { ClientTodo, useGlobalContext } from "../GlobalContext/store"
+import {
+  type NewSubtask,
+  TodoListMode,
+  useTodoList,
+} from "../GlobalContext/todo-list"
 import Icon from "./Icon"
+import { ClientTodo, Priority } from "~/GlobalContext/todos"
 
-export default function NewSubtask() {
-  const global = useGlobalContext()
+export default function NewSubtask(props: { subtask: NewSubtask }) {
+  const todoList = useTodoList()
   const [title, setTitle] = createSignal("")
   const [note, setNote] = createSignal("")
   const [dueDate, setDueDate] = createSignal("")
   const [showCalendar, setShowCalendar] = createSignal(false)
   const [showSelectPriority, setShowSelectPriority] = createSignal(true)
-  const [priority, setPriority] = createSignal<0 | 1 | 2 | 3>(0)
+  const [priority, setPriority] = createSignal<Priority>(0)
   const [starred, setStarred] = createSignal(false)
-  const newSubtask = global.newSubtask()!
 
-  createShortcut(
-    ["Enter"],
-    async () => {
-      if (title() === "") {
-        global.setEditingTodo(false)
-        return
-      }
+  createShortcut(["Enter"], () => {
+    batch(() => {
+      todoList.setMode(TodoListMode.Default)
 
-      const newSubtaskKey = global.todosState.addSubtask(newSubtask.parent, {
+      if (title() === "") return
+
+      const { parent } = props.subtask
+      const key = todoList.addSubtask(parent, {
+        type: "subtask",
         title: title(),
         note: note(),
-        done: false,
         starred: starred(),
         priority: priority(),
         dueDate: dueDate(),
-        parent: global.getTodoByKey(newSubtask.parent) as ClientTodo,
+        done: false,
+        parent: todoList.getTodoByKey(parent) as ClientTodo,
       })
-
-      global.setEditingTodo(true)
-      global.setNewTodoType("")
-      global.setChangeFocus(true)
-      global.setFocusedTodoKey(newSubtaskKey)
-      global.setNewSubtask(null)
-    },
-    { preventDefault: false }
-  )
+      todoList.setFocusedTodoKey(key)
+    })
+  })
 
   let titleRef!: HTMLInputElement,
     noteRef!: HTMLInputElement,
     datePickerRef!: HTMLInputElement
 
-  createEffect(() => {
-    if (global.editNoteInTodo()) {
-      autofocus(noteRef)
+  const [editNoteInTodo, setEditNoteInTodo] = createSignal(false)
 
-      createShortcut(["ArrowUp"], () => {
-        global.setEditNoteInTodo(false)
-      })
+  createEffect(() => {
+    if (editNoteInTodo()) {
+      autofocus(noteRef)
+      createShortcut(["ArrowUp"], () => setEditNoteInTodo(false))
     } else {
       autofocus(titleRef)
-
-      createShortcut(["ArrowDown"], () => {
-        global.setEditNoteInTodo(true)
-      })
+      createShortcut(["ArrowDown"], () => setEditNoteInTodo(true))
     }
   })
 

@@ -1,42 +1,81 @@
-import { For } from "solid-js"
-import { useGlobalContext } from "~/GlobalContext/store"
-import SuggestedTodo from "./SuggestedTodo"
+import { createEffect, createSignal, onCleanup } from "solid-js"
+import { ClientTodo, useTodoList } from "~/GlobalContext/todo-list"
 import { createShortcut } from "@solid-primitives/keyboard"
+import clsx from "clsx"
 import { Motion } from "@motionone/solid"
 
-// TODO: best move this someplace else
-// this is temporary
-export type SuggestedTodos = {
+type SuggestedTodo = {
   title: string
   note: string
 }
 
-export default function SuggestedTodos() {
-  const global = useGlobalContext()
+function SuggestedTodo(props: {
+  title: string
+  index: number
+  note?: string
+  isFocused: boolean
+  onClick: () => void
+}) {
+  return (
+    <div
+      class={clsx(
+        "p-2 m-2 mb-2 grid-cols-5 col-span-5",
+        props.isFocused && "bg-zinc-200 dark:bg-neutral-800 rounded-lg"
+      )}
+      onClick={props.onClick}
+    >
+      <div>{props.title.split(":")[0]}</div>
+      <div class="opacity-60 text-sm pl-5 text-start text-ellipsis">
+        {props.title.split(":")[1]}
+      </div>
+    </div>
+  )
+}
 
-  // createShortcut(["Enter"], () => {
-  //   global.todosState.updateTodo(global.focusedTodo()!, (p) => ({
-  //     ...p,
-  //     subtasks: p.subtasks.push({
-  //       title: "testing",
-  //       subutask: "subtask"
-  //     })
-  //   })
-  // })
+export default function SuggestedTodos(props: {
+  suggestions: SuggestedTodo[]
+}) {
+  const todoList = useTodoList()
+
+  console.log("SuggestedTodos")
+  onCleanup(() => {
+    console.log("SuggestedTodos cleanup")
+  })
+  createEffect(() => {
+    console.log("SuggestedTodos effect", props.suggestions)
+  })
+
+  const [focusedSuggestion, setFocusedSuggestion] = createSignal(0)
+
+  createShortcut(["Enter"], () => {
+    const suggestion = props.suggestions[focusedSuggestion()]
+
+    todoList.todosState.addSubtask(todoList.focusedTodoKey()!, {
+      type: "subtask",
+      title: suggestion.title,
+      done: false,
+      starred: false,
+      priority: 0,
+      dueDate: "",
+      note: "",
+      parent: todoList.focusedTodo() as ClientTodo,
+    })
+  })
 
   createShortcut(["ArrowDown"], () => {
-    global.setFocusedSuggestedTodo(
-      (global.focusedSuggestedTodo()! + 1) % global.suggestedTodos().length
-    )
+    setFocusedSuggestion((p) => {
+      const n = p + 1
+      if (n > props.suggestions.length - 1) return 0
+      return n
+    })
   })
 
   createShortcut(["ArrowUp"], () => {
-    if (global.focusedSuggestedTodo() === 0) {
-      global.setFocusedSuggestedTodo(global.suggestedTodos().length)
-    }
-    global.setFocusedSuggestedTodo(
-      (global.focusedSuggestedTodo()! - 1) % global.suggestedTodos().length
-    )
+    setFocusedSuggestion((p) => {
+      const n = p - 1
+      if (n < 0) return props.suggestions.length - 1
+      return n
+    })
   })
 
   return (
@@ -66,14 +105,17 @@ export default function SuggestedTodos() {
       >
         {/* TODO: fix this ts-ignore as well as all others.. */}
         Suggested tasks for {/* @ts-ignore */}
-        {global.flatTasks()[global.focusedTodoIndex()].title}
+        {todoList.focusedTodo()!.title}
       </Motion.div>
       <div class="grid-cols-5 col-span-5 overflow-scroll">
-        <For each={global.suggestedTodos()}>
-          {(todo, index) => (
-            <SuggestedTodo title={todo.title} index={index()} />
-          )}
-        </For>
+        {props.suggestions.map((todo, index) => (
+          <SuggestedTodo
+            title={todo.title}
+            index={index}
+            isFocused={index === focusedSuggestion()}
+            onClick={() => setFocusedSuggestion(index)}
+          />
+        ))}
       </div>
 
       {/* <div>chat</div> */}

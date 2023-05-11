@@ -5,18 +5,18 @@ import { isToday } from "~/lib/lib"
 import {
   ClientSubtask,
   ClientTodo,
-  useGlobalContext,
-} from "../GlobalContext/store"
+  TodoListMode,
+  useTodoList,
+} from "../GlobalContext/todo-list"
 import Icon from "./Icon"
 import Loader from "./Loader"
 
-interface Props {
+export default function Todo(props: {
   todo: ClientTodo | ClientSubtask
   subtask: boolean
-}
-
-export default function Todo(props: Props) {
-  const global = useGlobalContext()
+  loadingSuggestions: boolean
+}) {
+  const global = useTodoList()
   const [triggerAnimation, setTriggerAnimation] = createSignal(false)
 
   return (
@@ -56,9 +56,8 @@ export default function Todo(props: Props) {
             "user-select": "none",
           }}
           onClick={(e) => {
-            global.setNewTodo(false)
             if (global.isTodoFocused(props.todo.key)) {
-              global.setEditingTodo(true)
+              global.setMode(TodoListMode.Edit, {})
             } else {
               global.setFocusedTodoKey(props.todo.key)
             }
@@ -92,14 +91,7 @@ export default function Todo(props: Props) {
             style={{ "padding-right": "0.375rem" }}
             class="flex gap-3 items-center"
           >
-            <Show
-              when={
-                global.loadingSuggestedTodos() &&
-                global.isTodoFocused(props.todo.key)
-              }
-            >
-              <Loader />
-            </Show>
+            {props.loadingSuggestions && <Loader />}
             <div class="opacity-50 " style={{ "font-size": "14.8px" }}>
               {props.todo?.dueDate && isToday(props.todo.dueDate)
                 ? "Today"
@@ -107,23 +99,20 @@ export default function Todo(props: Props) {
             </div>
             <Show when={!props.todo.starred}>
               <div>
-                {props.todo.priority === 3 && <Icon name={"Priority 3"} />}
-                {props.todo.priority === 2 && <Icon name={"Priority 2"} />}
-                {props.todo.priority === 1 && <Icon name={"Priority 1"} />}
+                {props.todo.priority !== 0 && (
+                  <Icon name={`Priority ${props.todo.priority}`} />
+                )}
               </div>
             </Show>
             <Show when={props.todo.starred}>
               <div>
-                {props.todo.priority === 3 && (
-                  <Icon name={"StarWithPriority3"} />
-                )}
-                {props.todo.priority === 2 && (
-                  <Icon name={"StarWithPriority2"} />
-                )}
-                {props.todo.priority === 1 && (
-                  <Icon name={"StarWithPriority1"} />
-                )}
-                {props.todo.priority === 0 && <Icon name={"Star"} />}
+                <Icon
+                  name={
+                    props.todo.priority
+                      ? `StarWithPriority${props.todo.priority}`
+                      : `Star`
+                  }
+                />
               </div>
             </Show>
           </div>

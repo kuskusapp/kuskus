@@ -36,20 +36,16 @@ export type BaseTask = {
   priority: Priority
   note: string | null
   dueDate: string | null
-  labels?: Label[]
-}
-
-export type Label = {
-  id?: string | null
-  name: string
-}
-
-export type ClientSubtask = BaseTask & {
-  parent: ClientTodo
 }
 
 export type ClientTodo = BaseTask & {
+  type: "todo"
   subtasks: ClientSubtask[]
+}
+
+export type ClientSubtask = BaseTask & {
+  type: "subtask"
+  parent: ClientTodo
 }
 
 export const getNewKey = (() => {
@@ -71,6 +67,7 @@ const parseDbSubtasks = (
     for (const edge of subtasks.edges) {
       if (!edge || !edge.node) continue
       result.push({
+        type: "subtask",
         id: edge.node.id,
         key: getNewKey(),
         title: edge.node.title,
@@ -112,37 +109,36 @@ export function createTodosState() {
   const global = useGlobal()
   const grafbase = global.grafbase()!
 
-  onMount(() => {
-    // fetch initial todos from the database
-    // not using resource because we don't need to interact with Suspense
-    grafbase.request(TodosDocument).then((res) => {
-      setTodos(
-        produce((state) => {
-          if (res.todoCollection?.edges) {
-            for (const todo of res.todoCollection.edges) {
-              if (!todo?.node) continue
-              const subtasks: ClientTodo["subtasks"] = []
-              const clientTodo: ClientTodo = {
-                id: todo.node.id,
-                key: getNewKey(),
-                done: todo.node.done,
-                starred: todo.node.starred,
-                title: todo.node.title,
-                priority: parseDbPriority(todo.node.priority),
-                note: todo.node.note ?? null,
-                dueDate: todo.node.dueDate ?? null,
-                subtasks,
-              }
-              subtasks.push.apply(
-                subtasks,
-                parseDbSubtasks(todo.node.subtasks, clientTodo)
-              )
-              state.push(clientTodo)
+  // fetch initial todos from the database
+  // not using resource because we don't need to interact with Suspense
+  grafbase.request<Query>(TodosDocument).then((res) => {
+    setTodos(
+      produce((state) => {
+        if (res.todoCollection?.edges) {
+          for (const todo of res.todoCollection.edges) {
+            if (!todo?.node) continue
+            const subtasks: ClientTodo["subtasks"] = []
+            const clientTodo: ClientTodo = {
+              type: "todo",
+              id: todo.node.id,
+              key: getNewKey(),
+              done: todo.node.done,
+              starred: todo.node.starred,
+              title: todo.node.title,
+              priority: parseDbPriority(todo.node.priority),
+              note: todo.node.note ?? null,
+              dueDate: todo.node.dueDate ?? null,
+              subtasks,
             }
+            subtasks.push.apply(
+              subtasks,
+              parseDbSubtasks(todo.node.subtasks, clientTodo)
+            )
+            state.push(clientTodo)
           }
-        })
-      )
-    })
+        }
+      })
+    )
   })
 
   //
@@ -234,9 +230,9 @@ export function createTodosState() {
     // state
     todos,
     // actions
-    addTodo: (fields: Omit<ClientTodo, "id" | "key">): TodoKey => {
+    addTodo: (fields: Omit<ClientTodo, "id" | "key" | "type">): TodoKey => {
       const key = getNewKey()
-      setTodos(todos.length, { ...fields, id: null, key })
+      setTodos((p) => [...p, { ...fields, id: null, key, type: "todo" }])
       return key
     },
     toggleTodo: (key: TodoKey) => {
@@ -252,6 +248,8 @@ export function createTodosState() {
     removeTodo: (key: TodoKey) => {
       setTodos((p) => p.filter((t) => t.key !== key))
     },
+    // TODO: allow only passing of required values
+    // the rest is filled by default values exactly like in schema
     addSubtask: (
       parentKey: TodoKey,
       subtask: Omit<ClientSubtask, "id" | "key">
@@ -271,12 +269,9 @@ export function createTodosState() {
       )
       return key
     },
-    removeSubtask(subtaskKey: TodoKey) {
-      const todo = todos.find((t) =>
-        t.subtasks.find((s) => s.key === subtaskKey)
-      )
+    removeSubtask(parentKey: TodoKey, subtaskKey: TodoKey) {
       setTodos(
-        (t) => t.key === todo?.key,
+        (t) => t.key === parentKey,
         "subtasks",
         (prevSubtasks) => prevSubtasks.filter((s) => s.key !== subtaskKey)
       )
