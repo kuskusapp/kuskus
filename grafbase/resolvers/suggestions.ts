@@ -80,7 +80,7 @@ export default async function Resolver(
       "x-api-key": context.request.headers["x-api-key"],
     },
     body: JSON.stringify({
-      userDetailsQuery,
+      query: userDetailsQuery,
     }),
   })
   if (!res.ok) {
@@ -90,16 +90,8 @@ export default async function Resolver(
   }
   const resJson = await res.json()
 
-  console.log(JSON.stringify(resJson), "res json")
   const tasksAvailable =
-    resJson.data.userCollection.edges[0].node.aiTasksAvailable
-  console.log(tasksAvailable, "tasks available")
-  const userDetailsId = resJson.data.userCollection.edges[0].node.id
-  console.log(userDetailsId, "user id")
-  return {
-    suggestedTasks: null,
-    stripeCheckoutUrl: null,
-  }
+    resJson.data.userDetailsCollection.edges[0].node.aiTasksAvailable
 
   // if (tasksAvailable > 0) {
   //   // decrement aiTasksAvailable by 1
@@ -117,19 +109,21 @@ export default async function Resolver(
   //   // update cache
   //   // await redis.set(cacheString, suggestions.json())
   //   // console.log(JSON.stringify(suggestions.json()))
-  //   return {
-  //     tasks: suggestions.json(),
-  //   }
+  // return {
+  //   suggestedTasks: suggestions.json(),
+  //   stripeCheckoutUrl: null,
+  // }
   // }
   // console.log(userDetailsId, "hello")
 
+  const userDetailsId = resJson.data.userDetailsCollection.edges[0].node.id
   // user can't make the request, return a stripe payment link
   try {
     const data = await stripe.checkout.sessions.create({
       success_url: process.env.STRIPE_SUCCESS_URL!,
       mode: "subscription",
       metadata: {
-        userId: 100,
+        userId: userDetailsId,
       },
       line_items: [
         {
