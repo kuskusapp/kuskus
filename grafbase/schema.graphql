@@ -27,7 +27,7 @@ type SuggestedTask {
 }
 
 type UserDetails @model {
-  paidSubscription: Boolean! @default(value: false)
+  paidSubscriptionValidUntilDate: Date
   username: String # set by a user, this will be a route to show public todos TODO: if unique, it can't be null, solve this :(
   aiTasksAvailable: Int @default(value: 5) # times user can use gpt-3 AI suggestions
   # gpt3MonthlyTokensUsed: Int # how many gpt-3 tokens user used this month (for billing)

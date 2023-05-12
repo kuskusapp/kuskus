@@ -55,37 +55,44 @@ export default async function Resolver(
   // TODO: there should probably be a better way than userCollection
   // but for that I need to know the specific user id, maybe pass it?
   // in theory userCollection should work too though but is probably slower
-  // let query = `
-  //   {
-  //     userDetailsCollection(first: 1) {
-  //       edges {
-  //         node {
-  //           aiTasksAvailable
-  //         }
-  //       }
-  //     }
-  //   }
-  // `
+  let query = `
+    {
+      userDetailsCollection(first: 1) {
+        edges {
+          node {
+            id
+            aiTasksAvailable
+          }
+        }
+      }
+    }
+  `
 
   // get user's aiTasksAvailable
-  // const res = await fetch(process.env.GRAFBASE_API_URL!, {
-  //   method: "POST",
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //     Accept: "application/json",
-  //     "x-api-key": context.request.headers["x-api-key"],
-  //   },
-  //   body: JSON.stringify({
-  //     query,
-  //   }),
-  // })
-  // if (!res.ok) {
-  //   // not sure if I should throw here or return an error
-  //   throw new Error(`HTTP error! status: ${res.status}`)
-  // }
+  const res = await fetch(process.env.GRAFBASE_API_URL!, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+      "x-api-key": context.request.headers["x-api-key"],
+    },
+    body: JSON.stringify({
+      query,
+    }),
+  })
+  if (!res.ok) {
+    // not sure if I should throw here or return an error
+    throw new Error(`HTTP error! status: ${res.status}`)
+  }
+  console.log(JSON.stringify(res), "res")
+  return {
+    suggestedTasks: null,
+    stripeCheckoutUrl: null,
+  }
 
   // const tasksAvailable = (await res.json()).data.userCollection.edges[0].node
   //   .aiTasksAvailable
+  // const userDetailsId = (await res.json()).data.userCollection.edges[0].node.id
 
   // if (tasksAvailable > 0) {
   //   // decrement aiTasksAvailable by 1
@@ -107,12 +114,16 @@ export default async function Resolver(
   //     tasks: suggestions.json(),
   //   }
   // }
+  // console.log(userDetailsId, "hello")
 
   // user can't make the request, return a stripe payment link
   try {
     const data = await stripe.checkout.sessions.create({
       success_url: process.env.STRIPE_SUCCESS_URL!,
       mode: "subscription",
+      metadata: {
+        userId: 100,
+      },
       line_items: [
         {
           quantity: 1,
