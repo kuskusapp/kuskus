@@ -18,7 +18,7 @@ extend type Query {
 
 type SuggestionsPayload {
   suggestedTasks: [SuggestedTask]
-  stripeCheckoutUrl: CheckoutSession
+  stripeCheckoutUrl: String!
 }
 
 type SuggestedTask {
@@ -26,11 +26,8 @@ type SuggestedTask {
   note: String!
 }
 
-type CheckoutSession {
-  url: String!
-}
-
 type UserDetails @model {
+  paidSubscription: Boolean! @default(value: false)
   username: String # set by a user, this will be a route to show public todos TODO: if unique, it can't be null, solve this :(
   aiTasksAvailable: Int @default(value: 5) # times user can use gpt-3 AI suggestions
   # gpt3MonthlyTokensUsed: Int # how many gpt-3 tokens user used this month (for billing)

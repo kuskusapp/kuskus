@@ -98,12 +98,18 @@ export default function TodoList() {
             },
             // Complete task
             [" "]() {
-              const focused = todoList.focusedTodoKey()
-              if (focused) {
-                todoList.todosState.updateTodo(focused, (todo) => ({
-                  done: !todo.done,
-                }))
+              const focused = todoList.focusedTodo()
+              if (!focused) return
+              if (focused.type === "subtask") {
+                // TODO: complete
+                // todoList.todosState.updateSubtask(focused.key, (todo) => ({
+                //   done: !todo.done,
+                // }))
+                return
               }
+              todoList.todosState.updateTodo(focused.key, (todo) => ({
+                done: !todo.done,
+              }))
             },
             // Remove focused todo
             Backspace() {
