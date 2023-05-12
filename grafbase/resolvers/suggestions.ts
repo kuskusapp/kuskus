@@ -58,7 +58,7 @@ export default async function Resolver(
   // TODO: there should probably be a better way than userCollection
   // but for that I need to know the specific user id, maybe pass it?
   // in theory userCollection should work too though but is probably slower
-  let query = `
+  let userDetailsQuery = `
     {
       userDetailsCollection(first: 1) {
         edges {
@@ -71,7 +71,7 @@ export default async function Resolver(
     }
   `
 
-  // get user's aiTasksAvailable
+  // get user's aiTasksAvailable & id
   const res = await fetch(process.env.GRAFBASE_API_URL!, {
     method: "POST",
     headers: {
@@ -80,7 +80,7 @@ export default async function Resolver(
       "x-api-key": context.request.headers["x-api-key"],
     },
     body: JSON.stringify({
-      query,
+      userDetailsQuery,
     }),
   })
   if (!res.ok) {
@@ -88,12 +88,13 @@ export default async function Resolver(
     // maybe should return graphql back with `error: ` field? or something
     throw new Error(`HTTP error! status: ${res.status}`)
   }
-  console.log(JSON.stringify(await res.json()))
+  const resJson = await res.json()
 
-  const tasksAvailable = (await res.json()).data.userCollection.edges[0].node
-    .aiTasksAvailable
+  console.log(JSON.stringify(resJson), "res json")
+  const tasksAvailable =
+    resJson.data.userCollection.edges[0].node.aiTasksAvailable
   console.log(tasksAvailable, "tasks available")
-  const userDetailsId = (await res.json()).data.userCollection.edges[0].node.id
+  const userDetailsId = resJson.data.userCollection.edges[0].node.id
   console.log(userDetailsId, "user id")
   return {
     suggestedTasks: null,
