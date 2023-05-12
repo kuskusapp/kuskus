@@ -21,6 +21,9 @@ type SuggestedTasks = {
   note: string
 }
 
+// TODO: can you use graphql-code-generator types for this
+// together with the client so not to do raw queries like this..
+
 export default async function Resolver(
   _: any,
   { task }: { task: string },
@@ -81,18 +84,21 @@ export default async function Resolver(
     }),
   })
   if (!res.ok) {
-    // not sure if I should throw here or return an error
+    // TODO: should this throw error? probably not
+    // maybe should return graphql back with `error: ` field? or something
     throw new Error(`HTTP error! status: ${res.status}`)
   }
-  console.log(JSON.stringify(res), "res")
+  console.log(JSON.stringify(await res.json()))
+
+  const tasksAvailable = (await res.json()).data.userCollection.edges[0].node
+    .aiTasksAvailable
+  console.log(tasksAvailable, "tasks available")
+  const userDetailsId = (await res.json()).data.userCollection.edges[0].node.id
+  console.log(userDetailsId, "user id")
   return {
     suggestedTasks: null,
     stripeCheckoutUrl: null,
   }
-
-  // const tasksAvailable = (await res.json()).data.userCollection.edges[0].node
-  //   .aiTasksAvailable
-  // const userDetailsId = (await res.json()).data.userCollection.edges[0].node.id
 
   // if (tasksAvailable > 0) {
   //   // decrement aiTasksAvailable by 1

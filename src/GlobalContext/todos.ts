@@ -111,7 +111,7 @@ export function createTodosState() {
 
   // fetch initial todos from the database
   // not using resource because we don't need to interact with Suspense
-  grafbase.request<Query>(TodosDocument).then((res) => {
+  grafbase.request(TodosDocument).then((res) => {
     setTodos(
       produce((state) => {
         if (res.todoCollection?.edges) {
