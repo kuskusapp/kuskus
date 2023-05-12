@@ -2,6 +2,7 @@ import { autofocus } from "@solid-primitives/autofocus"
 import Fuse from "fuse.js"
 import { batch, createEffect, createSignal, onMount } from "solid-js"
 import { TodoListMode, useTodoList } from "~/GlobalContext/todo-list"
+import { wrapIndex } from "~/lib/lib"
 import { createShortcuts } from "~/lib/primitives"
 
 export default function LocalSearch() {
@@ -23,20 +24,13 @@ export default function LocalSearch() {
       // Focus on todo up from search results
       ArrowUp() {
         todoList.setFocusedTodoFromSearch((p) => {
-          const n = p - 1
-          if (n < 0) return todoList.flatTasks().length - 1
-          return n
-          // TODO: for some reason wrapIndex no work
-          // wrapIndex(todoList.flatTasks().length, p - 1)
+          return wrapIndex(p - 1, todoList.flatTasks().length)
         })
       },
       // Focus on todo down from search results
       ArrowDown() {
         todoList.setFocusedTodoFromSearch((p) => {
-          const n = p + 1
-          if (n > todoList.flatTasks().length - 1) return 0
-          return n
-          // wrapIndex(todoList.flatTasks().length, p + 1)
+          return wrapIndex(p + 1, todoList.flatTasks().length)
         })
       },
     })

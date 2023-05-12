@@ -75,20 +75,13 @@ export default function TodoList() {
             // Focus todo up
             ArrowUp() {
               todoList.setFocusedTodoIndex((p) => {
-                const n = p - 1
-                if (n < 0) return todoList.flatTasks().length - 1
-                return n
-                // TODO: for some reason wrapIndex no work
-                // wrapIndex(todoList.flatTasks().length, p - 1)
+                return wrapIndex(p - 1, todoList.flatTasks().length)
               })
             },
             // Focus todo down
             ArrowDown() {
               todoList.setFocusedTodoIndex((p) => {
-                const n = p + 1
-                if (n > todoList.flatTasks().length - 1) return 0
-                return n
-                // wrapIndex(todoList.flatTasks().length, p + 1)
+                return wrapIndex(p + 1, todoList.flatTasks().length)
               })
             },
             // Remove focused todo
