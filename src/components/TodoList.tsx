@@ -1,6 +1,6 @@
 import { Presence } from "@motionone/solid"
 import { createEventListener } from "@solid-primitives/event-listener"
-import { createShortcut } from "@solid-primitives/keyboard"
+import { createShortcut, useKeyDownList } from "@solid-primitives/keyboard"
 import {
   For,
   Match,
@@ -78,11 +78,32 @@ export default function TodoList() {
                 return wrapIndex(p - 1, todoList.flatTasks().length)
               })
             },
+            // Focus todo up
+            K() {
+              todoList.setFocusedTodoIndex((p) => {
+                return wrapIndex(p - 1, todoList.flatTasks().length)
+              })
+            },
             // Focus todo down
             ArrowDown() {
               todoList.setFocusedTodoIndex((p) => {
                 return wrapIndex(p + 1, todoList.flatTasks().length)
               })
+            },
+            // Focus todo down
+            J() {
+              todoList.setFocusedTodoIndex((p) => {
+                return wrapIndex(p + 1, todoList.flatTasks().length)
+              })
+            },
+            // Complete task
+            [" "]() {
+              const focused = todoList.focusedTodoKey()
+              if (focused) {
+                todoList.todosState.updateTodo(focused, (todo) => ({
+                  done: !todo.done,
+                }))
+              }
             },
             // Remove focused todo
             Backspace() {
