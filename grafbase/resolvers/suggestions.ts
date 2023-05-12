@@ -116,7 +116,7 @@ export default async function Resolver(
       line_items: [
         {
           quantity: 1,
-          price: "price_1N4NrWKmRnbuc3WvWhmp93hl",
+          price: process.env.STRIPE_PRICE_ID!,
         },
       ],
     })
