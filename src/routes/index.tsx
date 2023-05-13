@@ -1,33 +1,25 @@
 import { Show, Suspense, createResource } from "solid-js"
-import { GlobalProvider } from "~/GlobalContext/global"
 import { getUser } from "~/lib/auth"
 import App from "~/pages/App"
 import LandingPage from "~/pages/LandingPage"
 
-export default function Home() {
-  /**
-   * undefined - loading
-   * null - user not logged in
-   * userIdToken - id token of user that is logged in
-   */
-  const [userIdToken] = createResource(async () => {
-    const user = await getUser()
-    const token = user?.id_token
+export type User = {
+  id: string
+  username?: string
+  audienceToken?: string
+}
 
-    // no token means there is no signed in user
-    if (!token) {
-      return null
-    }
-    return user.id_token
+export default function Home() {
+  const [token] = createResource(async () => {
+    const user = await getUser()
+    return user?.id_token
   })
 
   return (
     <main>
-      <Suspense fallback={<></>}>
-        <Show when={userIdToken()} fallback={<LandingPage />}>
-          <GlobalProvider userIdToken={userIdToken() as string}>
-            <App />
-          </GlobalProvider>
+      <Suspense>
+        <Show when={token()} keyed fallback={<LandingPage />}>
+          {(token) => <App initialToken={token} />}
         </Show>
       </Suspense>
     </main>

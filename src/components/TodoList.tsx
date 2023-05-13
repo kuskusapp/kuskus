@@ -1,6 +1,6 @@
 import { Presence } from "@motionone/solid"
 import { createEventListener } from "@solid-primitives/event-listener"
-import { createShortcut, useKeyDownList } from "@solid-primitives/keyboard"
+import { createShortcut } from "@solid-primitives/keyboard"
 import {
   For,
   Match,
@@ -13,8 +13,6 @@ import {
 } from "solid-js"
 import { PageType, TodoListMode, useTodoList } from "~/GlobalContext/todo-list"
 import { createTodosForDev } from "~/lib/local"
-import ActionBar from "./ActionBar"
-import LocalSearch from "./LocalSearch"
 import SuggestedTodos from "./SuggestedTodos"
 import { createShortcuts } from "~/lib/primitives"
 import { Priority } from "~/GlobalContext/todos"
@@ -25,7 +23,6 @@ import Todo from "~/components/Todo"
 import TodoEdit from "~/components/TodoEdit"
 import TopBar from "~/components/TopBar"
 import { isDev } from "solid-js/web"
-import { useGlobal } from "~/GlobalContext/global"
 import { SuggestedTasksDocument } from "~/graphql/schema"
 
 export default function TodoList() {
@@ -184,21 +181,17 @@ export default function TodoList() {
     )
   })
 
-  // TODO: don't use in production, only for development
-  createShortcut(
-    ["Control", "I"],
-    async () => {
-      // seed the database with todos/subtasks
-      // only works in dev mode
-      if (!import.meta.env.PROD) {
-        createTodosForDev()
-      }
-    },
-    { preventDefault: false }
-  )
-
-  const global = useGlobal()
-  const grafbase = global.grafbase()!
+  if (isDev) {
+    createShortcut(
+      ["Control", "I"],
+      () => {
+        // seed the database with todos/subtasks
+        // only works in dev mode
+        createTodosForDev(todoList.request)
+      },
+      { preventDefault: false }
+    )
+  }
 
   const [suggestions] = createResource(
     () => {
@@ -207,7 +200,7 @@ export default function TodoList() {
       return focused && focused.type === "todo" && focused
     },
     async (todo) => {
-      const res = await grafbase.request(SuggestedTasksDocument, {
+      const res = await todoList.request(SuggestedTasksDocument, {
         task: todo.title,
       })
 

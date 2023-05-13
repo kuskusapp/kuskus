@@ -1,13 +1,11 @@
 import { createEffect, onMount } from "solid-js"
-import { createStore, produce } from "solid-js/store"
+import { createStore } from "solid-js/store"
 import {
-  Mutation,
-  Query,
   SettingsCreateDocument,
   SettingsDocument,
   SettingsUpdateDocument,
 } from "~/graphql/schema"
-import { useGlobal } from "./global"
+import { GrafbaseRequest } from "~/pages/App"
 
 export type Settings = {
   id?: string
@@ -17,23 +15,21 @@ export type Settings = {
 }
 
 // TODO: sync languageModelUsed too, gives grafbase errors..
-export function createSettingsState() {
+export function createSettingsState(options: { request: GrafbaseRequest }) {
   const [settings, setSettings] = createStore<Settings>({
     hideActionBar: false,
     iconOnlySidebar: false,
     languageModelUsed: "gpt-3",
   })
-  const global = useGlobal()
-  const grafbase = global.grafbase()!
 
   // TODO: this is really dumb, there has to be a better way to do this
   // all users have settings by default with default values
   // you shouldn't have to create them in front end code like this...
   onMount(() => {
-    grafbase.request(SettingsDocument).then(async (res) => {
+    options.request(SettingsDocument).then(async (res) => {
       // if there are no settings, create them and put id in local store
       if (res.settingsCollection?.edges?.length === 0) {
-        const res = await grafbase.request(SettingsCreateDocument, {
+        const res = options.request(SettingsCreateDocument, {
           settings: {}, // use default values
         })
         setSettings({ ...settings, id: res.settingsCreate?.settings?.id! })
@@ -45,7 +41,6 @@ export function createSettingsState() {
         })
       }
     })
-    return settings
   })
 
   // TODO: not sure how good this is..
@@ -54,7 +49,7 @@ export function createSettingsState() {
     // TODO: should not run on first load of the app..
     if (settings.id) {
       // if settings change, update db
-      grafbase.request(SettingsUpdateDocument, {
+      options.request(SettingsUpdateDocument, {
         id: settings.id,
         settings: {
           hideActionBar: settings.hideActionBar,

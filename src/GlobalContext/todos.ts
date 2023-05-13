@@ -1,5 +1,5 @@
 import { defer } from "@solid-primitives/utils"
-import { createEffect, onMount } from "solid-js"
+import { createEffect } from "solid-js"
 import { StoreSetter, createStore, produce } from "solid-js/store"
 import {
   SubtaskConnection,
@@ -15,7 +15,7 @@ import {
   TodosDocument,
 } from "~/graphql/schema"
 import { createArrayDiff } from "~/lib/primitives"
-import { useGlobal } from "./global"
+import { GrafbaseRequest } from "~/pages/App"
 
 export type Priority = 0 | 1 | 2 | 3
 /**
@@ -104,14 +104,12 @@ function getTodoUpdateInput(todo: BaseTask): TodoUpdateInput {
   }
 }
 
-export function createTodosState() {
+export function createTodosState({ request }: { request: GrafbaseRequest }) {
   const [todos, setTodos] = createStore<ClientTodo[]>([])
-  const global = useGlobal()
-  const grafbase = global.grafbase()!
 
   // fetch initial todos from the database
   // not using resource because we don't need to interact with Suspense
-  grafbase.request(TodosDocument).then((res) => {
+  request(TodosDocument).then((res) => {
     setTodos(
       produce((state) => {
         if (res.todoCollection?.edges) {
@@ -149,14 +147,12 @@ export function createTodosState() {
     (todo, onTodoRemove) => {
       // if the todo was added, we need to create it in the database
       if (!todo.id) {
-        grafbase
-          .request(TodoCreateDocument, {
-            todo: getTodoCreateInput(todo),
-          })
-          .then(async (res) => {
-            // tasks get their id after being added to the db
-            setTodos((t) => t === todo, "id", res.todoCreate?.todo?.id!)
-          })
+        request(TodoCreateDocument, {
+          todo: getTodoCreateInput(todo),
+        }).then(async (res) => {
+          // tasks get their id after being added to the db
+          setTodos((t) => t === todo, "id", res.todoCreate?.todo?.id!)
+        })
       }
 
       // update the todo in the database
@@ -165,7 +161,7 @@ export function createTodosState() {
           () => getTodoUpdateInput(todo),
           (payload) => {
             if (!todo.id) return
-            grafbase.request(TodoUpdateDocument, {
+            request(TodoUpdateDocument, {
               id: todo.id,
               todo: payload,
             })
@@ -174,7 +170,7 @@ export function createTodosState() {
       )
 
       onTodoRemove(() => {
-        todo.id && grafbase.request(TodoDeleteDocument, { id: todo.id })
+        todo.id && request(TodoDeleteDocument, { id: todo.id })
       })
 
       createArrayDiff(
@@ -182,25 +178,23 @@ export function createTodosState() {
         (subtask, onSubtaskRemove) => {
           // if the subtask was added, we need to create it in the database
           if (!subtask.id) {
-            grafbase
-              .request(SubtaskCreateDocument, {
-                subtask: getTodoCreateInput(subtask),
+            request(SubtaskCreateDocument, {
+              subtask: getTodoCreateInput(subtask),
+            }).then((res) => {
+              // tasks get their id after being added to the db
+              setTodos(
+                (t) => t === todo,
+                "subtasks",
+                (s) => s.key === subtask.key,
+                "id",
+                res.subtaskCreate?.subtask?.id!
+              )
+              // TODO: do the subtask create and subtask link in 1 query..
+              request(SubtaskLinkDocument, {
+                taskId: todo.id!,
+                subtaskId: res.subtaskCreate?.subtask?.id!,
               })
-              .then((res) => {
-                // tasks get their id after being added to the db
-                setTodos(
-                  (t) => t === todo,
-                  "subtasks",
-                  (s) => s.key === subtask.key,
-                  "id",
-                  res.subtaskCreate?.subtask?.id!
-                )
-                // TODO: do the subtask create and subtask link in 1 query..
-                grafbase.request(SubtaskLinkDocument, {
-                  taskId: todo.id!,
-                  subtaskId: res.subtaskCreate?.subtask?.id!,
-                })
-              })
+            })
           }
 
           // update the subtask in the database
@@ -209,7 +203,7 @@ export function createTodosState() {
               () => getTodoUpdateInput(subtask),
               (payload) => {
                 if (!subtask.id) return
-                grafbase.request(SubtaskUpdateDocument, {
+                request(SubtaskUpdateDocument, {
                   id: subtask.id,
                   subtask: payload,
                 })
@@ -218,8 +212,7 @@ export function createTodosState() {
           )
 
           onSubtaskRemove(() => {
-            subtask.id &&
-              grafbase.request(SubtaskDeleteDocument, { id: subtask.id })
+            subtask.id && request(SubtaskDeleteDocument, { id: subtask.id })
           })
         }
       )

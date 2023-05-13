@@ -1,4 +1,4 @@
-import { createEffect, createSignal, onCleanup } from "solid-js"
+import { createSignal } from "solid-js"
 import { ClientTodo, useTodoList } from "~/GlobalContext/todo-list"
 import { createShortcut } from "@solid-primitives/keyboard"
 import clsx from "clsx"
@@ -36,14 +36,6 @@ export default function SuggestedTodos(props: {
   suggestions: SuggestedTodo[]
 }) {
   const todoList = useTodoList()
-
-  console.log("SuggestedTodos")
-  onCleanup(() => {
-    console.log("SuggestedTodos cleanup")
-  })
-  createEffect(() => {
-    console.log("SuggestedTodos effect", props.suggestions)
-  })
 
   const [focusedSuggestion, setFocusedSuggestion] = createSignal(0)
 
