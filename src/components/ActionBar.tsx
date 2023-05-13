@@ -5,13 +5,13 @@ export default function ActionBar() {
   const todoList = useTodoList()
 
   return (
-    <div class="flex justify-between w-full items-center pl-3 pr-3">
+    <div class="flex justify-between w-full items-center pl-5 pr-5 pb-4 p-2 bg-black">
       <div
         class="has-tooltip cursor-pointer"
         onClick={() => todoList.setMode(TodoListMode.Search)}
       >
         <div
-          class="tooltip shadow-lg p-1 bg-stone-900 -mt-8 text-white text-sm flex items-center px-3 gap-1 font-bold"
+          class="tooltip shadow-lg p-1  -mt-8 text-white text-sm flex items-center px-3 gap-1 font-bold"
           style={{
             "transition-delay": "0.5s",
           }}
@@ -22,7 +22,7 @@ export default function ActionBar() {
         <Icon name="Search" />
       </div>
       <div
-        class="has-tooltip cursor-pointer pl-24 pt-2 pb-2 pr-24 rounded dark:border-stone-800"
+        class="has-tooltip cursor-pointer pl-24 pt-2 pb-2 pr-24 rounded"
         onClick={() => todoList.setMode(TodoListMode.NewTodo)}
       >
         <div

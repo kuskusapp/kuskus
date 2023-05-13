@@ -19,7 +19,7 @@ function SuggestedTodo(props: {
   return (
     <div
       class={clsx(
-        "p-2 m-2 mb-2 grid-cols-5 col-span-5",
+        "p-2 m-2 mb-2 grid-cols-5 col-span-5 min-w-0 ",
         props.isFocused && "bg-zinc-200 dark:bg-neutral-800 rounded-lg"
       )}
       onClick={props.onClick}
@@ -85,11 +85,9 @@ export default function SuggestedTodos(props: {
       transition={{ duration: 0.5 }}
       exit={{ width: "0px" }}
       style={{
-        "border-left": "solid 1px rgba(200, 200, 200, 0.2)",
         width: "40%",
-        height: "100%",
       }}
-      class="dark:bg-stone-900 bg-gray-100 flex flex-col justify-between items-center "
+      class=" gap-2 flex flex-col items-center h-full overflow-hidden"
     >
       <Motion.div
         initial={{ "font-size": "0px" }}
@@ -98,24 +96,32 @@ export default function SuggestedTodos(props: {
         // TODO: improve the animation on showing the text, text appears squished..
         exit={{ display: "none" }}
         style={{
-          "border-bottom": "solid 1px rgba(200, 200, 200, 0.2)",
+          "border-radius": "10px",
           color: "rgba(255, 255, 255, 0.5)",
         }}
-        class="dark:bg-stone-900 bg-gray-100 w-full p-3 text-lg text-center"
+        class="bg-stone-800 w-full p-3 text-lg text-center"
       >
         {/* TODO: fix this ts-ignore as well as all others.. */}
         Suggested tasks for {/* @ts-ignore */}
         {todoList.focusedTodo()!.title}
       </Motion.div>
-      <div class="grid-cols-5 col-span-5 overflow-scroll">
-        {props.suggestions.map((todo, index) => (
-          <SuggestedTodo
-            title={todo.title}
-            index={index}
-            isFocused={index === focusedSuggestion()}
-            onClick={() => setFocusedSuggestion(index)}
-          />
-        ))}
+      <div
+        class="h-full bg-stone-800 overflow-scroll"
+        style={{ "border-radius": "10px" }}
+      >
+        <div
+          class="flex flex-col h-full overflow-scroll"
+          style={{ "border-radius": "10px" }}
+        >
+          {props.suggestions.map((todo, index) => (
+            <SuggestedTodo
+              title={todo.title}
+              index={index}
+              isFocused={index === focusedSuggestion()}
+              onClick={() => setFocusedSuggestion(index)}
+            />
+          ))}
+        </div>
       </div>
 
       {/* <div>chat</div> */}

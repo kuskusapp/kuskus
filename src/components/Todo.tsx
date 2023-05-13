@@ -41,7 +41,7 @@ export default function Todo(props: {
       <Motion.div>
         <div
           class={clsx(
-            "flex cursor-default pl-1.5 justify-between p-2 dark:border-neutral-700 mb-1",
+            "flex cursor-default pl-1.5 justify-between p-2 dark:border-neutral-700 mb-1 rounded-lg",
             props.todo.note && "min-h-min",
             props.subtask && "ml-4",
             global.isTodoFocused(props.todo.key) &&

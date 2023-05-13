@@ -9,12 +9,12 @@ export default function Sidebar() {
   const todolist = useTodoList()
 
   onMount(() => {
-    Split(["#sidebar", "#page"], {
-      gutterSize: 4,
-      sizes: [10, 90],
-      snapOffset: 0,
-      minSize: 80,
-    })
+    // Split(["#sidebar", "#page"], {
+    //   gutterSize: 4,
+    //   sizes: [10, 90],
+    //   snapOffset: 0,
+    //   minSize: 80,
+    // })
   })
 
   return (
@@ -25,16 +25,16 @@ export default function Sidebar() {
           display: flex;
           flex-direction: row;
           }
-          .gutter {
-            background-color: ##1c1917;
-            background-repeat: no-repeat;
-            background-position: 100%;
+          // .gutter {
+          //   background-color: ##1c1917;
+          //   background-repeat: no-repeat;
+          //   background-position: 100%;
 
-            }
-          .gutter.gutter-horizontal {
-            cursor: col-resize;
+          //   }
+          // .gutter.gutter-horizontal {
+          //   cursor: col-resize;
 
-          }
+          // }
           #sidebar {
             container-type: inline-size;
             container-name: sidebar;
@@ -64,12 +64,12 @@ export default function Sidebar() {
           }
           `}
       </style>
-      <div
-        class="w-screen dark:bg-stone-900 bg-gray-100 pt-4 p-3 text-xs pl-4"
-        id="sidebar"
-      >
-        <div class="flex flex-col gap-1 justify-between h-full">
-          <div class="flex flex-col gap-1">
+      <div class="w-screen  text-xs " style={{ width: "24%" }} id="sidebar">
+        <div class="flex flex-col gap-2  h-full">
+          <div
+            class="flex flex-col gap-1 bg-stone-800 p-2"
+            style={{ "border-radius": "10px" }}
+          >
             <div
               id="TitleWrapper"
               class={clsx(
@@ -155,6 +155,14 @@ export default function Sidebar() {
                 Done
               </span>
             </div>
+          </div>
+          <div
+            class="flex flex-col bg-stone-800 p-2 grow"
+            style={{ "border-radius": "10px" }}
+          >
+            <div>tag</div>
+            <div>tag</div>
+            <div>tag</div>
           </div>
         </div>
       </div>

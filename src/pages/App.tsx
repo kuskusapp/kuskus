@@ -6,7 +6,9 @@ import {
   TodoListProvider,
   createTodoListState,
 } from "~/GlobalContext/todo-list"
+import ActionBar from "~/components/ActionBar"
 import Help from "~/components/Help"
+import LocalSearch from "~/components/LocalSearch"
 import Modal from "~/components/Modal"
 import Settings from "~/components/Settings"
 import Sidebar from "~/components/Sidebar"
@@ -29,16 +31,27 @@ export default function App() {
     "Control+3"() {
       todoList.updateActivePage(PageType.Starred)
     },
+
     "Control+4"() {
       todoList.updateActivePage(PageType.Done)
     },
   })
 
   return (
-    <div class="flex min-h-screen  bg-gray-100 dark:bg-stone-900">
+    <div class="h-screen bg-white dark:bg-black">
       <TodoListProvider {...todoList}>
-        <Sidebar />
-        <TodoList />
+        <div class="flex flex-col h-screen">
+          <div class="flex grow gap-2 p-2 h-full overflow-hidden">
+            <Sidebar />
+            <TodoList />
+          </div>
+          <Show
+            when={todoList.inMode(TodoListMode.Search)}
+            fallback={<ActionBar />}
+          >
+            <LocalSearch />
+          </Show>
+        </div>
         <Show when={showHelp()}>
           <Modal
             title="Help"

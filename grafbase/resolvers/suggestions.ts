@@ -33,22 +33,22 @@ export default async function Resolver(
   // hit the cache
   // TODO: expand to add more cases
   // like different panctuation should not avoid hitting the cache
-  // const cacheString = task
-  //   .replace(" a ", "-") // remove all `a` and `an` from the task to put in cache
-  //   .replace(" an ", "-") // do it in a better way, regex?
-  //   .split(" ")
-  //   .join("-")
-  //   .toLowerCase()
+  const cacheString = task
+    .replace(" a ", "-") // remove all `a` and `an` from the task to put in cache
+    .replace(" an ", "-") // do it in a better way, regex?
+    .split(" ")
+    .join("-")
+    .toLowerCase()
 
-  // const cachedTask: CachedTask | null = await redis.get(
-  //   `gpt-3-subtasks-${cacheString}`
-  // )
-  // if (cachedTask) {
-  //   return {
-  //     suggestedTasks: cachedTask.subtasks,
-  //     stripeCheckoutUrl: null,
-  //   }
-  // }
+  const cachedTask: CachedTask | null = await redis.get(
+    `gpt-3-subtasks-${cacheString}`
+  )
+  if (cachedTask) {
+    return {
+      suggestedTasks: cachedTask.subtasks,
+      stripeCheckoutUrl: null,
+    }
+  }
 
   // TODO: fix below
   // ai should work

@@ -219,11 +219,10 @@ export default function TodoList() {
   return (
     <div
       id="page"
-      class="flex w-full  bg-white dark:bg-stone-900 grow overflow-auto justify-between relative "
-      style={{ "border-left": "solid 1px rgba(200, 200, 200, 0.2)" }}
+      class="flex w-full h-full grow overflow-auto justify-between relative"
     >
       <div
-        class="flex flex-col justify-between rounded overflow-auto relative w-full drop h-screen"
+        class="flex flex-col justify-between rounded relative w-full  drop gap-2"
         ref={(el) => {
           createEventListener(
             el,
@@ -246,9 +245,13 @@ export default function TodoList() {
               : PageType[todoList.activePage()]
           }
         />
-        <div class="grow flex justify-between overflow-scroll">
-          <div class="grow">
+        <div class="grow flex gap-2 overflow-hidden">
+          <div
+            class="grow bg-stone-800 overflow-scroll"
+            style={{ "border-radius": "10px" }}
+          >
             <div
+              class="p-2 overflow-scroll"
               ref={(el) => {
                 createEventListener(
                   el,
@@ -309,20 +312,6 @@ export default function TodoList() {
               </Show>
             </Suspense>
           </Presence>
-        </div>
-
-        <div
-          style={{
-            "border-top": "solid 1px rgba(200,200,200,0.2)",
-          }}
-          class="flex p-2 dark:bg-stone-900  bg-gray-100"
-        >
-          <Show
-            when={todoList.inMode(TodoListMode.Search)}
-            fallback={<ActionBar />}
-          >
-            <LocalSearch />
-          </Show>
         </div>
       </div>
     </div>

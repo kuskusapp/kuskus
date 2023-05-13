@@ -39,7 +39,7 @@ export default function LocalSearch() {
   return (
     <input
       style={{ outline: "none", "border-radius": "10px", margin: "-4px" }}
-      class="w-full p-2 px-4 grow dark:bg-stone-900 bg-gray-100"
+      class="w-full grow bg-black pl-5 pr-5 pb-6 p-4"
       onKeyPress={(e) => {
         if (e.key === "Enter") {
           if (todoList.localSearchResultIds().length > 0) {
