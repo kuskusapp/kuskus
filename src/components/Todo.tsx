@@ -16,7 +16,7 @@ export default function Todo(props: {
   subtask: boolean
   loadingSuggestions: boolean
 }) {
-  const global = useTodoList()
+  const todoList = useTodoList()
   const [triggerAnimation, setTriggerAnimation] = createSignal(false)
 
   return (
@@ -44,11 +44,11 @@ export default function Todo(props: {
             "flex cursor-default pl-1.5 justify-between p-2 dark:border-neutral-700 mb-1 rounded-lg",
             props.todo.note && "min-h-min",
             props.subtask && "ml-4",
-            global.isTodoFocused(props.todo.key) &&
+            todoList.isTodoFocused(props.todo.key) &&
               "dark:bg-neutral-700 bg-zinc-200",
-            global.localSearchResultIds().includes(props.todo.key) &&
+            todoList.localSearchData()?.isResult(props.todo.key) &&
               "border rounded border-blue-500",
-            global.localSearchResultId() === props.todo.key &&
+            todoList.localSearchData()?.isSelected(props.todo.key) &&
               "bg-blue-300 dark:bg-blue-500"
           )}
           style={{
@@ -56,10 +56,10 @@ export default function Todo(props: {
             "user-select": "none",
           }}
           onClick={(e) => {
-            if (global.isTodoFocused(props.todo.key)) {
-              global.setMode(TodoListMode.Edit, {})
+            if (todoList.isTodoFocused(props.todo.key)) {
+              todoList.setMode(TodoListMode.Edit, {})
             } else {
-              global.setFocusedTodoKey(props.todo.key)
+              todoList.setFocusedTodoKey(props.todo.key)
             }
           }}
         >
@@ -76,7 +76,7 @@ export default function Todo(props: {
                 onClick={() => {
                   setTriggerAnimation(true)
                   setTimeout(() => {
-                    global.todosState.toggleTodo(props.todo.key)
+                    todoList.todosState.toggleTodo(props.todo.key)
                     setTriggerAnimation(false)
                   }, 500)
                 }}

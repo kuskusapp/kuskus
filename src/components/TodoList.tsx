@@ -159,10 +159,7 @@ export default function TodoList() {
             },
             // local search
             F() {
-              batch(() => {
-                todoList.setMode(TodoListMode.Search)
-                todoList.setFocusedTodoKey(null)
-              })
+              todoList.startLocalSearch()
             },
             // Suggestions
             A() {
