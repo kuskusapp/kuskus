@@ -80,9 +80,9 @@ export default function SuggestedTodos(props: {
 
   return (
     <Motion.div
-      initial={{ width: "0px", "font-size": "0px", opacity: 0 }}
-      animate={{ width: "40%", "font-size": "18px", opacity: 1 }}
-      transition={{ duration: 0.5 }}
+      initial={{ transform: "translateX(20px)", opacity: 0 }}
+      animate={{ transform: "translateX(0px)", opacity: 1 }}
+      transition={{ duration: 1 }}
       exit={{ width: "0px" }}
       style={{
         width: "40%",

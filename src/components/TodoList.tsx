@@ -245,63 +245,71 @@ export default function TodoList() {
               : PageType[todoList.activePage()]
           }
         />
-        <div class="grow flex gap-2 overflow-hidden">
-          <div
-            class="grow bg-stone-800 overflow-scroll"
-            style={{ "border-radius": "10px" }}
-          >
+        <div class="grow flex gap-2 w-full overflow-hidden">
+          <div class="flex flex-col gap-2 w-full">
             <div
-              class="p-2 overflow-scroll"
-              ref={(el) => {
-                createEventListener(
-                  el,
-                  "click",
-                  (e) => {
-                    if (e.target === el) todoList.setFocusedTodoKey(null)
-                  },
-                  { passive: true }
-                )
-              }}
+              class="grow bg-stone-800 overflow-scroll"
+              style={{ "border-radius": "10px" }}
             >
-              <For each={todoList.flatTasks()}>
-                {(todo) => {
-                  if (todo.type === "new-subtask") {
-                    return <NewSubtask subtask={todo} />
-                  }
-                  return (
-                    <Switch>
-                      <Match
-                        when={
-                          todoList.inMode(TodoListMode.Edit) &&
-                          todoList.isTodoFocused(todo.key)
-                        }
-                      >
-                        <TodoEdit
-                          todo={todo}
-                          initialEditNote={
-                            todoList.getModeData(TodoListMode.Edit)!
-                              .initEditingNote
-                          }
-                        />
-                      </Match>
-                      <Match when={true}>
-                        <Todo
-                          todo={todo}
-                          subtask={todo.type === "subtask"}
-                          loadingSuggestions={
-                            suggestions.loading &&
-                            todoList.isTodoFocused(todo.key)
-                          }
-                        />
-                      </Match>
-                    </Switch>
+              <div
+                class="p-2 overflow-scroll"
+                ref={(el) => {
+                  createEventListener(
+                    el,
+                    "click",
+                    (e) => {
+                      if (e.target === el) todoList.setFocusedTodoKey(null)
+                    },
+                    { passive: true }
                   )
                 }}
-              </For>
-              <Show when={todoList.inMode(TodoListMode.NewTodo)}>
-                <NewTodo />
-              </Show>
+              >
+                <For each={todoList.flatTasks()}>
+                  {(todo) => {
+                    if (todo.type === "new-subtask") {
+                      return <NewSubtask subtask={todo} />
+                    }
+                    return (
+                      <Switch>
+                        <Match
+                          when={
+                            todoList.inMode(TodoListMode.Edit) &&
+                            todoList.isTodoFocused(todo.key)
+                          }
+                        >
+                          <TodoEdit
+                            todo={todo}
+                            initialEditNote={
+                              todoList.getModeData(TodoListMode.Edit)!
+                                .initEditingNote
+                            }
+                          />
+                        </Match>
+                        <Match when={true}>
+                          <Todo
+                            todo={todo}
+                            subtask={todo.type === "subtask"}
+                            loadingSuggestions={
+                              suggestions.loading &&
+                              todoList.isTodoFocused(todo.key)
+                            }
+                          />
+                        </Match>
+                      </Switch>
+                    )
+                  }}
+                </For>
+                <Show when={todoList.inMode(TodoListMode.NewTodo)}>
+                  <NewTodo />
+                </Show>
+              </div>
             </div>
+            <Show
+              when={todoList.inMode(TodoListMode.Search)}
+              fallback={<ActionBar />}
+            >
+              <LocalSearch />
+            </Show>
           </div>
           <Presence>
             <Suspense>

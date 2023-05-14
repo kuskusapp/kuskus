@@ -45,12 +45,6 @@ export default function App() {
             <Sidebar />
             <TodoList />
           </div>
-          <Show
-            when={todoList.inMode(TodoListMode.Search)}
-            fallback={<ActionBar />}
-          >
-            <LocalSearch />
-          </Show>
         </div>
         <Show when={showHelp()}>
           <Modal

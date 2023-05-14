@@ -5,7 +5,10 @@ export default function ActionBar() {
   const todoList = useTodoList()
 
   return (
-    <div class="flex justify-between w-full items-center pl-5 pr-5 pb-4 p-2 bg-black">
+    <div
+      class="flex justify-between w-full items-center pl-5 pr-5 p-2 bg-stone-800"
+      style={{ "border-radius": "10px" }}
+    >
       <div
         class="has-tooltip cursor-pointer"
         onClick={() => todoList.setMode(TodoListMode.Search)}
