@@ -19,7 +19,7 @@ function SuggestedTodo(props: {
   return (
     <div
       class={clsx(
-        "p-2 m-2 mb-2 grid-cols-5 col-span-5 min-w-0 ",
+        "p-2 m-2 mb-2 grid-cols-5 col-span-5 min-w-0",
         props.isFocused && "bg-zinc-200 dark:bg-neutral-800 rounded-lg"
       )}
       onClick={props.onClick}
@@ -98,7 +98,7 @@ export default function SuggestedTodos(props: {
         {todoList.focusedTodo()!.title}
       </Motion.div>
       <div
-        class="h-full bg-stone-800 overflow-scroll"
+        class="h-full bg-stone-800 overflow-scroll w-full"
         style={{ "border-radius": "10px" }}
       >
         <div

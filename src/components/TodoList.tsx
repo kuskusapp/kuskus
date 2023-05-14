@@ -24,6 +24,8 @@ import TodoEdit from "~/components/TodoEdit"
 import TopBar from "~/components/TopBar"
 import { isDev } from "solid-js/web"
 import { SuggestedTasksDocument } from "~/graphql/schema"
+import ActionBar from "./ActionBar"
+import LocalSearch from "./LocalSearch"
 
 export default function TodoList() {
   const todoList = useTodoList()
