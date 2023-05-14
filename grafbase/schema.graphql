@@ -17,13 +17,18 @@ extend type Query {
 }
 
 type SuggestionsPayload {
-  suggestedTasks: [SuggestedTask]
+  suggestedTasks: suggestedTasks
   stripeCheckoutUrl: String!
 }
 
+type SuggestedTasks {
+  intro: String
+  tasks: [SuggestedTask]!
+}
+
 type SuggestedTask {
-  title: String!
-  note: String!
+  task: String!
+  note: String
 }
 
 type UserDetails @model {
