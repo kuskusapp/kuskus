@@ -17,7 +17,7 @@ extend type Query {
 }
 
 type SuggestionsPayload {
-  suggestedTasks: suggestedTasks
+  suggestedTasks: SuggestedTasks
   stripeCheckoutUrl: String
 }
 
