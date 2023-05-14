@@ -1,5 +1,9 @@
 import Stripe from "stripe"
+import { OpenAI } from "langchain/llms/openai"
 import { Redis } from "@upstash/redis"
+import { fromMarkdown } from "mdast-util-from-markdown"
+import { toMarkdown } from "mdast-util-to-markdown"
+import { toString } from "mdast-util-to-string"
 
 // eslint-disable-next-line turbo/no-undeclared-env-vars
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
@@ -14,11 +18,6 @@ const redis = new Redis({
 
 type CachedTask = {
   subtasks: SuggestedTasks[]
-}
-
-type SuggestedTasks = {
-  title: string
-  note: string
 }
 
 // TODO: can you use graphql-code-generator types for this
@@ -93,27 +92,32 @@ export default async function Resolver(
   const tasksAvailable =
     resJson.data.userDetailsCollection.edges[0].node.aiTasksAvailable
 
-  // if (tasksAvailable > 0) {
-  //   // decrement aiTasksAvailable by 1
-  //   // query = ``
+  if (tasksAvailable > 0) {
+    // decrement aiTasksAvailable by 1
+    // query = ``
 
-  //   const suggestions = await fetch(
-  //     `${process.env.AI_ENDPOINT}/subtasks?request=${task}`,
-  //     {
-  //       headers: {
-  //         OPENAI_KEY: process.env.OPENAI_API_KEY!,
-  //       },
-  //     }
-  //   )
+    const model = new OpenAI({
+      modelName: "gpt-3.5-turbo",
+      openAIApiKey: process.env.OPENAI_API_KEY,
+    })
 
-  //   // update cache
-  //   // await redis.set(cacheString, suggestions.json())
-  //   // console.log(JSON.stringify(suggestions.json()))
-  // return {
-  //   suggestedTasks: suggestions.json(),
-  //   stripeCheckoutUrl: null,
-  // }
-  // }
+    const res = await model.call(
+      `Provide detailed steps to do this task: ${task}. Use bullet points for each step.`
+    )
+
+    console.log(res, "res")
+    const suggestedTasks = parseSuggestions(res)
+    console.log(suggestedTasks)
+    return
+
+    // update cache
+    // await redis.set(cacheString, suggestions.json())
+    // console.log(JSON.stringify(suggestions.json()))
+    // return {
+    //   suggestedTasks: suggestions.json(),
+    //   stripeCheckoutUrl: null,
+    // }
+  }
   // console.log(userDetailsId, "hello")
 
   const userDetailsId = resJson.data.userDetailsCollection.edges[0].node.id
@@ -139,4 +143,93 @@ export default async function Resolver(
   } catch (error) {
     console.log(error)
   }
+}
+
+type SuggestedTasks = {
+  intro?: string
+  tasks: SuggestedTask[]
+}
+type SuggestedTask = {
+  task: string
+  note?: string
+}
+
+// parses a string of markdown and returns a list of suggested tasks
+// TODO: type response of function to `SuggestedTasks` once it works
+function parseSuggestions(markdownString: string) {
+  const tree = fromMarkdown(markdownString)
+
+  const tasks: SuggestedTasks = { tasks: [] }
+
+  let atSteps = false
+  let currentNote = ""
+  let currentTask = null
+
+  for (const node of tree.children) {
+    if (node.type === "paragraph") {
+      const text = toString(node)
+
+      if (/^steps:$/i.test(text.trim())) {
+        // Only assign the intro field if there's content before the tasks
+        if (node.position.start.offset > 1) {
+          tasks.intro = markdownString
+            .slice(0, node.position.start.offset - 1)
+            .trim()
+        }
+        atSteps = true
+      } else if (atSteps) {
+        // Accumulate notes
+        currentNote += text + "\n"
+      }
+    }
+
+    if (
+      (atSteps || tasks.intro === undefined) &&
+      node.type === "list" &&
+      node.start
+    ) {
+      // If we haven't encountered "Steps:" yet, but we found a numbered list, we assume that's where tasks start
+      if (!atSteps) {
+        // Only assign the intro field if there's content before the tasks
+        if (node.position.start.offset > 1) {
+          tasks.intro = markdownString
+            .slice(0, node.position.start.offset - 1)
+            .trim()
+        }
+        atSteps = true
+      }
+
+      for (const item of node.children) {
+        // If there's a current task, it means we've encountered a new task and should add the current one to the list
+        if (currentTask) {
+          tasks.tasks.push({
+            task: currentTask,
+            note: currentNote.trim() || undefined,
+          })
+          // Reset currentNote for the next task
+          currentNote = ""
+        }
+
+        const head = item.children[0]
+        const taskAndNote = toMarkdown(head).trim().split(/:(.+)/)
+
+        if (taskAndNote.length > 1) {
+          currentTask = taskAndNote[0].trim() + ":"
+          currentNote = taskAndNote[1].trim()
+        } else {
+          currentTask = taskAndNote[0].trim()
+        }
+      }
+    }
+  }
+
+  // Don't forget to add the last task
+  if (currentTask) {
+    tasks.tasks.push({
+      task: currentTask,
+      note: currentNote.trim() || undefined,
+    })
+  }
+
+  return tasks
 }
