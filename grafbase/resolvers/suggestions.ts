@@ -1,5 +1,5 @@
 import Stripe from "stripe"
-import { OpenAI } from "langchain/llms/openai"
+// import { OpenAI } from "langchain/llms/openai"
 import { Redis } from "@upstash/redis"
 import { fromMarkdown } from "mdast-util-from-markdown"
 import { toMarkdown } from "mdast-util-to-markdown"
@@ -91,23 +91,91 @@ export default async function Resolver(
     // decrement aiTasksAvailable by 1
     // query = ``
 
-    const model = new OpenAI({
-      modelName: "gpt-3.5-turbo",
-      openAIApiKey: process.env.OPENAI_API_KEY,
-    })
+    // const model = new OpenAI({
+    //   modelName: "gpt-3.5-turbo",
+    //   openAIApiKey: process.env.OPENAI_API_KEY,
+    // })
 
-    const res = await model.call(
-      `Provide detailed steps to do this task: ${task}. Use bullet points for each step.`
-    )
+  //   const response = await fetch('https://api.openai.com/v1/completions', {
+  //   method: 'POST',
+  //   headers: {
+  //     'Content-Type': 'application/json',
+  //     Authorization: `Bearer ${process.env.OPENAI_API_KEY}`
+  //   },
+  //   body: JSON.stringify({
+  //     model: 'text-davinci-003',
+  //     task,
+  //     max_tokens: 200,
+  //     temperature: 0
+  //   })
+  // })
+  // console.log(response)
+  // return {
 
-    console.log(res, "res")
-    const suggestedTasks = parseSuggestions(res)
+  // }
+
+    // const res = await model.call(
+    //   `Provide detailed steps to do this task: ${task}. Use bullet points for each step.`
+    // )
+
+    const cakeInstructions = `
+Baking a cake involves several steps that need to be followed religiously to get a perfectly baked cake. Here is a step-by-step guide on how to bake a cake:
+
+Ingredients:
+
+- 2 cups of flour
+- 2 cups of sugar
+- 4 eggs
+- 1 cup of milk
+- 1 cup of unsalted butter
+- 2 teaspoons of baking powder
+- 1 teaspoon of vanilla essence
+
+Steps:
+
+1. Preheat oven to 350°F (175°C) and grease the cake pan with a non-stick spray.
+
+This should be  a note.
+
+Can have code blocks too inside potentially.
+
+2. Take a medium-sized bowl and mix together the flour and baking powder. Set it aside.
+
+3. In a separate large-sized bowl, cream together the sugar and butter until the mixture turns pale and fluffy.
+
+4. Add eggs to the sugar-butter mixture, one at a time, and beat well after each addition.
+
+5. Mix in the vanilla essence.
+
+6. Gradually add the flour mixture to the sugar-butter mixture, alternating with milk until everything is combined. Beat the batter well, but don't overmix.
+
+7. Pour the batter into the prepared cake pan and smooth the surface with a spatula.
+
+8. Tap the cake pan gently onto the kitchen countertop to remove any air bubbles.
+
+9. Place the cake pan in the preheated oven and bake the cake for 30-35 minutes or until the toothpick inserted in the center comes out clean.
+
+10. Remove the cake pan from the oven and let it cool down on the wire rack.
+
+11. Once the cake is cool, you can decorate it with frosting or icing, or traditional buttercream.
+
+12. Your cake is ready to serve. Cut into pieces and enjoy.
+
+Baking a cake is easy if you follow the above mentioned step-by-step guide carefully. You can even decorate it as per your preference or occasion.
+`
+    // console.log(res, "res")
+    const suggestedTasks = parseSuggestions(cakeInstructions)
     console.log(suggestedTasks)
+    return {
+      suggestedTasks: suggestedTasks,
+      stripeCheckoutUrl: null,
+    }
+
 
     // update cache
     // await redis.set(cacheString, suggestedTasks)
     return {
-      suggestedTasks: suggestedTasks,
+      suggestedTasks: null,
       stripeCheckoutUrl: null,
     }
   }
@@ -146,6 +214,7 @@ type SuggestedTask = {
   note?: string
 }
 
+
 // parse a string of markdown and return a list of suggested tasks
 function parseSuggestions(markdownString: string) {
   const tree = fromMarkdown(markdownString)
@@ -162,8 +231,10 @@ function parseSuggestions(markdownString: string) {
 
       if (/^steps:$/i.test(text.trim())) {
         // Only assign the intro field if there's content before the tasks
+        // @ts-ignore
         if (node.position.start.offset > 1) {
           tasks.intro = markdownString
+          // @ts-ignore
             .slice(0, node.position.start.offset - 1)
             .trim()
         }
@@ -182,8 +253,10 @@ function parseSuggestions(markdownString: string) {
       // If we haven't encountered "Steps:" yet, but we found a numbered list, we assume that's where tasks start
       if (!atSteps) {
         // Only assign the intro field if there's content before the tasks
+        // @ts-ignore
         if (node.position.start.offset > 1) {
           tasks.intro = markdownString
+          // @ts-ignore
             .slice(0, node.position.start.offset - 1)
             .trim()
         }
