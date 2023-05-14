@@ -6,6 +6,7 @@ import {
   createSelector,
   createSignal,
   untrack,
+  Signal,
 } from "solid-js"
 import {
   ClientSubtask,
@@ -45,6 +46,13 @@ export enum TodoListMode {
 type TodoListModeDataMap = {
   [TodoListMode.NewSubtask]: NewSubtask
   [TodoListMode.Edit]: { initEditingNote?: true }
+  [TodoListMode.Search]: Signal<
+    | {
+        isResult(key: TodoKey): boolean
+        isSelected(key: TodoKey): boolean
+      }
+    | undefined
+  >
 }
 
 export type TodoListModeData<T extends TodoListMode> =
@@ -62,10 +70,6 @@ export function createTodoListState(
   const todosState = createTodosState(options)
 
   const [activePage, setActivePage] = createSignal(PageType.All)
-
-  const [focusedTodoFromSearch, setFocusedTodoFromSearch] = createSignal(0)
-  const [highlitedTodosFromSearch, setHighlightedTodosFromSearch] =
-    createSignal([])
 
   const [focusedTodoKey, setFocusedTodoKey] = createSignal<TodoKey | null>(null)
   const isTodoFocused = createSelector<TodoKey | null, TodoKey>(focusedTodoKey)
@@ -85,9 +89,7 @@ export function createTodoListState(
     () => modeState().type
   )
   const getModeData = <T extends TodoListMode>(mode: T) =>
-    modeState().type === mode
-      ? (modeState().data as TodoListModeData<T>)
-      : undefined
+    inMode(mode) ? (modeState().data as TodoListModeData<T>) : undefined
 
   function addNewTask() {
     batch(() => {
@@ -95,11 +97,6 @@ export function createTodoListState(
       setFocusedTodoKey(null)
     })
   }
-
-  const newSubtask = createMemo(() => {
-    const mode = modeState()
-    return mode.type === TodoListMode.NewSubtask ? mode.data : null
-  })
 
   function addNewSubtask(): void {
     const key = getNewKey()
@@ -114,16 +111,6 @@ export function createTodoListState(
       setFocusedTodoKey(key)
     })
   }
-
-  const [todoEditInput, setTodoEditInput] = createSignal("")
-  const [localSearchResultIds, setLocalSearchResultIds] = createSignal<
-    TodoKey[]
-  >([])
-  const [localSearchResultId, setLocalSearchResultId] =
-    createSignal<TodoKey | null>(null)
-  const [clickTimeStamp, setClickTimeStamp] = createSignal(0)
-  const [localSearchResultIndex, setLocalSearchResultIndex] =
-    createSignal<number>(0)
 
   const compareTodos = (a: ClientTodo, b: ClientTodo): number => {
     if (b.starred && !a.starred) {
@@ -152,7 +139,7 @@ export function createTodoListState(
           t,
           ...t.subtasks,
         ]
-        const ns = newSubtask()
+        const ns = getModeData(TodoListMode.NewSubtask)
         if (ns?.parent === t.key) list.push(ns)
         return list
       })
@@ -213,22 +200,15 @@ export function createTodoListState(
     getModeData,
     inMode,
     setMode,
-    todoEditInput,
-    setTodoEditInput,
-    focusedTodoFromSearch,
-    setFocusedTodoFromSearch,
-    highlitedTodosFromSearch,
-    setHighlightedTodosFromSearch,
-    localSearchResultIds,
-    setLocalSearchResultIds,
-    localSearchResultId,
-    setLocalSearchResultId,
-    clickTimeStamp,
-    setClickTimeStamp,
-    localSearchResultIndex,
-    setLocalSearchResultIndex,
     addNewTask,
     addNewSubtask,
+    localSearchData: createMemo(() => getModeData(TodoListMode.Search)?.[0]()),
+    startLocalSearch() {
+      batch(() => {
+        setMode(TodoListMode.Search, createSignal(undefined))
+        setFocusedTodoKey(null)
+      })
+    },
   } as const
 }
 
