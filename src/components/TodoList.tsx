@@ -210,8 +210,9 @@ export default function TodoList() {
       const res = await grafbase.request(SuggestedTasksDocument, {
         task: todo.title,
       })
+      // console.log(res.suggestions.suggestedTasks, "suggestions")
 
-      const suggestions = res.suggestions.suggestedTasks
+      const suggestions = res.suggestions.suggestedTasks.tasks
       return suggestions && suggestions.length ? suggestions : undefined
     }
   )

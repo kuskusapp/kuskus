@@ -17,12 +17,8 @@ export type Scalars = {
   Boolean: boolean
   Int: number
   Float: number
+  Date: any
   DateTime: any
-}
-
-export type CheckoutSession = {
-  __typename?: "CheckoutSession"
-  url: Scalars["String"]
 }
 
 /** Possible operations for an Int field */
@@ -362,14 +358,20 @@ export type SubtaskUpdatePayload = {
 
 export type SuggestedTask = {
   __typename?: "SuggestedTask"
-  note: Scalars["String"]
-  title: Scalars["String"]
+  note?: Maybe<Scalars["String"]>
+  task: Scalars["String"]
+}
+
+export type SuggestedTasks = {
+  __typename?: "SuggestedTasks"
+  intro?: Maybe<Scalars["String"]>
+  tasks: Array<Maybe<SuggestedTask>>
 }
 
 export type SuggestionsPayload = {
   __typename?: "SuggestionsPayload"
-  stripeCheckoutUrl?: Maybe<CheckoutSession>
-  suggestedTasks?: Maybe<Array<Maybe<SuggestedTask>>>
+  stripeCheckoutUrl?: Maybe<Scalars["String"]>
+  suggestedTasks?: Maybe<SuggestedTasks>
 }
 
 export type Todo = {
@@ -468,6 +470,7 @@ export type UserDetails = {
   createdAt: Scalars["DateTime"]
   /** Unique identifier */
   id: Scalars["ID"]
+  paidSubscriptionValidUntilDate?: Maybe<Scalars["Date"]>
   /** when the model was updated */
   updatedAt: Scalars["DateTime"]
   username?: Maybe<Scalars["String"]>
@@ -487,6 +490,7 @@ export type UserDetailsConnection = {
 /** Input to create a UserDetails */
 export type UserDetailsCreateInput = {
   aiTasksAvailable?: InputMaybe<Scalars["Int"]>
+  paidSubscriptionValidUntilDate?: InputMaybe<Scalars["Date"]>
   username?: InputMaybe<Scalars["String"]>
 }
 
@@ -513,6 +517,7 @@ export type UserDetailsOrderByInput = {
 /** Input to update a UserDetails */
 export type UserDetailsUpdateInput = {
   aiTasksAvailable?: InputMaybe<IntOperationsInput>
+  paidSubscriptionValidUntilDate?: InputMaybe<Scalars["Date"]>
   username?: InputMaybe<Scalars["String"]>
 }
 
@@ -773,11 +778,15 @@ export type SuggestedTasksQuery = {
   __typename?: "Query"
   suggestions?: {
     __typename?: "SuggestionsPayload"
-    suggestedTasks?: Array<{
-      __typename?: "SuggestedTask"
-      title: string
-      note: string
-    } | null> | null
+    suggestedTasks?: {
+      __typename?: "SuggestedTasks"
+      intro?: string | null
+      tasks: Array<{
+        __typename?: "SuggestedTask"
+        task: string
+        note?: string | null
+      } | null>
+    } | null
   } | null
 }
 
@@ -2007,8 +2016,24 @@ export const SuggestedTasksDocument = {
                   selectionSet: {
                     kind: "SelectionSet",
                     selections: [
-                      { kind: "Field", name: { kind: "Name", value: "title" } },
-                      { kind: "Field", name: { kind: "Name", value: "note" } },
+                      { kind: "Field", name: { kind: "Name", value: "intro" } },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "tasks" },
+                        selectionSet: {
+                          kind: "SelectionSet",
+                          selections: [
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "task" },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "note" },
+                            },
+                          ],
+                        },
+                      },
                     ],
                   },
                 },

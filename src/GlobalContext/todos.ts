@@ -1,5 +1,5 @@
 import { defer } from "@solid-primitives/utils"
-import { createEffect, onMount } from "solid-js"
+import { createEffect } from "solid-js"
 import { StoreSetter, createStore, produce } from "solid-js/store"
 import {
   SubtaskConnection,

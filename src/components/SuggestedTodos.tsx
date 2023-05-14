@@ -5,14 +5,14 @@ import clsx from "clsx"
 import { Motion } from "@motionone/solid"
 
 type SuggestedTodo = {
-  title: string
+  task: string
   note: string
 }
 
 function SuggestedTodo(props: {
-  title: string
-  index: number
+  task: string
   note?: string
+  index: number
   isFocused: boolean
   onClick: () => void
 }) {
@@ -24,9 +24,9 @@ function SuggestedTodo(props: {
       )}
       onClick={props.onClick}
     >
-      <div>{props.title.split(":")[0]}</div>
+      <div>{props.task.split(":")[0]}</div>
       <div class="opacity-60 text-sm pl-5 text-start text-ellipsis">
-        {props.title.split(":")[1]}
+        {props.task.split(":")[1]}
       </div>
     </div>
   )
@@ -52,7 +52,7 @@ export default function SuggestedTodos(props: {
 
     todoList.todosState.addSubtask(todoList.focusedTodoKey()!, {
       type: "subtask",
-      title: suggestion.title,
+      title: suggestion.task,
       done: false,
       starred: false,
       priority: 0,
@@ -87,7 +87,7 @@ export default function SuggestedTodos(props: {
       style={{
         width: "40%",
       }}
-      class=" gap-2 flex flex-col items-center h-full overflow-hidden"
+      class="gap-2 flex flex-col items-center h-full overflow-hidden"
     >
       <Motion.div
         initial={{ "font-size": "0px" }}
@@ -115,7 +115,7 @@ export default function SuggestedTodos(props: {
         >
           {props.suggestions.map((todo, index) => (
             <SuggestedTodo
-              title={todo.title}
+              task={todo.task}
               index={index}
               isFocused={index === focusedSuggestion()}
               onClick={() => setFocusedSuggestion(index)}
