@@ -49,14 +49,9 @@ export default async function Resolver(
     }
   }
 
-  // TODO: fix below
-  // ai should work
-  // stripe return page should work too
-  // return {}
-
-  // TODO: there should probably be a better way than userCollection
-  // but for that I need to know the specific user id, maybe pass it?
-  // in theory userCollection should work too though but is probably slower
+  // TODO: there should probably be a better way than userDetailsCollection
+  // I try to make sure there is only one userDetails per user
+  // sadly grafbase can't enforce that yet so I have to do this..
   let userDetailsQuery = `
     {
       userDetailsCollection(first: 1) {
@@ -83,8 +78,8 @@ export default async function Resolver(
     }),
   })
   if (!res.ok) {
-    // TODO: should this throw error? probably not
-    // maybe should return graphql back with `error: ` field? or something
+    // TODO: should this throw error? I don't know..
+    // maybe should return graphql back with `error: ` field?
     throw new Error(`HTTP error! status: ${res.status}`)
   }
   const resJson = await res.json()
@@ -108,20 +103,17 @@ export default async function Resolver(
     console.log(res, "res")
     const suggestedTasks = parseSuggestions(res)
     console.log(suggestedTasks)
-    return
 
     // update cache
-    // await redis.set(cacheString, suggestions.json())
-    // console.log(JSON.stringify(suggestions.json()))
-    // return {
-    //   suggestedTasks: suggestions.json(),
-    //   stripeCheckoutUrl: null,
-    // }
+    // await redis.set(cacheString, suggestedTasks)
+    return {
+      suggestedTasks: suggestedTasks,
+      stripeCheckoutUrl: null,
+    }
   }
-  // console.log(userDetailsId, "hello")
 
-  const userDetailsId = resJson.data.userDetailsCollection.edges[0].node.id
   // user can't make the request, return a stripe payment link
+  const userDetailsId = resJson.data.userDetailsCollection.edges[0].node.id
   try {
     const data = await stripe.checkout.sessions.create({
       success_url: process.env.STRIPE_SUCCESS_URL!,
@@ -154,8 +146,7 @@ type SuggestedTask = {
   note?: string
 }
 
-// parses a string of markdown and returns a list of suggested tasks
-// TODO: type response of function to `SuggestedTasks` once it works
+// parse a string of markdown and return a list of suggested tasks
 function parseSuggestions(markdownString: string) {
   const tree = fromMarkdown(markdownString)
 
