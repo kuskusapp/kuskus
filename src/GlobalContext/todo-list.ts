@@ -1,11 +1,12 @@
 import {
   batch,
+  createContext,
+  useContext,
   createMemo,
   createSelector,
   createSignal,
   untrack,
 } from "solid-js"
-import { createContextProvider } from "@solid-primitives/context"
 import {
   ClientSubtask,
   ClientTodo,
@@ -55,8 +56,10 @@ type TodoListModeState = {
     : { data?: undefined })
 }[TodoListMode]
 
-export function createTodoListState() {
-  const todosState = createTodosState()
+export function createTodoListState(
+  options: Parameters<typeof createTodosState>[0]
+) {
+  const todosState = createTodosState(options)
 
   const [activePage, setActivePage] = createSignal(PageType.All)
 
@@ -183,6 +186,7 @@ export function createTodoListState() {
   }
 
   return {
+    request: options.request,
     todosState,
     getTodoIndex,
     flatTasks,
@@ -228,8 +232,12 @@ export function createTodoListState() {
   } as const
 }
 
-export const [TodoListProvider, useTodoList] = createContextProvider(
-  (state: ReturnType<typeof createTodoListState>) => state,
-  // @ts-expect-error this is just to assert context as non-nullable
-  {}
-)
+const TodoListCtx = createContext<ReturnType<typeof createTodoListState>>()
+
+export const TodoListProvider = TodoListCtx.Provider
+
+export const useTodoList = () => {
+  const ctx = useContext(TodoListCtx)
+  if (!ctx) throw new Error("useTodoList must be used within TodoListProvider")
+  return ctx
+}
