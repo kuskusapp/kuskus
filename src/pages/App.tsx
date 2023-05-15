@@ -1,7 +1,11 @@
 import { GraphQLClient } from "graphql-request"
 import { Show, createSignal } from "solid-js"
 import { useNavigate } from "solid-start"
-import { SettingsProvider, createSettingsState } from "~/GlobalContext/settings"
+import {
+  SettingsProvider,
+  createSettingsState,
+  useSettings,
+} from "~/GlobalContext/settings"
 import {
   PageType,
   TodoListMode,
@@ -64,31 +68,35 @@ export default function App(props: { initialToken: string }) {
   })
 
   return (
-    <div class="h-screen bg-white dark:bg-black">
+    <div class=" bg-white dark:bg-black">
       <TodoListProvider value={todoList}>
-        {/* <SettingsProvider value={settingsState}> */}
-        <div class="flex flex-col h-screen">
-          <div class="flex grow gap-2 p-2 h-full overflow-hidden">
-            <Sidebar />
-            {/* <CollapsedSidebar /> */}
-            <TodoList />
+        <SettingsProvider value={settingsState}>
+          <div class="flex flex-col h-screen">
+            <div class="flex grow gap-2 p-2 h-full overflow-hidden">
+              <Show
+                when={settingsState.settings.collapsedSidebar}
+                fallback={<Sidebar />}
+              >
+                <CollapsedSidebar />
+              </Show>
+              <TodoList />
+            </div>
           </div>
-        </div>
-        <Show when={showHelp()}>
-          <Modal
-            title="Help"
-            onClose={() => setShowHelp(false)}
-            children={<Help />}
-          />
-        </Show>
-        <Show when={todoList.inMode(TodoListMode.Settings)}>
-          <Modal
-            title="Settings"
-            onClose={() => todoList.setMode(TodoListMode.Default)}
-            children={<Settings />}
-          />
-        </Show>
-        {/* </SettingsProvider> */}
+          <Show when={showHelp()}>
+            <Modal
+              title="Help"
+              onClose={() => setShowHelp(false)}
+              children={<Help />}
+            />
+          </Show>
+          <Show when={todoList.inMode(TodoListMode.Settings)}>
+            <Modal
+              title="Settings"
+              onClose={() => todoList.setMode(TodoListMode.Default)}
+              children={<Settings />}
+            />
+          </Show>
+        </SettingsProvider>
       </TodoListProvider>
     </div>
   )

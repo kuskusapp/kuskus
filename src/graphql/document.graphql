@@ -5,6 +5,7 @@ fragment Todo on Todo {
   starred
   priority
   note
+  tags
   dueDate
 }
 
@@ -15,6 +16,7 @@ fragment Subtask on Subtask {
   starred
   priority
   note
+  tags
   dueDate
 }
 
@@ -138,8 +140,7 @@ query Settings {
     edges {
       node {
         id
-        hideActionBar
-        iconOnlySidebar
+        collapsedSidebar
         languageModelUsed
       }
     }
@@ -171,5 +172,6 @@ query SuggestedTasks($task: String!) {
         note
       }
     }
+    stripeCheckoutUrl
   }
 }

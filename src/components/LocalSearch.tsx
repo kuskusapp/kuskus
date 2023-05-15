@@ -75,7 +75,7 @@ export default function LocalSearch() {
   return (
     <input
       style={{ outline: "none", "border-radius": "10px", margin: "-4px" }}
-      class="w-full grow bg-black pl-5 pr-5 pb-6 p-4"
+      class="w-full bg-black pl-5 pr-5 pb-6 p-4"
       onKeyPress={(e) => {
         const selected = results().selected()
         if (e.key === "Enter" && selected) {

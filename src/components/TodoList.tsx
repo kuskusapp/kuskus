@@ -192,6 +192,7 @@ export default function TodoList() {
     )
   }
 
+  // TODO: make use of stripe checkout url
   const [suggestions] = createResource(
     () => {
       if (!todoList.inMode(TodoListMode.Suggest)) return
@@ -202,8 +203,12 @@ export default function TodoList() {
       const res = await todoList.request(SuggestedTasksDocument, {
         task: todo.title,
       })
-      // console.log(res.suggestions.suggestedTasks, "suggestions")
+      // TODO: fix types..
+      const stripeCheckoutUrl = res.suggestions.suggestedTasks.stripeCheckoutUrl
 
+      if (stripeCheckoutUrl) {
+        todoList.setMode(TodoListMode.Settings, { settingsState: "upgrade" })
+      }
       const suggestions = res.suggestions.suggestedTasks.tasks
       return suggestions && suggestions.length ? suggestions : undefined
     }

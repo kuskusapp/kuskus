@@ -1,17 +1,22 @@
 import clsx from "clsx"
-import { Match, Switch, createSignal, onMount } from "solid-js"
+import { Match, Switch, createSignal, onCleanup, onMount } from "solid-js"
 import { GoogleClient } from "~/lib/auth"
 import Keybind from "./Keybind"
-import { useTodoList } from "~/GlobalContext/todo-list"
+import { TodoListMode, useTodoList } from "~/GlobalContext/todo-list"
+import { useSettings } from "~/GlobalContext/settings"
 
 export default function Settings() {
-  const global = useTodoList()
-  const [show, setShow] = createSignal("Keyboard")
+  const todoList = useTodoList()
+  const settings = useSettings()
+  const initial = todoList.getModeData(TodoListMode.Settings)
+  const [show, setShow] = createSignal(
+    initial?.settingsState ? initial.settingsState : "Upgrade"
+  )
 
   return (
     <div class="flex h-full w-full">
       <div
-        class="flex justify-between flex-col dark:bg-stone-950 bg-zinc-200"
+        class="flex justify-between flex-col dark:bg-stone-900 bg-zinc-200 pr-1"
         style={{ "border-radius": "0px 0px 0px 10px" }}
       >
         <div>
@@ -49,10 +54,19 @@ export default function Settings() {
             >
               Help
             </div>
+            <div
+              class={clsx(
+                "cursor-pointer",
+                show() === "Upgrade" && "font-bold"
+              )}
+              onClick={() => setShow("Upgrade")}
+            >
+              Upgrade
+            </div>
           </div>
         </div>
         <div
-          class="flex cursor-pointer pl-3 pb-2"
+          class="flex cursor-pointer self-center pb-3 text-red-500"
           onClick={() => {
             GoogleClient.signoutRedirect({
               post_logout_redirect_uri: import.meta.env
@@ -69,7 +83,7 @@ export default function Settings() {
             <div
               class="cursor-pointer"
               onClick={() => {
-                global.settingsState.toggleHideActionBar()
+                // TODO: add maybe..
               }}
             >
               Hide action bar
@@ -120,6 +134,43 @@ export default function Settings() {
               <a class="text-blue-500" href="https://discord.gg/f8YHjyrX3h">
                 Discord
               </a>
+            </div>
+          </Match>
+          <Match when={show() === "Upgrade"}>
+            <div class="flex h-full w-full">
+              <div class="flex flex-col justify-center items-center gap-5 w-full bg-neutral-900">
+                <div class="text-4xl mb-5 font-bold">10$ / month</div>
+                <div class="text-xl align-center">
+                  <div class="">
+                    Unlimited <span class="font-semibold text-2xl">AI</span>{" "}
+                    (GPT-3)
+                  </div>
+                  <div>
+                    Unlimited <span class="font-semibold text-2xl">Todos</span>
+                  </div>
+                </div>
+                <div class="bg-neutral-950 p-3 px-8 rounded-xl cursor-pointer">
+                  Subscribe
+                </div>
+              </div>
+              <div
+                class="flex flex-col justify-center items-center gap-5 w-full bg-neutral-800 "
+                style={{ "border-left": "solid 1px rgba(1,1,1,0.5)" }}
+              >
+                <div class="text-4xl mb-5 font-bold">25$ / month</div>
+                <div class="text-xl align-center">
+                  <div>
+                    State of the art{" "}
+                    <span class="font-semibold text-2xl">AI</span>
+                  </div>
+                  <div>
+                    1500 <span class="font-semibold text-2xl">GPT-4</span> tasks
+                  </div>
+                </div>
+                <div class="bg-neutral-950 p-3 px-8 rounded-xl cursor-pointer">
+                  Subscribe
+                </div>
+              </div>
             </div>
           </Match>
         </Switch>

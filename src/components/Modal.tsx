@@ -20,9 +20,9 @@ export default function Modal(props: Props) {
     "click",
     (e) => {
       if (e.target === ref) {
-        global.setShowHelp(false)
-        global.setShowSettings(false)
-        global.setNewTodo(false)
+        // global.setShowHelp(false)
+        // global.setShowSettings(false)
+        // global.setNewTodo(false)
       }
     },
     { passive: true }
@@ -34,25 +34,27 @@ export default function Modal(props: Props) {
         "background-color": "#00000080",
         "backdrop-filter": "blur(2px)",
       }}
-      class="fixed h-screen w-screen"
+      class="fixed bottom-0 right-0 h-screen w-screen"
     >
       <div class="items-center h-full w-full flex justify-center" ref={ref}>
         <div
           style={{
             "border-radius": "10px",
           }}
-          class=" bg-gray-100 dark:bg-stone-900 h-1/2 flex w-1/2"
+          class=" bg-gray-100 dark:bg-stone-900 h-5/6 flex w-11/12"
         >
           <div class="w-full h-full flex flex-col">
             <nav
               style={{
                 "border-radius": "10px 10px 0 0",
               }}
-              class="flex items-end justify-between pl-4 pr-3 pb-1 pt-1"
+              class="flex items-end justify-between pl-4 pr-3 pb-1 pt-2"
             >
-              <div></div>
-              <div>{props.title}</div>
-              <div class="cursor-pointer" onClick={() => props.onClose()}>
+              <div class="opacity-60">{props.title}</div>
+              <div
+                class="cursor-pointer opacity-60"
+                onClick={() => props.onClose()}
+              >
                 <Icon name="Cross" />
               </div>
             </nav>

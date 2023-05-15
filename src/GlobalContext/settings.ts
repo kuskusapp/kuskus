@@ -1,4 +1,4 @@
-import { createContext, createEffect, onMount } from "solid-js"
+import { createContext, createEffect, onMount, useContext } from "solid-js"
 import { createStore } from "solid-js/store"
 import {
   SettingsCreateDocument,
@@ -9,16 +9,14 @@ import { GrafbaseRequest } from "~/pages/App"
 
 export type Settings = {
   id?: string
-  hideActionBar: Boolean
-  iconOnlySidebar: Boolean
+  collapsedSidebar: Boolean
   languageModelUsed: string // TODO: for some reason this is giving an error with grafbase..
 }
 
 // TODO: sync languageModelUsed too, gives grafbase errors..
 export function createSettingsState(options: { request: GrafbaseRequest }) {
   const [settings, setSettings] = createStore<Settings>({
-    hideActionBar: false,
-    iconOnlySidebar: false,
+    collapsedSidebar: false,
     languageModelUsed: "gpt-3",
   })
 
@@ -52,8 +50,7 @@ export function createSettingsState(options: { request: GrafbaseRequest }) {
       options.request(SettingsUpdateDocument, {
         id: settings.id,
         settings: {
-          hideActionBar: settings.hideActionBar,
-          iconOnlySidebar: settings.iconOnlySidebar,
+          collapsedSidebar: settings.collapsedSidebar,
           languageModelUsed: settings.languageModelUsed,
         },
       })
@@ -64,10 +61,9 @@ export function createSettingsState(options: { request: GrafbaseRequest }) {
     // state
     settings,
     // actions
-    toggleHideActionBar: () =>
-      setSettings({ hideActionBar: !settings.hideActionBar }),
-    toggleIconOnlySidebar: () =>
-      setSettings({ iconOnlySidebar: !settings.iconOnlySidebar }),
+    setCollapsedSidebar: () => {
+      return setSettings({ collapsedSidebar: !settings.collapsedSidebar })
+    },
     setlanguageModelUsed: (model: string) =>
       setSettings({ languageModelUsed: model }),
   }
@@ -76,3 +72,9 @@ export function createSettingsState(options: { request: GrafbaseRequest }) {
 const SettingsCtx = createContext<ReturnType<typeof createSettingsState>>()
 
 export const SettingsProvider = SettingsCtx.Provider
+
+export const useSettings = () => {
+  const ctx = useContext(SettingsCtx)
+  if (!ctx) throw new Error("useSettings must be used within SettingsProvider")
+  return ctx
+}

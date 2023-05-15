@@ -35,6 +35,7 @@ export type BaseTask = {
   starred: boolean
   priority: Priority
   note: string | null
+  tags: string[] | null
   dueDate: string | null
 }
 
@@ -76,6 +77,8 @@ const parseDbSubtasks = (
         dueDate: edge.node.dueDate ?? null,
         note: edge.node.note ?? null,
         priority: parseDbPriority(edge.node.priority),
+        // TODO: why is it Maybe<string>..
+        tags: edge.node.tags ?? null,
         parent,
       })
     }
@@ -126,6 +129,8 @@ export function createTodosState({ request }: { request: GrafbaseRequest }) {
               priority: parseDbPriority(todo.node.priority),
               note: todo.node.note ?? null,
               dueDate: todo.node.dueDate ?? null,
+              // TODO: test
+              tags: todo.node.tags ?? null,
               subtasks,
             }
             subtasks.push.apply(
@@ -149,9 +154,10 @@ export function createTodosState({ request }: { request: GrafbaseRequest }) {
       if (!todo.id) {
         request(TodoCreateDocument, {
           todo: getTodoCreateInput(todo),
-        }).then(async (res) => {
+        }).then((res) => {
           // tasks get their id after being added to the db
-          setTodos((t) => t === todo, "id", res.todoCreate?.todo?.id!)
+          const id = res.todoCreate?.todo?.id!
+          setTodos((t) => t.key === todo.key, "id", id)
         })
       }
 
@@ -189,6 +195,7 @@ export function createTodosState({ request }: { request: GrafbaseRequest }) {
                 "id",
                 res.subtaskCreate?.subtask?.id!
               )
+
               // TODO: do the subtask create and subtask link in 1 query..
               request(SubtaskLinkDocument, {
                 taskId: todo.id!,

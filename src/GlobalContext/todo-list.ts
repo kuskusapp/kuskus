@@ -44,6 +44,7 @@ export enum TodoListMode {
 }
 
 type TodoListModeDataMap = {
+  [TodoListMode.Settings]: { settingsState?: string }
   [TodoListMode.NewSubtask]: NewSubtask
   [TodoListMode.Edit]: { initEditingNote?: true }
   [TodoListMode.Search]: Signal<

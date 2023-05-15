@@ -1,4 +1,4 @@
-import { useTodoList } from "~/GlobalContext/todo-list"
+import { useSettings } from "~/GlobalContext/settings"
 import Icon from "./Icon"
 
 interface Props {
@@ -6,6 +6,8 @@ interface Props {
 }
 
 export default function TopBar(props: Props) {
+  const settings = useSettings()
+
   return (
     <>
       <div
@@ -13,8 +15,9 @@ export default function TopBar(props: Props) {
         style={{ "border-radius": "10px" }}
       >
         <div
+          class="cursor-pointer"
           onClick={() => {
-            // TODO: settings.toggleIconOnlySidebar()
+            settings.setCollapsedSidebar()
           }}
         >
           <Icon name="Sidebar" />

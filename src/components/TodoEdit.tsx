@@ -31,8 +31,7 @@ export default function TodoEdit(props: {
   const [showSelectPriority, setShowSelectPriority] = createSignal(false)
   const [priority, setPriority] = createSignal(props.todo.priority)
   const [starred, setStarred] = createSignal(props.todo.starred)
-
-
+  const [tags, setTags] = createSignal(props.todo.tags)
 
   onCleanup(() => {
     // REMOVE
@@ -50,6 +49,7 @@ export default function TodoEdit(props: {
           note: note(),
           priority: priority(),
           starred: starred(),
+          tags: tags(),
           dueDate: showCalendar() && !dueDate() ? todayDate() : dueDate(),
         }))
         todoList.setMode(TodoListMode.Default)

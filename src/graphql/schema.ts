@@ -196,10 +196,9 @@ export type QueryUserDetailsCollectionArgs = {
 
 export type Settings = {
   __typename?: "Settings"
+  collapsedSidebar: Scalars["Boolean"]
   /** when the model was created */
   createdAt: Scalars["DateTime"]
-  hideActionBar: Scalars["Boolean"]
-  iconOnlySidebar: Scalars["Boolean"]
   /** Unique identifier */
   id: Scalars["ID"]
   languageModelUsed: Scalars["String"]
@@ -220,8 +219,7 @@ export type SettingsConnection = {
 
 /** Input to create a Settings */
 export type SettingsCreateInput = {
-  hideActionBar?: Scalars["Boolean"]
-  iconOnlySidebar?: Scalars["Boolean"]
+  collapsedSidebar?: Scalars["Boolean"]
   languageModelUsed?: Scalars["String"]
 }
 
@@ -247,8 +245,7 @@ export type SettingsOrderByInput = {
 
 /** Input to update a Settings */
 export type SettingsUpdateInput = {
-  hideActionBar?: InputMaybe<Scalars["Boolean"]>
-  iconOnlySidebar?: InputMaybe<Scalars["Boolean"]>
+  collapsedSidebar?: InputMaybe<Scalars["Boolean"]>
   languageModelUsed?: InputMaybe<Scalars["String"]>
 }
 
@@ -269,6 +266,7 @@ export type Subtask = {
   note?: Maybe<Scalars["String"]>
   priority: Scalars["Int"]
   starred: Scalars["Boolean"]
+  tags?: Maybe<Array<Maybe<Scalars["String"]>>>
   title: Scalars["String"]
   /** when the model was updated */
   updatedAt: Scalars["DateTime"]
@@ -293,6 +291,7 @@ export type SubtaskCreateInput = {
   note?: InputMaybe<Scalars["String"]>
   priority?: Scalars["Int"]
   starred?: Scalars["Boolean"]
+  tags?: InputMaybe<Array<InputMaybe<Scalars["String"]>>>
   title: Scalars["String"]
 }
 
@@ -324,6 +323,7 @@ export type SubtaskToTodoCreateSubtask = {
   note?: InputMaybe<Scalars["String"]>
   priority?: Scalars["Int"]
   starred?: Scalars["Boolean"]
+  tags?: InputMaybe<Array<InputMaybe<Scalars["String"]>>>
   title: Scalars["String"]
 }
 
@@ -348,6 +348,7 @@ export type SubtaskUpdateInput = {
   note?: InputMaybe<Scalars["String"]>
   priority?: InputMaybe<IntOperationsInput>
   starred?: InputMaybe<Scalars["Boolean"]>
+  tags?: InputMaybe<Array<InputMaybe<Scalars["String"]>>>
   title?: InputMaybe<Scalars["String"]>
 }
 
@@ -383,11 +384,11 @@ export type Todo = {
   dueDate?: Maybe<Scalars["String"]>
   /** Unique identifier */
   id: Scalars["ID"]
-  labels?: Maybe<Array<Maybe<Scalars["String"]>>>
   note?: Maybe<Scalars["String"]>
   priority: Scalars["Int"]
   starred: Scalars["Boolean"]
   subtasks?: Maybe<SubtaskConnection>
+  tags?: Maybe<Array<Maybe<Scalars["String"]>>>
   title: Scalars["String"]
   /** when the model was updated */
   updatedAt: Scalars["DateTime"]
@@ -417,11 +418,11 @@ export type TodoCreateInput = {
   cached?: InputMaybe<Scalars["String"]>
   done?: Scalars["Boolean"]
   dueDate?: InputMaybe<Scalars["String"]>
-  labels?: InputMaybe<Array<InputMaybe<Scalars["String"]>>>
   note?: InputMaybe<Scalars["String"]>
   priority?: Scalars["Int"]
   starred?: Scalars["Boolean"]
   subtasks?: InputMaybe<Array<InputMaybe<SubtaskToTodoCreateSubtaskRelation>>>
+  tags?: InputMaybe<Array<InputMaybe<Scalars["String"]>>>
   title: Scalars["String"]
 }
 
@@ -450,11 +451,11 @@ export type TodoUpdateInput = {
   cached?: InputMaybe<Scalars["String"]>
   done?: InputMaybe<Scalars["Boolean"]>
   dueDate?: InputMaybe<Scalars["String"]>
-  labels?: InputMaybe<Array<InputMaybe<Scalars["String"]>>>
   note?: InputMaybe<Scalars["String"]>
   priority?: InputMaybe<IntOperationsInput>
   starred?: InputMaybe<Scalars["Boolean"]>
   subtasks?: InputMaybe<Array<InputMaybe<SubtaskToTodoUpdateSubtaskRelation>>>
+  tags?: InputMaybe<Array<InputMaybe<Scalars["String"]>>>
   title?: InputMaybe<Scalars["String"]>
 }
 
@@ -534,6 +535,7 @@ export type TodoFragment = {
   starred: boolean
   priority: number
   note?: string | null
+  tags?: Array<string | null> | null
   dueDate?: string | null
 }
 
@@ -545,6 +547,7 @@ export type SubtaskFragment = {
   starred: boolean
   priority: number
   note?: string | null
+  tags?: Array<string | null> | null
   dueDate?: string | null
 }
 
@@ -564,6 +567,7 @@ export type TodosQuery = {
         starred: boolean
         priority: number
         note?: string | null
+        tags?: Array<string | null> | null
         dueDate?: string | null
         subtasks?: {
           __typename?: "SubtaskConnection"
@@ -577,6 +581,7 @@ export type TodosQuery = {
               starred: boolean
               priority: number
               note?: string | null
+              tags?: Array<string | null> | null
               dueDate?: string | null
             }
           } | null> | null
@@ -737,8 +742,7 @@ export type SettingsQuery = {
       node: {
         __typename?: "Settings"
         id: string
-        hideActionBar: boolean
-        iconOnlySidebar: boolean
+        collapsedSidebar: boolean
         languageModelUsed: string
       }
     } | null> | null
@@ -778,6 +782,7 @@ export type SuggestedTasksQuery = {
   __typename?: "Query"
   suggestions?: {
     __typename?: "SuggestionsPayload"
+    stripeCheckoutUrl?: string | null
     suggestedTasks?: {
       __typename?: "SuggestedTasks"
       intro?: string | null
@@ -809,6 +814,7 @@ export const TodoFragmentDoc = {
           { kind: "Field", name: { kind: "Name", value: "starred" } },
           { kind: "Field", name: { kind: "Name", value: "priority" } },
           { kind: "Field", name: { kind: "Name", value: "note" } },
+          { kind: "Field", name: { kind: "Name", value: "tags" } },
           { kind: "Field", name: { kind: "Name", value: "dueDate" } },
         ],
       },
@@ -834,6 +840,7 @@ export const SubtaskFragmentDoc = {
           { kind: "Field", name: { kind: "Name", value: "starred" } },
           { kind: "Field", name: { kind: "Name", value: "priority" } },
           { kind: "Field", name: { kind: "Name", value: "note" } },
+          { kind: "Field", name: { kind: "Name", value: "tags" } },
           { kind: "Field", name: { kind: "Name", value: "dueDate" } },
         ],
       },
@@ -948,6 +955,7 @@ export const TodosDocument = {
           { kind: "Field", name: { kind: "Name", value: "starred" } },
           { kind: "Field", name: { kind: "Name", value: "priority" } },
           { kind: "Field", name: { kind: "Name", value: "note" } },
+          { kind: "Field", name: { kind: "Name", value: "tags" } },
           { kind: "Field", name: { kind: "Name", value: "dueDate" } },
         ],
       },
@@ -968,6 +976,7 @@ export const TodosDocument = {
           { kind: "Field", name: { kind: "Name", value: "starred" } },
           { kind: "Field", name: { kind: "Name", value: "priority" } },
           { kind: "Field", name: { kind: "Name", value: "note" } },
+          { kind: "Field", name: { kind: "Name", value: "tags" } },
           { kind: "Field", name: { kind: "Name", value: "dueDate" } },
         ],
       },
@@ -1793,11 +1802,7 @@ export const SettingsDocument = {
                             },
                             {
                               kind: "Field",
-                              name: { kind: "Name", value: "hideActionBar" },
-                            },
-                            {
-                              kind: "Field",
-                              name: { kind: "Name", value: "iconOnlySidebar" },
+                              name: { kind: "Name", value: "collapsedSidebar" },
                             },
                             {
                               kind: "Field",
@@ -2036,6 +2041,10 @@ export const SuggestedTasksDocument = {
                       },
                     ],
                   },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "stripeCheckoutUrl" },
                 },
               ],
             },
