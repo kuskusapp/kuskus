@@ -1,4 +1,4 @@
-import { createEffect, onMount } from "solid-js"
+import { createContext, createEffect, onMount } from "solid-js"
 import { createStore } from "solid-js/store"
 import {
   SettingsCreateDocument,
@@ -72,3 +72,7 @@ export function createSettingsState(options: { request: GrafbaseRequest }) {
       setSettings({ languageModelUsed: model }),
   }
 }
+
+const SettingsCtx = createContext<ReturnType<typeof createSettingsState>>()
+
+export const SettingsProvider = SettingsCtx.Provider

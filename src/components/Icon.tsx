@@ -7,6 +7,7 @@ interface Props {
     | "Inbox"
     | "Star"
     | "Plus"
+    | "Sidebar"
     | "Priority 3"
     | "Priority 2"
     | "Priority 1"
@@ -33,7 +34,7 @@ export default function Icon(props: Props) {
   switch (props.name) {
     case "Calendar":
       return (
-        <svg width="18" height="18" fill="none" viewBox="0 0 24 24">
+        <svg width="28" height="28" fill="none" viewBox="0 0 24 24">
           <path
             stroke="currentColor"
             stroke-linecap="round"
@@ -112,8 +113,8 @@ export default function Icon(props: Props) {
     case "Done":
       return (
         <svg
-          width="18"
-          height="18"
+          width="28"
+          height="28"
           viewBox="0 0 24 24"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
@@ -180,7 +181,7 @@ export default function Icon(props: Props) {
       )
     case "Inbox":
       return (
-        <svg width="18" height="18" fill="none" viewBox="0 0 24 24">
+        <svg width="28" height="28" fill="none" viewBox="0 0 24 24">
           <path
             stroke="currentColor"
             stroke-linecap="round"
@@ -199,7 +200,7 @@ export default function Icon(props: Props) {
       )
     case "Star":
       return (
-        <svg width="18" height="18" fill="none" viewBox="0 0 24 24">
+        <svg width="28" height="28" fill="none" viewBox="0 0 24 24">
           <path
             stroke="currentColor"
             stroke-linecap="round"
@@ -590,6 +591,24 @@ export default function Icon(props: Props) {
             d="M63.2184 32.2727V65H57.2418L43.0036 44.4016H42.7638V65H35.8445V32.2727H41.9169L56.0433 52.8551H56.331V32.2727H63.2184Z"
             fill="black"
           />
+        </svg>
+      )
+    case "Sidebar":
+      return (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          fill="none"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.5"
+            d="M12.75 4.75h4.5a2 2 0 0 1 2 2v10.5a2 2 0 0 1-2 2h-4.5m-8-2V6.75a2 2 0 0 1 2-2h2.5v14.5h-2.5a2 2 0 0 1-2-2Z"
+          ></path>
         </svg>
       )
     case "Search":

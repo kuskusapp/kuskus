@@ -1,6 +1,5 @@
 import clsx from "clsx"
 import { onMount } from "solid-js"
-import Split from "split.js"
 import { PageType, useTodoList } from "~/GlobalContext/todo-list"
 import { todayDate } from "~/lib/lib"
 import Icon from "./Icon"
@@ -8,33 +7,11 @@ import Icon from "./Icon"
 export default function Sidebar() {
   const todolist = useTodoList()
 
-  onMount(() => {
-    // Split(["#sidebar", "#page"], {
-    //   gutterSize: 4,
-    //   sizes: [10, 90],
-    //   snapOffset: 0,
-    //   minSize: 80,
-    // })
-  })
-
   return (
     <>
       <style>
         {`
-        .split {
-          display: flex;
-          flex-direction: row;
-          }
-          // .gutter {
-          //   background-color: ##1c1917;
-          //   background-repeat: no-repeat;
-          //   background-position: 100%;
 
-          //   }
-          // .gutter.gutter-horizontal {
-          //   cursor: col-resize;
-
-          // }
           #sidebar {
             container-type: inline-size;
             container-name: sidebar;
@@ -64,10 +41,10 @@ export default function Sidebar() {
           }
           `}
       </style>
-      <div class="w-screen  text-xs " style={{ width: "24%" }} id="sidebar">
+      <div class="w-screen  text-base " style={{ width: "18%" }} id="sidebar">
         <div class="flex flex-col gap-2  h-full">
           <div
-            class="flex flex-col gap-1 bg-stone-800 p-2"
+            class="flex flex-col gap-1 bg-neutral-900 p-2"
             style={{ "border-radius": "10px" }}
           >
             <div
@@ -75,7 +52,7 @@ export default function Sidebar() {
               class={clsx(
                 "flex px-2 cursor-pointer items-center",
                 todolist.activePage() === PageType.All &&
-                  "rounded dark:bg-neutral-700 bg-zinc-200"
+                  "rounded dark:bg-neutral-800 bg-zinc-200"
               )}
               onClick={() => todolist.updateActivePage(PageType.All)}
             >
@@ -93,7 +70,7 @@ export default function Sidebar() {
               class={clsx(
                 "flex px-2 cursor-pointer items-center",
                 todolist.activePage() === PageType.Today &&
-                  "rounded dark:bg-neutral-700 bg-zinc-200"
+                  "rounded dark:bg-neutral-800 bg-zinc-200"
               )}
               onClick={() => todolist.updateActivePage(PageType.Today)}
             >
@@ -122,7 +99,7 @@ export default function Sidebar() {
               class={clsx(
                 "flex px-2 cursor-pointer items-center",
                 todolist.activePage() === PageType.Starred &&
-                  "rounded dark:bg-neutral-700 bg-zinc-200"
+                  "rounded dark:bg-neutral-800 bg-zinc-200"
               )}
               onClick={() => todolist.updateActivePage(PageType.Starred)}
             >
@@ -146,7 +123,7 @@ export default function Sidebar() {
               class={clsx(
                 "flex px-2 cursor-pointer items-center justify-start ",
                 todolist.activePage() === PageType.Done &&
-                  "rounded dark:bg-neutral-700 bg-zinc-200"
+                  "rounded dark:bg-neutral-800 bg-zinc-200"
               )}
               onClick={() => todolist.updateActivePage(PageType.Done)}
             >
@@ -157,7 +134,7 @@ export default function Sidebar() {
             </div>
           </div>
           <div
-            class="flex flex-col bg-stone-800 p-2 grow"
+            class="flex flex-col bg-neutral-900 p-2 grow"
             style={{ "border-radius": "10px" }}
           >
             <div>tag</div>

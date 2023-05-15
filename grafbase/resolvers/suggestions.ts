@@ -66,7 +66,7 @@ export default async function Resolver(
   `
 
   // get user's aiTasksAvailable & id
-  const res = await fetch(process.env.GRAFBASE_API_URL!, {
+  let res = await fetch(process.env.GRAFBASE_API_URL!, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -82,12 +82,12 @@ export default async function Resolver(
     // maybe should return graphql back with `error: ` field?
     throw new Error(`HTTP error! status: ${res.status}`)
   }
-  const resJson = await res.json()
+  const userDetailsJson = await res.json()
 
-  const tasksAvailable =
-    resJson.data.userDetailsCollection.edges[0].node.aiTasksAvailable
+  // const tasksAvailable =
+  //   userDetailsJson.data.userDetailsCollection.edges[0].node.aiTasksAvailable
 
-  if (tasksAvailable > 0) {
+  // if (tasksAvailable > 0) {
     // decrement aiTasksAvailable by 1
     // query = ``
 
@@ -96,47 +96,47 @@ export default async function Resolver(
     //   openAIApiKey: process.env.OPENAI_API_KEY,
     // })
 
-    const res = await fetch("https://api.openai.com/v1/completions", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-      },
-      body: JSON.stringify({
-        model: "text-davinci-003",
-        prompt: `Provide detailed steps to do this task: ${task}. Number each step.`,
-        max_tokens: 200,
-        temperature: 0,
-      }),
-    })
+    // const res = await fetch("https://api.openai.com/v1/completions", {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //     Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
+    //   },
+    //   body: JSON.stringify({
+    //     model: "text-davinci-003",
+    //     prompt: `Provide detailed steps to do this task: ${task}. Number each step.`,
+    //     max_tokens: 200,
+    //     temperature: 0,
+    //   }),
+    // })
 
-    const resJson = await res.json()
-    // @ts-ignore
-    const answer = resJson.choices[0].text.trim()
-    const suggestedTasks = parseSuggestions(answer)
-    console.log(JSON.stringify(suggestedTasks), "suggested")
-    return {
-      suggestedTasks: suggestedTasks,
-      stripeCheckoutUrl: null,
-    }
+    // const resJson = await res.json()
+    // // @ts-ignore
+    // const answer = resJson.choices[0].text.trim()
+    // const suggestedTasks = parseSuggestions(answer)
+    // console.log(JSON.stringify(suggestedTasks), "suggested")
+    // return {
+    //   suggestedTasks: suggestedTasks,
+    //   stripeCheckoutUrl: null,
+    // }
 
 
     // update cache
     // await redis.set(cacheString, suggestedTasks)
-    return {
-      suggestedTasks: null,
-      stripeCheckoutUrl: null,
-    }
-  }
+  //   return {
+  //     suggestedTasks: null,
+  //     stripeCheckoutUrl: null,
+  //   }
+  // }
 
   // user can't make the request, return a stripe payment link
-  const userDetailsId = resJson.data.userDetailsCollection.edges[0].node.id
+  const userDetailsId = userDetailsJson.data.userDetailsCollection.edges[0].node.id
   try {
     const data = await stripe.checkout.sessions.create({
       success_url: process.env.STRIPE_SUCCESS_URL!,
       mode: "subscription",
       metadata: {
-        userId: userDetailsId,
+        userDetailsId: userDetailsId,
       },
       line_items: [
         {

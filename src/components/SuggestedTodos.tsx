@@ -20,7 +20,7 @@ function SuggestedTodo(props: {
     <div
       class={clsx(
         "p-2 m-2 mb-2 grid-cols-5 col-span-5 min-w-0",
-        props.isFocused && "bg-zinc-200 dark:bg-neutral-800 rounded-lg"
+        props.isFocused && "bg-zinc-200 dark:bg-neutral-700 rounded-lg"
       )}
       onClick={props.onClick}
     >
@@ -91,14 +91,14 @@ export default function SuggestedTodos(props: {
           "border-radius": "10px",
           color: "rgba(255, 255, 255, 0.5)",
         }}
-        class="bg-stone-800 w-full p-3 text-lg text-center"
+        class="bg-neutral-900 w-full p-3 text-lg text-center"
       >
         {/* TODO: fix this ts-ignore as well as all others.. */}
         Suggested tasks for {/* @ts-ignore */}
         {todoList.focusedTodo()!.title}
       </Motion.div>
       <div
-        class="h-full bg-stone-800 overflow-scroll w-full"
+        class="h-full bg-neutral-900 overflow-scroll w-full"
         style={{ "border-radius": "10px" }}
       >
         <div

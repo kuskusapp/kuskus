@@ -1,7 +1,7 @@
 import { GraphQLClient } from "graphql-request"
 import { Show, createSignal } from "solid-js"
 import { useNavigate } from "solid-start"
-import { createSettingsState } from "~/GlobalContext/settings"
+import { SettingsProvider, createSettingsState } from "~/GlobalContext/settings"
 import {
   PageType,
   TodoListMode,
@@ -9,6 +9,7 @@ import {
   createTodoListState,
 } from "~/GlobalContext/todo-list"
 import ActionBar from "~/components/ActionBar"
+import CollapsedSidebar from "~/components/CollapsedSidebar"
 import Help from "~/components/Help"
 import LocalSearch from "~/components/LocalSearch"
 import Modal from "~/components/Modal"
@@ -65,9 +66,11 @@ export default function App(props: { initialToken: string }) {
   return (
     <div class="h-screen bg-white dark:bg-black">
       <TodoListProvider value={todoList}>
+        {/* <SettingsProvider value={settingsState}> */}
         <div class="flex flex-col h-screen">
           <div class="flex grow gap-2 p-2 h-full overflow-hidden">
             <Sidebar />
+            {/* <CollapsedSidebar /> */}
             <TodoList />
           </div>
         </div>
@@ -85,6 +88,7 @@ export default function App(props: { initialToken: string }) {
             children={<Settings />}
           />
         </Show>
+        {/* </SettingsProvider> */}
       </TodoListProvider>
     </div>
   )

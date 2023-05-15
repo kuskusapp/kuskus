@@ -59,7 +59,7 @@ export default function NewTodo() {
       initial={{ transform: "translateY(15px)", opacity: 0 }}
       animate={{ transform: "translateY(0px)", opacity: 1 }}
       transition={{ duration: 0.3 }}
-      class="flex justify-between cursor-default pl-1.5 pr-1.5 dark:bg-neutral-700 bg-zinc-200 py-2"
+      class="flex justify-between cursor-default pl-1.5 pr-1.5 dark:bg-neutral-700 bg-zinc-200 py-2 rounded-lg"
     >
       <div class="w-full">
         <div class="flex gap-2 items-center">

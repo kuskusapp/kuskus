@@ -32,9 +32,7 @@ export default function TodoEdit(props: {
   const [priority, setPriority] = createSignal(props.todo.priority)
   const [starred, setStarred] = createSignal(props.todo.starred)
 
-  onMount(() => {
-    todoList.setClickTimeStamp(0)
-  })
+
 
   onCleanup(() => {
     // REMOVE
@@ -121,7 +119,7 @@ export default function TodoEdit(props: {
   })
 
   return (
-    <Motion.div class="flex justify-between cursor-default pl-1.5 pr-1.5 dark:bg-neutral-700 bg-zinc-200 py-2 transition-all ">
+    <Motion.div class="flex justify-between cursor-default pl-1.5 pr-1.5 dark:bg-neutral-800 bg-zinc-200 py-2 transition-all rounded-lg">
       <div class="w-full">
         <div class="flex gap-2 items-center">
           <div>

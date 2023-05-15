@@ -45,7 +45,7 @@ export default function Todo(props: {
             props.todo.note && "min-h-min",
             props.subtask && "ml-4",
             todoList.isTodoFocused(props.todo.key) &&
-              "dark:bg-neutral-700 bg-zinc-200",
+              "dark:bg-neutral-800 bg-zinc-200",
             todoList.localSearchData()?.isResult(props.todo.key) &&
               "border rounded border-blue-500",
             todoList.localSearchData()?.isSelected(props.todo.key) &&
