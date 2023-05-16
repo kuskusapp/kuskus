@@ -6,7 +6,6 @@ import LandingPage from "~/pages/LandingPage"
 export type User = {
   id: string
   username?: string
-  audienceToken?: string
 }
 
 export default function Home() {

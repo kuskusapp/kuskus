@@ -43,8 +43,8 @@ export default function App(props: { initialToken: string }) {
     }
   }
 
-  const userDetailsState = createUserDetailsState({ request })
   const todoList = createTodoListState({ request })
+  const userDetailsState = createUserDetailsState({ request })
 
   const [showHelp, setShowHelp] = createSignal(false)
 
@@ -66,8 +66,8 @@ export default function App(props: { initialToken: string }) {
 
   return (
     <div class=" bg-white dark:bg-black">
-      <TodoListProvider value={todoList}>
-        <UserDetailsProvider value={userDetailsState}>
+      <UserDetailsProvider value={userDetailsState}>
+        <TodoListProvider value={todoList}>
           <div class="flex flex-col h-screen">
             <div class="flex grow gap-2 p-2 h-full overflow-hidden">
               <Show
@@ -93,8 +93,8 @@ export default function App(props: { initialToken: string }) {
               children={<Settings />}
             />
           </Show>
-        </UserDetailsProvider>
-      </TodoListProvider>
+        </TodoListProvider>
+      </UserDetailsProvider>
     </div>
   )
 }
