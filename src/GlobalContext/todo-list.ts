@@ -147,6 +147,24 @@ export function createTodoListState(
       .flat()
   )
 
+  // TODO: make sure memo runs no more than needed..
+  // list containing all unique tag names used + the count
+  const currentlyUsedTagsWithCount = createMemo(() => {
+    let uniqueTagsWithCount = new Set<string>()
+    // let countOfTags = {}
+    todosState.todos.map((t) => {
+      if (t.tags) {
+        t.tags.forEach((tag) => {
+          // if (uniqueTags.has(tag)) {
+          //   // countOfTags[tag] += 1
+          // }
+          uniqueTagsWithCount.add(tag)
+        })
+      }
+    })
+    return uniqueTagsWithCount
+  })
+
   function getTodoByKey(
     key: TodoKey
   ): NewSubtask | ClientSubtask | ClientTodo | undefined {
@@ -191,6 +209,7 @@ export function createTodoListState(
     },
     orderedTodos,
     focusedTodo,
+    currentlyUsedTags,
     focusedTodoKey,
     focusedTodoIndex,
     getTodoByKey,

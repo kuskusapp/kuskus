@@ -1,6 +1,9 @@
+import { Motion } from "@motionone/solid"
 import { autofocus } from "@solid-primitives/autofocus"
+import { createEventListener } from "@solid-primitives/event-listener"
 import { createShortcut } from "@solid-primitives/keyboard"
 import {
+  For,
   Show,
   batch,
   createEffect,
@@ -16,8 +19,6 @@ import {
   useTodoList,
 } from "../GlobalContext/todo-list"
 import Icon from "./Icon"
-import { Motion } from "@motionone/solid"
-import { createEventListener } from "@solid-primitives/event-listener"
 
 export default function TodoEdit(props: {
   todo: ClientTodo | ClientSubtask
@@ -31,8 +32,13 @@ export default function TodoEdit(props: {
   const [showSelectPriority, setShowSelectPriority] = createSignal(false)
   const [priority, setPriority] = createSignal(props.todo.priority)
   const [starred, setStarred] = createSignal(props.todo.starred)
-  const [tags, setTags] = createSignal(props.todo.tags)
+  // const [tags, setTags] = createSignal(props.todo.tags)
+  const [tags, setTags] = createSignal(["check", "life"])
   const [searchTags, setSearchTags] = createSignal(false)
+
+  onMount(() => {
+    console.log(props.todo.tags)
+  })
 
   onCleanup(() => {
     // REMOVE
@@ -103,7 +109,8 @@ export default function TodoEdit(props: {
 
   let titleRef!: HTMLInputElement,
     noteRef!: HTMLInputElement,
-    datePickerRef!: HTMLInputElement
+    datePickerRef!: HTMLInputElement,
+    tagInputRef!: HTMLInputElement
 
   const [editNoteInTodo, setEditNoteInTodo] = createSignal(
     !!props.initialEditNote
@@ -117,6 +124,14 @@ export default function TodoEdit(props: {
       autofocus(titleRef)
       createShortcut(["ArrowDown"], () => setEditNoteInTodo(true))
     }
+  })
+
+  createEffect(() => {
+    if (searchTags()) {
+      autofocus(tagInputRef)
+      return
+    }
+    autofocus(titleRef)
   })
 
   return (
@@ -228,7 +243,6 @@ export default function TodoEdit(props: {
           >
             <div
               onClick={() => {
-                console.log("runs..")
                 setSearchTags(!searchTags())
               }}
             >
@@ -256,6 +270,8 @@ export default function TodoEdit(props: {
 
                   <input
                     class="bg-neutral-800 rounded outline-none"
+                    ref={tagInputRef}
+                    autofocus
                     style={{
                       "padding-left": "2px",
                       width: "75px",
@@ -274,15 +290,17 @@ export default function TodoEdit(props: {
                   }}
                 >
                   <div class="flex flex-col overflow-scroll px-2">
-                    <div>blue</div>
-                    <div>red</div>
-                    <div>yellow</div>
-                    <div>yellow</div>
-                    <div>yellow</div>
-                    <div>yellow</div>
-                    <div>yellow</div>
-                    <div>yellow</div>
-                    <div>yellow</div>
+                    <For each={tags()}>
+                      {(tag) => (
+                        <div
+                          onClick={() => {
+                            setTags([...tags(), tag])
+                          }}
+                        >
+                          {tag}
+                        </div>
+                      )}
+                    </For>
                   </div>
                 </div>
               </div>

@@ -1,6 +1,6 @@
 import { Motion } from "@motionone/solid"
 import clsx from "clsx"
-import { Show, createSignal } from "solid-js"
+import { For, Show, createSignal } from "solid-js"
 import { isToday } from "~/lib/lib"
 import {
   ClientSubtask,
@@ -96,6 +96,19 @@ export default function Todo(props: {
               {props.todo?.dueDate && isToday(props.todo.dueDate)
                 ? "Today"
                 : props.todo.dueDate}
+            </div>
+            <div class="flex items-center gap-2 justify-center overflow-auto">
+              <For each={props.todo.tags}>
+                {(tag) => (
+                  <div
+                    style={{ "max-width": "100px" }}
+                    class=" bg-neutral-700 flex justify-start px-3 rounded-2xl overflow-hidden"
+                  >
+                    <div class="">{tag}</div>
+                  </div>
+                )}
+              </For>
+              {/* {props.todo.tags && props.todo.tags.map()} */}
             </div>
             <Show when={!props.todo.starred}>
               <div>
