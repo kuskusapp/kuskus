@@ -20,25 +20,6 @@ export default async function Resolver(
   { task }: { task: string },
   context: any
 ) {
-  const resFromTinyBird = await fetch(
-    "https://api.tinybird.co/v0/events?name=ai_use",
-    {
-      method: "POST",
-      body: JSON.stringify({
-        hello: "World",
-      }),
-      headers: {
-        Authorization: `Bearer ${process.env.TINYBIRD_API_KEY}`,
-      },
-    }
-  )
-  console.log(await resFromTinyBird.json())
-
-  return {
-    suggestedTasks: null,
-    stripeCheckoutUrl: null,
-  }
-
   // cache string purpose is to make semantically same task requests
   // hit the cache
   // TODO: expand to add more cases
@@ -101,48 +82,39 @@ export default async function Resolver(
   // check if user can do AI task due to subscription
   if (new Date(paidSubscriptionValidUntilDate) > new Date()) {
     // TODO: check which model user wants to use, 4 or 3, default to 3..
-
     const { suggestedTasks, rawResponse } = await suggestionsv3(
       task,
       process.env.OPENAI_API_KEY!
     )
+    await redis.set(cacheString, suggestedTasks) // cache
 
     // TODO: consider case when suggested tasks are [] and/or intro is empty too
     // send rawResponse in this case..
     // make sure to log it as failure..
 
-    // const resFromTinyBird = await fetch(
-    //   "https://api.tinybird.co/v0/events?name=ai_use",
-    //   {
-    //     method: "POST",
-    //     body: JSON.stringify({
-    //       test: "Hello",
-    //     }),
-    //     headers: {
-    //       Authorization:
-    //         "Bearer p.eyJ1IjogIjczYzNkYmFhLWVjNmYtNDYzMC05N2I2LTlkNjY0MzA2ODEwYiIsICJpZCI6ICI3ZWZjZjFkMS0wOTZjLTRjM2UtYWFkMy04YzYxYWVmM2M3MjYifQ.A7ooG8MiR-gQbQLmsDCYwnZzRaasFgqm97RNzCiTSEM",
-    //     },
-    //   }
-    // )
-
-    // tinybird.sendDataTo("ai_use")({
-    //   suggestedTasks,
-    //   rawResponse,
-    // })
-
+    await fetch("https://api.tinybird.co/v0/events?name=ai_use", {
+      method: "POST",
+      body: JSON.stringify({
+        suggestedTasks: suggestedTasks,
+        rawResponse: rawResponse,
+      }),
+      headers: {
+        Authorization: `Bearer ${process.env.TINYBIRD_API_KEY}`,
+      },
+    })
     return {
       suggestedTasks: suggestedTasks,
       stripeCheckoutUrl: null,
     }
   }
 
+  const userDetailsId =
+    userDetailsJson.data.userDetailsCollection.edges[0].node.id
   const freeAiTasksAvailable =
     userDetailsJson.data.userDetailsCollection.edges[0].node
       .freeAiTasksAvailable
   // check if user can do AI task due to free tasks
   if (freeAiTasksAvailable > 0) {
-    const userDetailsId =
-      userDetailsJson.data.userDetailsCollection.edges[0].node.id
     // TODO: can return nothing from graphql, not sure how..
     let updateUserDetails = `
       mutation {
@@ -172,46 +144,28 @@ export default async function Resolver(
         query: updateUserDetails,
       }),
     })
+
+    const { suggestedTasks, rawResponse } = await suggestionsv3(
+      task,
+      process.env.OPENAI_API_KEY!
+    )
+    await redis.set(cacheString, suggestedTasks) // cache
+
+    await fetch("https://api.tinybird.co/v0/events?name=ai_use", {
+      method: "POST",
+      body: JSON.stringify({
+        suggestedTasks: suggestedTasks,
+        rawResponse: rawResponse,
+      }),
+      headers: {
+        Authorization: `Bearer ${process.env.TINYBIRD_API_KEY}`,
+      },
+    })
+    return {
+      suggestedTasks: suggestedTasks,
+      stripeCheckoutUrl: null,
+    }
   }
-  // decrement aiTasksAvailable by 1
-  // query = ``
-
-  // const model = new OpenAI({
-  //   modelName: "gpt-3.5-turbo",
-  //   openAIApiKey: process.env.OPENAI_API_KEY,
-  // })
-
-  // const res = await fetch("https://api.openai.com/v1/completions", {
-  //   method: "POST",
-  //   headers: {
-  //     "Content-Type": "application/json",
-  //     Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-  //   },
-  //   body: JSON.stringify({
-  //     model: "text-davinci-003",
-  //     prompt: `Provide detailed steps to do this task: ${task}. Number each step.`,
-  //     max_tokens: 200,
-  //     temperature: 0,
-  //   }),
-  // })
-
-  // const resJson = await res.json()
-  // // @ts-ignore
-  // const answer = resJson.choices[0].text.trim()
-  // const suggestedTasks = parseSuggestions(answer)
-  // console.log(JSON.stringify(suggestedTasks), "suggested")
-  // return {
-  //   suggestedTasks: suggestedTasks,
-  //   stripeCheckoutUrl: null,
-  // }
-
-  // update cache
-  // await redis.set(cacheString, suggestedTasks)
-  //   return {
-  //     suggestedTasks: null,
-  //     stripeCheckoutUrl: null,
-  //   }
-  // }
 
   // user can't make the request, return a stripe payment link
   try {
