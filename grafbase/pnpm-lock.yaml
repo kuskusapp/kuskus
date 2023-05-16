@@ -2,8 +2,8 @@ lockfileVersion: '6.0'
 
 dependencies:
   '@kuskusapp/ai':
-    specifier: ^0.1.8
-    version: 0.1.8(typescript@5.0.4)
+    specifier: ^0.1.10
+    version: 0.1.10(typescript@5.0.4)
   '@upstash/redis':
     specifier: ^1.20.6
     version: 1.20.6
@@ -275,8 +275,8 @@ packages:
       '@jridgewell/sourcemap-codec': 1.4.14
     dev: false
 
-  /@kuskusapp/ai@0.1.8(typescript@5.0.4):
-    resolution: {integrity: sha512-GCfh0ELyEun7fWBV2N6E3l6rYeyFK8ToYyyecVDW+fqzTArQRUf+wNOwQSfzTu6bwl1RckqkohwuI/iGt70P3Q==}
+  /@kuskusapp/ai@0.1.10(typescript@5.0.4):
+    resolution: {integrity: sha512-BHowZVRMwJN5962QsWc2rBdtn/TOqB2S9Rot1zKrYEci6RJBaChg+JCg52Mccsnss6y1gA6BrxuxHIZ2fSZwXw==}
     peerDependencies:
       typescript: ^5.0.0
     dependencies:

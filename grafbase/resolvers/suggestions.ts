@@ -20,13 +20,6 @@ export default async function Resolver(
   { task }: { task: string },
   context: any
 ) {
-  // const suggestions = await suggestionsv3(task, process.env.OPENAI_API_KEY!)
-  // console.log(suggestions)
-  // return {
-  //   suggestedTasks: suggestions,
-  //   stripeCheckoutUrl: null,
-  // }
-
   // cache string purpose is to make semantically same task requests
   // hit the cache
   // TODO: expand to add more cases
@@ -82,22 +75,62 @@ export default async function Resolver(
     throw new Error(`HTTP error! status: ${res.status}`)
   }
   const userDetailsJson = await res.json()
-
   const paidSubscriptionValidUntilDate =
     userDetailsJson.data.userDetailsCollection.edges[0].node
       .paidSubscriptionValidUntilDate
+
+  // check if user can do AI task due to subscription
+  if (new Date(paidSubscriptionValidUntilDate) > new Date()) {
+    const { suggestedTasks, rawResponse } = await suggestionsv3(
+      task,
+      process.env.OPENAI_API_KEY!
+    )
+
+    // analytics.send([task, suggestions, rawResponse])
+
+    return {
+      suggestedTasks: suggestedTasks,
+      stripeCheckoutUrl: null,
+    }
+  }
+
   const freeAiTasksAvailable =
     userDetailsJson.data.userDetailsCollection.edges[0].node
       .freeAiTasksAvailable
-
-  // check if user can do AI task
-  if (
-    new Date(paidSubscriptionValidUntilDate) > new Date() ||
-    freeAiTasksAvailable > 0
-  ) {
+  // check if user can do AI task due to free tasks
+  if (freeAiTasksAvailable > 0) {
+    const userDetailsId =
+      userDetailsJson.data.userDetailsCollection.edges[0].node.id
+    // TODO: can return nothing from graphql, not sure how..
+    let updateUserDetails = `
+      mutation {
+        userDetailsUpdate(
+          by: {
+            id: "${userDetailsId}"
+          }
+          input: {
+            freeAiTasksAvailable: {
+              set: ${freeAiTasksAvailable - 1}
+            }
+          }
+        ) {
+          userDetails {
+            freeAiTasksAvailable
+          }
+        }
+      }
+    `
+    await fetch(process.env.GRAFBASE_API_URL!, {
+      method: "POST",
+      headers: {
+        "x-api-key": context.request.headers["x-api-key"],
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        query: updateUserDetails,
+      }),
+    })
   }
-
-  // if (tasksAvailable > 0) {
   // decrement aiTasksAvailable by 1
   // query = ``
 
@@ -139,8 +172,6 @@ export default async function Resolver(
   // }
 
   // user can't make the request, return a stripe payment link
-  const userDetailsId =
-    userDetailsJson.data.userDetailsCollection.edges[0].node.id
   try {
     const data = await stripe.checkout.sessions.create({
       success_url: process.env.STRIPE_SUCCESS_URL!,

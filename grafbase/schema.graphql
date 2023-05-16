@@ -12,6 +12,16 @@ schema
   query: Query
 }
 
+extend schema
+  @openapi(
+    name: "Tinybird"
+    schema: "{{ env.TINYBIRD_API_SCHEMA }}"
+    headers: [
+      { name: "Authorization", value: "Bearer {{ env.TINYBIRD_API_TOKEN }}" }
+    ]
+  )
+  @cache(rules: [{ maxAge: 60, types: ["Query"] }])
+
 extend type Query {
   suggestions(task: String!): SuggestionsPayload @resolver(name: "suggestions")
 }
