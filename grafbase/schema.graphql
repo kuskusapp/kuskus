@@ -32,14 +32,11 @@ type SuggestedTask {
 }
 
 type UserDetails @model {
+  freeAiTasksAvailable: Int @default(value: 10) # times user can use gpt-3 AI suggestions for free
   paidSubscriptionValidUntilDate: Date
-  username: String # set by a user, this will be a route to show public todos TODO: if unique, it can't be null, solve this :(
-  aiTasksAvailable: Int @default(value: 5) # times user can use gpt-3 AI suggestions for free
-}
-
-type Settings @model {
+  languageModelUsed: String! @default(value: "gpt-3") # gpt-3 | gpt-4
   collapsedSidebar: Boolean! @default(value: false)
-  languageModelUsed: String! @default(value: "gpt-3") # gpt-3 | gpt-4 | llama
+  # username: String # set by a user, this will be a route to show public todos TODO: if unique, it can't be null, solve this :(
 }
 
 type Todo @model {

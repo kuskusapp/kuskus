@@ -30,12 +30,6 @@ export type IntOperationsInput = {
 
 export type Mutation = {
   __typename?: "Mutation"
-  /** Create a Settings */
-  settingsCreate?: Maybe<SettingsCreatePayload>
-  /** Delete a Settings by ID or unique field */
-  settingsDelete?: Maybe<SettingsDeletePayload>
-  /** Update a Settings */
-  settingsUpdate?: Maybe<SettingsUpdatePayload>
   /** Create a Subtask */
   subtaskCreate?: Maybe<SubtaskCreatePayload>
   /** Delete a Subtask by ID or unique field */
@@ -54,19 +48,6 @@ export type Mutation = {
   userDetailsDelete?: Maybe<UserDetailsDeletePayload>
   /** Update a UserDetails */
   userDetailsUpdate?: Maybe<UserDetailsUpdatePayload>
-}
-
-export type MutationSettingsCreateArgs = {
-  input: SettingsCreateInput
-}
-
-export type MutationSettingsDeleteArgs = {
-  by: SettingsByInput
-}
-
-export type MutationSettingsUpdateArgs = {
-  by: SettingsByInput
-  input: SettingsUpdateInput
 }
 
 export type MutationSubtaskCreateArgs = {
@@ -123,10 +104,6 @@ export type PageInfo = {
 
 export type Query = {
   __typename?: "Query"
-  /** Query a single Settings by an ID or a unique field */
-  settings?: Maybe<Settings>
-  /** Paginated query to fetch the whole list of `Settings`. */
-  settingsCollection?: Maybe<SettingsConnection>
   /** Query a single Subtask by an ID or a unique field */
   subtask?: Maybe<Subtask>
   /** Paginated query to fetch the whole list of `Subtask`. */
@@ -140,18 +117,6 @@ export type Query = {
   userDetails?: Maybe<UserDetails>
   /** Paginated query to fetch the whole list of `UserDetails`. */
   userDetailsCollection?: Maybe<UserDetailsConnection>
-}
-
-export type QuerySettingsArgs = {
-  by: SettingsByInput
-}
-
-export type QuerySettingsCollectionArgs = {
-  after?: InputMaybe<Scalars["String"]>
-  before?: InputMaybe<Scalars["String"]>
-  first?: InputMaybe<Scalars["Int"]>
-  last?: InputMaybe<Scalars["Int"]>
-  orderBy?: InputMaybe<SettingsOrderByInput>
 }
 
 export type QuerySubtaskArgs = {
@@ -192,66 +157,6 @@ export type QueryUserDetailsCollectionArgs = {
   first?: InputMaybe<Scalars["Int"]>
   last?: InputMaybe<Scalars["Int"]>
   orderBy?: InputMaybe<UserDetailsOrderByInput>
-}
-
-export type Settings = {
-  __typename?: "Settings"
-  collapsedSidebar: Scalars["Boolean"]
-  /** when the model was created */
-  createdAt: Scalars["DateTime"]
-  /** Unique identifier */
-  id: Scalars["ID"]
-  languageModelUsed: Scalars["String"]
-  /** when the model was updated */
-  updatedAt: Scalars["DateTime"]
-}
-
-export type SettingsByInput = {
-  id?: InputMaybe<Scalars["ID"]>
-}
-
-export type SettingsConnection = {
-  __typename?: "SettingsConnection"
-  edges?: Maybe<Array<Maybe<SettingsEdge>>>
-  /** Information to aid in pagination */
-  pageInfo: PageInfo
-}
-
-/** Input to create a Settings */
-export type SettingsCreateInput = {
-  collapsedSidebar?: Scalars["Boolean"]
-  languageModelUsed?: Scalars["String"]
-}
-
-export type SettingsCreatePayload = {
-  __typename?: "SettingsCreatePayload"
-  settings?: Maybe<Settings>
-}
-
-export type SettingsDeletePayload = {
-  __typename?: "SettingsDeletePayload"
-  deletedId: Scalars["ID"]
-}
-
-export type SettingsEdge = {
-  __typename?: "SettingsEdge"
-  cursor: Scalars["String"]
-  node: Settings
-}
-
-export type SettingsOrderByInput = {
-  createdAt?: InputMaybe<OrderByDirection>
-}
-
-/** Input to update a Settings */
-export type SettingsUpdateInput = {
-  collapsedSidebar?: InputMaybe<Scalars["Boolean"]>
-  languageModelUsed?: InputMaybe<Scalars["String"]>
-}
-
-export type SettingsUpdatePayload = {
-  __typename?: "SettingsUpdatePayload"
-  settings?: Maybe<Settings>
 }
 
 export type Subtask = {
@@ -466,15 +371,16 @@ export type TodoUpdatePayload = {
 
 export type UserDetails = {
   __typename?: "UserDetails"
-  aiTasksAvailable?: Maybe<Scalars["Int"]>
+  collapsedSidebar: Scalars["Boolean"]
   /** when the model was created */
   createdAt: Scalars["DateTime"]
+  freeAiTasksAvailable?: Maybe<Scalars["Int"]>
   /** Unique identifier */
   id: Scalars["ID"]
+  languageModelUsed: Scalars["String"]
   paidSubscriptionValidUntilDate?: Maybe<Scalars["Date"]>
   /** when the model was updated */
   updatedAt: Scalars["DateTime"]
-  username?: Maybe<Scalars["String"]>
 }
 
 export type UserDetailsByInput = {
@@ -490,9 +396,10 @@ export type UserDetailsConnection = {
 
 /** Input to create a UserDetails */
 export type UserDetailsCreateInput = {
-  aiTasksAvailable?: InputMaybe<Scalars["Int"]>
+  collapsedSidebar?: Scalars["Boolean"]
+  freeAiTasksAvailable?: InputMaybe<Scalars["Int"]>
+  languageModelUsed?: Scalars["String"]
   paidSubscriptionValidUntilDate?: InputMaybe<Scalars["Date"]>
-  username?: InputMaybe<Scalars["String"]>
 }
 
 export type UserDetailsCreatePayload = {
@@ -517,9 +424,10 @@ export type UserDetailsOrderByInput = {
 
 /** Input to update a UserDetails */
 export type UserDetailsUpdateInput = {
-  aiTasksAvailable?: InputMaybe<IntOperationsInput>
+  collapsedSidebar?: InputMaybe<Scalars["Boolean"]>
+  freeAiTasksAvailable?: InputMaybe<IntOperationsInput>
+  languageModelUsed?: InputMaybe<Scalars["String"]>
   paidSubscriptionValidUntilDate?: InputMaybe<Scalars["Date"]>
-  username?: InputMaybe<Scalars["String"]>
 }
 
 export type UserDetailsUpdatePayload = {
@@ -699,8 +607,10 @@ export type UserDetailsQuery = {
       node: {
         __typename?: "UserDetails"
         id: string
-        username?: string | null
-        aiTasksAvailable?: number | null
+        freeAiTasksAvailable?: number | null
+        paidSubscriptionValidUntilDate?: any | null
+        languageModelUsed: string
+        collapsedSidebar: boolean
       }
     } | null> | null
   } | null
@@ -728,49 +638,6 @@ export type UserDetailsUpdateMutation = {
   userDetailsUpdate?: {
     __typename?: "UserDetailsUpdatePayload"
     userDetails?: { __typename?: "UserDetails"; id: string } | null
-  } | null
-}
-
-export type SettingsQueryVariables = Exact<{ [key: string]: never }>
-
-export type SettingsQuery = {
-  __typename?: "Query"
-  settingsCollection?: {
-    __typename?: "SettingsConnection"
-    edges?: Array<{
-      __typename?: "SettingsEdge"
-      node: {
-        __typename?: "Settings"
-        id: string
-        collapsedSidebar: boolean
-        languageModelUsed: string
-      }
-    } | null> | null
-  } | null
-}
-
-export type SettingsCreateMutationVariables = Exact<{
-  settings: SettingsCreateInput
-}>
-
-export type SettingsCreateMutation = {
-  __typename?: "Mutation"
-  settingsCreate?: {
-    __typename?: "SettingsCreatePayload"
-    settings?: { __typename?: "Settings"; id: string } | null
-  } | null
-}
-
-export type SettingsUpdateMutationVariables = Exact<{
-  id: Scalars["ID"]
-  settings: SettingsUpdateInput
-}>
-
-export type SettingsUpdateMutation = {
-  __typename?: "Mutation"
-  settingsUpdate?: {
-    __typename?: "SettingsUpdatePayload"
-    settings?: { __typename?: "Settings"; id: string } | null
   } | null
 }
 
@@ -1590,11 +1457,28 @@ export const UserDetailsDocument = {
                             },
                             {
                               kind: "Field",
-                              name: { kind: "Name", value: "username" },
+                              name: {
+                                kind: "Name",
+                                value: "freeAiTasksAvailable",
+                              },
                             },
                             {
                               kind: "Field",
-                              name: { kind: "Name", value: "aiTasksAvailable" },
+                              name: {
+                                kind: "Name",
+                                value: "paidSubscriptionValidUntilDate",
+                              },
+                            },
+                            {
+                              kind: "Field",
+                              name: {
+                                kind: "Name",
+                                value: "languageModelUsed",
+                              },
+                            },
+                            {
+                              kind: "Field",
+                              name: { kind: "Name", value: "collapsedSidebar" },
                             },
                           ],
                         },
@@ -1760,221 +1644,6 @@ export const UserDetailsUpdateDocument = {
 } as unknown as DocumentNode<
   UserDetailsUpdateMutation,
   UserDetailsUpdateMutationVariables
->
-export const SettingsDocument = {
-  kind: "Document",
-  definitions: [
-    {
-      kind: "OperationDefinition",
-      operation: "query",
-      name: { kind: "Name", value: "Settings" },
-      selectionSet: {
-        kind: "SelectionSet",
-        selections: [
-          {
-            kind: "Field",
-            name: { kind: "Name", value: "settingsCollection" },
-            arguments: [
-              {
-                kind: "Argument",
-                name: { kind: "Name", value: "first" },
-                value: { kind: "IntValue", value: "1" },
-              },
-            ],
-            selectionSet: {
-              kind: "SelectionSet",
-              selections: [
-                {
-                  kind: "Field",
-                  name: { kind: "Name", value: "edges" },
-                  selectionSet: {
-                    kind: "SelectionSet",
-                    selections: [
-                      {
-                        kind: "Field",
-                        name: { kind: "Name", value: "node" },
-                        selectionSet: {
-                          kind: "SelectionSet",
-                          selections: [
-                            {
-                              kind: "Field",
-                              name: { kind: "Name", value: "id" },
-                            },
-                            {
-                              kind: "Field",
-                              name: { kind: "Name", value: "collapsedSidebar" },
-                            },
-                            {
-                              kind: "Field",
-                              name: {
-                                kind: "Name",
-                                value: "languageModelUsed",
-                              },
-                            },
-                          ],
-                        },
-                      },
-                    ],
-                  },
-                },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<SettingsQuery, SettingsQueryVariables>
-export const SettingsCreateDocument = {
-  kind: "Document",
-  definitions: [
-    {
-      kind: "OperationDefinition",
-      operation: "mutation",
-      name: { kind: "Name", value: "SettingsCreate" },
-      variableDefinitions: [
-        {
-          kind: "VariableDefinition",
-          variable: {
-            kind: "Variable",
-            name: { kind: "Name", value: "settings" },
-          },
-          type: {
-            kind: "NonNullType",
-            type: {
-              kind: "NamedType",
-              name: { kind: "Name", value: "SettingsCreateInput" },
-            },
-          },
-        },
-      ],
-      selectionSet: {
-        kind: "SelectionSet",
-        selections: [
-          {
-            kind: "Field",
-            name: { kind: "Name", value: "settingsCreate" },
-            arguments: [
-              {
-                kind: "Argument",
-                name: { kind: "Name", value: "input" },
-                value: {
-                  kind: "Variable",
-                  name: { kind: "Name", value: "settings" },
-                },
-              },
-            ],
-            selectionSet: {
-              kind: "SelectionSet",
-              selections: [
-                {
-                  kind: "Field",
-                  name: { kind: "Name", value: "settings" },
-                  selectionSet: {
-                    kind: "SelectionSet",
-                    selections: [
-                      { kind: "Field", name: { kind: "Name", value: "id" } },
-                    ],
-                  },
-                },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<
-  SettingsCreateMutation,
-  SettingsCreateMutationVariables
->
-export const SettingsUpdateDocument = {
-  kind: "Document",
-  definitions: [
-    {
-      kind: "OperationDefinition",
-      operation: "mutation",
-      name: { kind: "Name", value: "SettingsUpdate" },
-      variableDefinitions: [
-        {
-          kind: "VariableDefinition",
-          variable: { kind: "Variable", name: { kind: "Name", value: "id" } },
-          type: {
-            kind: "NonNullType",
-            type: { kind: "NamedType", name: { kind: "Name", value: "ID" } },
-          },
-        },
-        {
-          kind: "VariableDefinition",
-          variable: {
-            kind: "Variable",
-            name: { kind: "Name", value: "settings" },
-          },
-          type: {
-            kind: "NonNullType",
-            type: {
-              kind: "NamedType",
-              name: { kind: "Name", value: "SettingsUpdateInput" },
-            },
-          },
-        },
-      ],
-      selectionSet: {
-        kind: "SelectionSet",
-        selections: [
-          {
-            kind: "Field",
-            name: { kind: "Name", value: "settingsUpdate" },
-            arguments: [
-              {
-                kind: "Argument",
-                name: { kind: "Name", value: "by" },
-                value: {
-                  kind: "ObjectValue",
-                  fields: [
-                    {
-                      kind: "ObjectField",
-                      name: { kind: "Name", value: "id" },
-                      value: {
-                        kind: "Variable",
-                        name: { kind: "Name", value: "id" },
-                      },
-                    },
-                  ],
-                },
-              },
-              {
-                kind: "Argument",
-                name: { kind: "Name", value: "input" },
-                value: {
-                  kind: "Variable",
-                  name: { kind: "Name", value: "settings" },
-                },
-              },
-            ],
-            selectionSet: {
-              kind: "SelectionSet",
-              selections: [
-                {
-                  kind: "Field",
-                  name: { kind: "Name", value: "settings" },
-                  selectionSet: {
-                    kind: "SelectionSet",
-                    selections: [
-                      { kind: "Field", name: { kind: "Name", value: "id" } },
-                    ],
-                  },
-                },
-              ],
-            },
-          },
-        ],
-      },
-    },
-  ],
-} as unknown as DocumentNode<
-  SettingsUpdateMutation,
-  SettingsUpdateMutationVariables
 >
 export const SuggestedTasksDocument = {
   kind: "Document",

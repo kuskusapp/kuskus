@@ -112,8 +112,10 @@ query UserDetails {
     edges {
       node {
         id
-        username
-        aiTasksAvailable
+        freeAiTasksAvailable
+        paidSubscriptionValidUntilDate
+        languageModelUsed
+        collapsedSidebar
       }
     }
   }
@@ -130,34 +132,6 @@ mutation UserDetailsCreate($userDetails: UserDetailsCreateInput!) {
 mutation UserDetailsUpdate($id: ID!, $userDetails: UserDetailsUpdateInput!) {
   userDetailsUpdate(by: { id: $id }, input: $userDetails) {
     userDetails {
-      id
-    }
-  }
-}
-
-query Settings {
-  settingsCollection(first: 1) {
-    edges {
-      node {
-        id
-        collapsedSidebar
-        languageModelUsed
-      }
-    }
-  }
-}
-
-mutation SettingsCreate($settings: SettingsCreateInput!) {
-  settingsCreate(input: $settings) {
-    settings {
-      id
-    }
-  }
-}
-
-mutation SettingsUpdate($id: ID!, $settings: SettingsUpdateInput!) {
-  settingsUpdate(by: { id: $id }, input: $settings) {
-    settings {
       id
     }
   }
