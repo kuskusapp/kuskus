@@ -150,18 +150,19 @@ export function createTodoListState(
   // TODO: make sure memo runs no more than needed..
   // list containing all unique tag names used + the count
   const currentlyUsedTagsWithCount = createMemo(() => {
-    let uniqueTagsWithCount = new Set<string>()
-    // let countOfTags = {}
+    let uniqueTagsWithCount = new Map<string, number>()
     todosState.todos.map((t) => {
       if (t.tags) {
         t.tags.forEach((tag) => {
-          // if (uniqueTags.has(tag)) {
-          //   // countOfTags[tag] += 1
-          // }
-          uniqueTagsWithCount.add(tag)
+          if (uniqueTagsWithCount.has(tag)) {
+            uniqueTagsWithCount.set(tag, uniqueTagsWithCount.get(tag)! + 1)
+          } else {
+            uniqueTagsWithCount.set(tag, 1)
+          }
         })
       }
     })
+    console.log(uniqueTagsWithCount, "uniqueTagsWithCount")
     return uniqueTagsWithCount
   })
 
@@ -209,7 +210,7 @@ export function createTodoListState(
     },
     orderedTodos,
     focusedTodo,
-    currentlyUsedTags,
+    currentlyUsedTagsWithCount,
     focusedTodoKey,
     focusedTodoIndex,
     getTodoByKey,

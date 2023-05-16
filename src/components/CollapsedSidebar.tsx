@@ -1,5 +1,5 @@
 import clsx from "clsx"
-import { onMount } from "solid-js"
+import { For, onMount } from "solid-js"
 import { PageType, useTodoList } from "~/GlobalContext/todo-list"
 import { todayDate } from "~/lib/lib"
 import Icon from "./Icon"
@@ -143,12 +143,20 @@ export default function CollapsedSidebar() {
             </div>
           </div>
           <div
-            class="flex flex-col bg-neutral-900 p-2 grow"
+            class="flex flex-col bg-neutral-900 p-2 gap-2 py-4 grow"
             style={{ "border-radius": "10px" }}
           >
-            <div>tag</div>
-            <div>tag</div>
-            <div>tag</div>
+            <For
+              each={Array.from(todolist.currentlyUsedTagsWithCount().keys())}
+            >
+              {(tagKey) => (
+                <div class="flex flex-row-reverse px-2 items-center justify-center">
+                  <div class="font-bold">
+                    {tagKey.slice(0, 2).toUpperCase()}
+                  </div>
+                </div>
+              )}
+            </For>
           </div>
         </div>
       </div>
