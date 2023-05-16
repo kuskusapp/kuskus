@@ -6,7 +6,7 @@ interface Props {
 }
 
 export default function TopBar(props: Props) {
-  const userDetails = useUserDetails()
+  // const userDetails = useUserDetails()
 
   return (
     <>
@@ -17,7 +17,7 @@ export default function TopBar(props: Props) {
         <div
           class="cursor-pointer"
           onClick={() => {
-            userDetails.setCollapsedSidebar()
+            // userDetails.setCollapsedSidebar()
           }}
         >
           <Icon name="Sidebar" />

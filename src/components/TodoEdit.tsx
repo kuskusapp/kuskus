@@ -32,6 +32,7 @@ export default function TodoEdit(props: {
   const [priority, setPriority] = createSignal(props.todo.priority)
   const [starred, setStarred] = createSignal(props.todo.starred)
   const [tags, setTags] = createSignal(props.todo.tags)
+  const [searchTags, setSearchTags] = createSignal(false)
 
   onCleanup(() => {
     // REMOVE
@@ -156,7 +157,7 @@ export default function TodoEdit(props: {
       </div>
       <div
         style={{ "padding-right": "0.375rem" }}
-        class="flex flex-col justify-between items-end"
+        class="flex flex-col justify-between items-end "
       >
         {/* TODO: don't duplicate like below.. */}
         <Show when={showSelectPriority()}>
@@ -220,7 +221,73 @@ export default function TodoEdit(props: {
             {priority() === 0 && <Icon name={"Star"} />}
           </div>
         </Show>
-        <div class="opacity-60 text-sm">
+        <div class=" text-sm flex items-center gap-2">
+          <div
+            class=" transition-all rounded relative cursor-pointer"
+            style={{ "padding-top": "1.5px" }}
+          >
+            <div
+              onClick={() => {
+                console.log("runs..")
+                setSearchTags(!searchTags())
+              }}
+            >
+              <Icon name="Tag" />
+            </div>
+
+            <Show when={searchTags()}>
+              <div
+                class="absolute flex gap-1 flex-col"
+                style={{
+                  right: "-1px",
+                  bottom: "-180px",
+                }}
+              >
+                <div
+                  class="flex bg-neutral-800 opacity-90 rounded pl-1"
+                  style={{
+                    width: "105px",
+                    border: "solid 1px rgba(80,80,80,0.5)",
+                  }}
+                >
+                  <div class="opacity-60">
+                    <Icon name="Search" />
+                  </div>
+
+                  <input
+                    class="bg-neutral-800 rounded outline-none"
+                    style={{
+                      "padding-left": "2px",
+                      width: "75px",
+                    }}
+                    type="text"
+                    placeholder="Search"
+                  />
+                </div>
+
+                <div
+                  class="rounded bg-neutral-800 overflow-auto"
+                  style={{
+                    width: "105px",
+                    height: "150px",
+                    border: "solid 1px rgba(80,80,80,0.5)",
+                  }}
+                >
+                  <div class="flex flex-col overflow-scroll px-2">
+                    <div>blue</div>
+                    <div>red</div>
+                    <div>yellow</div>
+                    <div>yellow</div>
+                    <div>yellow</div>
+                    <div>yellow</div>
+                    <div>yellow</div>
+                    <div>yellow</div>
+                    <div>yellow</div>
+                  </div>
+                </div>
+              </div>
+            </Show>
+          </div>
           <Show
             when={props.todo.dueDate || showCalendar()}
             fallback={
@@ -231,7 +298,7 @@ export default function TodoEdit(props: {
                   datePickerRef.focus()
                 }}
               >
-                <Icon name="Calendar"></Icon>
+                <Icon width="20" height="20" name="Calendar"></Icon>
               </div>
             }
           >

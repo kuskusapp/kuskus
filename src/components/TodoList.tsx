@@ -250,7 +250,7 @@ export default function TodoList() {
               style={{ "border-radius": "10px" }}
             >
               <div
-                class="p-2 overflow-scroll"
+                class="p-2 pb-10 overflow-scroll"
                 ref={(el) => {
                   createEventListener(
                     el,
