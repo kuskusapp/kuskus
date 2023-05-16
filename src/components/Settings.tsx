@@ -3,11 +3,11 @@ import { Match, Switch, createSignal, onCleanup, onMount } from "solid-js"
 import { GoogleClient } from "~/lib/auth"
 import Keybind from "./Keybind"
 import { TodoListMode, useTodoList } from "~/GlobalContext/todo-list"
-import { useSettings } from "~/GlobalContext/settings"
+import { useUserDetails } from "~/GlobalContext/userDetails"
 
 export default function Settings() {
   const todoList = useTodoList()
-  const settings = useSettings()
+  const userDetails = useUserDetails()
   const initial = todoList.getModeData(TodoListMode.Settings)
   const [show, setShow] = createSignal(
     initial?.settingsState ? initial.settingsState : "Upgrade"

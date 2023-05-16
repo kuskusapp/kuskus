@@ -1,4 +1,4 @@
-import { useSettings } from "~/GlobalContext/settings"
+import { useUserDetails } from "~/GlobalContext/userDetails"
 import Icon from "./Icon"
 
 interface Props {
@@ -6,7 +6,7 @@ interface Props {
 }
 
 export default function TopBar(props: Props) {
-  const settings = useSettings()
+  const userDetails = useUserDetails()
 
   return (
     <>
@@ -17,7 +17,7 @@ export default function TopBar(props: Props) {
         <div
           class="cursor-pointer"
           onClick={() => {
-            settings.setCollapsedSidebar()
+            userDetails.setCollapsedSidebar()
           }}
         >
           <Icon name="Sidebar" />

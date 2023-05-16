@@ -2,20 +2,17 @@ import { GraphQLClient } from "graphql-request"
 import { Show, createSignal } from "solid-js"
 import { useNavigate } from "solid-start"
 import {
-  SettingsProvider,
-  createSettingsState,
-  useSettings,
-} from "~/GlobalContext/settings"
-import {
   PageType,
   TodoListMode,
   TodoListProvider,
   createTodoListState,
 } from "~/GlobalContext/todo-list"
-import ActionBar from "~/components/ActionBar"
+import {
+  UserDetailsProvider,
+  createUserDetailsState,
+} from "~/GlobalContext/userDetails"
 import CollapsedSidebar from "~/components/CollapsedSidebar"
 import Help from "~/components/Help"
-import LocalSearch from "~/components/LocalSearch"
 import Modal from "~/components/Modal"
 import Settings from "~/components/Settings"
 import Sidebar from "~/components/Sidebar"
@@ -46,7 +43,7 @@ export default function App(props: { initialToken: string }) {
     }
   }
 
-  const settingsState = createSettingsState({ request })
+  const userDetailsState = createUserDetailsState({ request })
   const todoList = createTodoListState({ request })
 
   const [showHelp, setShowHelp] = createSignal(false)
@@ -70,11 +67,11 @@ export default function App(props: { initialToken: string }) {
   return (
     <div class=" bg-white dark:bg-black">
       <TodoListProvider value={todoList}>
-        <SettingsProvider value={settingsState}>
+        <UserDetailsProvider value={userDetailsState}>
           <div class="flex flex-col h-screen">
             <div class="flex grow gap-2 p-2 h-full overflow-hidden">
               <Show
-                when={settingsState.settings.collapsedSidebar}
+                when={userDetailsState.userDetails.collapsedSidebar}
                 fallback={<Sidebar />}
               >
                 <CollapsedSidebar />
@@ -96,7 +93,7 @@ export default function App(props: { initialToken: string }) {
               children={<Settings />}
             />
           </Show>
-        </SettingsProvider>
+        </UserDetailsProvider>
       </TodoListProvider>
     </div>
   )
