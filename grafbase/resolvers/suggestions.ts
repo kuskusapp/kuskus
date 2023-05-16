@@ -20,6 +20,25 @@ export default async function Resolver(
   { task }: { task: string },
   context: any
 ) {
+  const resFromTinyBird = await fetch(
+    "https://api.tinybird.co/v0/events?name=ai_use",
+    {
+      method: "POST",
+      body: JSON.stringify({
+        hello: "World",
+      }),
+      headers: {
+        Authorization: `Bearer ${process.env.TINYBIRD_API_KEY}`,
+      },
+    }
+  )
+  console.log(await resFromTinyBird.json())
+
+  return {
+    suggestedTasks: null,
+    stripeCheckoutUrl: null,
+  }
+
   // cache string purpose is to make semantically same task requests
   // hit the cache
   // TODO: expand to add more cases
@@ -81,12 +100,35 @@ export default async function Resolver(
 
   // check if user can do AI task due to subscription
   if (new Date(paidSubscriptionValidUntilDate) > new Date()) {
+    // TODO: check which model user wants to use, 4 or 3, default to 3..
+
     const { suggestedTasks, rawResponse } = await suggestionsv3(
       task,
       process.env.OPENAI_API_KEY!
     )
 
-    // analytics.send([task, suggestions, rawResponse])
+    // TODO: consider case when suggested tasks are [] and/or intro is empty too
+    // send rawResponse in this case..
+    // make sure to log it as failure..
+
+    // const resFromTinyBird = await fetch(
+    //   "https://api.tinybird.co/v0/events?name=ai_use",
+    //   {
+    //     method: "POST",
+    //     body: JSON.stringify({
+    //       test: "Hello",
+    //     }),
+    //     headers: {
+    //       Authorization:
+    //         "Bearer p.eyJ1IjogIjczYzNkYmFhLWVjNmYtNDYzMC05N2I2LTlkNjY0MzA2ODEwYiIsICJpZCI6ICI3ZWZjZjFkMS0wOTZjLTRjM2UtYWFkMy04YzYxYWVmM2M3MjYifQ.A7ooG8MiR-gQbQLmsDCYwnZzRaasFgqm97RNzCiTSEM",
+    //     },
+    //   }
+    // )
+
+    // tinybird.sendDataTo("ai_use")({
+    //   suggestedTasks,
+    //   rawResponse,
+    // })
 
     return {
       suggestedTasks: suggestedTasks,
