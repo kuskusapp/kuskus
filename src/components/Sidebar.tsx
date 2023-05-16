@@ -140,12 +140,12 @@ export default function Sidebar() {
             <For
               each={Array.from(todolist.currentlyUsedTagsWithCount().keys())}
             >
-              {(tagKey) => (
-                <div class="flex flex-row-reverse px-2 justify-between items-center">
+              {(tag) => (
+                <div class="flex flex-row-reverse px-2 justify-between items-center cursor-pointer">
                   <div class="opacity-60 text-xs">
-                    {todolist.currentlyUsedTagsWithCount().get(tagKey)}
+                    {todolist.currentlyUsedTagsWithCount().get(tag)}
                   </div>
-                  <div>{tagKey}</div>
+                  <div>{tag}</div>
                 </div>
               )}
             </For>

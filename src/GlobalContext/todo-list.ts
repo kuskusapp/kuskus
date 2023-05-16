@@ -162,7 +162,6 @@ export function createTodoListState(
         })
       }
     })
-    console.log(uniqueTagsWithCount, "uniqueTagsWithCount")
     return uniqueTagsWithCount
   })
 

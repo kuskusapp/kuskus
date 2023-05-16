@@ -27,7 +27,6 @@ export default function NewSubtask(props: { subtask: NewSubtask }) {
       if (title() === "") return
 
       const { parent } = props.subtask
-      console.log(todoList.getTodoByKey(parent), "undefined?")
       const key = todoList.addSubtask(parent, {
         type: "subtask",
         title: title(),

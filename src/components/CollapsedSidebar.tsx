@@ -149,11 +149,9 @@ export default function CollapsedSidebar() {
             <For
               each={Array.from(todolist.currentlyUsedTagsWithCount().keys())}
             >
-              {(tagKey) => (
-                <div class="flex flex-row-reverse px-2 items-center justify-center">
-                  <div class="font-bold">
-                    {tagKey.slice(0, 2).toUpperCase()}
-                  </div>
+              {(tag) => (
+                <div class="flex flex-row-reverse px-2 items-center justify-center cursor-pointer">
+                  <div class="text-xs">{tag}</div>
                 </div>
               )}
             </For>
