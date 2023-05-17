@@ -251,7 +251,7 @@ export default function TodoList() {
         <div class="grow flex gap-2 w-full overflow-hidden">
           <div class="flex flex-col gap-2 w-full">
             <div
-              class="grow bg-neutral-900 overflow-scroll"
+              class="grow bg-gray-100 dark:bg-neutral-900 overflow-scroll"
               style={{ "border-radius": "10px" }}
             >
               <div

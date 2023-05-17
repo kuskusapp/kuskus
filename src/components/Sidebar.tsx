@@ -44,7 +44,7 @@ export default function Sidebar() {
       <div class="w-screen  text-base " style={{ width: "18%" }} id="sidebar">
         <div class="flex flex-col gap-2  h-full">
           <div
-            class="flex flex-col gap-1 bg-neutral-900 p-2"
+            class="flex flex-col gap-1 bg-gray-100 dark:bg-neutral-900 p-2"
             style={{ "border-radius": "10px" }}
           >
             <div
@@ -134,7 +134,7 @@ export default function Sidebar() {
             </div>
           </div>
           <div
-            class="flex flex-col bg-neutral-900 gap-1 p-2 grow"
+            class="flex flex-col bg-gray-100 dark:bg-neutral-900 gap-1 p-2 grow"
             style={{ "border-radius": "10px" }}
           >
             <For
@@ -146,7 +146,7 @@ export default function Sidebar() {
                     "flex flex-row-reverse pl-3 text-md align-center px-2 justify-between items-center cursor-pointer",
                     todolist.activePage() === PageType.Filtered &&
                       todolist.selectedTagInSidebar() === tag &&
-                      "bg-neutral-800 rounded"
+                      "bg-zinc-200 dark:bg-neutral-800 rounded"
                   )}
                   style={{ "padding-top": "2px", "padding-bottom": "2px" }}
                   onClick={() => {

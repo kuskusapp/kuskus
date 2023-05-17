@@ -6,7 +6,7 @@ export default function ActionBar() {
 
   return (
     <div
-      class="flex justify-between w-full items-center pl-5 pr-5 p-2 bg-neutral-900"
+      class="flex justify-between w-full items-center pl-5 pr-5 p-2 bg-gray-100 dark:bg-neutral-900"
       style={{ "border-radius": "10px" }}
     >
       <div

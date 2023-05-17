@@ -16,7 +16,7 @@ export default function TopBar(props: Props) {
   return (
     <>
       <div
-        class="p-3 flex justify-between bg-neutral-900 items-center"
+        class="p-3 flex justify-between bg-gray-100 dark:bg-neutral-900 items-center"
         style={{ "border-radius": "10px" }}
       >
         <div class="flex gap-2 items-center">

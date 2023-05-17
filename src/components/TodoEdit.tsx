@@ -243,25 +243,25 @@ export default function TodoEdit(props: {
             <Show when={searchTags()}>
               <div
                 id="tagsearch"
-                class="flex w-full bg-neutral-800 relative opacity-90 rounded pl-1"
+                class="flex w-full bg-zinc-200 dark:bg-neutral-800 relative opacity-90 rounded pl-1"
                 style={{
                   border: "solid 1px rgba(80,80,80,0.5)",
                 }}
               >
                 <div
                   style={{ width: "100px" }}
-                  class="flex gap-1 bg-neutral-800 pl-0.5 px-6 rounded-2xl"
+                  class="flex gap-1 bg-zinc-200 dark:bg-neutral-800 pl-0.5 px-6 rounded-2xl"
                 >
                   <div class="opacity-60">
                     <Icon name="Search" />
                   </div>
 
                   <input
-                    class="bg-neutral-800 rounded pl-0.5 outline-none"
+                    class="bg-zinc-200 dark:bg-neutral-800 text-sm rounded pl-0.5 outline-none"
                     ref={tagInputRef}
                     autofocus
                     style={{
-                      width: "80px",
+                      width: "60px",
                     }}
                     type="text"
                     placeholder="Search"
@@ -276,7 +276,7 @@ export default function TodoEdit(props: {
                   }}
                 >
                   <div
-                    class="rounded w-full bg-neutral-800 overflow-auto"
+                    class="rounded w-full bg-zinc-200 dark:bg-neutral-800 overflow-auto"
                     style={{
                       height: "150px",
                       border: "solid 1px rgba(80,80,80,0.5)",
@@ -299,19 +299,24 @@ export default function TodoEdit(props: {
                 </div>
               </div>
             </Show>
-            <For each={tags()}>
-              {(tag) => (
-                <div class="bg-neutral-700 flex justify-center rounded-2xl overflow-hidden px-3">
-                  <div>{tag}</div>
-                </div>
-              )}
-            </For>
             <div
-              onClick={() => {
-                setSearchTags(!searchTags())
-              }}
+              style={{ "padding-top": "1px", "padding-bottom": "1px" }}
+              class="flex gap-2"
             >
-              <Icon name="Tag" />
+              <For each={tags()}>
+                {(tag) => (
+                  <div class="bg-zinc-300 dark:bg-neutral-700 flex justify-center rounded-2xl overflow-hidden px-3">
+                    <div>{tag}</div>
+                  </div>
+                )}
+              </For>
+              <div
+                onClick={() => {
+                  setSearchTags(!searchTags())
+                }}
+              >
+                <Icon name="Tag" />
+              </div>
             </div>
           </div>
           <Show

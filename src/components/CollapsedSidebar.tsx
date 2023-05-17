@@ -23,7 +23,7 @@ export default function CollapsedSidebar() {
       <div class="  text-base " style={{ width: "70px" }} id="sidebar">
         <div class="flex flex-col gap-2  h-full">
           <div
-            class="flex flex-col gap-2 bg-neutral-900 py-4 p-2"
+            class="flex flex-col gap-2 bg-gray-100 dark:bg-neutral-900 py-4 p-2"
             style={{ "border-radius": "10px" }}
           >
             <div
@@ -41,7 +41,7 @@ export default function CollapsedSidebar() {
                 <div
                   id="Number"
                   class={clsx(
-                    "bg-neutral-900 absolute bottom-0 right-0 text-xs",
+                    "bg-gray-100 dark:bg-neutral-900 absolute bottom-0 right-0 text-xs",
                     todolist.activePage() === PageType.All && "bg-neutral-800"
                   )}
                   style={{
@@ -72,7 +72,7 @@ export default function CollapsedSidebar() {
                 <div
                   id="Number"
                   class={clsx(
-                    "absolute bg-neutral-900 bottom-0 right-0 text-xs",
+                    "absolute bg-gray-100 dark:bg-neutral-900 bottom-0 right-0 text-xs",
                     todolist.activePage() === PageType.Today && "bg-neutral-800"
                   )}
                   style={{
@@ -109,7 +109,7 @@ export default function CollapsedSidebar() {
 
                 <div
                   class={clsx(
-                    "absolute bg-neutral-900 bottom-0 right-0 text-xs",
+                    "absolute bg-gray-100 dark:bg-neutral-900 bottom-0 right-0 text-xs",
                     todolist.activePage() === PageType.Starred &&
                       "bg-neutral-800"
                   )}
@@ -143,7 +143,7 @@ export default function CollapsedSidebar() {
             </div>
           </div>
           <div
-            class="flex flex-col bg-neutral-900 p-2 gap-2 py-4 grow"
+            class="flex flex-col bg-gray-100 dark:bg-neutral-900 p-2 gap-2 py-4 grow"
             style={{ "border-radius": "10px" }}
           >
             <For

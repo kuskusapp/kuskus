@@ -102,7 +102,7 @@ export default function Todo(props: {
                 {(tag) => (
                   <div
                     style={{ "max-width": "100px" }}
-                    class=" bg-neutral-700 flex justify-start px-3 rounded-2xl overflow-hidden"
+                    class="bg-zinc-300 opacity-80 dark:bg-neutral-700 flex justify-start px-3 rounded-2xl overflow-hidden"
                   >
                     <div class="">{tag}</div>
                   </div>

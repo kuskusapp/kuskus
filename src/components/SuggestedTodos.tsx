@@ -91,14 +91,14 @@ export default function SuggestedTodos(props: {
           "border-radius": "10px",
           color: "rgba(255, 255, 255, 0.5)",
         }}
-        class="bg-neutral-900 w-full p-3 text-lg text-center"
+        class="bg-gray-100 dark:bg-neutral-900 w-full p-3 text-lg text-center"
       >
         {/* TODO: fix this ts-ignore as well as all others.. */}
         Suggested tasks for {/* @ts-ignore */}
         {todoList.focusedTodo()!.title}
       </Motion.div>
       <div
-        class="h-full bg-neutral-900 overflow-scroll w-full"
+        class="h-full bg-gray-100 dark:bg-neutral-900 overflow-scroll w-full"
         style={{ "border-radius": "10px" }}
       >
         <div
