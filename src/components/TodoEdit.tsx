@@ -1,4 +1,5 @@
 import { Motion } from "@motionone/solid"
+import Fuse from "fuse.js"
 import { autofocus } from "@solid-primitives/autofocus"
 import { createEventListener } from "@solid-primitives/event-listener"
 import { createShortcut } from "@solid-primitives/keyboard"
@@ -7,6 +8,7 @@ import {
   Show,
   batch,
   createEffect,
+  createMemo,
   createSignal,
   onCleanup,
   onMount,
@@ -35,8 +37,26 @@ export default function TodoEdit(props: {
   const [tags, setTags] = createSignal(props.todo.tags)
   const [searchTags, setSearchTags] = createSignal(false)
 
-  onMount(() => {
-    console.log(props.todo.tags)
+  const fuse = createMemo(
+    () =>
+      new Fuse(Array.from(todoList.currentlyUsedTagsWithCount().keys()), {
+        shouldSort: false,
+      })
+  )
+  const [searchTagsQuery, setSearchTagsQuery] = createSignal("")
+  const filteredTags = createMemo(() => {
+    if (searchTagsQuery() === "") {
+      return Array.from(todoList.currentlyUsedTagsWithCount().keys()).filter(
+        (r) => !props.todo.tags?.includes(r)
+      )
+    }
+    const results = fuse()
+      .search(searchTagsQuery())
+      .filter((r) => !props.todo.tags?.includes(r.item))
+      .map((r) => {
+        return r.item
+      })
+    return results
   })
 
   onCleanup(() => {
@@ -134,7 +154,7 @@ export default function TodoEdit(props: {
   })
 
   return (
-    <Motion.div class="flex justify-between cursor-default pl-1.5 pr-1.5 dark:bg-neutral-800 bg-zinc-200 py-2 transition-all rounded-lg">
+    <Motion.div class="flex justify-between cursor-default pl-1.5 pr-1.5 dark:bg-neutral-800 bg-zinc-200 py-2 transition-all rounded-lg w-full">
       <div class="w-full">
         <div class="flex gap-2 items-center">
           <div>
@@ -171,7 +191,7 @@ export default function TodoEdit(props: {
       </div>
       <div
         style={{ "padding-right": "0.375rem" }}
-        class="flex flex-col justify-between items-end "
+        class="flex flex-col justify-between items-end w-full"
       >
         {/* TODO: don't duplicate like below.. */}
         <Show when={showSelectPriority()}>
@@ -235,15 +255,15 @@ export default function TodoEdit(props: {
             {priority() === 0 && <Icon name={"Star"} />}
           </div>
         </Show>
-        <div class=" text-sm flex items-center gap-2">
+        <div class=" text-sm flex items-center justify-end gap-2 w-full">
           <div
-            class=" flex transition-all gap-2 rounded relative cursor-pointer"
+            class=" flex transition-all min-w-fit gap-2 rounded relative cursor-pointer"
             style={{ "padding-top": "1.5px" }}
           >
             <Show when={searchTags()}>
               <div
                 id="tagsearch"
-                class="flex w-full bg-zinc-200 dark:bg-neutral-800 relative opacity-90 rounded pl-1"
+                class="flex w-full bg-zinc-200 dark:bg-neutral-800 relative z-20 rounded pl-1"
                 style={{
                   border: "solid 1px rgba(80,80,80,0.5)",
                 }}
@@ -264,26 +284,29 @@ export default function TodoEdit(props: {
                       width: "60px",
                     }}
                     type="text"
+                    oninput={(e) => {
+                      setSearchTagsQuery(e.target.value)
+                    }}
                     placeholder="Search"
                   />
                 </div>
 
                 <div
-                  class="absolute flex w-full gap-1 flex-col"
+                  class="absolute z-30 flex w-full gap-1 flex-col"
                   style={{
                     left: "0px",
                     bottom: "-154px",
                   }}
                 >
                   <div
-                    class="rounded w-full bg-zinc-200 dark:bg-neutral-800 overflow-auto"
+                    class="rounded w-full z-10 bg-zinc-200 dark:bg-neutral-800 overflow-auto"
                     style={{
                       height: "150px",
                       border: "solid 1px rgba(80,80,80,0.5)",
                     }}
                   >
                     <div class="flex flex-col overflow-scroll px-2">
-                      <For each={tags()}>
+                      <For each={filteredTags()}>
                         {(tag) => (
                           <div
                             onClick={() => {
@@ -300,12 +323,15 @@ export default function TodoEdit(props: {
               </div>
             </Show>
             <div
-              style={{ "padding-top": "1px", "padding-bottom": "1px" }}
-              class="flex gap-2"
+              style={{
+                "padding-top": "1px",
+                "padding-bottom": "1px",
+              }}
+              class="flex min-w-fit gap-2"
             >
               <For each={tags()}>
                 {(tag) => (
-                  <div class="bg-zinc-300 dark:bg-neutral-700 flex justify-center rounded-2xl overflow-hidden px-3">
+                  <div class="min-w-fit bg-zinc-300 dark:bg-neutral-700 flex justify-center rounded-2xl overflow-hidden px-3">
                     <div>{tag}</div>
                   </div>
                 )}

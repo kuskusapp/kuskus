@@ -308,12 +308,13 @@ export default function TodoList() {
                 </Show>
               </div>
             </div>
-            <Show
+            <ActionBar />
+            {/* <Show
               when={todoList.inMode(TodoListMode.Search)}
               fallback={<ActionBar />}
             >
               <LocalSearch />
-            </Show>
+            </Show> */}
           </div>
           <Presence>
             <Suspense>
