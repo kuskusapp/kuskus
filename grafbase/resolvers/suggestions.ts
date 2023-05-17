@@ -38,18 +38,16 @@ export default async function Resolver(
 
   let cacheString = `gpt-3-subtasks-${sanitizeTask}`
   const cachedTask: SuggestedTaskResponse | null = await redis.get(cacheString)
-  console.log(cachedTask, "cached task")
 
   if (cachedTask) {
     logAI(cacheString, cachedTask.suggestedTasks, cachedTask.rawResponse)
-    console.log("cache..")
     return {
       suggestedTasks: cachedTask.suggestedTasks,
       rawResponse: cachedTask.rawResponse,
+      normalSubscriptionStripeUrl: null,
+      proSubscriptionStripeUrl: null,
     }
   }
-
-  console.log("not cache")
 
   // TODO: there should probably be a better way than userDetailsCollection
   // I try to make sure there is only one userDetails per user
@@ -96,7 +94,6 @@ export default async function Resolver(
   // check if user can do AI task due to subscription
   if (new Date(paidSubscriptionValidUntilDate) > new Date()) {
     if (languageModelUsed === "gpt-4") {
-      console.log("gpt-4 used")
       const { suggestedTasks, rawResponse } = await suggestionsv4(
         task,
         process.env.OPENAI_API_KEY!
@@ -110,6 +107,8 @@ export default async function Resolver(
       return {
         suggestedTasks: suggestedTasks,
         rawResponse: rawResponse,
+        normalSubscriptionStripeUrl: null,
+        proSubscriptionStripeUrl: null,
       }
     } else {
       const { suggestedTasks, rawResponse } = await suggestionsv3(
@@ -124,6 +123,8 @@ export default async function Resolver(
       return {
         suggestedTasks: suggestedTasks,
         rawResponse: rawResponse,
+        normalSubscriptionStripeUrl: null,
+        proSubscriptionStripeUrl: null,
       }
     }
   }
@@ -172,6 +173,8 @@ export default async function Resolver(
     await redis.set(cacheString, {
       suggestedTasks,
       rawResponse,
+      normalSubscriptionStripeUrl: null,
+      proSubscriptionStripeUrl: null,
     })
     logAI(cacheString, suggestedTasks, rawResponse)
 
@@ -210,6 +213,8 @@ export default async function Resolver(
       ],
     })
     return {
+      suggestedTasks: null,
+      rawResponse: null,
       normalSubscriptionStripeUrl: normalSubscription.url,
       proSubscriptionStripeUrl: proSubscription.url,
     }
