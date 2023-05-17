@@ -1,4 +1,4 @@
-import { createSignal } from "solid-js"
+import { createMemo, createSignal, onMount } from "solid-js"
 import { ClientTodo, useTodoList } from "~/GlobalContext/todo-list"
 import { createShortcut } from "@solid-primitives/keyboard"
 import clsx from "clsx"
@@ -15,12 +15,14 @@ function SuggestedTodo(props: {
   index: number
   isFocused: boolean
   onClick: () => void
+  accepted: boolean
 }) {
   return (
     <div
       class={clsx(
         "p-2 m-2 mb-2 grid-cols-5 col-span-5 min-w-0",
-        props.isFocused && "bg-zinc-200 dark:bg-neutral-700 rounded-lg"
+        props.isFocused && "bg-zinc-200 dark:bg-neutral-700 rounded-lg",
+        props.accepted && "opacity-50"
       )}
       onClick={props.onClick}
     >
@@ -38,10 +40,27 @@ export default function SuggestedTodos(props: {
   const todoList = useTodoList()
 
   const [focusedSuggestion, setFocusedSuggestion] = createSignal(0)
+  const [acceptedSuggestions, setAcceptedSuggestions] = createSignal<string[]>(
+    []
+  )
+
+  const availableSuggestions = createMemo(() => {
+    const newSuggestions = props.suggestions.filter(
+      (s) => !acceptedSuggestions().includes(s.task)
+    )
+    return newSuggestions
+  })
 
   createShortcut(["Enter"], () => {
     const suggestion = props.suggestions[focusedSuggestion()]
+    setAcceptedSuggestions([...acceptedSuggestions(), suggestion.task])
+    setFocusedSuggestion((p) => {
+      const n = p + 1
+      if (n > availableSuggestions().length - 1) return 0
+      return n
+    })
 
+    // TODO: fix..
     todoList.todosState.addSubtask(todoList.focusedTodoKey()!, {
       type: "subtask",
       title: suggestion.task,
@@ -57,7 +76,7 @@ export default function SuggestedTodos(props: {
   createShortcut(["ArrowDown"], () => {
     setFocusedSuggestion((p) => {
       const n = p + 1
-      if (n > props.suggestions.length - 1) return 0
+      if (n > availableSuggestions().length - 1) return 0
       return n
     })
   })
@@ -65,7 +84,7 @@ export default function SuggestedTodos(props: {
   createShortcut(["ArrowUp"], () => {
     setFocusedSuggestion((p) => {
       const n = p - 1
-      if (n < 0) return props.suggestions.length - 1
+      if (n < 0) return availableSuggestions().length - 1
       return n
     })
   })
@@ -111,6 +130,7 @@ export default function SuggestedTodos(props: {
               index={index}
               isFocused={index === focusedSuggestion()}
               onClick={() => setFocusedSuggestion(index)}
+              accepted={acceptedSuggestions().includes(todo.task)}
             />
           ))}
         </div>

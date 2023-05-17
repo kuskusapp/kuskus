@@ -208,12 +208,20 @@ export default function TodoList() {
       const res = await todoList.request(SuggestedTasksDocument, {
         task: todo.title,
       })
-      // TODO: fix types..
-      const stripeCheckoutUrl = res.suggestions.suggestedTasks.stripeCheckoutUrl
+      console.log(res, "res")
+      // TODO: fix types
+      const normalSubscriptionStripeUrl =
+        // @ts-ignore
+        res.suggestions.suggestedTasks.normalSubscriptionStripeUrl
+      const proSubscriptionStripeUrl =
+        // @ts-ignore
+        res.suggestions.suggestedTasks.proSubscriptionStripeUrl
 
-      if (stripeCheckoutUrl) {
+      if (normalSubscriptionStripeUrl || proSubscriptionStripeUrl) {
         todoList.setMode(TodoListMode.Settings, { settingsState: "upgrade" })
+        return
       }
+      // @ts-ignore
       const suggestions = res.suggestions.suggestedTasks.tasks
       return suggestions && suggestions.length ? suggestions : undefined
     }
@@ -321,7 +329,9 @@ export default function TodoList() {
               <Show
                 when={todoList.inMode(TodoListMode.Suggest) && suggestions()}
               >
-                {(list) => <SuggestedTodos suggestions={list()} />}
+                {(suggestions) => (
+                  <SuggestedTodos suggestions={suggestions()} />
+                )}
               </Show>
             </Suspense>
           </Presence>

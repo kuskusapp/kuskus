@@ -146,6 +146,8 @@ query SuggestedTasks($task: String!) {
         note
       }
     }
-    stripeCheckoutUrl
+    rawResponse
+    normalSubscriptionStripeUrl
+    proSubscriptionStripeUrl
   }
 }

@@ -276,7 +276,9 @@ export type SuggestedTasks = {
 
 export type SuggestionsPayload = {
   __typename?: "SuggestionsPayload"
-  stripeCheckoutUrl?: Maybe<Scalars["String"]>
+  normalSubscriptionStripeUrl?: Maybe<Scalars["String"]>
+  proSubscriptionStripeUrl?: Maybe<Scalars["String"]>
+  rawResponse?: Maybe<Scalars["String"]>
   suggestedTasks?: Maybe<SuggestedTasks>
 }
 
@@ -649,7 +651,9 @@ export type SuggestedTasksQuery = {
   __typename?: "Query"
   suggestions?: {
     __typename?: "SuggestionsPayload"
-    stripeCheckoutUrl?: string | null
+    rawResponse?: string | null
+    normalSubscriptionStripeUrl?: string | null
+    proSubscriptionStripeUrl?: string | null
     suggestedTasks?: {
       __typename?: "SuggestedTasks"
       intro?: string | null
@@ -1711,9 +1715,14 @@ export const SuggestedTasksDocument = {
                     ],
                   },
                 },
+                { kind: "Field", name: { kind: "Name", value: "rawResponse" } },
                 {
                   kind: "Field",
-                  name: { kind: "Name", value: "stripeCheckoutUrl" },
+                  name: { kind: "Name", value: "normalSubscriptionStripeUrl" },
+                },
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "proSubscriptionStripeUrl" },
                 },
               ],
             },
