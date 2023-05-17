@@ -96,7 +96,8 @@ export default function TodoList() {
               })
             },
             // Activate filter search
-            // [("Meta", "F")]() {
+            // TODO:
+            // ["Meta"]() {
             //   console.log("trigger")
             // },
             // Complete task

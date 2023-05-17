@@ -18,7 +18,9 @@ extend type Query {
 
 type SuggestionsPayload {
   suggestedTasks: SuggestedTasks
-  stripeCheckoutUrl: String
+  rawResponse: String
+  normalSubscriptionStripeUrl: String
+  proSubscriptionStripeUrl: String
 }
 
 type SuggestedTasks {
