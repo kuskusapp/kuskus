@@ -12,7 +12,6 @@ type SuggestedTodo = {
 function SuggestedTodo(props: {
   task: string
   note?: string
-  index: number
   isFocused: boolean
   onClick: () => void
   accepted: boolean
@@ -40,23 +39,32 @@ export default function SuggestedTodos(props: {
   const todoList = useTodoList()
 
   const [focusedSuggestion, setFocusedSuggestion] = createSignal(0)
-  const [acceptedSuggestions, setAcceptedSuggestions] = createSignal<string[]>(
-    []
+  const [filteredSuggestions, setFilteredSuggestions] = createSignal(
+    props.suggestions.map((s) => {
+      return { ...s, accepted: false }
+    })
   )
 
-  const availableSuggestions = createMemo(() => {
-    const newSuggestions = props.suggestions.filter(
-      (s) => !acceptedSuggestions().includes(s.task)
-    )
-    return newSuggestions
-  })
+  // const availableSuggestions = createMemo(() => {
+  //   const newSuggestions = props.suggestions.filter(
+  //     (s) => !acceptedSuggestions().includes(s.task)
+  //   )
+  //   return newSuggestions
+  // })
 
   createShortcut(["Enter"], () => {
     const suggestion = props.suggestions[focusedSuggestion()]
-    setAcceptedSuggestions([...acceptedSuggestions(), suggestion.task])
+
+    let newFilteredSuggestions = filteredSuggestions()
+    newFilteredSuggestions[focusedSuggestion()].accepted = true
+    setFilteredSuggestions(newFilteredSuggestions)
+
     setFocusedSuggestion((p) => {
-      const n = p + 1
-      if (n > availableSuggestions().length - 1) return 0
+      let n = p + 1
+      if (n > filteredSuggestions().length - 1) {
+        n = 0
+      }
+      while (filteredSuggestions()[n].accepted === true) n++
       return n
     })
 
@@ -75,16 +83,22 @@ export default function SuggestedTodos(props: {
 
   createShortcut(["ArrowDown"], () => {
     setFocusedSuggestion((p) => {
-      const n = p + 1
-      if (n > availableSuggestions().length - 1) return 0
+      let n = p + 1
+      if (n > filteredSuggestions().length - 1) {
+        n = 0
+      }
+      while (filteredSuggestions()[n].accepted === true) n++
       return n
     })
   })
 
   createShortcut(["ArrowUp"], () => {
     setFocusedSuggestion((p) => {
-      const n = p - 1
-      if (n < 0) return availableSuggestions().length - 1
+      let n = p - 1
+      if (n < 0) {
+        n = filteredSuggestions().length - 1
+      }
+      while (filteredSuggestions()[n].accepted === true) n--
       return n
     })
   })
@@ -124,13 +138,12 @@ export default function SuggestedTodos(props: {
           class="flex flex-col h-full overflow-scroll"
           style={{ "border-radius": "10px" }}
         >
-          {props.suggestions.map((todo, index) => (
+          {filteredSuggestions().map((todo, index) => (
             <SuggestedTodo
               task={todo.task}
-              index={index}
               isFocused={index === focusedSuggestion()}
               onClick={() => setFocusedSuggestion(index)}
-              accepted={acceptedSuggestions().includes(todo.task)}
+              accepted={filteredSuggestions()[index].accepted}
             />
           ))}
         </div>

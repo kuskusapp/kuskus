@@ -3,7 +3,7 @@ lockfileVersion: '6.0'
 dependencies:
   '@graphql-codegen/cli':
     specifier: ^3.3.1
-    version: 3.3.1(@babel/core@7.21.8)(@types/node@20.1.0)(graphql@16.6.0)
+    version: 3.3.1(@babel/core@7.21.8)(@types/node@20.1.7)(graphql@16.6.0)
   '@graphql-codegen/typed-document-node':
     specifier: ^4.0.1
     version: 4.0.1(graphql@16.6.0)
@@ -17,8 +17,8 @@ dependencies:
     specifier: ^3.2.0
     version: 3.2.0(graphql@16.6.0)
   '@motionone/solid':
-    specifier: ^10.16.0
-    version: 10.16.0(solid-js@1.7.5)
+    specifier: ^10.16.2
+    version: 10.16.2(solid-js@1.7.5)
   '@solid-primitives/autofocus':
     specifier: ^0.0.106
     version: 0.0.106(solid-js@1.7.5)
@@ -26,11 +26,11 @@ dependencies:
     specifier: ^0.2.1
     version: 0.2.1(solid-js@1.7.5)
   '@solid-primitives/event-listener':
-    specifier: ^2.2.11
-    version: 2.2.11(solid-js@1.7.5)
+    specifier: ^2.2.12
+    version: 2.2.12(solid-js@1.7.5)
   '@solid-primitives/keyboard':
-    specifier: ^1.2.1
-    version: 1.2.1(solid-js@1.7.5)
+    specifier: ^1.2.2
+    version: 1.2.2(solid-js@1.7.5)
   '@solid-primitives/keyed':
     specifier: ^1.2.0
     version: 1.2.0(solid-js@1.7.5)
@@ -38,14 +38,14 @@ dependencies:
     specifier: ^1.3.2
     version: 1.3.2(solid-js@1.7.5)
   '@solid-primitives/scroll':
-    specifier: ^2.0.15
-    version: 2.0.15(solid-js@1.7.5)
+    specifier: ^2.0.16
+    version: 2.0.16(solid-js@1.7.5)
   '@solid-primitives/utils':
     specifier: ^6.1.1
     version: 6.1.1(solid-js@1.7.5)
   '@solidjs/meta':
-    specifier: ^0.28.4
-    version: 0.28.4(solid-js@1.7.5)
+    specifier: ^0.28.5
+    version: 0.28.5(solid-js@1.7.5)
   '@solidjs/router':
     specifier: ^0.8.2
     version: 0.8.2(solid-js@1.7.5)
@@ -53,8 +53,8 @@ dependencies:
     specifier: ^1.3.0
     version: 1.3.0
   '@types/node':
-    specifier: ^20.1.0
-    version: 20.1.0
+    specifier: ^20.1.7
+    version: 20.1.7
   clsx:
     specifier: ^1.2.1
     version: 1.2.1
@@ -71,8 +71,8 @@ dependencies:
     specifier: ^6.0.0
     version: 6.0.0(graphql@16.6.0)
   oidc-client-ts:
-    specifier: ^2.2.3
-    version: 2.2.3
+    specifier: ^2.2.4
+    version: 2.2.4
   solid-headless:
     specifier: ^0.13.1
     version: 0.13.1(solid-js@1.7.5)
@@ -81,16 +81,16 @@ dependencies:
     version: 1.7.5
   solid-start:
     specifier: ^0.2.26
-    version: 0.2.26(@solidjs/meta@0.28.4)(@solidjs/router@0.8.2)(solid-js@1.7.5)(solid-start-cloudflare-pages@0.2.26)(solid-start-node@0.2.26)(vite@4.3.5)
+    version: 0.2.26(@solidjs/meta@0.28.5)(@solidjs/router@0.8.2)(solid-js@1.7.5)(solid-start-cloudflare-pages@0.2.26)(solid-start-node@0.2.26)(vite@4.3.7)
   solid-start-cloudflare-pages:
     specifier: ^0.2.26
-    version: 0.2.26(solid-start@0.2.26)(vite@4.3.5)
+    version: 0.2.26(solid-start@0.2.26)(vite@4.3.7)
   split.js:
     specifier: ^1.6.5
     version: 1.6.5
   stripe:
-    specifier: ^12.4.0
-    version: 12.4.0
+    specifier: ^12.5.0
+    version: 12.5.0
   zod:
     specifier: ^3.21.4
     version: 3.21.4
@@ -103,8 +103,8 @@ devDependencies:
     specifier: ^10.4.14
     version: 10.4.14(postcss@8.4.23)
   grafbase:
-    specifier: ^0.18.12
-    version: 0.18.12
+    specifier: ^0.19.2
+    version: 0.19.2
   postcss:
     specifier: ^8.4.23
     version: 8.4.23
@@ -113,10 +113,10 @@ devDependencies:
     version: 2.8.8
   solid-devtools:
     specifier: ^0.26.0
-    version: 0.26.0(@solidjs/meta@0.28.4)(@solidjs/router@0.8.2)(solid-js@1.7.5)(solid-start-cloudflare-pages@0.2.26)(solid-start-node@0.2.26)(typescript@5.0.4)(vite@4.3.5)
+    version: 0.26.0(@solidjs/meta@0.28.5)(@solidjs/router@0.8.2)(solid-js@1.7.5)(solid-start-cloudflare-pages@0.2.26)(solid-start-node@0.2.26)(typescript@5.0.4)(vite@4.3.7)
   solid-start-node:
     specifier: ^0.2.26
-    version: 0.2.26(solid-start@0.2.26)(undici@5.22.0)(vite@4.3.5)
+    version: 0.2.26(solid-start@0.2.26)(undici@5.22.0)(vite@4.3.7)
   tailwindcss:
     specifier: ^3.3.2
     version: 3.3.2
@@ -124,8 +124,8 @@ devDependencies:
     specifier: ^5.0.4
     version: 5.0.4
   vite:
-    specifier: ^4.3.5
-    version: 4.3.5(@types/node@20.1.0)
+    specifier: ^4.3.7
+    version: 4.3.7(@types/node@20.1.7)
 
 packages:
 
@@ -1512,39 +1512,39 @@ packages:
     requiresBuild: true
     optional: true
 
-  /@grafbase/cli-aarch64-apple-darwin@0.18.12:
-    resolution: {integrity: sha512-0u2jFpWQ1tyLKZ8aJ4n6UbSXzucPbPfi069aZn8vxHA1Azjn+0tYt2O7HmtDgCtrt7XM4vFXFrs49kGjx5CMSA==}
+  /@grafbase/cli-aarch64-apple-darwin@0.19.2:
+    resolution: {integrity: sha512-6JPkKD+T3N7Umkd+GsJnmAQ+2UmHDL+ef9rDiQHeqEu34l4IgbVPX6LjxstyCyLDieLt72xeGB20Fb8fFqcLIw==}
     cpu: [arm64]
     os: [darwin]
     requiresBuild: true
     dev: true
     optional: true
 
-  /@grafbase/cli-x86_64-apple-darwin@0.18.12:
-    resolution: {integrity: sha512-UpZ/tI9JTa7bzkrCXMveVbos8UUR+uew6LSA4NgURiQKc3VNPAyU4/Ha+6qV9zKa1wtdCRflgCM+MUoCQZeGoA==}
+  /@grafbase/cli-x86_64-apple-darwin@0.19.2:
+    resolution: {integrity: sha512-8VMVVp+yV41378jx+7lp0PoNYGaN86oGzgiVYkbFRH2b1U7hT6kKxM3pCBe32AjjYsEKStbsa1609vJ3KeEG1Q==}
     cpu: [x64]
     os: [darwin]
     requiresBuild: true
     dev: true
     optional: true
 
-  /@grafbase/cli-x86_64-pc-windows-msvc@0.18.12:
-    resolution: {integrity: sha512-WQEIzaLDhXCig1tx59Xd9RMKJVBq7q1b+exzMEadGu5KsS1NzQnUJVLBhMfComd+2xh2bUjlGkHgqpNePU7VYA==}
+  /@grafbase/cli-x86_64-pc-windows-msvc@0.19.2:
+    resolution: {integrity: sha512-1OLEPcRG9RyuwS2lZDUmdB5xv+SashKbzwT1hqY1S5lvwafItsjKD3FNXsqj35pXbfYB3BKEGYKdKOqu/iC2WQ==}
     cpu: [x64]
     os: [win32]
     requiresBuild: true
     dev: true
     optional: true
 
-  /@grafbase/cli-x86_64-unknown-linux-musl@0.18.12:
-    resolution: {integrity: sha512-EjHVEB5sQlGmqLOh0cfHB1Vo4vp86cd9+WlmCYPyb3YCRN2WArQpFxtu9bALgywC34yER256nDY32ZhAh/umUw==}
+  /@grafbase/cli-x86_64-unknown-linux-musl@0.19.2:
+    resolution: {integrity: sha512-1LpZVxWA9vBxC1hqlzhbtsh4n1mvv6xI3CojLLzXHctBdNEJtHP+YVgHg0T42wyrjq+VaEVxuDT9bnKhmGLikg==}
     cpu: [x64]
     os: [linux]
     requiresBuild: true
     dev: true
     optional: true
 
-  /@graphql-codegen/cli@3.3.1(@babel/core@7.21.8)(@types/node@20.1.0)(graphql@16.6.0):
+  /@graphql-codegen/cli@3.3.1(@babel/core@7.21.8)(@types/node@20.1.7)(graphql@16.6.0):
     resolution: {integrity: sha512-4Es8Y9zFeT0Zx2qRL7L3qXDbbqvXK6aID+8v8lP6gaYD+uWx3Jd4Hsq5vxwVBR+6flm0BW/C85Qm0cvmT7O6LA==}
     hasBin: true
     peerDependencies:
@@ -1558,12 +1558,12 @@ packages:
       '@graphql-tools/apollo-engine-loader': 7.3.26(graphql@16.6.0)
       '@graphql-tools/code-file-loader': 7.3.23(@babel/core@7.21.8)(graphql@16.6.0)
       '@graphql-tools/git-loader': 7.2.22(@babel/core@7.21.8)(graphql@16.6.0)
-      '@graphql-tools/github-loader': 7.3.28(@babel/core@7.21.8)(@types/node@20.1.0)(graphql@16.6.0)
+      '@graphql-tools/github-loader': 7.3.28(@babel/core@7.21.8)(@types/node@20.1.7)(graphql@16.6.0)
       '@graphql-tools/graphql-file-loader': 7.5.17(graphql@16.6.0)
       '@graphql-tools/json-file-loader': 7.4.18(graphql@16.6.0)
       '@graphql-tools/load': 7.8.14(graphql@16.6.0)
-      '@graphql-tools/prisma-loader': 7.2.71(@types/node@20.1.0)(graphql@16.6.0)
-      '@graphql-tools/url-loader': 7.17.18(@types/node@20.1.0)(graphql@16.6.0)
+      '@graphql-tools/prisma-loader': 7.2.71(@types/node@20.1.7)(graphql@16.6.0)
+      '@graphql-tools/url-loader': 7.17.18(@types/node@20.1.7)(graphql@16.6.0)
       '@graphql-tools/utils': 9.2.1(graphql@16.6.0)
       '@parcel/watcher': 2.1.0
       '@whatwg-node/fetch': 0.8.8
@@ -1572,7 +1572,7 @@ packages:
       debounce: 1.2.1
       detect-indent: 6.1.0
       graphql: 16.6.0
-      graphql-config: 4.5.0(@types/node@20.1.0)(graphql@16.6.0)
+      graphql-config: 4.5.0(@types/node@20.1.7)(graphql@16.6.0)
       inquirer: 8.2.5
       is-glob: 4.0.3
       jiti: 1.18.2
@@ -1778,7 +1778,7 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@graphql-tools/executor-http@0.1.9(@types/node@20.1.0)(graphql@16.6.0):
+  /@graphql-tools/executor-http@0.1.9(@types/node@20.1.7)(graphql@16.6.0):
     resolution: {integrity: sha512-tNzMt5qc1ptlHKfpSv9wVBVKCZ7gks6Yb/JcYJluxZIT4qRV+TtOFjpptfBU63usgrGVOVcGjzWc/mt7KhmmpQ==}
     peerDependencies:
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
@@ -1789,7 +1789,7 @@ packages:
       dset: 3.1.2
       extract-files: 11.0.0
       graphql: 16.6.0
-      meros: 1.2.1(@types/node@20.1.0)
+      meros: 1.2.1(@types/node@20.1.7)
       tslib: 2.5.0
       value-or-promise: 1.0.12
     transitivePeerDependencies:
@@ -1842,13 +1842,13 @@ packages:
       - supports-color
     dev: false
 
-  /@graphql-tools/github-loader@7.3.28(@babel/core@7.21.8)(@types/node@20.1.0)(graphql@16.6.0):
+  /@graphql-tools/github-loader@7.3.28(@babel/core@7.21.8)(@types/node@20.1.7)(graphql@16.6.0):
     resolution: {integrity: sha512-OK92Lf9pmxPQvjUNv05b3tnVhw0JRfPqOf15jZjyQ8BfdEUrJoP32b4dRQQem/wyRL24KY4wOfArJNqzpsbwCA==}
     peerDependencies:
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
     dependencies:
       '@ardatan/sync-fetch': 0.0.1
-      '@graphql-tools/executor-http': 0.1.9(@types/node@20.1.0)(graphql@16.6.0)
+      '@graphql-tools/executor-http': 0.1.9(@types/node@20.1.7)(graphql@16.6.0)
       '@graphql-tools/graphql-tag-pluck': 7.5.2(@babel/core@7.21.8)(graphql@16.6.0)
       '@graphql-tools/utils': 9.2.1(graphql@16.6.0)
       '@whatwg-node/fetch': 0.8.8
@@ -1946,12 +1946,12 @@ packages:
       tslib: 2.5.0
     dev: false
 
-  /@graphql-tools/prisma-loader@7.2.71(@types/node@20.1.0)(graphql@16.6.0):
+  /@graphql-tools/prisma-loader@7.2.71(@types/node@20.1.7)(graphql@16.6.0):
     resolution: {integrity: sha512-FuIvhRrkduqPdj3QX0/anCxGViEETfoZ/1NvotfM6iVO1XxR75VXvP/iyKGbK6XvYRXwSstgj2DetlQnqdgXhA==}
     peerDependencies:
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
     dependencies:
-      '@graphql-tools/url-loader': 7.17.18(@types/node@20.1.0)(graphql@16.6.0)
+      '@graphql-tools/url-loader': 7.17.18(@types/node@20.1.7)(graphql@16.6.0)
       '@graphql-tools/utils': 9.2.1(graphql@16.6.0)
       '@types/js-yaml': 4.0.5
       '@types/json-stable-stringify': 1.0.34
@@ -2004,7 +2004,7 @@ packages:
       value-or-promise: 1.0.12
     dev: false
 
-  /@graphql-tools/url-loader@7.17.18(@types/node@20.1.0)(graphql@16.6.0):
+  /@graphql-tools/url-loader@7.17.18(@types/node@20.1.7)(graphql@16.6.0):
     resolution: {integrity: sha512-ear0CiyTj04jCVAxi7TvgbnGDIN2HgqzXzwsfcqiVg9cvjT40NcMlZ2P1lZDgqMkZ9oyLTV8Bw6j+SyG6A+xPw==}
     peerDependencies:
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
@@ -2012,7 +2012,7 @@ packages:
       '@ardatan/sync-fetch': 0.0.1
       '@graphql-tools/delegate': 9.0.35(graphql@16.6.0)
       '@graphql-tools/executor-graphql-ws': 0.0.14(graphql@16.6.0)
-      '@graphql-tools/executor-http': 0.1.9(@types/node@20.1.0)(graphql@16.6.0)
+      '@graphql-tools/executor-http': 0.1.9(@types/node@20.1.7)(graphql@16.6.0)
       '@graphql-tools/executor-legacy-ws': 0.0.11(graphql@16.6.0)
       '@graphql-tools/utils': 9.2.1(graphql@16.6.0)
       '@graphql-tools/wrap': 9.4.2(graphql@16.6.0)
@@ -2269,8 +2269,8 @@ packages:
       tslib: 2.5.0
     dev: false
 
-  /@motionone/dom@10.15.5:
-    resolution: {integrity: sha512-Xc5avlgyh3xukU9tydh9+8mB8+2zAq+WlLsC3eEIp7Ax7DnXgY7Bj/iv0a4X2R9z9ZFZiaXK3BO0xMYHKbAAdA==}
+  /@motionone/dom@10.16.2:
+    resolution: {integrity: sha512-bnuHdNbge1FutZXv+k7xub9oPWcF0hsu8y1HTH/qg6av58YI0VufZ3ngfC7p2xhMJMnoh0LXFma2EGTgPeCkeg==}
     dependencies:
       '@motionone/animation': 10.15.1
       '@motionone/generators': 10.15.1
@@ -2295,12 +2295,12 @@ packages:
       tslib: 2.5.0
     dev: false
 
-  /@motionone/solid@10.16.0(solid-js@1.7.5):
-    resolution: {integrity: sha512-pxE5qQEtwv42bAllHFVapZevX5T4YTYzFe7vo0+Lljqyx+7+jP1NT0fosBUAOhDNdJNANNMldXwyh+qGBW5BrA==}
+  /@motionone/solid@10.16.2(solid-js@1.7.5):
+    resolution: {integrity: sha512-0bl1KRDWc6BRcKXzRZR2KdRzIIN86SfSe8mcfKPwHYQDzdOEohRcYUsDaYlwWuwU07VCngOHZEPgFCofDJ80zw==}
     peerDependencies:
       solid-js: ^1.5.0
     dependencies:
-      '@motionone/dom': 10.15.5
+      '@motionone/dom': 10.16.2
       '@motionone/utils': 10.15.1
       '@solid-primitives/props': 3.1.5(solid-js@1.7.5)
       '@solid-primitives/refs': 1.0.3(solid-js@1.7.5)
@@ -2462,8 +2462,8 @@ packages:
       '@solid-primitives/bounds': 0.0.107(solid-js@1.7.5)
       '@solid-primitives/cursor': 0.0.105(solid-js@1.7.5)
       '@solid-primitives/event-bus': 1.0.6(solid-js@1.7.5)
-      '@solid-primitives/event-listener': 2.2.11(solid-js@1.7.5)
-      '@solid-primitives/keyboard': 1.2.1(solid-js@1.7.5)
+      '@solid-primitives/event-listener': 2.2.12(solid-js@1.7.5)
+      '@solid-primitives/keyboard': 1.2.2(solid-js@1.7.5)
       '@solid-primitives/platform': 0.0.103(solid-js@1.7.5)
       '@solid-primitives/scheduled': 1.3.2(solid-js@1.7.5)
       '@solid-primitives/utils': 5.5.2(solid-js@1.7.5)
@@ -2479,7 +2479,7 @@ packages:
       solid-js: ^1.6.9
     dependencies:
       '@solid-primitives/event-bus': 1.0.6(solid-js@1.7.5)
-      '@solid-primitives/event-listener': 2.2.11(solid-js@1.7.5)
+      '@solid-primitives/event-listener': 2.2.12(solid-js@1.7.5)
       '@solid-primitives/media': 2.2.1(solid-js@1.7.5)
       '@solid-primitives/refs': 0.3.7(solid-js@1.7.5)
       '@solid-primitives/rootless': 1.4.0(solid-js@1.7.5)
@@ -2506,7 +2506,7 @@ packages:
     peerDependencies:
       solid-js: ^1.6.0
     dependencies:
-      '@solid-primitives/event-listener': 2.2.11(solid-js@1.7.5)
+      '@solid-primitives/event-listener': 2.2.12(solid-js@1.7.5)
       '@solid-primitives/resize-observer': 2.0.16(solid-js@1.7.5)
       '@solid-primitives/utils': 5.5.2(solid-js@1.7.5)
       solid-js: 1.7.5
@@ -2538,8 +2538,8 @@ packages:
       solid-js: 1.7.5
     dev: true
 
-  /@solid-primitives/event-listener@2.2.11(solid-js@1.7.5):
-    resolution: {integrity: sha512-pX/offimvt8qtXxwk3kUB6R7igVhnXmSHosQ0ITBOPQvcyhB9Lfrb80zSM8Z0MUf6ZKWyt5n8lco+yK5v2+bIg==}
+  /@solid-primitives/event-listener@2.2.12(solid-js@1.7.5):
+    resolution: {integrity: sha512-CGSn4BF8t9887LWdnGOOIIEoMJFhrs4mCeSDoGJRLy1zmPjokFb+IMNd3VLTpvf6+prxEDIEy6wrzE373ZvTzA==}
     peerDependencies:
       solid-js: ^1.6.12
     dependencies:
@@ -2555,12 +2555,12 @@ packages:
       solid-js: 1.7.5
     dev: true
 
-  /@solid-primitives/keyboard@1.2.1(solid-js@1.7.5):
-    resolution: {integrity: sha512-W5dAGZCqVq42dCg6e1vElVKf/107uhh66t+1fnRNBcBJCiI0ZWDYsDXNBKLwJoGbkB4Ik4huwoer3U/RptOQZQ==}
+  /@solid-primitives/keyboard@1.2.2(solid-js@1.7.5):
+    resolution: {integrity: sha512-sBk0DbQEE0uKXe9WusNbR3WVU4+94RlnVhyV+iFgZak1IPETAzrzhf9RbRkcu482UylI/6mrsHxITeW8dO+yqQ==}
     peerDependencies:
       solid-js: ^1.6.12
     dependencies:
-      '@solid-primitives/event-listener': 2.2.11(solid-js@1.7.5)
+      '@solid-primitives/event-listener': 2.2.12(solid-js@1.7.5)
       '@solid-primitives/rootless': 1.4.0(solid-js@1.7.5)
       '@solid-primitives/utils': 6.1.1(solid-js@1.7.5)
       solid-js: 1.7.5
@@ -2578,7 +2578,7 @@ packages:
     peerDependencies:
       solid-js: ^1.6.12
     dependencies:
-      '@solid-primitives/event-listener': 2.2.11(solid-js@1.7.5)
+      '@solid-primitives/event-listener': 2.2.12(solid-js@1.7.5)
       '@solid-primitives/rootless': 1.4.0(solid-js@1.7.5)
       '@solid-primitives/static-store': 0.0.3(solid-js@1.7.5)
       '@solid-primitives/utils': 6.1.1(solid-js@1.7.5)
@@ -2627,7 +2627,7 @@ packages:
     peerDependencies:
       solid-js: ^1.6.12
     dependencies:
-      '@solid-primitives/event-listener': 2.2.11(solid-js@1.7.5)
+      '@solid-primitives/event-listener': 2.2.12(solid-js@1.7.5)
       '@solid-primitives/rootless': 1.4.0(solid-js@1.7.5)
       '@solid-primitives/static-store': 0.0.3(solid-js@1.7.5)
       '@solid-primitives/utils': 6.1.1(solid-js@1.7.5)
@@ -2649,12 +2649,12 @@ packages:
     dependencies:
       solid-js: 1.7.5
 
-  /@solid-primitives/scroll@2.0.15(solid-js@1.7.5):
-    resolution: {integrity: sha512-tZ6u4twLXJAUMO/43uE9RtutKfnx8GHExl52iLzPPcpJ1ZxgnrN9H+3d/Zc5d9oCd+GaTn+UyDmJfAHO6wWLzw==}
+  /@solid-primitives/scroll@2.0.16(solid-js@1.7.5):
+    resolution: {integrity: sha512-K4xbvjH3B0hiczBB86maVcm6+Yf/YLe4KWuH00Vs9AvmTa8t5fS4RtDIXAhiw902SJU2c/CpV5evtYnmx2X2BQ==}
     peerDependencies:
       solid-js: ^1.6.12
     dependencies:
-      '@solid-primitives/event-listener': 2.2.11(solid-js@1.7.5)
+      '@solid-primitives/event-listener': 2.2.12(solid-js@1.7.5)
       '@solid-primitives/rootless': 1.4.0(solid-js@1.7.5)
       '@solid-primitives/static-store': 0.0.3(solid-js@1.7.5)
       solid-js: 1.7.5
@@ -2700,8 +2700,8 @@ packages:
     dependencies:
       solid-js: 1.7.5
 
-  /@solidjs/meta@0.28.4(solid-js@1.7.5):
-    resolution: {integrity: sha512-1USElsQuGVcJnmZ6CxPfUVmKvCsVdBQoGrUyMxLtFw36Ytt90dPs/qLyXLvPR/ZPD16/qauWqg6APEkbrDOLcA==}
+  /@solidjs/meta@0.28.5(solid-js@1.7.5):
+    resolution: {integrity: sha512-52luJR6hVNMA1K8Od5OD0d8WVz/svqZG4is8lrDimiUGxdia3DzuLF+pK56dnEzbNt9cA42qVFL134U9LkC9Gg==}
     peerDependencies:
       solid-js: '>=1.4.0'
     dependencies:
@@ -2849,7 +2849,7 @@ packages:
   /@types/better-sqlite3@7.6.4:
     resolution: {integrity: sha512-dzrRZCYPXIXfSR1/surNbJ/grU3scTaygS0OMzjlGf71i9sc2fGyHPXXiXmEvNIoE0cGwsanEFMVJxPXmco9Eg==}
     dependencies:
-      '@types/node': 20.1.0
+      '@types/node': 20.1.7
 
   /@types/cookie@0.5.1:
     resolution: {integrity: sha512-COUnqfB2+ckwXXSFInsFdOAWQzCCx+a5hq2ruyj+Vjund94RJQd4LG2u9hnvJrTgunKAaax7ancBYlDrNYxA0g==}
@@ -2865,8 +2865,8 @@ packages:
     resolution: {integrity: sha512-s2cfwagOQAS8o06TcwKfr9Wx11dNGbH2E9vJz1cqV+a/LOyhWNLUNd6JSRYNzvB4d29UuJX2M0Dj9vE1T8fRXw==}
     dev: false
 
-  /@types/node@20.1.0:
-    resolution: {integrity: sha512-O+z53uwx64xY7D6roOi4+jApDGFg0qn6WHcxe5QeqjMaTezBO/mxdfFXIVAVVyNWKx84OmPB3L8kbVYOTeN34A==}
+  /@types/node@20.1.7:
+    resolution: {integrity: sha512-WCuw/o4GSwDGMoonES8rcvwsig77dGCMbZDrZr2x4ZZiNW4P/gcoZXe/0twgtobcTkmg9TuKflxYL/DuwDyJzg==}
 
   /@types/parse-json@4.0.0:
     resolution: {integrity: sha512-//oorEZjL6sbPcKUaCdIGlIUeH26mgzimjBB77G6XRgnDl/L5wOnpyBGRe/Mmf5CVW3PwEBE1NjiMZ/ssFh4wA==}
@@ -2881,7 +2881,7 @@ packages:
   /@types/ws@8.5.4:
     resolution: {integrity: sha512-zdQDHKUgcX/zBc4GrwsE/7dVdAD8JR4EuiAXiiUhhfyIJXXb2+PrGshFyeXWQPMmmZ2XxgaqclgpIC7eTXc1mg==}
     dependencies:
-      '@types/node': 20.1.0
+      '@types/node': 20.1.7
 
   /@whatwg-node/events@0.0.3:
     resolution: {integrity: sha512-IqnKIDWfXBJkvy/k6tzskWTc2NK3LcqHlb+KHGCrjOCH4jfQckRX0NAiIcC/vIqQkzLYw2r2CTSwAxcrtcD6lA==}
@@ -3937,18 +3937,18 @@ packages:
   /graceful-fs@4.2.11:
     resolution: {integrity: sha512-RbJ5/jmFcNNCcDV5o9eTnBLJ/HszWV0P73bc+Ff4nS/rJj+YaS6IGyiOL0VoBYX+l1Wrl3k63h/KrH+nhJ0XvQ==}
 
-  /grafbase@0.18.12:
-    resolution: {integrity: sha512-z6KTxZQgOv3OJ6v/8hpULFH6nAnrdalhTlkS+YeJmn+F7Zhfo45M7QYytcX2oLz4z92RtCCavXFA6ukBc4V1ag==}
+  /grafbase@0.19.2:
+    resolution: {integrity: sha512-8Z7wo0YxZpHTtCcagK1t06tjCK0TylUk/J2muCduKAuP3jf5vs9k6Ak86O08EgzNiWoqZfYXjaVdVa0MYd/02g==}
     hasBin: true
     requiresBuild: true
     optionalDependencies:
-      '@grafbase/cli-aarch64-apple-darwin': 0.18.12
-      '@grafbase/cli-x86_64-apple-darwin': 0.18.12
-      '@grafbase/cli-x86_64-pc-windows-msvc': 0.18.12
-      '@grafbase/cli-x86_64-unknown-linux-musl': 0.18.12
+      '@grafbase/cli-aarch64-apple-darwin': 0.19.2
+      '@grafbase/cli-x86_64-apple-darwin': 0.19.2
+      '@grafbase/cli-x86_64-pc-windows-msvc': 0.19.2
+      '@grafbase/cli-x86_64-unknown-linux-musl': 0.19.2
     dev: true
 
-  /graphql-config@4.5.0(@types/node@20.1.0)(graphql@16.6.0):
+  /graphql-config@4.5.0(@types/node@20.1.7)(graphql@16.6.0):
     resolution: {integrity: sha512-x6D0/cftpLUJ0Ch1e5sj1TZn6Wcxx4oMfmhaG9shM0DKajA9iR+j1z86GSTQ19fShbGvrSSvbIQsHku6aQ6BBw==}
     engines: {node: '>= 10.0.0'}
     peerDependencies:
@@ -3962,7 +3962,7 @@ packages:
       '@graphql-tools/json-file-loader': 7.4.18(graphql@16.6.0)
       '@graphql-tools/load': 7.8.14(graphql@16.6.0)
       '@graphql-tools/merge': 8.4.1(graphql@16.6.0)
-      '@graphql-tools/url-loader': 7.17.18(@types/node@20.1.0)(graphql@16.6.0)
+      '@graphql-tools/url-loader': 7.17.18(@types/node@20.1.7)(graphql@16.6.0)
       '@graphql-tools/utils': 9.2.1(graphql@16.6.0)
       cosmiconfig: 8.0.0
       graphql: 16.6.0
@@ -4474,7 +4474,7 @@ packages:
     resolution: {integrity: sha512-8q7VEgMJW4J8tcfVPy8g09NcQwZdbwFEqhe/WZkoIzjn/3TGDwtOCYtXGxA3O8tPzpczCCDgv+P2P5y00ZJOOg==}
     engines: {node: '>= 8'}
 
-  /meros@1.2.1(@types/node@20.1.0):
+  /meros@1.2.1(@types/node@20.1.7):
     resolution: {integrity: sha512-R2f/jxYqCAGI19KhAvaxSOxALBMkaXWH2a7rOyqQw+ZmizX5bKkEYWLzdhC+U82ZVVPVp6MCXe3EkVligh+12g==}
     engines: {node: '>=13'}
     peerDependencies:
@@ -4483,7 +4483,7 @@ packages:
       '@types/node':
         optional: true
     dependencies:
-      '@types/node': 20.1.0
+      '@types/node': 20.1.7
     dev: false
 
   /micromatch@4.0.5:
@@ -4716,8 +4716,8 @@ packages:
     resolution: {integrity: sha512-geUvdk7c+eizMNUDkRpW1wJwgfOiOeHbxBR/hLXK1aT6zmVSO0jsQcs7fj6MGw89jC/cjGfLcNOrtMYtGqm81g==}
     dev: false
 
-  /oidc-client-ts@2.2.3:
-    resolution: {integrity: sha512-nheMI8kSJu8L+Pmg7E4ra+LJ7lOTK60IfyblFmyx5qaJwwDpc1zkzFyH9eyERAQ92xUTF1uaB8WiaVxXATjLGA==}
+  /oidc-client-ts@2.2.4:
+    resolution: {integrity: sha512-nOZwIomju+AmXObl5Oq5PjrES/qTt8bLsENJCIydVgi9TEWk7SCkOU6X3RNkY7yfySRM1OJJvDKdREZdmnDT2g==}
     engines: {node: '>=12.13.0'}
     dependencies:
       crypto-js: 4.1.1
@@ -5343,7 +5343,7 @@ packages:
       tslib: 2.5.0
     dev: false
 
-  /solid-devtools@0.26.0(@solidjs/meta@0.28.4)(@solidjs/router@0.8.2)(solid-js@1.7.5)(solid-start-cloudflare-pages@0.2.26)(solid-start-node@0.2.26)(typescript@5.0.4)(vite@4.3.5):
+  /solid-devtools@0.26.0(@solidjs/meta@0.28.5)(@solidjs/router@0.8.2)(solid-js@1.7.5)(solid-start-cloudflare-pages@0.2.26)(solid-start-node@0.2.26)(typescript@5.0.4)(vite@4.3.7):
     resolution: {integrity: sha512-YNvdOj2SsAzArmclh5cdCPQNZlDaYp8TsYQWftCGEA7eQ0UJ2dfz+IDEw7KkW6d44tyfd5iUgjDeoht0+B5klA==}
     peerDependencies:
       solid-js: ^1.6.9
@@ -5358,9 +5358,9 @@ packages:
       '@solid-primitives/utils': 5.5.2(solid-js@1.7.5)
       solid-js: 1.7.5
       type-fest: 3.10.0(typescript@5.0.4)
-      vite: 4.3.5(@types/node@20.1.0)
+      vite: 4.3.7(@types/node@20.1.7)
     optionalDependencies:
-      solid-start: 0.2.26(@solidjs/meta@0.28.4)(@solidjs/router@0.8.2)(solid-js@1.7.5)(solid-start-cloudflare-pages@0.2.26)(solid-start-node@0.2.26)(vite@4.3.5)
+      solid-start: 0.2.26(@solidjs/meta@0.28.5)(@solidjs/router@0.8.2)(solid-js@1.7.5)(solid-start-cloudflare-pages@0.2.26)(solid-start-node@0.2.26)(vite@4.3.7)
     transitivePeerDependencies:
       - '@solidjs/meta'
       - '@solidjs/router'
@@ -5402,7 +5402,7 @@ packages:
       '@babel/types': 7.21.5
       solid-js: 1.7.5
 
-  /solid-start-cloudflare-pages@0.2.26(solid-start@0.2.26)(vite@4.3.5):
+  /solid-start-cloudflare-pages@0.2.26(solid-start@0.2.26)(vite@4.3.7):
     resolution: {integrity: sha512-l+Zg0zazQaHdTsY9N9yqOyX/C/YFBceF3wN7Z4luimS3bc3G9LqHbekypDTl/SHzl2izRGtw8XbRN8SiIVICmQ==}
     peerDependencies:
       solid-start: '*'
@@ -5420,9 +5420,9 @@ packages:
       '@types/ws': 8.5.4
       miniflare: 2.14.0
       rollup: 3.21.5
-      solid-start: 0.2.26(@solidjs/meta@0.28.4)(@solidjs/router@0.8.2)(solid-js@1.7.5)(solid-start-cloudflare-pages@0.2.26)(solid-start-node@0.2.26)(vite@4.3.5)
+      solid-start: 0.2.26(@solidjs/meta@0.28.5)(@solidjs/router@0.8.2)(solid-js@1.7.5)(solid-start-cloudflare-pages@0.2.26)(solid-start-node@0.2.26)(vite@4.3.7)
       terser: 5.17.2
-      vite: 4.3.5(@types/node@20.1.0)
+      vite: 4.3.7(@types/node@20.1.7)
       ws: 8.13.0
     transitivePeerDependencies:
       - '@miniflare/storage-redis'
@@ -5431,7 +5431,7 @@ packages:
       - ioredis
       - utf-8-validate
 
-  /solid-start-node@0.2.26(solid-start@0.2.26)(undici@5.22.0)(vite@4.3.5):
+  /solid-start-node@0.2.26(solid-start@0.2.26)(undici@5.22.0)(vite@4.3.7):
     resolution: {integrity: sha512-8vciTGoQV+lIlCUSVHJPazlaoKDRfBowDkPeBr/EZdmtbcMOKoJYf/APPQWFspylF+nhzunMf0+zJP90VtMEYg==}
     peerDependencies:
       solid-start: '*'
@@ -5445,14 +5445,14 @@ packages:
       polka: 1.0.0-next.22
       rollup: 3.21.5
       sirv: 2.0.3
-      solid-start: 0.2.26(@solidjs/meta@0.28.4)(@solidjs/router@0.8.2)(solid-js@1.7.5)(solid-start-cloudflare-pages@0.2.26)(solid-start-node@0.2.26)(vite@4.3.5)
+      solid-start: 0.2.26(@solidjs/meta@0.28.5)(@solidjs/router@0.8.2)(solid-js@1.7.5)(solid-start-cloudflare-pages@0.2.26)(solid-start-node@0.2.26)(vite@4.3.7)
       terser: 5.17.2
       undici: 5.22.0
-      vite: 4.3.5(@types/node@20.1.0)
+      vite: 4.3.7(@types/node@20.1.7)
     transitivePeerDependencies:
       - supports-color
 
-  /solid-start@0.2.26(@solidjs/meta@0.28.4)(@solidjs/router@0.8.2)(solid-js@1.7.5)(solid-start-cloudflare-pages@0.2.26)(solid-start-node@0.2.26)(vite@4.3.5):
+  /solid-start@0.2.26(@solidjs/meta@0.28.5)(@solidjs/router@0.8.2)(solid-js@1.7.5)(solid-start-cloudflare-pages@0.2.26)(solid-start-node@0.2.26)(vite@4.3.7):
     resolution: {integrity: sha512-kne2HZlnSMzsirdnvNs1CsDqBl0L0uvKKt1t4de1CH7JIngyqoMcER97jTE0Ejr84KknANaKAdvJAzZcL7Ueng==}
     hasBin: true
     peerDependencies:
@@ -5492,7 +5492,7 @@ packages:
       '@babel/preset-env': 7.21.5(@babel/core@7.21.8)
       '@babel/preset-typescript': 7.21.5(@babel/core@7.21.8)
       '@babel/template': 7.20.7
-      '@solidjs/meta': 0.28.4(solid-js@1.7.5)
+      '@solidjs/meta': 0.28.5(solid-js@1.7.5)
       '@solidjs/router': 0.8.2(solid-js@1.7.5)
       '@types/cookie': 0.5.1
       chokidar: 3.5.3
@@ -5515,13 +5515,13 @@ packages:
       set-cookie-parser: 2.6.0
       sirv: 2.0.3
       solid-js: 1.7.5
-      solid-start-cloudflare-pages: 0.2.26(solid-start@0.2.26)(vite@4.3.5)
-      solid-start-node: 0.2.26(solid-start@0.2.26)(undici@5.22.0)(vite@4.3.5)
+      solid-start-cloudflare-pages: 0.2.26(solid-start@0.2.26)(vite@4.3.7)
+      solid-start-node: 0.2.26(solid-start@0.2.26)(undici@5.22.0)(vite@4.3.7)
       terser: 5.17.2
       undici: 5.22.0
-      vite: 4.3.5(@types/node@20.1.0)
-      vite-plugin-inspect: 0.7.26(rollup@3.21.5)(vite@4.3.5)
-      vite-plugin-solid: 2.7.0(solid-js@1.7.5)(vite@4.3.5)
+      vite: 4.3.7(@types/node@20.1.7)
+      vite-plugin-inspect: 0.7.26(rollup@3.21.5)(vite@4.3.7)
+      vite-plugin-solid: 2.7.0(solid-js@1.7.5)(vite@4.3.7)
       wait-on: 6.0.1(debug@4.3.4)
     transitivePeerDependencies:
       - supports-color
@@ -5602,11 +5602,11 @@ packages:
     resolution: {integrity: sha512-dOESqjYr96iWYylGObzd39EuNTa5VJxyvVAEm5Jnh7KGo75V43Hk1odPQkNDyXNmUR6k+gEiDVXnjB8HJ3crXw==}
     engines: {node: '>=12'}
 
-  /stripe@12.4.0:
-    resolution: {integrity: sha512-QjZRzKi3wf8TsuJf/fd6/ejfPgwNptDIzFogRWaRzP3oMJnSD73I2YxR0Eje5zfrU8FmddYWZYawoUejqN+o1w==}
+  /stripe@12.5.0:
+    resolution: {integrity: sha512-eDBh4bv+Uo+GdhjnQ246lM5KaOReoBzxFltgW0HJqco/QEAgSYxZPOpFbd5+gJnZlRqHSB5B+Zqw273SlbdPag==}
     engines: {node: '>=12.*'}
     dependencies:
-      '@types/node': 20.1.0
+      '@types/node': 20.1.7
       qs: 6.11.1
     dev: false
 
@@ -5883,7 +5883,7 @@ packages:
     resolution: {integrity: sha512-BNGbWLfd0eUPabhkXUVm0j8uuvREyTh5ovRa/dyow/BqAbZJyC+5fU+IzQOzmAKzYqYRAISoRhdQr3eIZ/PXqg==}
     engines: {node: '>= 0.8'}
 
-  /vite-plugin-inspect@0.7.26(rollup@3.21.5)(vite@4.3.5):
+  /vite-plugin-inspect@0.7.26(rollup@3.21.5)(vite@4.3.7):
     resolution: {integrity: sha512-gRjBay+OxLr/Dr+HXlfJVXZH0cqhE5hkkBvo2du2cA1LGUBnV8Aym89AdPrURkSpTk3Rvw9dNWM2VLIuw6RKJg==}
     engines: {node: '>=14'}
     peerDependencies:
@@ -5895,12 +5895,12 @@ packages:
       fs-extra: 11.1.1
       picocolors: 1.0.0
       sirv: 2.0.3
-      vite: 4.3.5(@types/node@20.1.0)
+      vite: 4.3.7(@types/node@20.1.7)
     transitivePeerDependencies:
       - rollup
       - supports-color
 
-  /vite-plugin-solid@2.7.0(solid-js@1.7.5)(vite@4.3.5):
+  /vite-plugin-solid@2.7.0(solid-js@1.7.5)(vite@4.3.7):
     resolution: {integrity: sha512-avp/Jl5zOp/Itfo67xtDB2O61U7idviaIp4mLsjhCa13PjKNasz+IID0jYTyqUp9SFx6/PmBr6v4KgDppqompg==}
     peerDependencies:
       solid-js: ^1.7.2
@@ -5913,13 +5913,13 @@ packages:
       merge-anything: 5.1.6
       solid-js: 1.7.5
       solid-refresh: 0.5.2(solid-js@1.7.5)
-      vite: 4.3.5(@types/node@20.1.0)
-      vitefu: 0.2.4(vite@4.3.5)
+      vite: 4.3.7(@types/node@20.1.7)
+      vitefu: 0.2.4(vite@4.3.7)
     transitivePeerDependencies:
       - supports-color
 
-  /vite@4.3.5(@types/node@20.1.0):
-    resolution: {integrity: sha512-0gEnL9wiRFxgz40o/i/eTBwm+NEbpUeTWhzKrZDSdKm6nplj+z4lKz8ANDgildxHm47Vg8EUia0aicKbawUVVA==}
+  /vite@4.3.7(@types/node@20.1.7):
+    resolution: {integrity: sha512-MTIFpbIm9v7Hh5b0wSBgkcWzSBz7SAa6K/cBTwS4kUiQJfQLFlZZRJRQgqunCVzhTPCk674tW+0Qaqh3Q00dBg==}
     engines: {node: ^14.18.0 || >=16.0.0}
     hasBin: true
     peerDependencies:
@@ -5943,14 +5943,14 @@ packages:
       terser:
         optional: true
     dependencies:
-      '@types/node': 20.1.0
+      '@types/node': 20.1.7
       esbuild: 0.17.18
       postcss: 8.4.23
       rollup: 3.21.5
     optionalDependencies:
       fsevents: 2.3.2
 
-  /vitefu@0.2.4(vite@4.3.5):
+  /vitefu@0.2.4(vite@4.3.7):
     resolution: {integrity: sha512-fanAXjSaf9xXtOOeno8wZXIhgia+CZury481LsDaV++lSvcU2R9Ch2bPh3PYFyoHW+w9LqAeYRISVQjUIew14g==}
     peerDependencies:
       vite: ^3.0.0 || ^4.0.0
@@ -5958,7 +5958,7 @@ packages:
       vite:
         optional: true
     dependencies:
-      vite: 4.3.5(@types/node@20.1.0)
+      vite: 4.3.7(@types/node@20.1.7)
 
   /wait-on@6.0.1(debug@4.3.4):
     resolution: {integrity: sha512-zht+KASY3usTY5u2LgaNqn/Cd8MukxLGjdcZxT2ns5QzDmTFc4XoWBgC+C/na+sMRZTuVygQoMYwdcVjHnYIVw==}
