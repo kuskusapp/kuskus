@@ -73,7 +73,7 @@ const UserDetailsCtx =
 export const UserDetailsProvider = UserDetailsCtx.Provider
 
 export const useUserDetails = () => {
-  const ctx = useContext(UserDetailsProvider) // TODO: fix..
+  const ctx = useContext(UserDetailsCtx) // TODO: fix..
   if (!ctx)
     throw new Error("useUserDetails must be used within UserDetailsProvider")
   return ctx
