@@ -134,18 +134,27 @@ export default function Sidebar() {
             </div>
           </div>
           <div
-            class="flex flex-col bg-neutral-900 p-2 grow"
+            class="flex flex-col bg-neutral-900 gap-1 p-2 grow"
             style={{ "border-radius": "10px" }}
           >
             <For
               each={Array.from(todolist.currentlyUsedTagsWithCount().keys())}
             >
               {(tag) => (
-                <div class="flex flex-row-reverse px-2 justify-between items-center cursor-pointer">
-                  <div
-                    class="opacity-60 text-xs"
-                    onClick={() => todolist.setMode("Filtered")}
-                  >
+                <div
+                  class={clsx(
+                    "flex flex-row-reverse pl-3 text-md align-center px-2 justify-between items-center cursor-pointer",
+                    todolist.activePage() === PageType.Filtered &&
+                      todolist.selectedTagInSidebar() === tag &&
+                      "bg-neutral-800 rounded"
+                  )}
+                  style={{ "padding-top": "2px", "padding-bottom": "2px" }}
+                  onClick={() => {
+                    todolist.updateActivePage(PageType.Filtered)
+                    todolist.setSelectedTagInSidebar(tag)
+                  }}
+                >
+                  <div class="opacity-60 text-xs">
                     {todolist.currentlyUsedTagsWithCount().get(tag)}
                   </div>
                   <div>{tag}</div>

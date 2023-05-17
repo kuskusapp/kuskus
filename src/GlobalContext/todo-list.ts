@@ -74,6 +74,8 @@ export function createTodoListState(
 
   const [activePage, setActivePage] = createSignal(PageType.All)
 
+  const [selectedTagInSidebar, setSelectedTagInSidebar] = createSignal("")
+
   const [focusedTodoKey, setFocusedTodoKey] = createSignal<TodoKey | null>(null)
   const isTodoFocused = createSelector<TodoKey | null, TodoKey>(focusedTodoKey)
 
@@ -129,7 +131,7 @@ export function createTodoListState(
     [PageType.Today]: (t) => !t.done && t.dueDate === todayDate(),
     [PageType.Done]: (t) => t.done,
     [PageType.Starred]: (t) => !t.done && t.starred,
-    [PageType.Filtered]: (t) => searchFilter,
+    [PageType.Filtered]: (t) => t.tags!.includes(selectedTagInSidebar()),
   }
 
   const orderedTodos = createMemo(() =>
@@ -219,6 +221,8 @@ export function createTodoListState(
     isTodoFocused,
     setFocusedTodoKey,
     setFocusedTodoIndex,
+    selectedTagInSidebar,
+    setSelectedTagInSidebar,
     mode,
     getModeData,
     inMode,

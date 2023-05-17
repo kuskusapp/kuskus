@@ -31,7 +31,10 @@ export default function TopBar(props: Props) {
 
           <h1 class="font-bold text-lg">{props.title}</h1>
         </div>
-        <Show
+        {/* TODO: add in future */}
+        {/* like in 2Do, allow users to filter out content in current page */}
+        {/* also have a button to save the search into a smart search and put it in sidebar */}
+        {/* <Show
           when={showFilterSearch()}
           fallback={
             <div
@@ -59,7 +62,7 @@ export default function TopBar(props: Props) {
             ref={(el) => autofocus(el)}
             placeholder="Search"
           />
-        </Show>
+        </Show> */}
       </div>
     </>
   )

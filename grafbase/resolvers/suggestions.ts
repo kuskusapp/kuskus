@@ -181,6 +181,8 @@ export default async function Resolver(
     return {
       suggestedTasks: suggestedTasks,
       rawResponse: rawResponse,
+      normalSubscriptionStripeUrl: null,
+      proSubscriptionStripeUrl: null,
     }
   }
 
