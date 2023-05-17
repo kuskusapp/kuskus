@@ -43,6 +43,7 @@ export enum TodoListMode {
   Suggest,
   Settings,
   Filtered,
+  SearchTags,
 }
 
 type TodoListModeDataMap = {

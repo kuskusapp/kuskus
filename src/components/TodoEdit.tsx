@@ -1,8 +1,8 @@
 import { Motion } from "@motionone/solid"
-import Fuse from "fuse.js"
 import { autofocus } from "@solid-primitives/autofocus"
 import { createEventListener } from "@solid-primitives/event-listener"
 import { createShortcut } from "@solid-primitives/keyboard"
+import Fuse from "fuse.js"
 import {
   For,
   Show,
@@ -11,7 +11,6 @@ import {
   createMemo,
   createSignal,
   onCleanup,
-  onMount,
 } from "solid-js"
 import { todayDate } from "~/lib/lib"
 import {
@@ -36,6 +35,7 @@ export default function TodoEdit(props: {
   const [starred, setStarred] = createSignal(props.todo.starred)
   const [tags, setTags] = createSignal(props.todo.tags)
   const [searchTags, setSearchTags] = createSignal(false)
+  const [selectedTag, setSelectedTag] = createSignal("")
 
   const fuse = createMemo(
     () =>
@@ -284,6 +284,16 @@ export default function TodoEdit(props: {
                       width: "60px",
                     }}
                     type="text"
+                    onKeyPress={(e) => {
+                      // const selected = results().selected()
+                      if (e.key === "Enter") {
+                        console.log("enter")
+                        // batch(() => {
+                        //   todoList.setFocusedTodoKey(selected)
+                        //   todoList.setMode(TodoListMode.Default)
+                        // })
+                      }
+                    }}
                     oninput={(e) => {
                       setSearchTagsQuery(e.target.value)
                     }}
@@ -339,6 +349,7 @@ export default function TodoEdit(props: {
               <div
                 onClick={() => {
                   setSearchTags(!searchTags())
+                  todoList.setMode(TodoListMode.SearchTags)
                 }}
               >
                 <Icon name="Tag" />

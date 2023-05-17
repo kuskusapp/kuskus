@@ -5,7 +5,7 @@ import { todayDate } from "~/lib/lib"
 import Icon from "./Icon"
 
 export default function Sidebar() {
-  const todolist = useTodoList()
+  const todoList = useTodoList()
 
   return (
     <>
@@ -51,28 +51,28 @@ export default function Sidebar() {
               id="TitleWrapper"
               class={clsx(
                 "flex px-2 cursor-pointer items-center",
-                todolist.activePage() === PageType.All &&
+                todoList.activePage() === PageType.All &&
                   "rounded dark:bg-neutral-800 bg-zinc-200"
               )}
-              onClick={() => todolist.updateActivePage(PageType.All)}
+              onClick={() => todoList.updateActivePage(PageType.All)}
             >
               <Icon name="Inbox" />
               <span id="Title" class="pl-1 overflow-hidden">
                 All
               </span>
               <div id="Number" class="opacity-40 text-xs">
-                {todolist.todos.filter((t) => !t.done).length > 0 &&
-                  todolist.todos.filter((t) => !t.done).length}
+                {todoList.todos.filter((t) => !t.done).length > 0 &&
+                  todoList.todos.filter((t) => !t.done).length}
               </div>
             </div>
             <div
               id="TitleWrapper"
               class={clsx(
                 "flex px-2 cursor-pointer items-center",
-                todolist.activePage() === PageType.Today &&
+                todoList.activePage() === PageType.Today &&
                   "rounded dark:bg-neutral-800 bg-zinc-200"
               )}
-              onClick={() => todolist.updateActivePage(PageType.Today)}
+              onClick={() => todoList.updateActivePage(PageType.Today)}
             >
               <div>
                 <Icon name="Calendar" />
@@ -86,10 +86,10 @@ export default function Sidebar() {
                 {/* maybe make it a runnable function inside the JSX */}
                 {/* save first filter computation, then check if it's > 0 */}
                 {/* have same issue for other places in this component */}
-                {todolist.todosState.todos.filter(
+                {todoList.todosState.todos.filter(
                   (t) => !t.done && t.dueDate === todayDate()
                 ).length > 0 &&
-                  todolist.todosState.todos.filter(
+                  todoList.todosState.todos.filter(
                     (t) => !t.done && t.dueDate === todayDate()
                   ).length}
               </div>
@@ -98,10 +98,10 @@ export default function Sidebar() {
               id="TitleWrapper"
               class={clsx(
                 "flex px-2 cursor-pointer items-center",
-                todolist.activePage() === PageType.Starred &&
+                todoList.activePage() === PageType.Starred &&
                   "rounded dark:bg-neutral-800 bg-zinc-200"
               )}
-              onClick={() => todolist.updateActivePage(PageType.Starred)}
+              onClick={() => todoList.updateActivePage(PageType.Starred)}
             >
               <div>
                 <Icon name="Star" />
@@ -111,21 +111,21 @@ export default function Sidebar() {
               </span>
               <div class="opacity-40 text-xs ml-auto">
                 {/* TODO: not good, should not run filter twice */}
-                {todolist.todos.filter((t) => {
+                {todoList.todos.filter((t) => {
                   if (!t.done && t.starred) {
                     return true
                   }
-                }).length > 0 && todolist.todos.filter((t) => t.starred).length}
+                }).length > 0 && todoList.todos.filter((t) => t.starred).length}
               </div>
             </div>
             <div
               id=""
               class={clsx(
                 "flex px-2 cursor-pointer items-center justify-start ",
-                todolist.activePage() === PageType.Done &&
+                todoList.activePage() === PageType.Done &&
                   "rounded dark:bg-neutral-800 bg-zinc-200"
               )}
-              onClick={() => todolist.updateActivePage(PageType.Done)}
+              onClick={() => todoList.updateActivePage(PageType.Done)}
             >
               <Icon name="Done" />
               <span id="Title" class="pl-1 overflow-hidden">
@@ -138,24 +138,24 @@ export default function Sidebar() {
             style={{ "border-radius": "10px" }}
           >
             <For
-              each={Array.from(todolist.currentlyUsedTagsWithCount().keys())}
+              each={Array.from(todoList.currentlyUsedTagsWithCount().keys())}
             >
               {(tag) => (
                 <div
                   class={clsx(
                     "flex flex-row-reverse pl-3 text-md align-center px-2 justify-between items-center cursor-pointer",
-                    todolist.activePage() === PageType.Filtered &&
-                      todolist.selectedTagInSidebar() === tag &&
+                    todoList.activePage() === PageType.Filtered &&
+                      todoList.selectedTagInSidebar() === tag &&
                       "bg-zinc-200 dark:bg-neutral-800 rounded"
                   )}
                   style={{ "padding-top": "2px", "padding-bottom": "2px" }}
                   onClick={() => {
-                    todolist.updateActivePage(PageType.Filtered)
-                    todolist.setSelectedTagInSidebar(tag)
+                    todoList.updateActivePage(PageType.Filtered)
+                    todoList.setSelectedTagInSidebar(tag)
                   }}
                 >
                   <div class="opacity-60 text-xs">
-                    {todolist.currentlyUsedTagsWithCount().get(tag)}
+                    {todoList.currentlyUsedTagsWithCount().get(tag)}
                   </div>
                   <div>{tag}</div>
                 </div>

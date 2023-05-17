@@ -64,7 +64,7 @@ export function createUserDetailsState(options: { request: GrafbaseRequest }) {
     setCollapsedSidebar: () => {
       return setUserDetails({ collapsedSidebar: !userDetails.collapsedSidebar })
     },
-  }
+  } as const
 }
 
 const UserDetailsCtx =

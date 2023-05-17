@@ -5,7 +5,7 @@ import { todayDate } from "~/lib/lib"
 import Icon from "./Icon"
 
 export default function CollapsedSidebar() {
-  const todolist = useTodoList()
+  const todoList = useTodoList()
 
   return (
     <>
@@ -30,10 +30,10 @@ export default function CollapsedSidebar() {
               id="TitleWrapper"
               class={clsx(
                 "flex justify-center cursor-pointer items-center",
-                todolist.activePage() === PageType.All &&
+                todoList.activePage() === PageType.All &&
                   "rounded dark:bg-neutral-800 bg-zinc-200"
               )}
-              onClick={() => todolist.updateActivePage(PageType.All)}
+              onClick={() => todoList.updateActivePage(PageType.All)}
             >
               <div class="relative">
                 <Icon name="Inbox" />
@@ -42,7 +42,7 @@ export default function CollapsedSidebar() {
                   id="Number"
                   class={clsx(
                     "bg-gray-100 dark:bg-neutral-900 absolute bottom-0 right-0 text-xs",
-                    todolist.activePage() === PageType.All && "bg-neutral-800"
+                    todoList.activePage() === PageType.All && "bg-neutral-800"
                   )}
                   style={{
                     "margin-top": "1px",
@@ -51,8 +51,8 @@ export default function CollapsedSidebar() {
                     "border-radius": "10px",
                   }}
                 >
-                  {todolist.todos.filter((t) => !t.done).length > 0 &&
-                    todolist.todos.filter((t) => !t.done).length}
+                  {todoList.todos.filter((t) => !t.done).length > 0 &&
+                    todoList.todos.filter((t) => !t.done).length}
                 </div>
               </div>
             </div>
@@ -60,10 +60,10 @@ export default function CollapsedSidebar() {
               id="TitleWrapper"
               class={clsx(
                 "flex justify-center cursor-pointer items-center",
-                todolist.activePage() === PageType.Today &&
+                todoList.activePage() === PageType.Today &&
                   "rounded dark:bg-neutral-800 bg-zinc-200"
               )}
-              onClick={() => todolist.updateActivePage(PageType.Today)}
+              onClick={() => todoList.updateActivePage(PageType.Today)}
             >
               <div class="relative">
                 <div>
@@ -73,7 +73,7 @@ export default function CollapsedSidebar() {
                   id="Number"
                   class={clsx(
                     "absolute bg-gray-100 dark:bg-neutral-900 bottom-0 right-0 text-xs",
-                    todolist.activePage() === PageType.Today && "bg-neutral-800"
+                    todoList.activePage() === PageType.Today && "bg-neutral-800"
                   )}
                   style={{
                     "margin-top": "1px",
@@ -86,10 +86,10 @@ export default function CollapsedSidebar() {
                   {/* maybe make it a runnable function inside the JSX */}
                   {/* save first filter computation, then check if it's > 0 */}
                   {/* have same issue for other places in this component */}
-                  {todolist.todosState.todos.filter(
+                  {todoList.todosState.todos.filter(
                     (t) => !t.done && t.dueDate === todayDate()
                   ).length > 0 &&
-                    todolist.todosState.todos.filter(
+                    todoList.todosState.todos.filter(
                       (t) => !t.done && t.dueDate === todayDate()
                     ).length}
                 </div>
@@ -99,10 +99,10 @@ export default function CollapsedSidebar() {
               id="TitleWrapper"
               class={clsx(
                 "flex justify-center cursor-pointer items-center",
-                todolist.activePage() === PageType.Starred &&
+                todoList.activePage() === PageType.Starred &&
                   "rounded dark:bg-neutral-800 bg-zinc-200"
               )}
-              onClick={() => todolist.updateActivePage(PageType.Starred)}
+              onClick={() => todoList.updateActivePage(PageType.Starred)}
             >
               <div class="relative">
                 <Icon name="Star" />
@@ -110,7 +110,7 @@ export default function CollapsedSidebar() {
                 <div
                   class={clsx(
                     "absolute bg-gray-100 dark:bg-neutral-900 bottom-0 right-0 text-xs",
-                    todolist.activePage() === PageType.Starred &&
+                    todoList.activePage() === PageType.Starred &&
                       "bg-neutral-800"
                   )}
                   style={{
@@ -121,12 +121,12 @@ export default function CollapsedSidebar() {
                   }}
                 >
                   {/* TODO: not good, should not run filter twice */}
-                  {todolist.todos.filter((t) => {
+                  {todoList.todos.filter((t) => {
                     if (!t.done && t.starred) {
                       return true
                     }
                   }).length > 0 &&
-                    todolist.todos.filter((t) => t.starred).length}
+                    todoList.todos.filter((t) => t.starred).length}
                 </div>
               </div>
             </div>
@@ -134,10 +134,10 @@ export default function CollapsedSidebar() {
               id=""
               class={clsx(
                 "flex cursor-pointer items-center justify-center ",
-                todolist.activePage() === PageType.Done &&
+                todoList.activePage() === PageType.Done &&
                   "rounded dark:bg-neutral-800 bg-zinc-200"
               )}
-              onClick={() => todolist.updateActivePage(PageType.Done)}
+              onClick={() => todoList.updateActivePage(PageType.Done)}
             >
               <Icon name="Done" />
             </div>
@@ -147,7 +147,7 @@ export default function CollapsedSidebar() {
             style={{ "border-radius": "10px" }}
           >
             <For
-              each={Array.from(todolist.currentlyUsedTagsWithCount().keys())}
+              each={Array.from(todoList.currentlyUsedTagsWithCount().keys())}
             >
               {(tag) => (
                 <div class="flex flex-row-reverse px-2 items-center justify-center cursor-pointer">
