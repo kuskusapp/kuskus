@@ -6,9 +6,9 @@ import { GrafbaseRequest } from "~/pages/App"
 export type UserDetails = {
   id?: string
   freeAiTasksAvailable: number
-  paidSubscriptionValidUntilDate: string | null // TODO: Date type?
+  paidSubscriptionValidUntilDate: string | null // TODO: Date type? (2023-10-03)
   languageModelUsed: string
-  collapsedSidebar: Boolean
+  collapsedSidebar: boolean
 }
 
 export function createUserDetailsState(options: { request: GrafbaseRequest }) {
