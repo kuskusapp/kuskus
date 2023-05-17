@@ -1,5 +1,9 @@
-import { createMemo, createSignal, onMount } from "solid-js"
-import { ClientTodo, useTodoList } from "~/GlobalContext/todo-list"
+import { createEffect, createMemo, createSignal, onMount } from "solid-js"
+import {
+  ClientTodo,
+  TodoListMode,
+  useTodoList,
+} from "~/GlobalContext/todo-list"
 import { createShortcut } from "@solid-primitives/keyboard"
 import clsx from "clsx"
 import { Motion } from "@motionone/solid"
@@ -45,13 +49,6 @@ export default function SuggestedTodos(props: {
     })
   )
 
-  // const availableSuggestions = createMemo(() => {
-  //   const newSuggestions = props.suggestions.filter(
-  //     (s) => !acceptedSuggestions().includes(s.task)
-  //   )
-  //   return newSuggestions
-  // })
-
   createShortcut(["Enter"], () => {
     const suggestion = props.suggestions[focusedSuggestion()]
 
@@ -61,10 +58,20 @@ export default function SuggestedTodos(props: {
 
     setFocusedSuggestion((p) => {
       let n = p + 1
-      if (n > filteredSuggestions().length - 1) {
-        n = 0
+      let counter = 0 // Counter to track number of iterations
+      if (n >= filteredSuggestions().length) {
+        n = 0 // Reset to start if we're at the end of the array
       }
-      while (filteredSuggestions()[n].accepted === true) n++
+      while (
+        filteredSuggestions()[n]?.accepted === true &&
+        counter < filteredSuggestions().length
+      ) {
+        n++
+        counter++
+        if (n >= filteredSuggestions().length) {
+          n = 0 // Reset to start of array if we reach the end
+        }
+      }
       return n
     })
 
@@ -79,15 +86,32 @@ export default function SuggestedTodos(props: {
       note: "",
       parent: todoList.focusedTodo() as ClientTodo,
     })
+    if (filteredSuggestions().every((s) => s.accepted === true)) {
+      todoList.setMode(TodoListMode.Default)
+    }
   })
 
   createShortcut(["ArrowDown"], () => {
     setFocusedSuggestion((p) => {
       let n = p + 1
-      if (n > filteredSuggestions().length - 1) {
-        n = 0
+      let loopedOnce = false
+
+      while (
+        n < filteredSuggestions().length &&
+        filteredSuggestions()[n].accepted === true
+      ) {
+        n++
+        if (n >= filteredSuggestions().length) {
+          if (loopedOnce) break // If we have looped once and all are accepted, break the loop.
+          n = 0
+          loopedOnce = true
+        }
       }
-      while (filteredSuggestions()[n].accepted === true) n++
+
+      if (n >= filteredSuggestions().length) {
+        n = filteredSuggestions().length - 1 // If we have exceeded the array length, set n to the last index.
+      }
+
       return n
     })
   })
@@ -98,9 +122,16 @@ export default function SuggestedTodos(props: {
       if (n < 0) {
         n = filteredSuggestions().length - 1
       }
-      while (n > 0 && filteredSuggestions()[n].accepted === true) n--
-      if (n === 0) {
-        n = filteredSuggestions().length - 1
+      const originalN = n // Remember the starting point
+      while (filteredSuggestions()[n].accepted === true) {
+        n--
+        if (n < 0) {
+          n = filteredSuggestions().length - 1
+        }
+        if (n === originalN) {
+          // We've gone full circle, every suggestion is accepted
+          break
+        }
       }
       return n
     })
