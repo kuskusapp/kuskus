@@ -1,5 +1,5 @@
 import clsx from "clsx"
-import { For, onMount } from "solid-js"
+import { For } from "solid-js"
 import { PageType, useTodoList } from "~/GlobalContext/todo-list"
 import { todayDate } from "~/lib/lib"
 import Icon from "./Icon"
@@ -142,7 +142,10 @@ export default function Sidebar() {
             >
               {(tag) => (
                 <div class="flex flex-row-reverse px-2 justify-between items-center cursor-pointer">
-                  <div class="opacity-60 text-xs">
+                  <div
+                    class="opacity-60 text-xs"
+                    onClick={() => todolist.setMode("Filtered")}
+                  >
                     {todolist.currentlyUsedTagsWithCount().get(tag)}
                   </div>
                   <div>{tag}</div>

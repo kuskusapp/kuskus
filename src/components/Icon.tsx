@@ -29,6 +29,7 @@ interface Props {
     | "Github"
     | "Twitter"
     | "Tag"
+    | "Filter"
   width?: string
   height?: string
 }
@@ -629,6 +630,24 @@ export default function Icon(props: Props) {
             stroke-linejoin="round"
             stroke-width="1.5"
             d="M12 4.75H19.25V12L12.5535 18.6708C11.7544 19.4668 10.4556 19.445 9.68369 18.6226L5.28993 13.941C4.54041 13.1424 4.57265 11.8895 5.36226 11.1305L12 4.75Z"
+          ></path>
+        </svg>
+      )
+    case "Filter":
+      return (
+        <svg
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M4.75 4.75H19.25C19.25 8.06033 17.2814 11.0233 14.25 11.9507V18.25C14.25 18.8023 13.8023 19.25 13.25 19.25H10.75C10.1977 19.25 9.75 18.8023 9.75 18.25V11.9507C6.7186 11.0233 4.75 8.06033 4.75 4.75Z"
+            stroke="currentColor"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
           ></path>
         </svg>
       )

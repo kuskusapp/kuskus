@@ -1,6 +1,6 @@
 import { Presence } from "@motionone/solid"
 import { createEventListener } from "@solid-primitives/event-listener"
-import { createShortcut } from "@solid-primitives/keyboard"
+import { createShortcut, useKeyDownEvent } from "@solid-primitives/keyboard"
 import {
   For,
   Match,
@@ -95,6 +95,10 @@ export default function TodoList() {
                 return wrapIndex(p + 1, todoList.flatTasks().length)
               })
             },
+            // Activate filter search
+            // [("Meta", "F")]() {
+            //   console.log("trigger")
+            // },
             // Complete task
             [" "]() {
               const focused = todoList.focusedTodo()

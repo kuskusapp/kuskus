@@ -31,6 +31,7 @@ export enum PageType {
   Today = "Today",
   Done = "Done",
   Starred = "Starred",
+  Filtered = "Filtered",
 }
 
 export enum TodoListMode {
@@ -41,6 +42,7 @@ export enum TodoListMode {
   Search,
   Suggest,
   Settings,
+  Filtered,
 }
 
 type TodoListModeDataMap = {
@@ -127,6 +129,7 @@ export function createTodoListState(
     [PageType.Today]: (t) => !t.done && t.dueDate === todayDate(),
     [PageType.Done]: (t) => t.done,
     [PageType.Starred]: (t) => !t.done && t.starred,
+    [PageType.Filtered]: (t) => searchFilter,
   }
 
   const orderedTodos = createMemo(() =>

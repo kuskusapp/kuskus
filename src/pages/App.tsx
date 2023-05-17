@@ -72,6 +72,7 @@ export default function App(props: { initialToken: string }) {
             <div class="flex grow gap-2 p-2 h-full overflow-hidden">
               <Show
                 when={userDetailsState.userDetails.collapsedSidebar}
+                // when={true}
                 fallback={<Sidebar />}
               >
                 <CollapsedSidebar />
