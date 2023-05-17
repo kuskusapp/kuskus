@@ -32,8 +32,7 @@ export default function TodoEdit(props: {
   const [showSelectPriority, setShowSelectPriority] = createSignal(false)
   const [priority, setPriority] = createSignal(props.todo.priority)
   const [starred, setStarred] = createSignal(props.todo.starred)
-  // const [tags, setTags] = createSignal(props.todo.tags)
-  const [tags, setTags] = createSignal(["check", "life"])
+  const [tags, setTags] = createSignal(props.todo.tags)
   const [searchTags, setSearchTags] = createSignal(false)
 
   onMount(() => {
@@ -238,43 +237,31 @@ export default function TodoEdit(props: {
         </Show>
         <div class=" text-sm flex items-center gap-2">
           <div
-            class=" transition-all rounded relative cursor-pointer"
+            class=" flex transition-all gap-2 rounded relative cursor-pointer"
             style={{ "padding-top": "1.5px" }}
           >
-            <div
-              onClick={() => {
-                setSearchTags(!searchTags())
-              }}
-            >
-              <Icon name="Tag" />
-            </div>
-
             <Show when={searchTags()}>
               <div
-                class="absolute flex gap-1 flex-col"
+                id="tagsearch"
+                class="flex w-full bg-neutral-800 relative opacity-90 rounded pl-1"
                 style={{
-                  right: "-1px",
-                  bottom: "-180px",
+                  border: "solid 1px rgba(80,80,80,0.5)",
                 }}
               >
                 <div
-                  class="flex bg-neutral-800 opacity-90 rounded pl-1"
-                  style={{
-                    width: "105px",
-                    border: "solid 1px rgba(80,80,80,0.5)",
-                  }}
+                  style={{ width: "100px" }}
+                  class="flex gap-1 bg-neutral-800 pl-0.5 px-6 rounded-2xl"
                 >
                   <div class="opacity-60">
                     <Icon name="Search" />
                   </div>
 
                   <input
-                    class="bg-neutral-800 rounded outline-none"
+                    class="bg-neutral-800 rounded pl-0.5 outline-none"
                     ref={tagInputRef}
                     autofocus
                     style={{
-                      "padding-left": "2px",
-                      width: "75px",
+                      width: "80px",
                     }}
                     type="text"
                     placeholder="Search"
@@ -282,29 +269,50 @@ export default function TodoEdit(props: {
                 </div>
 
                 <div
-                  class="rounded bg-neutral-800 overflow-auto"
+                  class="absolute flex w-full gap-1 flex-col"
                   style={{
-                    width: "105px",
-                    height: "150px",
-                    border: "solid 1px rgba(80,80,80,0.5)",
+                    left: "0px",
+                    bottom: "-154px",
                   }}
                 >
-                  <div class="flex flex-col overflow-scroll px-2">
-                    <For each={tags()}>
-                      {(tag) => (
-                        <div
-                          onClick={() => {
-                            setTags([...tags(), tag])
-                          }}
-                        >
-                          {tag}
-                        </div>
-                      )}
-                    </For>
+                  <div
+                    class="rounded w-full bg-neutral-800 overflow-auto"
+                    style={{
+                      height: "150px",
+                      border: "solid 1px rgba(80,80,80,0.5)",
+                    }}
+                  >
+                    <div class="flex flex-col overflow-scroll px-2">
+                      <For each={tags()}>
+                        {(tag) => (
+                          <div
+                            onClick={() => {
+                              setTags([...tags(), tag])
+                            }}
+                          >
+                            {tag}
+                          </div>
+                        )}
+                      </For>
+                    </div>
                   </div>
                 </div>
               </div>
             </Show>
+            <For each={tags()}>
+              {(tag) => (
+                <div class="bg-neutral-700 flex justify-center rounded-2xl overflow-hidden px-3">
+                  <div>{tag}</div>
+                </div>
+              )}
+            </For>
+            <div
+              onClick={() => {
+                setSearchTags(!searchTags())
+              }}
+            >
+              <Icon name="Tag" />
+            </div>
           </div>
           <Show
             when={props.todo.dueDate || showCalendar()}

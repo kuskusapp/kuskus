@@ -131,7 +131,8 @@ export function createTodoListState(
     [PageType.Today]: (t) => !t.done && t.dueDate === todayDate(),
     [PageType.Done]: (t) => t.done,
     [PageType.Starred]: (t) => !t.done && t.starred,
-    [PageType.Filtered]: (t) => t.tags!.includes(selectedTagInSidebar()),
+    [PageType.Filtered]: (t) =>
+      !!t.tags && t.tags!.includes(selectedTagInSidebar()),
   }
 
   const orderedTodos = createMemo(() =>
