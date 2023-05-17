@@ -98,7 +98,10 @@ export default function SuggestedTodos(props: {
       if (n < 0) {
         n = filteredSuggestions().length - 1
       }
-      while (filteredSuggestions()[n].accepted === true) n--
+      while (n > 0 && filteredSuggestions()[n].accepted === true) n--
+      if (n === 0) {
+        n = filteredSuggestions().length - 1
+      }
       return n
     })
   })
