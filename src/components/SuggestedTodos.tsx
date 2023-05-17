@@ -96,16 +96,16 @@ export default function SuggestedTodos(props: {
       let n = p + 1
       let loopedOnce = false
 
-      while (
-        n < filteredSuggestions().length &&
-        filteredSuggestions()[n].accepted === true
-      ) {
-        n++
+      while (true) {
         if (n >= filteredSuggestions().length) {
           if (loopedOnce) break // If we have looped once and all are accepted, break the loop.
           n = 0
           loopedOnce = true
         }
+        if (filteredSuggestions()[n].accepted !== true) {
+          break
+        }
+        n++
       }
 
       if (n >= filteredSuggestions().length) {
