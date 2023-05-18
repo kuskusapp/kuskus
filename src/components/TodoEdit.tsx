@@ -126,7 +126,7 @@ export default function TodoEdit(props: {
     }
   })
 
-  let titleRef!: HTMLInputElement,
+  let titleRef!: HTMLTextAreaElement,
     noteRef!: HTMLInputElement,
     datePickerRef!: HTMLInputElement,
     tagInputRef!: HTMLInputElement
@@ -154,46 +154,33 @@ export default function TodoEdit(props: {
   })
 
   return (
-    <Motion.div class="flex justify-between cursor-default pl-1.5 pr-1.5 dark:bg-neutral-800 bg-zinc-200 py-2 transition-all rounded-lg w-full">
-      <div class="w-full">
-        <div class="flex gap-2 items-center">
+    <Motion.div class="flex flex-col cursor-default pl-1.5 pr-1.5 dark:bg-neutral-800 bg-zinc-200 py-2 transition-all rounded-lg w-full">
+      <div class="w-full h-full flex justify-between px-2 ">
+        <div class="flex grow gap-2 items-center h-full">
           <div>
             <Icon name={"Square"} />
           </div>
-          <div class="w-full ">
-            <input
+          <div class="w-full h-full">
+            <textarea
               value={title()}
               autofocus
               ref={titleRef}
               oninput={(e) => {
                 setTitle(e.target.value)
+                e.target.style.height = "auto"
+                e.target.style.height = e.target.scrollHeight + "px"
               }}
+              rows="1"
               style={{
                 outline: "none",
+                "word-break": "break-all",
+
+                "min-height": "20px",
               }}
-              class=" bg-inherit w-full"
-            ></input>
+              class=" bg-inherit w-full overflow-hidden resize-none"
+            ></textarea>
           </div>
         </div>
-        <div class="pl-7">
-          <input
-            autofocus
-            ref={noteRef}
-            class="bg-transparent text-sm opacity-70 w-full outline-none"
-            type="text"
-            oninput={(e) => {
-              setNote(e.target.value)
-            }}
-            placeholder="Notes"
-            value={props.todo.note ? props.todo.note : ""}
-          />
-        </div>
-      </div>
-      <div
-        style={{ "padding-right": "0.375rem" }}
-        class="flex flex-col justify-between items-end w-full"
-      >
-        {/* TODO: don't duplicate like below.. */}
         <Show when={showSelectPriority()}>
           <div class="cursor-pointer flex">
             <div
@@ -255,7 +242,35 @@ export default function TodoEdit(props: {
             {priority() === 0 && <Icon name={"Star"} />}
           </div>
         </Show>
-        <div class=" text-sm flex items-center justify-end gap-2 w-full">
+      </div>
+      <div
+        style={{ "padding-right": "0.375rem" }}
+        class="flex justify-between items-end w-full"
+      >
+        <div class="pl-9 grow">
+          <textarea
+            autofocus
+            ref={noteRef}
+            rows="1"
+            style={{
+              outline: "none",
+              "word-break": "break-all",
+
+              "min-height": "20px",
+            }}
+            class="flex justify-center items-center bg-inherit w-full overflow-hidden resize-none"
+            type="text"
+            oninput={(e) => {
+              setNote(e.target.value)
+              e.target.style.height = "auto"
+              e.target.style.height = e.target.scrollHeight + "px"
+            }}
+            placeholder="Notes"
+            value={props.todo.note ? props.todo.note : ""}
+          />
+        </div>
+        {/* TODO: don't duplicate like below.. */}
+        <div class=" text-sm flex w-1/2 items-center justify-end gap-2 overflow-auto">
           <div
             class=" flex transition-all min-w-fit gap-2 rounded relative cursor-pointer"
             style={{ "padding-top": "1.5px" }}
@@ -309,7 +324,7 @@ export default function TodoEdit(props: {
                   }}
                 >
                   <div
-                    class="rounded w-full z-10 bg-zinc-200 dark:bg-neutral-800 overflow-auto"
+                    class="rounded w-full z-10 bg-zinc-200 dark:bg-neutral-800"
                     style={{
                       height: "150px",
                       border: "solid 1px rgba(80,80,80,0.5)",
@@ -337,7 +352,7 @@ export default function TodoEdit(props: {
                 "padding-top": "1px",
                 "padding-bottom": "1px",
               }}
-              class="flex min-w-fit gap-2"
+              class="flex min-w-fit gap-2 overflow-auto"
             >
               <For each={tags()}>
                 {(tag) => (
@@ -352,10 +367,12 @@ export default function TodoEdit(props: {
                   todoList.setMode(TodoListMode.SearchTags)
                 }}
               >
+                {" "}
                 <Icon name="Tag" />
               </div>
             </div>
           </div>
+
           <Show
             when={props.todo.dueDate || showCalendar()}
             fallback={

@@ -13,8 +13,7 @@ export default function Sidebar() {
         {`
 
           #sidebar {
-            container-type: inline-size;
-            container-name: sidebar;
+            display: none
           }
           #Title {
             display: none
@@ -26,7 +25,7 @@ export default function Sidebar() {
           #Number {
             width: auto;
           }
-          @container sidebar (min-width: 70px){
+          @media (min-width: 768px){
             #Title {
               display: inline;
             }
@@ -36,6 +35,9 @@ export default function Sidebar() {
             }
             #Number {
               margin-left: auto;
+            }
+            #sidebar {
+              display: inline
             }
 
           }

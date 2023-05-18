@@ -89,7 +89,7 @@ export default function Todo(props: {
           </div>
           <div
             style={{ "padding-right": "0.375rem" }}
-            class="flex gap-3 items-center"
+            class="flex gap-3 items-center overflow-auto rounded-lg"
           >
             {props.loadingSuggestions && <Loader />}
             <div class="opacity-50 " style={{ "font-size": "14.8px" }}>
@@ -97,18 +97,17 @@ export default function Todo(props: {
                 ? "Today"
                 : props.todo.dueDate}
             </div>
-            <div class="flex items-center gap-2 justify-center overflow-auto">
-              <For each={props.todo.tags}>
-                {(tag) => (
-                  <div
-                    style={{ "max-width": "100px" }}
-                    class="bg-zinc-300 opacity-80 dark:bg-neutral-700 flex justify-start px-3 rounded-2xl overflow-hidden"
-                  >
-                    <div class="">{tag}</div>
-                  </div>
-                )}
-              </For>
-              {/* {props.todo.tags && props.todo.tags.map()} */}
+            <div class="w-fit">
+              <div class="flex w-fit items-center gap-2 justify-center overflow-auto">
+                <For each={props.todo.tags}>
+                  {(tag) => (
+                    <div class="bg-zinc-300 opacity-80 min-w-fit dark:bg-neutral-700 flex justify-start px-3 rounded-2xl overflow-hidden">
+                      <div class="whitespace-nowrap w-full">{tag}</div>
+                    </div>
+                  )}
+                </For>
+                {/* {props.todo.tags && props.todo.tags.map()} */}
+              </div>
             </div>
             <Show when={!props.todo.starred}>
               <div>
