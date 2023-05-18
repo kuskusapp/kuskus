@@ -31,6 +31,8 @@ export default function TodoList() {
   const todoList = useTodoList()
 
   function setPrority(i: Priority) {
+    console.log(todoList.todosState, "todo state")
+    console.log(todoList.flatTasks(), "flat tasks")
     const focusedTodoValue = todoList.focusedTodoKey()
     if (!focusedTodoValue) return
 
@@ -208,7 +210,6 @@ export default function TodoList() {
       const res = await todoList.request(SuggestedTasksDocument, {
         task: todo.title,
       })
-      console.log(res, "res")
       // TODO: fix types
       const normalSubscriptionStripeUrl =
         // @ts-ignore
