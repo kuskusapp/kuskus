@@ -1,5 +1,5 @@
 import clsx from "clsx"
-import { Match, Switch, createSignal, onCleanup, onMount } from "solid-js"
+import { Match, Show, Switch, createSignal, onCleanup, onMount } from "solid-js"
 import { GoogleClient } from "~/lib/auth"
 import Keybind from "./Keybind"
 import { TodoListMode, useTodoList } from "~/GlobalContext/todo-list"
@@ -128,14 +128,33 @@ export default function Settings() {
           <Match when={show() === "Account"}>
             <div class="w-full h-full flex items-center justify-center">
               <div class="flex flex-col gap-5 justify-center items-center">
-                <div class="font-bold text-4xl">You are on free plan</div>
-                <div class="opacity-60 flex flex-col items-center justify-center">
-                  <div>3/10 AI suggestions used</div>
-                  <div>3/10 tasks used</div>
-                </div>
-                <div class="flex items-center justify-center bg-neutral-800 p-2 px-6 hover:opacity-60 rounded-2xl">
-                  <div>Upgrade</div>
-                </div>
+                <Show
+                  when={
+                    new Date(
+                      userDetails.userDetails.paidSubscriptionValidUntilDate
+                    ) > new Date()
+                  }
+                  fallback={
+                    <>
+                      <div class="font-bold text-4xl">You are on free plan</div>
+                      <div class="opacity-60 flex flex-col items-center justify-center">
+                        <div>
+                          {10 - userDetails.userDetails.freeAiTasksAvailable}/10
+                          AI suggestions used
+                        </div>
+                        <div>{todoList.todos.length}/10 tasks used</div>
+                      </div>
+                      <div class="flex items-center justify-center bg-neutral-800 p-2 px-6 hover:opacity-60 rounded-2xl">
+                        <div>Upgrade</div>
+                      </div>
+                    </>
+                  }
+                >
+                  <div class="font-bold text-4xl">
+                    You are on paid plan. Enjoy!
+                  </div>
+                  <div class="opacity-60 flex flex-col items-center justify-center"></div>
+                </Show>
               </div>
             </div>
           </Match>

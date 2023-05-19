@@ -210,18 +210,8 @@ export default function TodoList() {
       const res = await todoList.request(SuggestedTasksDocument, {
         task: todo.title,
       })
-      // TODO: fix types
-      const normalSubscriptionStripeUrl =
-        // @ts-ignore
-        res.suggestions.suggestedTasks.normalSubscriptionStripeUrl
-      const proSubscriptionStripeUrl =
-        // @ts-ignore
-        res.suggestions.suggestedTasks.proSubscriptionStripeUrl
-
-      if (normalSubscriptionStripeUrl || proSubscriptionStripeUrl) {
-        todoList.setMode(TodoListMode.Settings, { settingsState: "upgrade" })
-        return
-      }
+      console.log(res)
+      return
       // @ts-ignore
       const suggestions = res.suggestions.suggestedTasks.tasks
       return suggestions && suggestions.length ? suggestions : undefined

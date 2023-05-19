@@ -170,6 +170,7 @@ export default async function Resolver(
     }
   }
 
+  console.log("RUNNNNNNNNN")
   return {
     needPayment: true,
   }
