@@ -286,7 +286,7 @@ export type SuggestedTasks = {
 
 export type SuggestionsPayload = {
   __typename?: "SuggestionsPayload"
-  needPayment: Scalars["Boolean"]
+  needPayment?: Maybe<Scalars["Boolean"]>
   rawResponse?: Maybe<Scalars["String"]>
   suggestedTasks?: Maybe<SuggestedTasks>
 }
@@ -661,6 +661,7 @@ export type SuggestedTasksQuery = {
   suggestions?: {
     __typename?: "SuggestionsPayload"
     rawResponse?: string | null
+    needPayment?: boolean | null
     suggestedTasks?: {
       __typename?: "SuggestedTasks"
       intro?: string | null
@@ -1732,6 +1733,7 @@ export const SuggestedTasksDocument = {
                   },
                 },
                 { kind: "Field", name: { kind: "Name", value: "rawResponse" } },
+                { kind: "Field", name: { kind: "Name", value: "needPayment" } },
               ],
             },
           },

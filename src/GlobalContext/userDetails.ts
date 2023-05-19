@@ -34,7 +34,6 @@ export function createUserDetailsState(options: { request: GrafbaseRequest }) {
       // @ts-ignore
       setUserDetails(res.userDetailsCollection.edges[0].node)
     })
-    console.log(userDetails, "user details")
   })
 
   createEffect(() => {

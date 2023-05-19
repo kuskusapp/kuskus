@@ -147,6 +147,7 @@ query SuggestedTasks($task: String!) {
       }
     }
     rawResponse
+    needPayment
   }
 }
 

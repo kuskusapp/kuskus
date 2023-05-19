@@ -26,9 +26,11 @@ import { isDev } from "solid-js/web"
 import { SuggestedTasksDocument } from "~/graphql/schema"
 import ActionBar from "./ActionBar"
 import LocalSearch from "./LocalSearch"
+import { useUserDetails } from "~/GlobalContext/userDetails"
 
 export default function TodoList() {
   const todoList = useTodoList()
+  const userDetails = useUserDetails()
 
   function setPrority(i: Priority) {
     console.log(todoList.todosState, "todo state")
@@ -160,6 +162,18 @@ export default function TodoList() {
             },
             // Add a new todo
             N() {
+              if (
+                new Date(
+                  userDetails.userDetails.paidSubscriptionValidUntilDate
+                ) < new Date()
+              ) {
+                if (todoList.todos.length > 10) {
+                  todoList.setMode(TodoListMode.Settings, {
+                    settingsState: "Account",
+                  })
+                  return
+                }
+              }
               todoList.addNewTask()
             },
             // Create new subtask
@@ -210,8 +224,10 @@ export default function TodoList() {
       const res = await todoList.request(SuggestedTasksDocument, {
         task: todo.title,
       })
-      console.log(res)
-      return
+      if (res.suggestions?.needPayment) {
+        todoList.setMode(TodoListMode.Settings, { settingsState: "Upgrade" })
+        return
+      }
       // @ts-ignore
       const suggestions = res.suggestions.suggestedTasks.tasks
       return suggestions && suggestions.length ? suggestions : undefined

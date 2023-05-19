@@ -144,9 +144,12 @@ export default function Settings() {
                         </div>
                         <div>{todoList.todos.length}/10 tasks used</div>
                       </div>
-                      <div class="flex items-center justify-center bg-neutral-800 p-2 px-6 hover:opacity-60 rounded-2xl">
-                        <div>Upgrade</div>
-                      </div>
+                      <button
+                        class="flex items-center justify-center bg-neutral-800 p-2 px-6 hover:opacity-60 rounded-2xl cursor-pointer"
+                        onClick={() => setShow("Upgrade")}
+                      >
+                        Upgrade
+                      </button>
                     </>
                   }
                 >
