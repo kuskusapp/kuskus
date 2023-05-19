@@ -68,7 +68,7 @@ export default function Auth() {
               <div id="text" class="text-2xl mt-3 mb-2">
                 Sign in/up with
               </div>
-              <hanko-auth api={hankoApi} />
+              <hanko-auth api={import.meta.env.HANKO_API} />
               {/* <div class="flex gap-2 items-start">
                 <button
                   id="Auth"
