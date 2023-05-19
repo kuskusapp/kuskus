@@ -1,11 +1,5 @@
-import Stripe from "stripe"
 import { Redis } from "@upstash/redis"
 import { suggestionsv3, suggestionsv4, SuggestedTasks } from "@kuskusapp/ai"
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: "2022-11-15",
-  typescript: true,
-})
 
 const redis = new Redis({
   url: process.env.UPSTASH_REDIS_REST_URL!,
@@ -44,8 +38,6 @@ export default async function Resolver(
     return {
       suggestedTasks: cachedTask.suggestedTasks,
       rawResponse: cachedTask.rawResponse,
-      normalSubscriptionStripeUrl: null,
-      proSubscriptionStripeUrl: null,
     }
   }
 
@@ -107,8 +99,6 @@ export default async function Resolver(
       return {
         suggestedTasks: suggestedTasks,
         rawResponse: rawResponse,
-        normalSubscriptionStripeUrl: null,
-        proSubscriptionStripeUrl: null,
       }
     } else {
       const { suggestedTasks, rawResponse } = await suggestionsv3(
@@ -123,8 +113,6 @@ export default async function Resolver(
       return {
         suggestedTasks: suggestedTasks,
         rawResponse: rawResponse,
-        normalSubscriptionStripeUrl: null,
-        proSubscriptionStripeUrl: null,
       }
     }
   }
@@ -173,55 +161,17 @@ export default async function Resolver(
     await redis.set(cacheString, {
       suggestedTasks,
       rawResponse,
-      normalSubscriptionStripeUrl: null,
-      proSubscriptionStripeUrl: null,
     })
     logAI(cacheString, suggestedTasks, rawResponse)
 
     return {
       suggestedTasks: suggestedTasks,
       rawResponse: rawResponse,
-      normalSubscriptionStripeUrl: null,
-      proSubscriptionStripeUrl: null,
     }
   }
 
-  // user can't make the request, return 2 stripe payment links for subscription
-  try {
-    const normalSubscription = await stripe.checkout.sessions.create({
-      success_url: process.env.STRIPE_SUCCESS_URL!,
-      mode: "subscription",
-      metadata: {
-        userDetailsId: userDetailsId,
-      },
-      line_items: [
-        {
-          quantity: 1,
-          price: process.env.STRIPE_10_SUBSCRIPTION!,
-        },
-      ],
-    })
-    const proSubscription = await stripe.checkout.sessions.create({
-      success_url: process.env.STRIPE_SUCCESS_URL!,
-      mode: "subscription",
-      metadata: {
-        userDetailsId: userDetailsId,
-      },
-      line_items: [
-        {
-          quantity: 1,
-          price: process.env.STRIPE_25_SUBSCRIPTION!,
-        },
-      ],
-    })
-    return {
-      suggestedTasks: null,
-      rawResponse: null,
-      normalSubscriptionStripeUrl: normalSubscription.url,
-      proSubscriptionStripeUrl: proSubscription.url,
-    }
-  } catch (error) {
-    console.log(error)
+  return {
+    needPayment: true,
   }
 }
 

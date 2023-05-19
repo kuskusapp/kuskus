@@ -8,13 +8,17 @@ schema
 
 extend type Query {
   suggestions(task: String!): SuggestionsPayload @resolver(name: "suggestions")
+  stripe(plan: String!): StripePayload @resolver(name: "stripe")
+}
+
+type StripePayload {
+  stripeCheckoutUrl: String!
 }
 
 type SuggestionsPayload {
   suggestedTasks: SuggestedTasks
   rawResponse: String
-  normalSubscriptionStripeUrl: String
-  proSubscriptionStripeUrl: String
+  needPayment: Boolean!
 }
 
 type SuggestedTasks {
