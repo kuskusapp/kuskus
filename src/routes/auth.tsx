@@ -37,6 +37,12 @@ export default function Auth() {
           font-weight: bold;
         }
 
+        hanko-auth::part(secondary-button) {
+          opacity: 0.8;
+          border-color: white;
+          color: white;
+        }
+
       hanko-auth, hanko-profile {
         /* Color Scheme */
         --color: #171717;
@@ -80,7 +86,6 @@ export default function Auth() {
 
         /* Divider Styles */;
         --divider-padding: 0 42px;
-        --divider-display: block;
         --divider-visibility: visible;
 
         /* Link Styles */;
