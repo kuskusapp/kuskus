@@ -63,7 +63,7 @@ export default async function Resolver(
           line_items: [
             {
               quantity: 1,
-              price: process.env.STRIPE_10_SUBSCRIPTION!,
+              price: process.env.STRIPE_NORMAL_MONTH_SUBSCRIPTION!,
             },
           ],
         })
@@ -72,7 +72,7 @@ export default async function Resolver(
         }
       case "normalYearly":
         const normalYearly = await stripe.checkout.sessions.create({
-          success_url: process.env.STRIPE_SUCCESS_URL!,
+          success_url: process.env.STRIPE_NORMAL_YEAR_SUBSCRIPTION!,
           mode: "subscription",
           metadata: {
             userDetailsId: userDetailsId,
@@ -80,7 +80,7 @@ export default async function Resolver(
           line_items: [
             {
               quantity: 1,
-              price: process.env.STRIPE_10_SUBSCRIPTION!,
+              price: process.env.STRIPE_NORMAL_YEAR_SUBSCRIPTION!,
             },
           ],
         })
@@ -97,7 +97,7 @@ export default async function Resolver(
           line_items: [
             {
               quantity: 1,
-              // price: process.env.STRIPE_10_SUBSCRIPTION!,
+              price: process.env.STRIPE_PRO_MONTH_SUBSCRIPTION!,
             },
           ],
         })
@@ -115,7 +115,7 @@ export default async function Resolver(
           line_items: [
             {
               quantity: 1,
-              // price: process.env.STRIPE_10_SUBSCRIPTION!,
+              price: process.env.STRIPE_PRO_YEAR_SUBSCRIPTION!,
             },
           ],
         })
