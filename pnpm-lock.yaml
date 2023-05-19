@@ -55,6 +55,9 @@ dependencies:
   '@teamhanko/hanko-elements':
     specifier: 0.4.0-alpha
     version: 0.4.0-alpha
+  '@teamhanko/hanko-frontend-sdk':
+    specifier: 0.4.0-alpha
+    version: 0.4.0-alpha
   '@types/node':
     specifier: ^20.1.7
     version: 20.1.7
