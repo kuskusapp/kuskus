@@ -104,6 +104,7 @@ export type PageInfo = {
 
 export type Query = {
   __typename?: "Query"
+  stripe?: Maybe<StripePayload>
   /** Query a single Subtask by an ID or a unique field */
   subtask?: Maybe<Subtask>
   /** Paginated query to fetch the whole list of `Subtask`. */
@@ -117,6 +118,10 @@ export type Query = {
   userDetails?: Maybe<UserDetails>
   /** Paginated query to fetch the whole list of `UserDetails`. */
   userDetailsCollection?: Maybe<UserDetailsConnection>
+}
+
+export type QueryStripeArgs = {
+  plan: Scalars["String"]
 }
 
 export type QuerySubtaskArgs = {
@@ -157,6 +162,11 @@ export type QueryUserDetailsCollectionArgs = {
   first?: InputMaybe<Scalars["Int"]>
   last?: InputMaybe<Scalars["Int"]>
   orderBy?: InputMaybe<UserDetailsOrderByInput>
+}
+
+export type StripePayload = {
+  __typename?: "StripePayload"
+  stripeCheckoutUrl: Scalars["String"]
 }
 
 export type Subtask = {
@@ -276,8 +286,7 @@ export type SuggestedTasks = {
 
 export type SuggestionsPayload = {
   __typename?: "SuggestionsPayload"
-  normalSubscriptionStripeUrl?: Maybe<Scalars["String"]>
-  proSubscriptionStripeUrl?: Maybe<Scalars["String"]>
+  needPayment: Scalars["Boolean"]
   rawResponse?: Maybe<Scalars["String"]>
   suggestedTasks?: Maybe<SuggestedTasks>
 }
@@ -652,8 +661,6 @@ export type SuggestedTasksQuery = {
   suggestions?: {
     __typename?: "SuggestionsPayload"
     rawResponse?: string | null
-    normalSubscriptionStripeUrl?: string | null
-    proSubscriptionStripeUrl?: string | null
     suggestedTasks?: {
       __typename?: "SuggestedTasks"
       intro?: string | null
@@ -664,6 +671,15 @@ export type SuggestedTasksQuery = {
       } | null>
     } | null
   } | null
+}
+
+export type StripeQueryVariables = Exact<{
+  plan: Scalars["String"]
+}>
+
+export type StripeQuery = {
+  __typename?: "Query"
+  stripe?: { __typename?: "StripePayload"; stripeCheckoutUrl: string } | null
 }
 
 export const TodoFragmentDoc = {
@@ -1716,14 +1732,6 @@ export const SuggestedTasksDocument = {
                   },
                 },
                 { kind: "Field", name: { kind: "Name", value: "rawResponse" } },
-                {
-                  kind: "Field",
-                  name: { kind: "Name", value: "normalSubscriptionStripeUrl" },
-                },
-                {
-                  kind: "Field",
-                  name: { kind: "Name", value: "proSubscriptionStripeUrl" },
-                },
               ],
             },
           },
@@ -1732,3 +1740,54 @@ export const SuggestedTasksDocument = {
     },
   ],
 } as unknown as DocumentNode<SuggestedTasksQuery, SuggestedTasksQueryVariables>
+export const StripeDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "Stripe" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: { kind: "Variable", name: { kind: "Name", value: "plan" } },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "String" },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "stripe" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "plan" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "plan" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "stripeCheckoutUrl" },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<StripeQuery, StripeQueryVariables>

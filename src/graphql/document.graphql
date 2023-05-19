@@ -147,7 +147,11 @@ query SuggestedTasks($task: String!) {
       }
     }
     rawResponse
-    normalSubscriptionStripeUrl
-    proSubscriptionStripeUrl
+  }
+}
+
+query Stripe($plan: String!) {
+  stripe(plan: $plan) {
+    stripeCheckoutUrl
   }
 }

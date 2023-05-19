@@ -52,37 +52,76 @@ export default async function Resolver(
     userDetailsJson.data.userDetailsCollection.edges[0].node.id
 
   try {
-    const normalSubscription = await stripe.checkout.sessions.create({
-      success_url: process.env.STRIPE_SUCCESS_URL!,
-      mode: "subscription",
-      metadata: {
-        userDetailsId: userDetailsId,
-      },
-      line_items: [
-        {
-          quantity: 1,
-          price: process.env.STRIPE_10_SUBSCRIPTION!,
-        },
-      ],
-    })
-    const proSubscription = await stripe.checkout.sessions.create({
-      success_url: process.env.STRIPE_SUCCESS_URL!,
-      mode: "subscription",
-      metadata: {
-        userDetailsId: userDetailsId,
-      },
-      line_items: [
-        {
-          quantity: 1,
-          price: process.env.STRIPE_25_SUBSCRIPTION!,
-        },
-      ],
-    })
-    return {
-      suggestedTasks: null,
-      rawResponse: null,
-      normalSubscriptionStripeUrl: normalSubscription.url,
-      proSubscriptionStripeUrl: proSubscription.url,
+    switch (plan) {
+      case "normalMonthly":
+        const normalMonthly = await stripe.checkout.sessions.create({
+          success_url: process.env.STRIPE_SUCCESS_URL!,
+          mode: "subscription",
+          metadata: {
+            userDetailsId: userDetailsId,
+          },
+          line_items: [
+            {
+              quantity: 1,
+              price: process.env.STRIPE_10_SUBSCRIPTION!,
+            },
+          ],
+        })
+        return {
+          stripeCheckoutUrl: normalMonthly.url,
+        }
+      case "normalYearly":
+        const normalYearly = await stripe.checkout.sessions.create({
+          success_url: process.env.STRIPE_SUCCESS_URL!,
+          mode: "subscription",
+          metadata: {
+            userDetailsId: userDetailsId,
+          },
+          line_items: [
+            {
+              quantity: 1,
+              price: process.env.STRIPE_10_SUBSCRIPTION!,
+            },
+          ],
+        })
+        return {
+          stripeCheckoutUrl: normalYearly.url,
+        }
+      case "proMonthly":
+        const proMonthly = await stripe.checkout.sessions.create({
+          success_url: process.env.STRIPE_SUCCESS_URL!,
+          mode: "subscription",
+          metadata: {
+            userDetailsId: userDetailsId,
+          },
+          line_items: [
+            {
+              quantity: 1,
+              // price: process.env.STRIPE_10_SUBSCRIPTION!,
+            },
+          ],
+        })
+        return {
+          stripeCheckoutUrl: proMonthly.url,
+        }
+
+      case "proYearly":
+        const proYearly = await stripe.checkout.sessions.create({
+          success_url: process.env.STRIPE_SUCCESS_URL!,
+          mode: "subscription",
+          metadata: {
+            userDetailsId: userDetailsId,
+          },
+          line_items: [
+            {
+              quantity: 1,
+              // price: process.env.STRIPE_10_SUBSCRIPTION!,
+            },
+          ],
+        })
+        return {
+          stripeCheckoutUrl: proYearly.url,
+        }
     }
   } catch (error) {
     console.log(error)
