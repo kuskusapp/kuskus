@@ -1,7 +1,16 @@
+import { onMount } from "solid-js"
 import Icon from "~/components/Icon"
 import { GoogleClient } from "~/lib/auth"
+import { register } from "@teamhanko/hanko-elements"
 
 export default function Auth() {
+  onMount(() => {
+    // register the component
+    // see: https://github.com/teamhanko/hanko/blob/main/frontend/elements/README.md#script
+    register({ shadow: true }).catch((error) => {
+      // handle error
+    })
+  })
   return (
     <>
       <style>
@@ -59,7 +68,8 @@ export default function Auth() {
               <div id="text" class="text-2xl mt-3 mb-2">
                 Sign in/up with
               </div>
-              <div class="flex gap-2 items-start">
+              <hanko-auth api={hankoApi} />
+              {/* <div class="flex gap-2 items-start">
                 <button
                   id="Auth"
                   class="flex justify-center p-3 bg-black w-32 rounded-md active:translate-y-0.5"
@@ -69,7 +79,7 @@ export default function Auth() {
                 >
                   <Icon name="Google" />
                 </button>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
