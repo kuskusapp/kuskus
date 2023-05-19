@@ -1,6 +1,16 @@
-import { createContext, createEffect, useContext } from "solid-js"
+import {
+  batch,
+  createContext,
+  createEffect,
+  onMount,
+  useContext,
+} from "solid-js"
 import { createStore } from "solid-js/store"
-import { UserDetailsUpdateDocument } from "~/graphql/schema"
+import CollapsedSidebar from "~/components/CollapsedSidebar"
+import {
+  UserDetailsDocument,
+  UserDetailsUpdateDocument,
+} from "~/graphql/schema"
 import { GrafbaseRequest } from "~/pages/App"
 
 export type UserDetails = {
@@ -19,24 +29,13 @@ export function createUserDetailsState(options: { request: GrafbaseRequest }) {
     collapsedSidebar: false,
   })
 
-  // TODO: don't think we need this as its created at login/google auth
-  // onMount(() => {
-  //   options.request(UserDetailsDocument).then(async (res) => {
-  //     // if there are no settings, create them and put id in local store
-  //     if (res.userDetailsCollection?.edges?.length === 0) {
-  //       const res = options.request(UserDetailsDocument, {
-  //         userDetails: {},
-  //       })
-  //       setSettings({ ...settings, id: res.settingsCreate?.settings?.id! })
-  //       return
-  //     } else {
-  //       setSettings({
-  //         ...settings,
-  //         id: res.settingsCollection?.edges![0]?.node.id,
-  //       })
-  //     }
-  //   })
-  // })
+  onMount(() => {
+    options.request(UserDetailsDocument).then((res) => {
+      // @ts-ignore
+      setUserDetails(res.userDetailsCollection.edges[0].node)
+    })
+    console.log(userDetails, "user details")
+  })
 
   createEffect(() => {
     // TODO: should not run on first load of the app..

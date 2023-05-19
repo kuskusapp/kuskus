@@ -35,7 +35,6 @@ export default function TodoEdit(props: {
   const [starred, setStarred] = createSignal(props.todo.starred)
   const [tags, setTags] = createSignal(props.todo.tags)
   const [searchTags, setSearchTags] = createSignal(false)
-  const [selectedTag, setSelectedTag] = createSignal("")
 
   const fuse = createMemo(
     () =>

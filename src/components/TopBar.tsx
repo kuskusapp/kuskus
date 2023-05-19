@@ -9,7 +9,7 @@ interface Props {
 }
 
 export default function TopBar(props: Props) {
-  // const userDetails = useUserDetails()
+  const userDetails = useUserDetails()
   const todoList = useTodoList()
   const [showFilterSearch, setShowFilterSearch] = createSignal(false)
 
@@ -23,7 +23,7 @@ export default function TopBar(props: Props) {
           <div
             class="cursor-pointer"
             onClick={() => {
-              // userDetails.setCollapsedSidebar()
+              userDetails.setCollapsedSidebar()
             }}
           >
             <Icon name="Sidebar" />
