@@ -171,6 +171,11 @@ export default function Settings() {
                     mouseInstruction="Press on plus button on bottom with a mouse"
                   />
                   <Instruction
+                    problem="Adding a subtask"
+                    keyboardInstruction="When a task or subtask is focused, press l key"
+                    mouseInstruction="TODO: "
+                  />
+                  <Instruction
                     problem="Changing focus between tasks"
                     keyboardInstruction="Use up and down arrow keys to move focus between"
                     mouseInstruction="Press on a task with a mouse"

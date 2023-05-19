@@ -46,8 +46,6 @@ export default function App(props: { hankoCookie: string }) {
   const todoList = createTodoListState({ request })
   const userDetailsState = createUserDetailsState({ request })
 
-  const [showHelp, setShowHelp] = createSignal(false)
-
   createShortcuts({
     "Control+1"() {
       todoList.updateActivePage(PageType.All)
@@ -80,13 +78,6 @@ export default function App(props: { hankoCookie: string }) {
               <TodoList />
             </div>
           </div>
-          <Show when={showHelp()}>
-            <Modal
-              title="Help"
-              onClose={() => setShowHelp(false)}
-              children={<Help />}
-            />
-          </Show>
           <Show when={todoList.inMode(TodoListMode.Settings)}>
             <Modal
               title="Settings"
