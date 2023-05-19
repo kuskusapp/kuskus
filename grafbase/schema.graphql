@@ -3,7 +3,7 @@ schema
     providers: [
       {
         type: jwks
-        jwksEndpoint: "https://b91ba64e-b8fb-4262-92ff-211e89810456.hanko.io/.well-known/jwks.json"
+        jwksEndpoint: "https://e879ccc9-285e-49d3-b37e-b569f0db4035.hanko.io/.well-known/jwks.json"
       }
     ]
     rules: [{ allow: owner }]

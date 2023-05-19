@@ -1,19 +1,25 @@
 import { createEventListener } from "@solid-primitives/event-listener"
 import { register } from "@teamhanko/hanko-elements"
 import { createEffect, createSignal, onMount } from "solid-js"
+import { makeEventListener } from "@solid-primitives/event-listener"
 
 export default function Auth() {
-  const [hankoApi, setHankoApi] = createSignal("")
   onMount(() => {
-    setHankoApi(import.meta.env.VITE_HANKO_API)
+    // setHankoApi(import.meta.env.VITE_HANKO_API)
     // register the component
     // see: https://github.com/teamhanko/hanko/blob/main/frontend/elements/README.md#script
     register({ shadow: true, injectStyles: true }).catch((error) => {
       // handle error
     })
   })
-
-  // createEventListener("hankoAuthSuccess", () => {})
+  makeEventListener(
+    document,
+    "hankoAuthSuccess",
+    (e) => {
+      console.log("success!")
+    },
+    { passive: true }
+  )
 
   return (
     <>
@@ -30,9 +36,6 @@ export default function Auth() {
           opacity: 0.7;
           font-weight: bold;
         }
-        .hanko_container {
-          background-color: red;
-        }
 
       hanko-auth, hanko-profile {
         /* Color Scheme */
@@ -44,7 +47,7 @@ export default function Auth() {
         --brand-color-shade-1: #6b84fb;
         --brand-contrast-color: white;
 
-        --background-color: white;
+        --background-color: transparent;
         --error-color: #e82020;
         --link-color: #506cf0;
 
@@ -67,7 +70,7 @@ export default function Auth() {
         --container-max-width: 600px;
 
         /* Headline Styles */;
-        --headline1-font-size: 24px;
+        --headline1-font-size: 0px;
         --headline1-font-weight: 600;
         --headline1-margin: 0 0 .5rem;
 
@@ -132,9 +135,11 @@ export default function Auth() {
               <div id="text" class="text-2xl mt-3 mb-2">
                 Sign in/up with
               </div>
+              {/* @ts-ignore */}
               {/* <hanko-auth api={import.meta.env.HANKO_API} /> */}
               {/* @ts-ignore */}
               <hanko-auth api={""} />
+              {/* @ts-ignore */}
               {/* <hanko-auth api={hankoApi()} /> */}
               {/* <div class="flex gap-2 items-start">
                 <button
