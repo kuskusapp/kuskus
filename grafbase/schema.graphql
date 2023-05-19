@@ -1,11 +1,6 @@
 schema
   @auth(
-    providers: [
-      {
-        type: jwks
-        jwksEndpoint: "https://e879ccc9-285e-49d3-b37e-b569f0db4035.hanko.io/.well-known/jwks.json"
-      }
-    ]
+    providers: [{ type: jwks, jwksEndpoint: "{{ env.HANKO_API_ENDPOINT }}" }]
     rules: [{ allow: owner }]
   ) {
   query: Query
