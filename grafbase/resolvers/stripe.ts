@@ -72,7 +72,7 @@ export default async function Resolver(
         }
       case "normalYearly":
         const normalYearly = await stripe.checkout.sessions.create({
-          success_url: process.env.STRIPE_NORMAL_YEAR_SUBSCRIPTION!,
+          success_url: process.env.STRIPE_SUCCESS_URL!,
           mode: "subscription",
           metadata: {
             userDetailsId: userDetailsId,
