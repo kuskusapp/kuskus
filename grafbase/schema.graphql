@@ -2,9 +2,8 @@ schema
   @auth(
     providers: [
       {
-        type: oidc
-        issuer: "https://accounts.google.com"
-        clientId: "{{ env.GOOGLE_CLIENT_ID }}"
+        type: jwks
+        jwksEndpoint: "https://b91ba64e-b8fb-4262-92ff-211e89810456.hanko.io/.well-known/jwks.json"
       }
     ]
     rules: [{ allow: owner }]

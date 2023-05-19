@@ -52,6 +52,9 @@ dependencies:
   '@tauri-apps/api':
     specifier: ^1.3.0
     version: 1.3.0
+  '@teamhanko/hanko-elements':
+    specifier: 0.4.0-alpha
+    version: 0.4.0-alpha
   '@types/node':
     specifier: ^20.1.7
     version: 20.1.7
@@ -1335,6 +1338,14 @@ packages:
 
   /@cloudflare/workers-types@3.19.0:
     resolution: {integrity: sha512-0FRcsz7Ea3jT+gc5gKPIYciykm1bbAaTpygdzpCwGt0RL+V83zWnYN30NWDW4rIHj/FHtz+MIuBKS61C8l7AzQ==}
+
+  /@denysvuika/preact-translate@0.4.1(preact@10.14.1):
+    resolution: {integrity: sha512-JCgTwPd6iq0nD6betffGYT4C2mj+PYLjEPuDcMRny4Nsh4E2W7UHWD8/jHnUyGiDnt0nezqAzP0s/AB+6XMVJg==}
+    peerDependencies:
+      preact: '>=10.0.0'
+    dependencies:
+      preact: 10.14.1
+    dev: false
 
   /@esbuild/android-arm64@0.17.18:
     resolution: {integrity: sha512-/iq0aK0eeHgSC3z55ucMAHO05OIqmQehiGay8eP5l/5l+iEr4EIbh4/MI8xD9qRFjqzgkc0JkX0LculNC9mXBw==}
@@ -2816,6 +2827,30 @@ packages:
       '@tauri-apps/cli-win32-x64-msvc': 1.3.1
     dev: true
 
+  /@teamhanko/hanko-elements@0.4.0-alpha:
+    resolution: {integrity: sha512-ePBW5KGg43Boz6e4ob1mb3YoZq2q3XAb0YDRas6tu6Bx64PZ2VHmjG9zGEdnSfFEU8RfZ4YFcOAhJmyKnzgnXg==}
+    dependencies:
+      '@denysvuika/preact-translate': 0.4.1(preact@10.14.1)
+      '@teamhanko/hanko-frontend-sdk': 0.4.0-alpha
+      '@teamhanko/preact-custom-element': 4.2.2(preact@10.14.1)
+      classnames: 2.3.2
+      preact: 10.14.1
+    dev: false
+
+  /@teamhanko/hanko-frontend-sdk@0.4.0-alpha:
+    resolution: {integrity: sha512-t9vIihQrMbUB7F20A2WOs7edpXyBf+niL5qON4V5ErQI7HX3a4Fs++tKr97oSJSFhIQLBAvFUaz8v+ZZ6VEZ1A==}
+    dependencies:
+      '@types/js-cookie': 3.0.3
+    dev: false
+
+  /@teamhanko/preact-custom-element@4.2.2(preact@10.14.1):
+    resolution: {integrity: sha512-3djCQr25IxQIgpidxD8J0fTQ7/hMuoa5Nmv7delQc6sX4kXgv9e/pE01cywpmGZLi69H1KUH4dmZ4cPPJQrsQQ==}
+    peerDependencies:
+      preact: 10.x
+    dependencies:
+      preact: 10.14.1
+    dev: false
+
   /@tootallnate/once@2.0.0:
     resolution: {integrity: sha512-XCuKFP5PS55gnMVu3dty8KPatLqUoy/ZYzDzAGCQ8JNFCkLXzmI7vNHCR+XpbZaMWQK/vQubr7PkYq8g470J/A==}
     engines: {node: '>= 10'}
@@ -2856,6 +2891,10 @@ packages:
 
   /@types/estree@1.0.1:
     resolution: {integrity: sha512-LG4opVs2ANWZ1TJoKc937iMmNstM/d0ae1vNbnBvBhqCSezgVUOzcLCqbI5elV8Vy6WKwKjaqR+zO9VKirBBCA==}
+
+  /@types/js-cookie@3.0.3:
+    resolution: {integrity: sha512-Xe7IImK09HP1sv2M/aI+48a20VX+TdRJucfq4vfRVy6nWN8PYPOEnlMRSgxJAgYQIXJVL8dZ4/ilAM7dWNaOww==}
+    dev: false
 
   /@types/js-yaml@4.0.5:
     resolution: {integrity: sha512-FhpRzf927MNQdRZP0J5DLIdTXhjLYzeUTmLAu69mnVksLH9CJY3IuSeEgbKUki7GQZm0WqDkGzyxju2EZGD2wA==}
@@ -3309,6 +3348,10 @@ packages:
       readdirp: 3.6.0
     optionalDependencies:
       fsevents: 2.3.2
+
+  /classnames@2.3.2:
+    resolution: {integrity: sha512-CSbhY4cFEJRe6/GQzIk5qXZ4Jeg5pcsP7b5peFSDpffpe1cqjASH/n9UTjBwOp6XpMSTwQ8Za2K5V02ueA7Tmw==}
+    dev: false
 
   /clean-stack@2.2.0:
     resolution: {integrity: sha512-4diC9HaTE+KRAMWhDhrGOECgWZxoevMc5TlkObMqNSsVU62PYzXZ/SMTjzyGAFF1YusgxGcSWTEXBhp0CPwQ1A==}
@@ -4999,6 +5042,10 @@ packages:
       nanoid: 3.3.6
       picocolors: 1.0.0
       source-map-js: 1.0.2
+
+  /preact@10.14.1:
+    resolution: {integrity: sha512-4XDSnUisk3YFBb3p9WeKeH1mKoxdFUsaXcvxs9wlpYR1wax/TWJVqhwmIWbByX0h7jMEJH6Zc5J6jqc58FKaNQ==}
+    dev: false
 
   /prettier@2.8.8:
     resolution: {integrity: sha512-tdN8qQGvNjw4CHbY+XXk0JgCXn9QiF21a55rBe5LJAU+kDyC4WQn4+awm2Xfk2lQMk5fKup9XgzTZtGkjBdP9Q==}
