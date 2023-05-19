@@ -18,6 +18,7 @@ export default function Auth() {
       // TODO: handle error
     })
   })
+
   makeEventListener(
     document,
     "hankoAuthSuccess",

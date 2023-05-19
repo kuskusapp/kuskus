@@ -236,7 +236,7 @@ export default function Settings() {
             </div>
           </Match>
           <Match when={show() === "Upgrade"}>
-            <div class="flex flex-col w-full h-full">
+            <div class="flex flex-col w-full h-full hidden">
               <div class="flex h-full w-full">
                 <div class="flex flex-col justify-center items-center gap-5 w-full bg-gray-200 dark:bg-neutral-900">
                   <div class="text-4xl mb-5 font-bold">10$ / month</div>
