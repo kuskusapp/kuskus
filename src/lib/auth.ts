@@ -1,4 +1,5 @@
 import { UserManager } from "oidc-client-ts"
+// import { hanko } from "@teamhanko/hanko-elements"
 
 // TODO: cors issue with github token endpoint, need proxy?
 // export const GithubClient = new UserManager({
@@ -24,6 +25,17 @@ export const GoogleClient = new UserManager({
   scope: "openid profile",
 })
 
-export async function getUser() {
-  return await GoogleClient.getUser()
+// export async function getUser() {
+//   return await GoogleClient.getUser()
+// }
+
+export async function getHankoCookie() {
+  const allCookies = document.cookie
+  const hankoCookie = allCookies
+    .split(";")
+    .find((cookie) => {
+      return cookie
+    })
+    ?.split("=")[1]
+  return hankoCookie
 }

@@ -13,7 +13,7 @@ html {
 
 @media (prefers-color-scheme: dark) {
   html {
-    color: white;
+    color: rgb(255, 255, 255);
     --palette-background: rgb(38 38 38);
     --palette-text: #eeeeee;
     color-scheme: dark;

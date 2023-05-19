@@ -1,7 +1,52 @@
-import Icon from "~/components/Icon"
-import { GoogleClient } from "~/lib/auth"
+import { makeEventListener } from "@solid-primitives/event-listener"
+import { register } from "@teamhanko/hanko-elements"
+import { GraphQLClient } from "graphql-request"
+import { onMount } from "solid-js"
+import { useNavigate } from "solid-start"
+import {
+  UserDetailsCreateDocument,
+  UserDetailsDocument,
+} from "~/graphql/schema"
+import { getHankoCookie } from "~/lib/auth"
 
 export default function Auth() {
+  const navigate = useNavigate()
+  onMount(() => {
+    // register hank component
+    // https://github.com/teamhanko/hanko/blob/main/frontend/elements/README.md#script
+    register({ shadow: true, injectStyles: true }).catch((error) => {
+      // TODO: handle error
+    })
+  })
+  makeEventListener(
+    document,
+    "hankoAuthSuccess",
+    async (e) => {
+      const hankoCookie = await getHankoCookie()
+      const client = new GraphQLClient(import.meta.env.VITE_GRAFBASE_API_URL, {
+        headers: {
+          authorization: `Bearer ${hankoCookie}`,
+        },
+      })
+
+      // TODO: does not look good but is needed for stripe to work
+      // we need to have userDetails to 100% be present in resolver
+      // the id from userDetails is our way to identify the user
+      const userDetails = await client.request(UserDetailsDocument)
+      // TODO: why possibly undefined? fix.
+      if (userDetails.userDetailsCollection?.edges?.length > 0) {
+        navigate("/")
+        return
+      }
+      // crete empty userDetails if it does not exist
+      await client.request(UserDetailsCreateDocument, {
+        userDetails: {},
+      })
+      navigate("/")
+    },
+    { passive: true }
+  )
+
   return (
     <>
       <style>
@@ -14,9 +59,40 @@ export default function Auth() {
           transition: all 0.3s linear
         }
         #text {
+          padding-top: 10px;
           opacity: 0.7;
           font-weight: bold;
         }
+
+
+        hanko-auth, hanko-profile {
+          --color: #fff;
+          --color-shade-1: #989BA1;
+          --color-shade-2: #43464E;
+          --brand-color: #AEDFFF;
+          --brand-color-shade-1: #A1C9E7;
+          --brand-contrast-color: #0B0D0E;
+          --background-color: transparent;
+          --error-color: #FF2E4C;
+          --link-color: #AEDFFF;
+          --font-family: "IBM Plex Sans";
+          --font-size: 1rem;
+          --font-weight: 400;
+          --headline1-font-size: 0px;
+          --headline1-font-weight: 600;
+          --headline2-font-size: 1rem;
+          --headline2-font-weight: 600;
+          --border-radius: 8px;
+          --item-height: 40px;
+          --item-margin: 18px 0px;
+          --container-padding: 20px 50px 50px 50px;
+          --container-max-width: 800px;
+          --headline1-margin: 0 0 1rem;
+          --headline2-margin: 1rem 0 .5rem;
+        }
+
+
+      }
       `}
       </style>
       <div
@@ -59,17 +135,9 @@ export default function Auth() {
               <div id="text" class="text-2xl mt-3 mb-2">
                 Sign in/up with
               </div>
-              <div class="flex gap-2 items-start">
-                <button
-                  id="Auth"
-                  class="flex justify-center p-3 bg-black w-32 rounded-md active:translate-y-0.5"
-                  onClick={() => {
-                    GoogleClient.signinRedirect()
-                  }}
-                >
-                  <Icon name="Google" />
-                </button>
-              </div>
+              {/* TODO: for some reason can't use import.meta.env.VITE_HANKO_API. fix it. */}
+              {/* @ts-ignore */}
+              <hanko-auth api={import.meta.env.VITE_HANKO_API} />
             </div>
           </div>
         </div>

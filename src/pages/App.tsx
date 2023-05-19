@@ -21,11 +21,11 @@ import { createShortcuts } from "~/lib/primitives"
 
 export type GrafbaseRequest = GraphQLClient["request"]
 
-export default function App(props: { initialToken: string }) {
+export default function App(props: { hankoCookie: string }) {
   const navigate = useNavigate()
 
   const grafbase = new GraphQLClient(import.meta.env.VITE_GRAFBASE_API_URL, {
-    headers: { authorization: `Bearer ${props.initialToken}` },
+    headers: { authorization: `Bearer ${props.hankoCookie}` },
   })
 
   const request: GrafbaseRequest = async (...args) => {
