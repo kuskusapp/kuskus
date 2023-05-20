@@ -13,7 +13,6 @@ type SuggestedTaskResponse = {
 
 // TODO: can you use graphql-code-generator types for this
 // together with the client so not to do raw queries like this..
-
 export default async function Resolver(
   _: any,
   { task }: { task: string },
