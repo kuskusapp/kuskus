@@ -32,6 +32,7 @@ interface Props {
     | "Filter"
     | "Cursor"
     | "Keyboard"
+    | "Close"
   width?: string
   height?: string
 }
@@ -730,6 +731,25 @@ export default function Icon(props: Props) {
             stroke-width="1.5"
             stroke-linecap="round"
             stroke-linejoin="round"
+          ></path>
+        </svg>
+      )
+    case "Close":
+      return (
+        <svg width="12" height="12" fill="none" viewBox="0 0 24 24">
+          <path
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.5"
+            d="M17.25 6.75L6.75 17.25"
+          ></path>
+          <path
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.5"
+            d="M6.75 6.75L17.25 17.25"
           ></path>
         </svg>
       )

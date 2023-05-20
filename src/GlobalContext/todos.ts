@@ -104,6 +104,7 @@ function getTodoUpdateInput(todo: BaseTask): TodoUpdateInput {
     priority: { set: todo.priority },
     note: todo.note,
     dueDate: todo.dueDate,
+    tags: todo.tags,
   }
 }
 
@@ -167,6 +168,7 @@ export function createTodosState({ request }: { request: GrafbaseRequest }) {
           () => getTodoUpdateInput(todo),
           (payload) => {
             if (!todo.id) return
+            console.log(payload, "payload")
             request(TodoUpdateDocument, {
               id: todo.id,
               todo: payload,
