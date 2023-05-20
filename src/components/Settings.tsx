@@ -71,10 +71,7 @@ export default function Settings() {
         <div
           class="flex cursor-pointer self-center pb-3 text-red-500"
           onClick={() => {
-            GoogleClient.signoutRedirect({
-              post_logout_redirect_uri: import.meta.env
-                .VITE_GOOGLE_LOGOUT_REDIRECT_URI,
-            })
+            // TODO: sign out with hanko, clear cookie?
           }}
         >
           Sign out

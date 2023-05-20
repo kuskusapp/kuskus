@@ -39,50 +39,49 @@ Important bits defined below.
 
 ## Setup
 
-Before running the app, you need to setup up some environment variables, specifcially for auth.
+Before running the app, you need to setup up some environment variables.
 
-In future [Hanko](https://www.hanko.io/) will be used as auth provider. Currently blocked on that by Grafbase not implementing RSA encryption.
+> TODO: Auth setup should not be this tedius. Should be just one CLI command to bootstrap any new developer. Perhaps using https://devenv.sh/
 
-It should also allow us to avoid the tedius setup steps below. There should be just one command to setup the whole local environment (perhaps with [devenv](https://devenv.sh/)).
+> TODO: should maybe setup https://1password.com/product/secrets/
 
-All help can be received on [Discord](https://discord.gg/f8YHjyrX3h). Ask away. ♥️
+> TODO: think of prividing common API keys for Tinybird/Upstash
 
-### Auth setup (Google)
+### Setup env variables
 
-For auth to work, first [create a new Google OAuth client ID](https://console.cloud.google.com/apis/credentials/oauthclient).
-
-Can [read this](https://developers.google.com/identity/protocols/oauth2) for how Google OAuth works.
-
-Authorized JS origin and redirect URIs + where you can see google client id and secret are shown below.
-
-![](https://images.nikiv.dev/kuskus-oauth-settings.png)
-
-Add these values to `.env` file at root of the project.
+Create new file `.env` at root of project with this content:
 
 ```
-VITE_GOOGLE_CLIENT_ID=
-VITE_GOOGLE_SECRET=
-
+VITE_HANKO_API=https://e879ccc9-285e-49d3-b37e-b569f0db4035.hanko.io
 VITE_GRAFBASE_API_URL=http://127.0.0.1:4000/graphql
 ```
 
-## Run server (GraphQL/Grafbase)
+Above Hanko API uses KusKus's staging auth setup. You can create your own new project at [hanko.io](https://www.hanko.io) and fill it with own API value.
 
 Create new file at `grafbase/.env` with this content:
 
 ```
-GOOGLE_CLIENT_ID=
+GRAFBASE_API_URL=http://127.0.0.1:4000/graphql
+HANKO_API_ENDPOINT=https://e879ccc9-285e-49d3-b37e-b569f0db4035.hanko.io/.well-known/jwks.json
+UPSTASH_REDIS_REST_URL=
+UPSTASH_REDIS_REST_TOKEN=
+OPENAI_API_KEY=
+TINYBIRD_API_KEY=
 ```
 
-Google Client ID is same as in above case.
+[Upstash](https://upstash.com/) Redis URL/Token can be gotten by creating new project in [Upstash Console](https://console.upstash.com).
 
-Then run:
+Can use your own OpenAI key. Get it from [here](https://openai.com/blog/openai-api).
+
+[Tinybird](https://www.tinybird.co/) is used for analytics. Can get the key for it in dashboard.
+
+## Run server (GraphQL/Grafbase)
 
 ```
 npx grafbase@latest dev
 ```
 
-Open http://localhost:4000 for GraphQL playground.
+Open http://localhost:4000 for GraphQL playground. Read [Grafbase getting started](https://grafbase.com/docs/quickstart/get-started) to get familiar.
 
 ## Run web (SolidJS)
 
@@ -93,10 +92,8 @@ pnpm dev
 
 Then go to http://localhost:3000/, it renders route defined at [src/routes/index.tsx](src/routes/index.tsx).
 
-If there is a user, it shows the app, otherwise the landing page.
-
-Press the `Login` button in landing page and auth with Google, it should show the app if all is good.
+If signed in (there is valid token stored in cookie), it shows the app, otherwise the landing page.
 
 ## Discuss / help
 
-Join [Discord](https://discord.gg/f8YHjyrX3h) for discussions.
+Join [Discord](https://discord.gg/f8YHjyrX3h) for discussions or help.

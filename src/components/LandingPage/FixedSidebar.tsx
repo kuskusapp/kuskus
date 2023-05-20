@@ -137,13 +137,13 @@ export default function FixedSidebar() {
                 >
                   <Icon name="Twitter" />
                 </a>{" "}
-                <a
+                {/* <a
                   id="Github"
                   class="w-5 mt-4"
                   href="https://github.com/kuskusapp/kuskus"
                 >
                   <Icon name="Github" />
-                </a>
+                </a> */}
               </div>
             </div>
           </div>
