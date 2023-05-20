@@ -1,7 +1,7 @@
 schema
   @auth(
     providers: [{ type: jwks, jwksEndpoint: "{{ env.HANKO_API_ENDPOINT }}" }]
-    rules: [{ allow: private }]
+    rules: [{ allow: owner }]
   ) {
   query: Query
 }
