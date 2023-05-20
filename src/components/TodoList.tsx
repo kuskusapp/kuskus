@@ -162,19 +162,19 @@ export default function TodoList() {
             },
             // Add a new todo
             N() {
-              console.log(userDetails.userDetails, "user details")
-              if (
-                new Date(
-                  userDetails.userDetails.paidSubscriptionValidUntilDate
-                ) < new Date()
-              ) {
-                if (todoList.todos.length > 10) {
-                  todoList.setMode(TodoListMode.Settings, {
-                    settingsState: "Account",
-                  })
-                  return
-                }
-              }
+              // console.log(userDetails.userDetails, "user details")
+              // if (
+              //   new Date(
+              //     userDetails.userDetails.paidSubscriptionValidUntilDate
+              //   ) < new Date()
+              // ) {
+              //   if (todoList.todos.length > 10) {
+              //     todoList.setMode(TodoListMode.Settings, {
+              //       settingsState: "Account",
+              //     })
+              //     return
+              //   }
+              // }
               todoList.addNewTask()
             },
             // Create new subtask
