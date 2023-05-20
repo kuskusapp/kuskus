@@ -32,9 +32,12 @@ export default async function Resolver(
 
   let cacheString = `gpt-3-subtasks-${sanitizeTask}`
   const cachedTask: SuggestedTaskResponse | null = await redis.get(cacheString)
+  logError(cacheString)
 
   if (cachedTask) {
     logAI(cacheString, cachedTask.suggestedTasks, cachedTask.rawResponse)
+    logError("cache hit")
+    logObject(cachedTask)
     return {
       suggestedTasks: cachedTask.suggestedTasks,
       rawResponse: cachedTask.rawResponse,
@@ -71,6 +74,7 @@ export default async function Resolver(
     }),
   })
   if (!res.ok) {
+    logError(res.status.toString())
     // TODO: should this throw error?
     // maybe should return graphql back with `error: ` field?
     throw new Error(`HTTP error! status: ${res.status}`)
@@ -124,6 +128,7 @@ export default async function Resolver(
       .freeAiTasksAvailable
   // check if user can do AI task due to free tasks
   if (freeAiTasksAvailable > 0) {
+    logError("trying to make free AI task")
     // TODO: can return nothing from graphql, not sure how..
     let updateUserDetails = `
       mutation {
@@ -153,6 +158,7 @@ export default async function Resolver(
         query: updateUserDetails,
       }),
     })
+    logError("increment free AI task")
 
     const { suggestedTasks, rawResponse } = await suggestionsv3(
       task,
@@ -170,10 +176,31 @@ export default async function Resolver(
     }
   }
 
-  console.log("RUNNNNNNNNN")
   return {
     needPayment: true,
   }
+}
+
+async function logError(error: string) {
+  await fetch("https://api.tinybird.co/v0/events?name=suggestions", {
+    method: "POST",
+    body: JSON.stringify({
+      error,
+    }),
+    headers: {
+      Authorization: `Bearer ${process.env.TINYBIRD_API_KEY}`,
+    },
+  })
+}
+
+async function logObject(obj: any) {
+  await fetch("https://api.tinybird.co/v0/events?name=suggestions", {
+    method: "POST",
+    body: obj,
+    headers: {
+      Authorization: `Bearer ${process.env.TINYBIRD_API_KEY}`,
+    },
+  })
 }
 
 // log event to tinybird
