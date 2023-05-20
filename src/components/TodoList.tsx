@@ -162,6 +162,7 @@ export default function TodoList() {
             },
             // Add a new todo
             N() {
+              console.log(userDetails.userDetails, "user details")
               if (
                 new Date(
                   userDetails.userDetails.paidSubscriptionValidUntilDate
@@ -224,6 +225,7 @@ export default function TodoList() {
       const res = await todoList.request(SuggestedTasksDocument, {
         task: todo.title,
       })
+      console.log(res, "res")
       if (res.suggestions?.needPayment) {
         todoList.setMode(TodoListMode.Settings, { settingsState: "Upgrade" })
         return
