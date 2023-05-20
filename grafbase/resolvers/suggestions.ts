@@ -182,7 +182,7 @@ export default async function Resolver(
 }
 
 async function logError(error: string) {
-  await fetch("https://api.tinybird.co/v0/events?name=suggestions", {
+  await fetch("https://api.tinybird.co/v0/events?name=error", {
     method: "POST",
     body: JSON.stringify({
       error,
@@ -194,7 +194,7 @@ async function logError(error: string) {
 }
 
 async function logObject(obj: any) {
-  await fetch("https://api.tinybird.co/v0/events?name=suggestions", {
+  await fetch("https://api.tinybird.co/v0/events?name=logs", {
     method: "POST",
     body: obj,
     headers: {
