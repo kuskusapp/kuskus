@@ -8,7 +8,7 @@ netlify
 .env
 .env.prod
 functions
-ai
+package-lock.json
 
 # dependencies
 /node_modules
