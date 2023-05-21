@@ -146,7 +146,7 @@ export default function Auth() {
               {/* <hanko-auth api={import.meta.env.VITE_HANKO_API} /> */}
               {/* @ts-ignore */}
               <hanko-auth
-                api={"https://e879ccc9-285e-49d3-b37e-b569f0db4035.hanko.io"}
+                api={"https://fae8e48b-e39d-4066-86a6-df7d5a449db9.hanko.io"}
               />
             </div>
           </div>
