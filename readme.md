@@ -7,7 +7,7 @@
 - Language model support integrated (see [AI repo](https://github.com/kuskusapp/ai))
   - Break down tasks into subtasks (pick which subtasks are good)
 - Fully keyboard driven (onscreen keys ala [2Do](https://www.2doapp.com/))
-- Very fast. Maintanable and scalable code. Open source.
+- Very fast. Maintanable and scalable code.
 
 ### Soon
 
