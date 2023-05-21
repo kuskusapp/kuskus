@@ -12,6 +12,11 @@ import { getHankoCookie } from "~/lib/auth"
 export default function Auth() {
   const navigate = useNavigate()
   onMount(() => {
+    // TODO: check if there is a valid token, if token is valid go to /
+    // if (token.valid) {
+    //   navigate("/")
+    // }
+
     // register hank component
     // https://github.com/teamhanko/hanko/blob/main/frontend/elements/README.md#script
     register({ shadow: true, injectStyles: true }).catch((error) => {
