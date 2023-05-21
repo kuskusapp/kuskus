@@ -2,22 +2,9 @@
 
 > Fast fully keyboard driven todo app with GitHub integration and AI features
 
-## Features (now)
+Public issue tracker is [here](https://github.com/kuskusapp/kuskus).
 
-- Language model support integrated (see [AI repo](https://github.com/kuskusapp/ai))
-  - Break down tasks into subtasks (pick which subtasks are good)
-- Fully keyboard driven (onscreen keys ala [2Do](https://www.2doapp.com/))
-- Very fast. Maintanable and scalable code.
-
-### Soon
-
-- GitHub issues integrated ala [Ship](https://www.realartists.com/blog/ship-20.html)
-- Editor embedded ala [Obsidian](https://obsidian.md/)
-- Clean design ala [Things](https://culturedcode.com/things/)
-- Project support ala [Height](https://height.app/), [Linear](https://linear.app/)
-- Public todos/projects with user profiles
-- Create AI agents for tasks for aid
-- iOS/Android apps
+Existing + future features are listed on [landing page](https://kuskus.app/home).
 
 ## File structure
 
