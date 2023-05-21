@@ -49,13 +49,13 @@ export default function Features() {
           >
             Features
           </div>
-          <div
+          {/* <div
             onClick={() => setShow("Updates")}
             class={clsx(show() === "Updates" && "font-bold")}
             id="Nav"
           >
             Updates
-          </div>
+          </div> */}
           <div
             onClick={() => setShow("Future")}
             class={clsx(show() === "Future" && "font-bold")}
@@ -63,6 +63,13 @@ export default function Features() {
           >
             Future
           </div>
+          {/* <div
+            onClick={() => setShow("Join")}
+            class={clsx(show() === "Join" && "font-bold")}
+            id="Nav"
+          >
+            Join
+          </div> */}
         </div>
         <div class="flex flex-col pl-16 pt-20 gap-6">
           <Switch>
@@ -97,9 +104,10 @@ export default function Features() {
                 </div>
               </div>
             </Match>
-            <Match when={show() === "Updates"}>
+            {/* <Match when={show() === "Updates"}>
               <div></div>
-            </Match>
+            </Match> */}
+            {/* TODO: fix UI! not good */}
             <Match when={show() === "Future"}>
               <div>
                 <h1 id="Animation" class="text-3xl font-bold text-sky-300 mb-3">
@@ -172,6 +180,58 @@ export default function Features() {
                   AI Agents
                 </h1>
                 <div>Create AI agents to do things for you.</div>
+              </div>
+              <div>
+                <h1 id="Animation" class="text-3xl font-bold text-sky-300 mb-3">
+                  Custom AI
+                </h1>
+                <div>
+                  You have full control over AI. Write a plugin, bind it to a
+                  key. Use it.
+                </div>
+              </div>
+            </Match>
+            <Match when={show() === "Join"}>
+              <div>
+                <h1 id="Animation" class="text-3xl font-bold text-sky-300 mb-3">
+                  <span class="text-white">Join</span> community
+                </h1>
+                <div>
+                  Join{" "}
+                  <a class="text-blue-500" href="https://discord.gg/f8YHjyrX3h">
+                    Discord
+                  </a>{" "}
+                  and share your thoughts and ideas on how you use KusKus app.
+                  Or what kinds of things you wish it did.
+                </div>
+              </div>
+              <div>
+                <h1 id="Animation" class="text-3xl font-bold text-sky-300 mb-3">
+                  <span class="text-white">Join</span> our team
+                </h1>
+                <div class="">
+                  KusKus app is built fully with{" "}
+                  <a class="text-blue-500" href="https://www.solidjs.com/">
+                    Solid
+                  </a>{" "}
+                  (UI),{" "}
+                  <a class="text-blue-500" href="https://grafbase.com">
+                    Grafbase
+                  </a>{" "}
+                  (DB, edge logic) and{" "}
+                  <a class="text-blue-500" href="https://tauri.app/">
+                    Tauri
+                  </a>{" "}
+                  (desktop apps).
+                </div>
+                <div>
+                  We need anyone that is great at building products. Designers
+                  especially. If you're interested, message us on{" "}
+                  <a class="text-blue-500" href="https://discord.gg/f8YHjyrX3h">
+                    Discord
+                  </a>
+                  .
+                </div>
               </div>
             </Match>
           </Switch>
