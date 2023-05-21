@@ -43,13 +43,6 @@ export default function Features() {
       >
         <div id="NavContainer" class="flex justify-between px-40 p-5">
           <div
-            onClick={() => setShow("Pricing")}
-            class={clsx(show() === "Pricing" && "font-bold")}
-            id="Nav"
-          >
-            Pricing
-          </div>
-          <div
             onClick={() => setShow("Features")}
             class={clsx(show() === "Features" && "font-bold")}
             id="Nav"
@@ -57,11 +50,18 @@ export default function Features() {
             Features
           </div>
           <div
-            onClick={() => setShow("Changelog")}
-            class={clsx(show() === "Changelog" && "font-bold")}
+            onClick={() => setShow("Updates")}
+            class={clsx(show() === "Updates" && "font-bold")}
             id="Nav"
           >
-            Changelog
+            Updates
+          </div>
+          <div
+            onClick={() => setShow("Future")}
+            class={clsx(show() === "Future" && "font-bold")}
+            id="Nav"
+          >
+            Future
           </div>
         </div>
         <div class="flex flex-col pl-16 pt-20 gap-6">
@@ -74,19 +74,105 @@ export default function Features() {
                 <h1 id="Animation" class="text-3xl font-bold text-sky-300 mb-3">
                   AI
                 </h1>
-                <div>Create a task. AI will create subtasks for you.</div>
+                <div>
+                  Create a task. AI will create subtasks for you. You pick
+                  what's good.
+                </div>
               </div>
               <div>
                 <h1 id="Animation" class="text-3xl font-bold text-sky-300 mb-3">
                   <span class="text-white">Keyboard</span> Shortcuts
                 </h1>
                 <div class="text-white">
-                  Everything in the app is one hotkey away.
+                  Everything is fully keyboard driven. Fully modal. Can use
+                  mouse too if you like.
+                </div>
+              </div>
+              <div>
+                <h1 id="Animation" class="text-3xl font-bold text-sky-300 mb-3">
+                  Fast
+                </h1>
+                <div class="text-white">
+                  Instant UI updates. No loading screens. No waiting.
                 </div>
               </div>
             </Match>
-            <Match when={show() === "Changelog"}>
+            <Match when={show() === "Updates"}>
               <div></div>
+            </Match>
+            <Match when={show() === "Future"}>
+              <div>
+                <h1 id="Animation" class="text-3xl font-bold text-sky-300 mb-3">
+                  Mobile apps
+                </h1>
+                <div>Native iOS/Android apps. Fast and sleek.</div>
+              </div>
+              <div>
+                <h1 id="Animation" class="text-3xl font-bold text-sky-300 mb-3">
+                  GitHub issues <span class="text-white">integrated</span>
+                </h1>
+                <div>
+                  Similar to now dead app{" "}
+                  <a
+                    class="text-blue-500"
+                    href="https://www.realartists.com/blog/ship-20.html"
+                  >
+                    Ship
+                  </a>
+                  . Like{" "}
+                  <a class="text-blue-500" href="https://linear.app">
+                    Linear
+                  </a>{" "}
+                  or{" "}
+                  <a class="text-blue-500" href="https://height.app">
+                    Height
+                  </a>{" "}
+                  but on top of GitHub issues.
+                </div>
+              </div>
+              <div>
+                <h1 id="Animation" class="text-3xl font-bold text-sky-300 mb-3">
+                  Editor <span class="text-white">embedded</span>
+                </h1>
+                <div>
+                  Write free form. Make plans. Easily create tasks from text.
+                  Like in{" "}
+                  <a class="text-blue-500" href="https://obsidian.md/">
+                    Obsidian
+                  </a>
+                  .
+                </div>
+              </div>
+              <div>
+                <h1 id="Animation" class="text-3xl font-bold text-sky-300 mb-3">
+                  Clean Design
+                </h1>
+                <div>
+                  Current UI is utility focused. Future UI will delight.{" "}
+                  <a
+                    class="text-blue-500"
+                    href="https://culturedcode.com/things/"
+                  >
+                    Things
+                  </a>{" "}
+                  is big inspiration.
+                </div>
+              </div>
+              <div>
+                <h1 id="Animation" class="text-3xl font-bold text-sky-300 mb-3">
+                  Collaboration
+                </h1>
+                <div>
+                  Collaborate on tasks with your team/spouse/anyone. In real
+                  time.
+                </div>
+              </div>
+              <div>
+                <h1 id="Animation" class="text-3xl font-bold text-sky-300 mb-3">
+                  AI Agents
+                </h1>
+                <div>Create AI agents to do things for you.</div>
+              </div>
             </Match>
           </Switch>
         </div>
