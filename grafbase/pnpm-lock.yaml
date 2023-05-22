@@ -1,6 +1,9 @@
 lockfileVersion: '6.0'
 
 dependencies:
+  '@chronark/zod-bird':
+    specifier: ^0.0.3
+    version: 0.0.3
   '@kuskusapp/ai':
     specifier: ^0.1.10
     version: 0.1.10(typescript@5.0.4)
@@ -22,6 +25,9 @@ dependencies:
   stripe:
     specifier: ^12.5.0
     version: 12.5.0
+  zod:
+    specifier: ^3.21.4
+    version: 3.21.4
 
 packages:
 
@@ -32,6 +38,12 @@ packages:
       cross-fetch: 3.1.6
     transitivePeerDependencies:
       - encoding
+    dev: false
+
+  /@chronark/zod-bird@0.0.3:
+    resolution: {integrity: sha512-dDEsmo43AY7RZy/RdcNaDYUcveYd8PvlXPkeosqtqnxYOCX3wZUjiIxXpGM2Vo8JLPrd9FbOTDmXJAc80cuZUQ==}
+    dependencies:
+      zod: 3.21.4
     dev: false
 
   /@dqbd/tiktoken@1.0.7:

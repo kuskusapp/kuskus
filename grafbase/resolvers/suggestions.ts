@@ -1,5 +1,27 @@
 import { Redis } from "@upstash/redis"
 import { suggestionsv3, suggestionsv4, SuggestedTasks } from "@kuskusapp/ai"
+import { z } from "zod"
+import { Tinybird } from "@chronark/zod-bird"
+
+const tb = new Tinybird({ token: process.env.TINYBIRD_API_KEY! })
+
+const log = tb.buildIngestEndpoint({
+  datasource: "resolver_suggestions_log",
+  event: z.object({
+    // string or stringified json
+    content: z.string().default(""),
+    metadata: z.string().optional().default(""),
+  }),
+})
+
+const logError = tb.buildIngestEndpoint({
+  datasource: "resolver_suggestions_error",
+  event: z.object({
+    // string or stringified json
+    error: z.string().default(""),
+    metadata: z.string().optional().default(""),
+  }),
+})
 
 const redis = new Redis({
   url: process.env.UPSTASH_REDIS_REST_URL!,
@@ -18,6 +40,8 @@ export default async function Resolver(
   { task }: { task: string },
   context: any
 ) {
+  await log({ content: "getting suggestions" })
+
   // cache string purpose is to make semantically same task requests
   // hit the cache
   // TODO: expand to add more cases
@@ -31,17 +55,21 @@ export default async function Resolver(
 
   let cacheString = `gpt-3-subtasks-${sanitizeTask}`
   const cachedTask: SuggestedTaskResponse | null = await redis.get(cacheString)
-  logError(cacheString)
 
   if (cachedTask) {
-    logAI(cacheString, cachedTask.suggestedTasks, cachedTask.rawResponse)
-    logError("cache hit")
-    logObject(cachedTask)
+    await log({
+      content: "getting suggestions from cache",
+      metadata: `cachedTask: ${JSON.stringify(cachedTask)}`,
+    })
     return {
       suggestedTasks: cachedTask.suggestedTasks,
       rawResponse: cachedTask.rawResponse,
     }
   }
+  await log({
+    content: "no suggestions for this task",
+    metadata: `task: ${task}`,
+  })
 
   // TODO: there should probably be a better way than userDetailsCollection
   // I try to make sure there is only one userDetails per user
@@ -73,8 +101,7 @@ export default async function Resolver(
     }),
   })
   if (!res.ok) {
-    logError(res.status.toString())
-    // TODO: should this throw error?
+    // TODO: what should this be? throw new Error??
     // maybe should return graphql back with `error: ` field?
     throw new Error(`HTTP error! status: ${res.status}`)
   }
@@ -98,7 +125,7 @@ export default async function Resolver(
         suggestedTasks,
         rawResponse,
       })
-      logAI(cacheString, suggestedTasks, rawResponse)
+      // logAI(cacheString, suggestedTasks, rawResponse)
       return {
         suggestedTasks: suggestedTasks,
         rawResponse: rawResponse,
@@ -112,7 +139,7 @@ export default async function Resolver(
         suggestedTasks,
         rawResponse,
       })
-      logAI(cacheString, suggestedTasks, rawResponse)
+      // logAI(cacheString, suggestedTasks, rawResponse)
       return {
         suggestedTasks: suggestedTasks,
         rawResponse: rawResponse,
@@ -127,7 +154,7 @@ export default async function Resolver(
       .freeAiTasksAvailable
   // check if user can do AI task due to free tasks
   if (freeAiTasksAvailable > 0) {
-    logError("trying to make free AI task")
+    // logError("trying to make free AI task")
     // TODO: can return nothing from graphql, not sure how..
     let updateUserDetails = `
       mutation {
@@ -157,7 +184,7 @@ export default async function Resolver(
         query: updateUserDetails,
       }),
     })
-    logError("increment free AI task")
+    // logError("increment free AI task")
 
     const { suggestedTasks, rawResponse } = await suggestionsv3(
       task,
@@ -167,7 +194,7 @@ export default async function Resolver(
       suggestedTasks,
       rawResponse,
     })
-    logAI(cacheString, suggestedTasks, rawResponse)
+    // logAI(cacheString, suggestedTasks, rawResponse)
 
     return {
       suggestedTasks: suggestedTasks,
@@ -180,43 +207,56 @@ export default async function Resolver(
   }
 }
 
-async function logError(error: string) {
-  await fetch("https://api.tinybird.co/v0/events?name=error", {
-    method: "POST",
-    body: JSON.stringify({
-      error,
-    }),
-    headers: {
-      Authorization: `Bearer ${process.env.TINYBIRD_API_KEY}`,
-    },
-  })
-}
+// async function log(log: any, name?: string) {
+//   await fetch("https://api.tinybird.co/v0/events?name=log", {
+//     method: "POST",
+//     body: JSON.stringify({
+//       name,
+//       log,
+//     }),
+//     headers: {
+//       Authorization: `Bearer ${process.env.TINYBIRD_API_KEY}`,
+//     },
+//   })
+// }
 
-async function logObject(obj: any) {
-  await fetch("https://api.tinybird.co/v0/events?name=logs", {
-    method: "POST",
-    body: obj,
-    headers: {
-      Authorization: `Bearer ${process.env.TINYBIRD_API_KEY}`,
-    },
-  })
-}
+// async function logError(error: string) {
+//   await fetch("https://api.tinybird.co/v0/events?name=error", {
+//     method: "POST",
+//     body: JSON.stringify({
+//       error,
+//     }),
+//     headers: {
+//       Authorization: `Bearer ${process.env.TINYBIRD_API_KEY}`,
+//     },
+//   })
+// }
 
-// log event to tinybird
-async function logAI(
-  cacheString: string,
-  suggestedTasks: SuggestedTasks,
-  rawResponse: string
-) {
-  await fetch("https://api.tinybird.co/v0/events?name=suggestions", {
-    method: "POST",
-    body: JSON.stringify({
-      cacheString,
-      suggestedTasks,
-      rawResponse,
-    }),
-    headers: {
-      Authorization: `Bearer ${process.env.TINYBIRD_API_KEY}`,
-    },
-  })
-}
+// async function logObject(obj: any) {
+//   await fetch("https://api.tinybird.co/v0/events?name=logs", {
+//     method: "POST",
+//     body: obj,
+//     headers: {
+//       Authorization: `Bearer ${process.env.TINYBIRD_API_KEY}`,
+//     },
+//   })
+// }
+
+// // log event to tinybird
+// async function logAI(
+//   cacheString: string,
+//   suggestedTasks: SuggestedTasks,
+//   rawResponse: string
+// ) {
+//   await fetch("https://api.tinybird.co/v0/events?name=suggestions", {
+//     method: "POST",
+//     body: JSON.stringify({
+//       cacheString,
+//       suggestedTasks,
+//       rawResponse,
+//     }),
+//     headers: {
+//       Authorization: `Bearer ${process.env.TINYBIRD_API_KEY}`,
+//     },
+//   })
+// }
