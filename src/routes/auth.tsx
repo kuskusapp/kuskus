@@ -16,7 +16,7 @@ export default function Auth() {
     // TODO: can change to use https://github.com/teamhanko/hanko/tree/main/frontend/frontend-sdk
     // i.e. call https://github.com/teamhanko/hanko/tree/main/frontend/frontend-sdk#get-the-current-user--validate-the-jwt-against-the-hanko-api
     const res = await fetch(
-      "https://e879ccc9-285e-49d3-b37e-b569f0db4035.hanko.io/me",
+      "https://fae8e48b-e39d-4066-86a6-df7d5a449db9.hanko.io/me",
       {
         method: "GET",
         headers: {
