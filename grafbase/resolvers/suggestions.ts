@@ -1,7 +1,9 @@
-import { Redis } from "@upstash/redis"
+import { Redis } from "@upstash/redis/cloudflare"
 import { suggestionsv3, suggestionsv4, SuggestedTasks } from "@kuskusapp/ai"
 import { z } from "zod"
 import { Tinybird } from "@chronark/zod-bird"
+// import { GraphQLClient } from "graphql-request"
+// import { UserDetailsDocument } from "~/graphql/schema"
 
 const tb = new Tinybird({ token: process.env.TINYBIRD_API_KEY! })
 
@@ -35,12 +37,8 @@ type SuggestedTaskResponse = {
 
 // TODO: can you use graphql-code-generator types for this
 // together with the client so not to do raw queries like this..
-export default async function Resolver(
-  _: any,
-  { task }: { task: string },
-  context: any
-) {
-  await log({ content: "getting suggestions" })
+export default async function Resolver(_: any, { task }: { task: string }) {
+  await log({ content: "getting suggestions", metadata: `task: ${task}` })
 
   // cache string purpose is to make semantically same task requests
   // hit the cache
@@ -53,14 +51,24 @@ export default async function Resolver(
     .join("-")
     .toLowerCase()
 
+  // console.log(sanitizeTask, "sanitize task")
+  // console.log(cacheString, "cache string")
   let cacheString = `gpt-3-subtasks-${sanitizeTask}`
-  const cachedTask: SuggestedTaskResponse | null = await redis.get(cacheString)
+  const cachedTask: SuggestedTaskResponse | null = await redis
+    .get(cacheString)
+    .catch((err) => {
+      console.log(err, "failed to get cached task, error")
+    })
+    .then()
+  console.log(cachedTask, "cached task")
+  console.log("trying again")
 
   if (cachedTask) {
     await log({
       content: "getting suggestions from cache",
       metadata: `cachedTask: ${JSON.stringify(cachedTask)}`,
     })
+    console.log("getting from cache")
     return {
       suggestedTasks: cachedTask.suggestedTasks,
       rawResponse: cachedTask.rawResponse,
@@ -89,18 +97,24 @@ export default async function Resolver(
     }
   `
 
-  let res = await fetch(process.env.GRAFBASE_API_URL!, {
+  let res = await fetch(process.env.API_OF_GRAFBASE!, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       Accept: "application/json",
-      "x-api-key": context.request.headers["x-api-key"],
+      "x-api-key": process.env.KEY_OF_GRAFBASE!,
     },
     body: JSON.stringify({
       query: userDetailsQuery,
     }),
   })
+  console.log(res, "response from grafbase with user details")
   if (!res.ok) {
+    console.log(res.ok, "res.ok")
+    logError({
+      error: "Failed to get user details from grafbase",
+      metadata: `res.stats: ${res.status}`,
+    })
     // TODO: what should this be? throw new Error??
     // maybe should return graphql back with `error: ` field?
     throw new Error(`HTTP error! status: ${res.status}`)
@@ -115,7 +129,9 @@ export default async function Resolver(
 
   // check if user can do AI task due to subscription
   if (new Date(paidSubscriptionValidUntilDate) > new Date()) {
+    console.log("user is subscribed")
     if (languageModelUsed === "gpt-4") {
+      console.log("do gpt-4")
       const { suggestedTasks, rawResponse } = await suggestionsv4(
         task,
         process.env.OPENAI_API_KEY!
@@ -125,12 +141,18 @@ export default async function Resolver(
         suggestedTasks,
         rawResponse,
       })
-      // logAI(cacheString, suggestedTasks, rawResponse)
+      await log({
+        content: "new gpt-4 suggested tasks response",
+        metadata: `suggestedTasks: ${JSON.stringify(
+          suggestedTasks
+        )}. rawResponse: ${rawResponse}`,
+      })
       return {
         suggestedTasks: suggestedTasks,
         rawResponse: rawResponse,
       }
     } else {
+      console.log("do gpt-3")
       const { suggestedTasks, rawResponse } = await suggestionsv3(
         task,
         process.env.OPENAI_API_KEY!
@@ -139,7 +161,12 @@ export default async function Resolver(
         suggestedTasks,
         rawResponse,
       })
-      // logAI(cacheString, suggestedTasks, rawResponse)
+      await log({
+        content: "new gpt-3 suggested tasks response",
+        metadata: `suggestedTasks: ${JSON.stringify(
+          suggestedTasks
+        )}. rawResponse: ${rawResponse}`,
+      })
       return {
         suggestedTasks: suggestedTasks,
         rawResponse: rawResponse,
@@ -154,7 +181,7 @@ export default async function Resolver(
       .freeAiTasksAvailable
   // check if user can do AI task due to free tasks
   if (freeAiTasksAvailable > 0) {
-    // logError("trying to make free AI task")
+    console.log("do task with free ai tasks")
     // TODO: can return nothing from graphql, not sure how..
     let updateUserDetails = `
       mutation {
@@ -174,27 +201,29 @@ export default async function Resolver(
         }
       }
     `
-    await fetch(process.env.GRAFBASE_API_URL!, {
+    const resFromFetch = await fetch(process.env.API_OF_GRAFBASE!, {
       method: "POST",
       headers: {
-        "x-api-key": context.request.headers["x-api-key"],
+        "x-api-key": process.env.KEY_OF_GRAFBASE!,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
         query: updateUserDetails,
       }),
     })
-    // logError("increment free AI task")
+    console.log(resFromFetch, "res from fetch to update user details")
 
     const { suggestedTasks, rawResponse } = await suggestionsv3(
       task,
       process.env.OPENAI_API_KEY!
     )
-    await redis.set(cacheString, {
+    console.log(suggestedTasks, "suggested tasks")
+    const s = await redis.set(cacheString, {
       suggestedTasks,
       rawResponse,
     })
-    // logAI(cacheString, suggestedTasks, rawResponse)
+
+    console.log(s, "result from trying to save to upstash cache ")
 
     return {
       suggestedTasks: suggestedTasks,
@@ -206,57 +235,3 @@ export default async function Resolver(
     needPayment: true,
   }
 }
-
-// async function log(log: any, name?: string) {
-//   await fetch("https://api.tinybird.co/v0/events?name=log", {
-//     method: "POST",
-//     body: JSON.stringify({
-//       name,
-//       log,
-//     }),
-//     headers: {
-//       Authorization: `Bearer ${process.env.TINYBIRD_API_KEY}`,
-//     },
-//   })
-// }
-
-// async function logError(error: string) {
-//   await fetch("https://api.tinybird.co/v0/events?name=error", {
-//     method: "POST",
-//     body: JSON.stringify({
-//       error,
-//     }),
-//     headers: {
-//       Authorization: `Bearer ${process.env.TINYBIRD_API_KEY}`,
-//     },
-//   })
-// }
-
-// async function logObject(obj: any) {
-//   await fetch("https://api.tinybird.co/v0/events?name=logs", {
-//     method: "POST",
-//     body: obj,
-//     headers: {
-//       Authorization: `Bearer ${process.env.TINYBIRD_API_KEY}`,
-//     },
-//   })
-// }
-
-// // log event to tinybird
-// async function logAI(
-//   cacheString: string,
-//   suggestedTasks: SuggestedTasks,
-//   rawResponse: string
-// ) {
-//   await fetch("https://api.tinybird.co/v0/events?name=suggestions", {
-//     method: "POST",
-//     body: JSON.stringify({
-//       cacheString,
-//       suggestedTasks,
-//       rawResponse,
-//     }),
-//     headers: {
-//       Authorization: `Bearer ${process.env.TINYBIRD_API_KEY}`,
-//     },
-//   })
-// }

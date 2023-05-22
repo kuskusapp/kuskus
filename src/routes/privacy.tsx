@@ -18,28 +18,28 @@ export default function Privacy() {
             <a class="text-blue-400" href="https://openai.com/">
               OpenAI
             </a>{" "}
-            for processing. OpenAI's Privacy Policy is{" "}
+            for processing. OpenAI's privacy policy is{" "}
             <a
               class="text-blue-400"
               href="https://openai.com/policies/privacy-policy"
             >
               here
             </a>
-            . All user data exists on Amazon Web Services (AWS) servers. AWS's
-            Privacy Policy is{" "}
+            . All data created by users exists on Amazon Web Services (AWS)
+            servers. AWS's privacy policy is{" "}
             <a class="text-blue-400" href="https://aws.amazon.com/privacy/">
               here
             </a>
             .
           </div>
           <div class="mb-10">
-            The code for the app is open source. You can inspect it{" "}
-            <a class="text-blue-400" href="https://github.com/kuskusapp/kuskus">
-              here
-            </a>
-            . We use Google Authentication to authenticate users. Google's
-            Privacy Policy is{" "}
-            <a class="text-blue-400" href="https://policies.google.com/privacy">
+            We use{" "}
+            <a class="text-blue-400" href="https://www.hanko.io/">
+              Hanko
+            </a>{" "}
+            auth provider to authenticate users using email and passkeys.
+            Hanko's privacy policy is{" "}
+            <a class="text-blue-400" href="https://www.hanko.io/privacy">
               here
             </a>
             .
@@ -51,7 +51,7 @@ export default function Privacy() {
               contact us
             </a>{" "}
             if you have any questions or concerns not already addressed in this
-            Privacy Policy.
+            privacy policy.
           </div>
         </div>
       </div>

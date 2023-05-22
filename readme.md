@@ -41,6 +41,7 @@ Create new file `.env` at root of project with this content:
 ```
 VITE_HANKO_API=https://e879ccc9-285e-49d3-b37e-b569f0db4035.hanko.io
 VITE_GRAFBASE_API_URL=http://127.0.0.1:4000/graphql
+VITE_TINYBIRD_API_KEY=
 ```
 
 Above Hanko API uses KusKus's staging auth setup. You can create your own new project at [hanko.io](https://www.hanko.io) and fill it with own API value.

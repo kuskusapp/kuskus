@@ -15,15 +15,13 @@ export default function Auth() {
     // TODO: check if there is a valid token, if token is valid go to /
     // TODO: can change to use https://github.com/teamhanko/hanko/tree/main/frontend/frontend-sdk
     // i.e. call https://github.com/teamhanko/hanko/tree/main/frontend/frontend-sdk#get-the-current-user--validate-the-jwt-against-the-hanko-api
-    const res = await fetch(
-      "https://fae8e48b-e39d-4066-86a6-df7d5a449db9.hanko.io/me",
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${await getHankoCookie()}`,
-        },
-      }
-    )
+    // TODO: make that hanko api url into VITE env!
+    const res = await fetch(`${import.meta.env.VITE_HANKO_API}/me`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${await getHankoCookie()}`,
+      },
+    })
 
     if (res.status === 200) {
       navigate("/")
@@ -153,6 +151,13 @@ export default function Auth() {
               <div id="text" class="text-2xl mt-3 mb-2">
                 Sign in/up with
               </div>
+              {/* TODO: should be fixed with new hanko-auth version */}
+              {/* currently vite variables don't work.. */}
+              {/* dev! */}
+              {/* <hanko-auth
+                api={"https://e879ccc9-285e-49d3-b37e-b569f0db4035.hanko.io"}
+              /> */}
+              {/* production! */}
               <hanko-auth
                 api={"https://fae8e48b-e39d-4066-86a6-df7d5a449db9.hanko.io"}
               />

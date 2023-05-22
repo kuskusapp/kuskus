@@ -12,12 +12,12 @@ import {
   createUserDetailsState,
 } from "~/GlobalContext/userDetails"
 import CollapsedSidebar from "~/components/CollapsedSidebar"
-import Help from "~/components/Help"
 import Modal from "~/components/Modal"
 import Settings from "~/components/Settings"
 import Sidebar from "~/components/Sidebar"
 import TodoList from "~/components/TodoList"
 import { createShortcuts } from "~/lib/primitives"
+import { logError } from "~/lib/tinybird"
 
 export type GrafbaseRequest = GraphQLClient["request"]
 
@@ -32,14 +32,13 @@ export default function App(props: { hankoCookie: string }) {
     try {
       return await grafbase.request(...(args as [any]))
     } catch (error) {
-      // TODO: there are different kinds of errors that can happen here
-      console.log(error, "error")
-      // in case of invalid token, it should go back to /auth page
-      // and say nicely in pop up, please log in again
-      // ideally once we integrate with auth provider
-      // the user session should at least be one month
-      // so token invalidation should not happen often
-      navigate("/auth")
+      // if (error.response.error.includes("Unauthorized")) {
+      //   navigate("/auth")
+      // }
+      logError({
+        error: "grafbase client error",
+        metadata: `error: ${JSON.stringify(error)}`,
+      })
     }
   }
 

@@ -22,6 +22,7 @@
     "vite": "^4.3.8"
   },
   "dependencies": {
+    "@chronark/zod-bird": "^0.0.3",
     "@graphql-codegen/cli": "^3.3.1",
     "@graphql-codegen/typed-document-node": "^4.0.1",
     "@graphql-codegen/typescript": "^3.0.4",
