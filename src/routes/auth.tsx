@@ -11,11 +11,23 @@ import { getHankoCookie } from "~/lib/auth"
 
 export default function Auth() {
   const navigate = useNavigate()
-  onMount(() => {
+  onMount(async () => {
     // TODO: check if there is a valid token, if token is valid go to /
-    // if (token.valid) {
-    //   navigate("/")
-    // }
+    // TODO: can change to use https://github.com/teamhanko/hanko/tree/main/frontend/frontend-sdk
+    // i.e. call https://github.com/teamhanko/hanko/tree/main/frontend/frontend-sdk#get-the-current-user--validate-the-jwt-against-the-hanko-api
+    const res = await fetch(
+      "https://e879ccc9-285e-49d3-b37e-b569f0db4035.hanko.io/me",
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${await getHankoCookie()}`,
+        },
+      }
+    )
+
+    if (res.status === 200) {
+      navigate("/")
+    }
 
     // register hank component
     // https://github.com/teamhanko/hanko/blob/main/frontend/elements/README.md#script
