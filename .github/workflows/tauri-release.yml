@@ -13,7 +13,7 @@ jobs:
       matrix:
         settings:
           - platform: "macos-latest"
-            args: "--target universal-apple-darwin"
+            args: "--target universal-apple-darwin" # try
           - platform: "macos-latest"
             args: "--target x86_64-apple-darwin"
           - platform: "ubuntu-20.04"
