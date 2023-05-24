@@ -38,13 +38,13 @@
       "endpoints": [
         "https://github.com/kuskusapp/kuskus/releases/latest/download/latest.json"
       ],
-      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDJEQzBDOTAxOTFFMUY0NTIKUldSUzlPR1JBY25BTFd2TE92b292S0l1b3prcWlsRWtPZ2U5cFE0WHVoeGhKMGdzT2ZqNi9ydTUK"
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IDRFNzQ5REQ2MTM2MUUxOEEKUldTSzRXRVQxcDEwVGxGVmc2SjV3d1B0c1JMV3VKQWI2RVozd25sNStzOE5Ib1BNZFMwSFRlZ3AK"
     },
     "windows": [
       {
         "fullscreen": false,
         "resizable": true,
-        "title": "kuskus",
+        "title": "KusKus",
         "width": 800,
         "height": 600
       }
