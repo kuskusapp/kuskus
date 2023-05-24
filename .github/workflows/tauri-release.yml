@@ -13,7 +13,7 @@ jobs:
       matrix:
         settings:
           - platform: "macos-latest"
-            args: "--target universal-apple-darwin" # try
+            args: "--target universal-apple-darwin"
           - platform: "macos-latest"
             args: "--target x86_64-apple-darwin"
           - platform: "ubuntu-20.04"
@@ -54,3 +54,4 @@ jobs:
           owner: kuskusapp
           repo: kuskus
           releaseCommitish: a8e90e034cc33cbb0a837f9bebce671bcac6307b
+          args: ${{ matrix.settings.args }}
