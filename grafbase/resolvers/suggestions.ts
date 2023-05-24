@@ -51,24 +51,23 @@ export default async function Resolver(_: any, { task }: { task: string }) {
     .join("-")
     .toLowerCase()
 
-  // console.log(sanitizeTask, "sanitize task")
-  // console.log(cacheString, "cache string")
   let cacheString = `gpt-3-subtasks-${sanitizeTask}`
   const cachedTask: SuggestedTaskResponse | null = await redis
     .get(cacheString)
     .catch((err) => {
-      console.log(err, "failed to get cached task, error")
+      logError({
+        error: "Failed to get task from redis",
+        metadata: `error: ${err}`,
+      })
+      return
     })
     .then()
-  console.log(cachedTask, "cached task")
-  console.log("trying again")
 
   if (cachedTask) {
     await log({
       content: "getting suggestions from cache",
       metadata: `cachedTask: ${JSON.stringify(cachedTask)}`,
     })
-    console.log("getting from cache")
     return {
       suggestedTasks: cachedTask.suggestedTasks,
       rawResponse: cachedTask.rawResponse,
@@ -97,27 +96,35 @@ export default async function Resolver(_: any, { task }: { task: string }) {
     }
   `
 
-  let res = await fetch(process.env.API_OF_GRAFBASE!, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-      "x-api-key": process.env.KEY_OF_GRAFBASE!,
-    },
-    body: JSON.stringify({
-      query: userDetailsQuery,
-    }),
-  })
-  console.log(res, "response from grafbase with user details")
-  if (!res.ok) {
-    console.log(res.ok, "res.ok")
+  let res: Response | undefined
+
+  try {
+    res = await fetch(process.env.API_OF_GRAFBASE!, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        "x-api-key": process.env.KEY_OF_GRAFBASE!,
+      },
+      body: JSON.stringify({
+        query: userDetailsQuery,
+      }),
+    })
+  } catch (err) {
     logError({
       error: "Failed to get user details from grafbase",
-      metadata: `res.stats: ${res.status}`,
+      metadata: `error: ${err}`,
     })
-    // TODO: what should this be? throw new Error??
-    // maybe should return graphql back with `error: ` field?
-    throw new Error(`HTTP error! status: ${res.status}`)
+    // return or throw error here
+    return {
+      error: err,
+    }
+  }
+
+  if (!res) {
+    return {
+      error: "Failed to get user details from grafbase",
+    }
   }
 
   const userDetailsJson = await res.json()
@@ -129,9 +136,7 @@ export default async function Resolver(_: any, { task }: { task: string }) {
 
   // check if user can do AI task due to subscription
   if (new Date(paidSubscriptionValidUntilDate) > new Date()) {
-    console.log("user is subscribed")
     if (languageModelUsed === "gpt-4") {
-      console.log("do gpt-4")
       const { suggestedTasks, rawResponse } = await suggestionsv4(
         task,
         process.env.OPENAI_API_KEY!
@@ -152,7 +157,6 @@ export default async function Resolver(_: any, { task }: { task: string }) {
         rawResponse: rawResponse,
       }
     } else {
-      console.log("do gpt-3")
       const { suggestedTasks, rawResponse } = await suggestionsv3(
         task,
         process.env.OPENAI_API_KEY!
@@ -181,7 +185,6 @@ export default async function Resolver(_: any, { task }: { task: string }) {
       .freeAiTasksAvailable
   // check if user can do AI task due to free tasks
   if (freeAiTasksAvailable > 0) {
-    console.log("do task with free ai tasks")
     // TODO: can return nothing from graphql, not sure how..
     let updateUserDetails = `
       mutation {
@@ -211,19 +214,15 @@ export default async function Resolver(_: any, { task }: { task: string }) {
         query: updateUserDetails,
       }),
     })
-    console.log(resFromFetch, "res from fetch to update user details")
 
     const { suggestedTasks, rawResponse } = await suggestionsv3(
       task,
       process.env.OPENAI_API_KEY!
     )
-    console.log(suggestedTasks, "suggested tasks")
     const s = await redis.set(cacheString, {
       suggestedTasks,
       rawResponse,
     })
-
-    console.log(s, "result from trying to save to upstash cache ")
 
     return {
       suggestedTasks: suggestedTasks,
