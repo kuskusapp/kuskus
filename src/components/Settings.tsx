@@ -23,9 +23,39 @@ export default function Settings() {
           transition: all 1s ease-out;
         }
         #Plan {
-          border: solid 3px rgba(43, 43, 43, 0.5);
+          border: solid 3px rgba(200,200,200, 0.5);
           transition: all 1s ease-out;
         }
+        #Sidebar {
+          border-right: solid 3px rgba(200,200,200, 0.5);
+        }
+        #helpNav {
+          border-bottom: solid 3px rgba(200,200,200, 0.5),
+        }
+        #helpTitle {
+          border-right: solid 3px rgba(200,200,200, 0.5)
+        }
+        #instructions {
+          border-bottom: solid 3px rgba(200,200,200, 0.5)
+        }
+        @media (prefers-color-scheme: dark) {
+          #Plan {
+            border: solid 3px rgba(43, 43, 43, 0.5);
+          }
+          #Sidebar {
+            border-right: solid 3px rgba(43, 43, 43, 0.5);
+          }
+          #helpNav {
+            border-bottom: solid 3px rgba(43, 43, 43, 0.5)
+          }
+          #helpTitle {
+            border-right: solid 3px rgba(43, 43, 43, 0.5)
+          }
+          #instructions {
+            border-bottom: solid 3px rgba(43, 43, 43, 0.5)
+          }
+        }
+        
       `}
       </style>
       <div class="flex flex-col h-full w-full">
@@ -42,8 +72,8 @@ export default function Settings() {
             class="flex justify-between flex-col  dark:bg-stone-900 bg-gray-100 pr-1"
             style={{
               width: "16%",
-              "border-right": "solid 3px rgba(43, 43, 43, 0.5)",
             }}
+            id="Sidebar"
           >
             <div>
               <div>
@@ -212,19 +242,14 @@ export default function Settings() {
               <Match when={show() === "Help"}>
                 <div class="w-full h-full flex flex-col items-center justify-between overflow-auto">
                   <div class="overflow-scroll h-full w-full flex flex-col justify-center items-center">
-                    <div
-                      class=" w-full flex"
-                      style={{
-                        "border-bottom": "solid 3px rgba(43, 43, 43, 0.5)",
-                      }}
-                    >
+                    <div class=" w-full flex" id="helpNav">
                       <div
                         class="font-bold p-6 pl-4"
                         style={{
                           "font-size": "36px",
                           width: "20%",
-                          "border-right": "solid 3px rgba(43, 43, 43, 0.5)",
                         }}
+                        id="helpTitle"
                       >
                         Help
                       </div>
@@ -240,12 +265,7 @@ export default function Settings() {
                         </div>
                       </div>
                     </div>
-                    <div
-                      class="flex flex-col h-full w-full"
-                      style={{
-                        "border-bottom": "solid 3px rgba(43, 43, 43, 0.5)",
-                      }}
-                    >
+                    <div class="flex flex-col h-full w-full" id="instructions">
                       <Instruction
                         problem="Adding a task"
                         keyboardInstruction="Press n key"

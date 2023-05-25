@@ -8,43 +8,59 @@ interface Props {
 
 export default function Instruction(props: Props) {
   return (
-    <div
-      id="singularhelp"
-      class="flex"
-      style={{
-        "border-right": "solid 3px rgba(43, 43, 43, 0.5)",
-      }}
-    >
-      <div
-        id="titleOfHelp"
-        class="flex gap-4 h-full justify-end items-center p-4 text-xl font-semibold text-end"
-        style={{
-          width: "20%",
-          "border-right": "solid 3px rgba(43, 43, 43, 0.5)",
-        }}
-      >
-        {props.problem}
-      </div>{" "}
-      <div class="text-sm grow h-full w-1/2">
+    <>
+      <style>
+        {`
+        #titleOfHelp{
+          border-right: solid 3px rgba(200, 200, 200, 0.5)
+        }
+        #keyboardtab {
+          border-right: solid 3px rgba(200, 200, 200, 0.5)
+        }
+        #helpitem {
+          border-top: solid 3px rgba(200,200,200, 0.5)
+        }
+        @media (prefers-color-scheme: dark) {
+          #titleOfHelp {
+            border-right: solid 3px rgba(43, 43, 43, 0.5)
+          }
+          #keyboardtab {
+            border-right: solid 3px rgba(43, 43, 43, 0.5)
+          }
+          #helpitem {
+            border-top: solid 3px rgba(43, 43, 43, 0.5)
+          }
+        }
+      `}
+      </style>
+      <div id="singularhelp" class="flex">
         <div
-          class="flex gap-3  h-full justify-between"
-          style={{ "border-top": "solid 3px rgba(43, 43, 43, 0.5)" }}
+          id="titleOfHelp"
+          class="flex  gap-4  justify-end items-center p-4 text-xl font-semibold text-end"
+          style={{
+            width: "20%",
+          }}
         >
+          {props.problem}
+        </div>{" "}
+        <div class="text-sm grow w-1/2">
           <div
-            id="keyboardtab"
-            class="w-1/2 p-4 "
-            style={{ "border-right": "solid 3px rgba(43, 43, 43, 0.5)" }}
+            class="flex gap-3 justify-between"
+            style={{ "border-top": "solid 3px rgba(43, 43, 43, 0.5)" }}
+            id="helpitem"
           >
-            <div class="flex items-center justify-center"></div>
+            <div id="keyboardtab" class="w-1/2 p-4 ">
+              <div class="flex items-center justify-center"></div>
 
-            <div>{props.keyboardInstruction}</div>
-          </div>
-          <div class="w-1/2 rounded-lg p-2" id="mousetab">
-            <div class="flex items-center justify-center"></div>
-            <div>{props.mouseInstruction}</div>
+              <div>{props.keyboardInstruction}</div>
+            </div>
+            <div class="w-1/2 rounded-lg p-2" id="mousetab">
+              <div class="flex items-center justify-center"></div>
+              <div>{props.mouseInstruction}</div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   )
 }
