@@ -138,16 +138,19 @@ mutation UserDetailsUpdate($id: ID!, $userDetails: UserDetailsUpdateInput!) {
 }
 
 query SuggestedTasks($task: String!, $userId: ID!) {
-  suggestions(task: $task) {
-    suggestedTasks {
-      intro
-      tasks {
-        task
-        note
+  userDetails(by: { id: $userId }) {
+    suggestions(task: $task) {
+      rawResponse
+      suggestedTasks {
+        intro
+        tasks {
+          task
+          note
+        }
       }
+      needPayment
+      freeAiTaskUsed
     }
-    rawResponse
-    needPayment
   }
 }
 

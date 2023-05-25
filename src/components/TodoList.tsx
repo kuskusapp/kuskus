@@ -225,15 +225,16 @@ export default function TodoList() {
     async (todo) => {
       const res = await todoList.request(SuggestedTasksDocument, {
         task: todo.title,
+        userId: userDetails.userDetails.id!,
       })
       console.log(res, "res")
-      if (res.suggestions?.needPayment) {
-        todoList.setMode(TodoListMode.Settings, { settingsState: "Upgrade" })
-        return
-      }
+      // if (res.suggestions?.needPayment) {
+      //   todoList.setMode(TodoListMode.Settings, { settingsState: "Upgrade" })
+      //   return
+      // }
       // @ts-ignore
-      const suggestions = res.suggestions.suggestedTasks.tasks
-      return suggestions && suggestions.length ? suggestions : undefined
+      // const suggestions = res.suggestions.suggestedTasks.tasks
+      // return suggestions && suggestions.length ? suggestions : undefined
     }
   )
 

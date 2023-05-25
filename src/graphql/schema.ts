@@ -109,7 +109,6 @@ export type Query = {
   subtask?: Maybe<Subtask>
   /** Paginated query to fetch the whole list of `Subtask`. */
   subtaskCollection?: Maybe<SubtaskConnection>
-  suggestions?: Maybe<SuggestionsPayload>
   /** Query a single Todo by an ID or a unique field */
   todo?: Maybe<Todo>
   /** Paginated query to fetch the whole list of `Todo`. */
@@ -134,10 +133,6 @@ export type QuerySubtaskCollectionArgs = {
   first?: InputMaybe<Scalars["Int"]>
   last?: InputMaybe<Scalars["Int"]>
   orderBy?: InputMaybe<SubtaskOrderByInput>
-}
-
-export type QuerySuggestionsArgs = {
-  task: Scalars["String"]
 }
 
 export type QueryTodoArgs = {
@@ -286,6 +281,7 @@ export type SuggestedTasks = {
 
 export type SuggestionsPayload = {
   __typename?: "SuggestionsPayload"
+  freeAiTaskUsed?: Maybe<Scalars["Boolean"]>
   needPayment?: Maybe<Scalars["Boolean"]>
   rawResponse?: Maybe<Scalars["String"]>
   suggestedTasks?: Maybe<SuggestedTasks>
@@ -386,12 +382,18 @@ export type UserDetails = {
   /** when the model was created */
   createdAt: Scalars["DateTime"]
   freeAiTasksAvailable?: Maybe<Scalars["Int"]>
+  gpt4TasksAvailable?: Maybe<Scalars["Int"]>
   /** Unique identifier */
   id: Scalars["ID"]
   languageModelUsed: Scalars["String"]
   paidSubscriptionValidUntilDate?: Maybe<Scalars["Date"]>
+  suggestions?: Maybe<SuggestionsPayload>
   /** when the model was updated */
   updatedAt: Scalars["DateTime"]
+}
+
+export type UserDetailsSuggestionsArgs = {
+  task: Scalars["String"]
 }
 
 export type UserDetailsByInput = {
@@ -409,6 +411,7 @@ export type UserDetailsConnection = {
 export type UserDetailsCreateInput = {
   collapsedSidebar?: Scalars["Boolean"]
   freeAiTasksAvailable?: InputMaybe<Scalars["Int"]>
+  gpt4TasksAvailable?: InputMaybe<Scalars["Int"]>
   languageModelUsed?: Scalars["String"]
   paidSubscriptionValidUntilDate?: InputMaybe<Scalars["Date"]>
 }
@@ -437,6 +440,7 @@ export type UserDetailsOrderByInput = {
 export type UserDetailsUpdateInput = {
   collapsedSidebar?: InputMaybe<Scalars["Boolean"]>
   freeAiTasksAvailable?: InputMaybe<IntOperationsInput>
+  gpt4TasksAvailable?: InputMaybe<IntOperationsInput>
   languageModelUsed?: InputMaybe<Scalars["String"]>
   paidSubscriptionValidUntilDate?: InputMaybe<Scalars["Date"]>
 }
@@ -654,22 +658,27 @@ export type UserDetailsUpdateMutation = {
 
 export type SuggestedTasksQueryVariables = Exact<{
   task: Scalars["String"]
+  userId: Scalars["ID"]
 }>
 
 export type SuggestedTasksQuery = {
   __typename?: "Query"
-  suggestions?: {
-    __typename?: "SuggestionsPayload"
-    rawResponse?: string | null
-    needPayment?: boolean | null
-    suggestedTasks?: {
-      __typename?: "SuggestedTasks"
-      intro?: string | null
-      tasks: Array<{
-        __typename?: "SuggestedTask"
-        task: string
-        note?: string | null
-      } | null>
+  userDetails?: {
+    __typename?: "UserDetails"
+    suggestions?: {
+      __typename?: "SuggestionsPayload"
+      rawResponse?: string | null
+      needPayment?: boolean | null
+      freeAiTaskUsed?: boolean | null
+      suggestedTasks?: {
+        __typename?: "SuggestedTasks"
+        intro?: string | null
+        tasks: Array<{
+          __typename?: "SuggestedTask"
+          task: string
+          note?: string | null
+        } | null>
+      } | null
     } | null
   } | null
 }
@@ -1685,20 +1694,40 @@ export const SuggestedTasksDocument = {
             },
           },
         },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "userId" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: { kind: "NamedType", name: { kind: "Name", value: "ID" } },
+          },
+        },
       ],
       selectionSet: {
         kind: "SelectionSet",
         selections: [
           {
             kind: "Field",
-            name: { kind: "Name", value: "suggestions" },
+            name: { kind: "Name", value: "userDetails" },
             arguments: [
               {
                 kind: "Argument",
-                name: { kind: "Name", value: "task" },
+                name: { kind: "Name", value: "by" },
                 value: {
-                  kind: "Variable",
-                  name: { kind: "Name", value: "task" },
+                  kind: "ObjectValue",
+                  fields: [
+                    {
+                      kind: "ObjectField",
+                      name: { kind: "Name", value: "id" },
+                      value: {
+                        kind: "Variable",
+                        name: { kind: "Name", value: "userId" },
+                      },
+                    },
+                  ],
                 },
               },
             ],
@@ -1707,33 +1736,65 @@ export const SuggestedTasksDocument = {
               selections: [
                 {
                   kind: "Field",
-                  name: { kind: "Name", value: "suggestedTasks" },
+                  name: { kind: "Name", value: "suggestions" },
+                  arguments: [
+                    {
+                      kind: "Argument",
+                      name: { kind: "Name", value: "task" },
+                      value: {
+                        kind: "Variable",
+                        name: { kind: "Name", value: "task" },
+                      },
+                    },
+                  ],
                   selectionSet: {
                     kind: "SelectionSet",
                     selections: [
-                      { kind: "Field", name: { kind: "Name", value: "intro" } },
                       {
                         kind: "Field",
-                        name: { kind: "Name", value: "tasks" },
+                        name: { kind: "Name", value: "rawResponse" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "suggestedTasks" },
                         selectionSet: {
                           kind: "SelectionSet",
                           selections: [
                             {
                               kind: "Field",
-                              name: { kind: "Name", value: "task" },
+                              name: { kind: "Name", value: "intro" },
                             },
                             {
                               kind: "Field",
-                              name: { kind: "Name", value: "note" },
+                              name: { kind: "Name", value: "tasks" },
+                              selectionSet: {
+                                kind: "SelectionSet",
+                                selections: [
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "task" },
+                                  },
+                                  {
+                                    kind: "Field",
+                                    name: { kind: "Name", value: "note" },
+                                  },
+                                ],
+                              },
                             },
                           ],
                         },
                       },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "needPayment" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "freeAiTaskUsed" },
+                      },
                     ],
                   },
                 },
-                { kind: "Field", name: { kind: "Name", value: "rawResponse" } },
-                { kind: "Field", name: { kind: "Name", value: "needPayment" } },
               ],
             },
           },
