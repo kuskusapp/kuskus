@@ -187,13 +187,13 @@ export default function TodoList() {
               todoList.startLocalSearch()
             },
             // Suggestions
-            A() {
-              const focused = todoList.focusedTodo()
+            // A() {
+            //   const focused = todoList.focusedTodo()
 
-              if (focused && focused.type === "todo") {
-                todoList.setMode(TodoListMode.Suggest)
-              }
-            },
+            //   if (focused && focused.type === "todo") {
+            //     todoList.setMode(TodoListMode.Suggest)
+            //   }
+            // },
           }
         : {
             Escape() {

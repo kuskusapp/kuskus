@@ -59,7 +59,7 @@ export default function Sidebar() {
           `}
       </style>
       <div
-        class="w-screen bg-neutral-900 text-base "
+        class="w-screen bg-white dark:bg-neutral-900 text-base "
         style={{
           width: "18%",
           "border-right": "solid 3px rgb(43, 43, 43, 0.5)",
