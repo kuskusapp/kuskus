@@ -103,7 +103,7 @@ export default function Settings() {
                       show() === "Upgrade" &&
                         "font-bold text-blue-300 border-r-4 border-blue-300"
                     )}
-                    onClick={() => setShow("Upgrade")}
+                    // onClick={() => setShow("Upgrade")}
                   >
                     Upgrade
                   </div>

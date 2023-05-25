@@ -18,6 +18,7 @@ type SuggestionsPayload {
   suggestedTasks: SuggestedTasks
   rawResponse: String
   needPayment: Boolean
+  freeAiTaskUsed: Boolean
 }
 
 type SuggestedTasks {

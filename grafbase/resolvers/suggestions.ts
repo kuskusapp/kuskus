@@ -135,41 +135,11 @@ export default async function Resolver(
 
   // check if user can do AI task due to free tasks
   if (freeAiTasksAvailable > 0) {
-    // TODO: can return nothing from graphql, not sure how..
-    let updateUserDetails = `
-    mutation {
-      userDetailsUpdate(
-        by: {
-          id: "${id}"
-        }
-        input: {
-          freeAiTasksAvailable: {
-            set: ${freeAiTasksAvailable - 1}
-          }
-        }
-      ) {
-        userDetails {
-          freeAiTasksAvailable
-        }
-      }
-    }
-  `
-    const resFromFetch = await fetch(process.env.API_OF_GRAFBASE!, {
-      method: "POST",
-      headers: {
-        "x-api-key": process.env.KEY_OF_GRAFBASE!,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        query: updateUserDetails,
-      }),
-    })
-
     const { suggestedTasks, rawResponse } = await suggestionsv3(
       task,
       process.env.OPENAI_API_KEY!
     )
-    const s = await redis.set(cacheString, {
+    await redis.set(cacheString, {
       suggestedTasks,
       rawResponse,
     })
@@ -177,6 +147,7 @@ export default async function Resolver(
     return {
       suggestedTasks: suggestedTasks,
       rawResponse: rawResponse,
+      freeAiTaskUsed: true,
     }
   }
 
