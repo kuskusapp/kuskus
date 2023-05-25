@@ -1,7 +1,6 @@
-import { useTodoList } from "~/GlobalContext/todo-list"
-import Icon from "./Icon"
 import { createEventListener } from "@solid-primitives/event-listener"
 import type { JSX } from "solid-js"
+import { useTodoList } from "~/GlobalContext/todo-list"
 
 // TODO: should contain JSX passed in
 // find a type for JSX.element..

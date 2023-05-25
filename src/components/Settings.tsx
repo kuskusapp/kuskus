@@ -55,7 +55,7 @@ export default function Settings() {
             border-bottom: solid 3px rgba(43, 43, 43, 0.5)
           }
         }
-        
+
       `}
       </style>
       <div class="flex flex-col h-full w-full">
@@ -133,7 +133,7 @@ export default function Settings() {
                       show() === "Upgrade" &&
                         "font-bold text-blue-300 border-r-4 border-blue-300"
                     )}
-                    // onClick={() => setShow("Upgrade")}
+                    onClick={() => setShow("Upgrade")}
                   >
                     Upgrade
                   </div>
@@ -274,7 +274,7 @@ export default function Settings() {
                       <Instruction
                         problem="Adding a subtask"
                         keyboardInstruction="When a task or subtask is focused, press l key"
-                        mouseInstruction="TODO: "
+                        mouseInstruction="Right click on a task and select 'Add subtask'"
                       />
                       <Instruction
                         problem="Changing focus between tasks"
@@ -319,7 +319,7 @@ export default function Settings() {
                       <Instruction
                         problem="Do AI suggestions for task"
                         keyboardInstruction="Press a key when task is focused. You will see a loading indicator and then the suggestions will appear"
-                        mouseInstruction="TODO: "
+                        mouseInstruction=""
                       />
                     </div>
                     <div class="flex w-full h-1/2 flex-col gap-5 text-2xl font-semibold justify-between items-center overflow-scroll">

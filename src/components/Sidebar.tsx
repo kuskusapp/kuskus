@@ -11,7 +11,6 @@ export default function Sidebar() {
     <>
       <style>
         {`
-
           #sidebar {
             display: none
           }
@@ -42,15 +41,6 @@ export default function Sidebar() {
             }
             #sidebar {
               display: inline
-            }
-
-
-          }
-          @media (min-width: 1200px){
-            #tags {
-              width: 0%;
-              display: none
-
             }
           }
           #sidebar {

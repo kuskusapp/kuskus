@@ -1,6 +1,4 @@
-import { createEventListener } from "@solid-primitives/event-listener"
-import { batch, createSignal, onCleanup } from "solid-js"
-import TodoList from "./TodoList"
+import { createSignal, onCleanup } from "solid-js"
 import { useTodoList } from "~/GlobalContext/todo-list"
 
 export default function NewTag() {

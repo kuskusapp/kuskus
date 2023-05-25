@@ -11,7 +11,6 @@ import {
 import Icon from "./Icon"
 import Loader from "./Loader"
 import ContextMenu from "./ContextMenu"
-import { todo } from "node:test"
 
 export default function Todo(props: {
   todo: ClientTodo | ClientSubtask
@@ -25,7 +24,7 @@ export default function Todo(props: {
     y: 0,
   })
   const [showContextMenu, setShowContextMenu] = createSignal(false)
-  const [daysLeft, setDaysLeft] = createSignal("")
+  // const [daysLeft, setDaysLeft] = createSignal("")
 
   createEffect(() => {
     const handleClick = () => setShowContextMenu(false)
@@ -59,6 +58,7 @@ export default function Todo(props: {
           oncontextmenu={(e) => {
             e.preventDefault()
             setShowContextMenu(true)
+            todoList.setFocusedTodoKey(props.todo.key)
             setPoints({
               x: e.pageX,
               y: e.pageY,
@@ -87,10 +87,9 @@ export default function Todo(props: {
             }
           }}
         >
-          {showContextMenu() &&
-            todoList.focusedTodoKey() === props.todo.key && (
-              <ContextMenu top={points().y} left={points().x} />
-            )}
+          {showContextMenu() && todoList.isTodoFocused(props.todo.key) && (
+            <ContextMenu top={points().y} left={points().x} />
+          )}
 
           <div
             style={{ display: "flex" }}

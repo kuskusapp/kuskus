@@ -1,11 +1,16 @@
 import { batch } from "solid-js"
 import { useTodoList, TodoListMode } from "~/GlobalContext/todo-list"
 
-export default function ContextMenu(props: { top: number; left: number }) {
+interface Props {
+  top: number
+  left: number
+}
+
+export default function ContextMenu(props: Props) {
   const todoList = useTodoList()
   return (
     <div
-      class="flex flex-col gap-2 items-center absolute bg-neutral-900 p-2 rounded-lg"
+      class="flex flex-col gap-2 items-center absolute bg-gray-100 dark:bg-neutral-900 p-2 rounded-lg"
       style={{
         top: `${props.top}px`,
         left: `calc(${props.left}px`,
@@ -16,11 +21,20 @@ export default function ContextMenu(props: { top: number; left: number }) {
         onClick={() => {
           todoList.setMode(TodoListMode.Edit, {})
         }}
+        class="hover:bg-gray-200 dark:hover:bg-neutral-800 w-full rounded-lg flex items-center p-1 px-2 justify-center cursor-pointer"
       >
-        edit
+        Edit
       </div>
-      <div>new Subtask</div>
       <div
+        class="hover:bg-gray-200 dark:hover:bg-neutral-800 w-full rounded-lg flex items-center p-1 px-2 justify-center cursor-pointer"
+        onClick={() => {
+          todoList.addNewSubtask()
+        }}
+      >
+        New subtask
+      </div>
+      <div
+        class="hover:bg-gray-200 dark:hover:bg-neutral-800 w-full rounded-lg flex items-center p-1 px-2 justify-center cursor-pointer"
         onClick={() => {
           const focused = todoList.focusedTodo(),
             index = todoList.focusedTodoIndex()
@@ -39,7 +53,7 @@ export default function ContextMenu(props: { top: number; left: number }) {
           })
         }}
       >
-        delete
+        Delete
       </div>
     </div>
   )

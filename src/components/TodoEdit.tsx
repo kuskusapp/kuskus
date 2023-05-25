@@ -11,6 +11,7 @@ import {
   createMemo,
   createSignal,
   onCleanup,
+  untrack,
 } from "solid-js"
 import { todayDate } from "~/lib/lib"
 import {
@@ -35,6 +36,14 @@ export default function TodoEdit(props: {
   const [starred, setStarred] = createSignal(props.todo.starred)
   const [tags, setTags] = createSignal(props.todo.tags)
   const [searchTags, setSearchTags] = createSignal(false)
+
+  // createEventListener(document, "click", (e) => {
+  //   console.log("click..")
+  //   if (!searchTags()) {
+  //     return
+  //   }
+  //   setSearchTags(false)
+  // })
 
   const fuse = createMemo(
     () =>
@@ -330,7 +339,26 @@ export default function TodoEdit(props: {
                       }}
                       type="text"
                       onKeyPress={(e) => {
-                        if (e.key === "Enter" && searchTagsQuery() !== "") {
+                        if (searchTagsQuery() === "" && e.key === "Enter") {
+                          setSearchTags(false)
+                          return
+                        }
+                        if (e.key === "Enter") {
+                          if (
+                            searchTagsQuery() !== "" &&
+                            filteredTags().length > 0
+                          ) {
+                            if (tags() !== null) {
+                              if (tags() !== undefined) {
+                                setTags([...tags(), filteredTags()[0]])
+                              } else {
+                                setTags([filteredTags()[0]])
+                              }
+                            } else {
+                              setTags([filteredTags()[0]])
+                            }
+                            return
+                          }
                           if (tags() !== null) {
                             if (tags() !== undefined) {
                               setTags([...tags(), searchTagsQuery()])

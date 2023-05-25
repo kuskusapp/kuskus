@@ -33,7 +33,7 @@ export default function ActionBar() {
         >
           <div
             class="has-tooltip cursor-pointer"
-            onClick={() => todoList.setMode(TodoListMode.Search)}
+            onClick={() => todoList.startLocalSearch()}
           >
             <div
               class="tooltip shadow-lg p-1  -mt-8 text-white text-sm flex items-center px-3 gap-1 font-bold"
