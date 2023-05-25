@@ -228,13 +228,13 @@ export default function TodoList() {
         userId: userDetails.userDetails.id!,
       })
       console.log(res, "res")
-      // if (res.suggestions?.needPayment) {
-      //   todoList.setMode(TodoListMode.Settings, { settingsState: "Upgrade" })
-      //   return
-      // }
+      if (res.userDetails?.suggestions.needPayment) {
+        todoList.setMode(TodoListMode.Settings, { settingsState: "Upgrade" })
+        return
+      }
       // @ts-ignore
-      // const suggestions = res.suggestions.suggestedTasks.tasks
-      // return suggestions && suggestions.length ? suggestions : undefined
+      const suggestions = res.userDetails.suggestions.suggestedTasks.tasks
+      return suggestions && suggestions.length ? suggestions : undefined
     }
   )
 
