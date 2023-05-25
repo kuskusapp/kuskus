@@ -37,7 +37,15 @@ type SuggestedTaskResponse = {
 
 // TODO: can you use graphql-code-generator types for this
 // together with the client so not to do raw queries like this..
-export default async function Resolver(_: any, { task }: { task: string }) {
+export default async function Resolver(
+  {
+    paidSubscriptionValidUntilDate,
+    freeAiTasksAvailable,
+    languageModelUsed,
+    id,
+  }: any,
+  { task }: any
+) {
   await log({ content: "getting suggestions", metadata: `task: ${task}` })
 
   // cache string purpose is to make semantically same task requests
@@ -52,9 +60,11 @@ export default async function Resolver(_: any, { task }: { task: string }) {
     .toLowerCase()
 
   let cacheString = `gpt-3-subtasks-${sanitizeTask}`
+  console.log(cacheString)
   const cachedTask: SuggestedTaskResponse | null = await redis
     .get(cacheString)
     .catch((err) => {
+      console.log(err, "err")
       logError({
         error: "Failed to get task from redis",
         metadata: `error: ${err}`,
@@ -63,6 +73,7 @@ export default async function Resolver(_: any, { task }: { task: string }) {
     })
     .then()
 
+  console.log(cachedTask, "cachedTask")
   if (cachedTask) {
     await log({
       content: "getting suggestions from cache",
@@ -77,62 +88,6 @@ export default async function Resolver(_: any, { task }: { task: string }) {
     content: "no suggestions for this task",
     metadata: `task: ${task}`,
   })
-
-  // TODO: there should probably be a better way than userDetailsCollection
-  // I try to make sure there is only one userDetails per user
-  // sadly grafbase can't enforce that yet so I have to do this..
-  let userDetailsQuery = `
-    {
-      userDetailsCollection(first: 1) {
-        edges {
-          node {
-            id
-            freeAiTasksAvailable
-            paidSubscriptionValidUntilDate
-            languageModelUsed
-          }
-        }
-      }
-    }
-  `
-
-  let res: Response | undefined
-
-  try {
-    res = await fetch(process.env.API_OF_GRAFBASE!, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-        "x-api-key": process.env.KEY_OF_GRAFBASE!,
-      },
-      body: JSON.stringify({
-        query: userDetailsQuery,
-      }),
-    })
-  } catch (err) {
-    logError({
-      error: "Failed to get user details from grafbase",
-      metadata: `error: ${err}`,
-    })
-    // return or throw error here
-    return {
-      error: err,
-    }
-  }
-
-  if (!res) {
-    return {
-      error: "Failed to get user details from grafbase",
-    }
-  }
-
-  const userDetailsJson = await res.json()
-  const paidSubscriptionValidUntilDate =
-    userDetailsJson.data.userDetailsCollection.edges[0].node
-      .paidSubscriptionValidUntilDate
-  const languageModelUsed =
-    userDetailsJson.data.userDetailsCollection.edges[0].node.languageModelUsed
 
   // check if user can do AI task due to subscription
   if (new Date(paidSubscriptionValidUntilDate) > new Date()) {
@@ -178,32 +133,27 @@ export default async function Resolver(_: any, { task }: { task: string }) {
     }
   }
 
-  const userDetailsId =
-    userDetailsJson.data.userDetailsCollection.edges[0].node.id
-  const freeAiTasksAvailable =
-    userDetailsJson.data.userDetailsCollection.edges[0].node
-      .freeAiTasksAvailable
   // check if user can do AI task due to free tasks
   if (freeAiTasksAvailable > 0) {
     // TODO: can return nothing from graphql, not sure how..
     let updateUserDetails = `
-      mutation {
-        userDetailsUpdate(
-          by: {
-            id: "${userDetailsId}"
-          }
-          input: {
-            freeAiTasksAvailable: {
-              set: ${freeAiTasksAvailable - 1}
-            }
-          }
-        ) {
-          userDetails {
-            freeAiTasksAvailable
+    mutation {
+      userDetailsUpdate(
+        by: {
+          id: "${id}"
+        }
+        input: {
+          freeAiTasksAvailable: {
+            set: ${freeAiTasksAvailable - 1}
           }
         }
+      ) {
+        userDetails {
+          freeAiTasksAvailable
+        }
       }
-    `
+    }
+  `
     const resFromFetch = await fetch(process.env.API_OF_GRAFBASE!, {
       method: "POST",
       headers: {

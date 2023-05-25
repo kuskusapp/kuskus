@@ -7,7 +7,6 @@ schema
 }
 
 extend type Query {
-  suggestions(task: String!): SuggestionsPayload @resolver(name: "suggestions")
   stripe(plan: String!): StripePayload @resolver(name: "stripe")
 }
 
@@ -32,6 +31,7 @@ type SuggestedTask {
 }
 
 type UserDetails @model {
+  suggestions(task: String!): SuggestionsPayload @resolver(name: "suggestions")
   paidSubscriptionValidUntilDate: Date # of this form: 2023-05-12
   freeAiTasksAvailable: Int @default(value: 10) # times user can use gpt-3 AI suggestions for free
   gpt4TasksAvailable: Int @default(value: 0) # times user can use gpt-4 AI suggestions
