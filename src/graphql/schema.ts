@@ -42,12 +42,12 @@ export type Mutation = {
   todoDelete?: Maybe<TodoDeletePayload>
   /** Update a Todo */
   todoUpdate?: Maybe<TodoUpdatePayload>
-  /** Create a UserDetails */
-  userDetailsCreate?: Maybe<UserDetailsCreatePayload>
-  /** Delete a UserDetails by ID or unique field */
-  userDetailsDelete?: Maybe<UserDetailsDeletePayload>
-  /** Update a UserDetails */
-  userDetailsUpdate?: Maybe<UserDetailsUpdatePayload>
+  /** Create a User */
+  userCreate?: Maybe<UserCreatePayload>
+  /** Delete a User by ID or unique field */
+  userDelete?: Maybe<UserDeletePayload>
+  /** Update a User */
+  userUpdate?: Maybe<UserUpdatePayload>
 }
 
 export type MutationSubtaskCreateArgs = {
@@ -76,17 +76,17 @@ export type MutationTodoUpdateArgs = {
   input: TodoUpdateInput
 }
 
-export type MutationUserDetailsCreateArgs = {
-  input: UserDetailsCreateInput
+export type MutationUserCreateArgs = {
+  input: UserCreateInput
 }
 
-export type MutationUserDetailsDeleteArgs = {
-  by: UserDetailsByInput
+export type MutationUserDeleteArgs = {
+  by: UserByInput
 }
 
-export type MutationUserDetailsUpdateArgs = {
-  by: UserDetailsByInput
-  input: UserDetailsUpdateInput
+export type MutationUserUpdateArgs = {
+  by: UserByInput
+  input: UserUpdateInput
 }
 
 export enum OrderByDirection {
@@ -104,7 +104,6 @@ export type PageInfo = {
 
 export type Query = {
   __typename?: "Query"
-  stripe?: Maybe<StripePayload>
   /** Query a single Subtask by an ID or a unique field */
   subtask?: Maybe<Subtask>
   /** Paginated query to fetch the whole list of `Subtask`. */
@@ -113,14 +112,10 @@ export type Query = {
   todo?: Maybe<Todo>
   /** Paginated query to fetch the whole list of `Todo`. */
   todoCollection?: Maybe<TodoConnection>
-  /** Query a single UserDetails by an ID or a unique field */
-  userDetails?: Maybe<UserDetails>
-  /** Paginated query to fetch the whole list of `UserDetails`. */
-  userDetailsCollection?: Maybe<UserDetailsConnection>
-}
-
-export type QueryStripeArgs = {
-  plan: Scalars["String"]
+  /** Query a single User by an ID or a unique field */
+  user?: Maybe<User>
+  /** Paginated query to fetch the whole list of `User`. */
+  userCollection?: Maybe<UserConnection>
 }
 
 export type QuerySubtaskArgs = {
@@ -147,16 +142,16 @@ export type QueryTodoCollectionArgs = {
   orderBy?: InputMaybe<TodoOrderByInput>
 }
 
-export type QueryUserDetailsArgs = {
-  by: UserDetailsByInput
+export type QueryUserArgs = {
+  by: UserByInput
 }
 
-export type QueryUserDetailsCollectionArgs = {
+export type QueryUserCollectionArgs = {
   after?: InputMaybe<Scalars["String"]>
   before?: InputMaybe<Scalars["String"]>
   first?: InputMaybe<Scalars["Int"]>
   last?: InputMaybe<Scalars["Int"]>
-  orderBy?: InputMaybe<UserDetailsOrderByInput>
+  orderBy?: InputMaybe<UserOrderByInput>
 }
 
 export type StripePayload = {
@@ -376,8 +371,8 @@ export type TodoUpdatePayload = {
   todo?: Maybe<Todo>
 }
 
-export type UserDetails = {
-  __typename?: "UserDetails"
+export type User = {
+  __typename?: "User"
   collapsedSidebar: Scalars["Boolean"]
   /** when the model was created */
   createdAt: Scalars["DateTime"]
@@ -387,28 +382,33 @@ export type UserDetails = {
   id: Scalars["ID"]
   languageModelUsed: Scalars["String"]
   paidSubscriptionValidUntilDate?: Maybe<Scalars["Date"]>
+  stripe?: Maybe<StripePayload>
   suggestions?: Maybe<SuggestionsPayload>
   /** when the model was updated */
   updatedAt: Scalars["DateTime"]
 }
 
-export type UserDetailsSuggestionsArgs = {
+export type UserStripeArgs = {
+  plan: Scalars["String"]
+}
+
+export type UserSuggestionsArgs = {
   task: Scalars["String"]
 }
 
-export type UserDetailsByInput = {
+export type UserByInput = {
   id?: InputMaybe<Scalars["ID"]>
 }
 
-export type UserDetailsConnection = {
-  __typename?: "UserDetailsConnection"
-  edges?: Maybe<Array<Maybe<UserDetailsEdge>>>
+export type UserConnection = {
+  __typename?: "UserConnection"
+  edges?: Maybe<Array<Maybe<UserEdge>>>
   /** Information to aid in pagination */
   pageInfo: PageInfo
 }
 
-/** Input to create a UserDetails */
-export type UserDetailsCreateInput = {
+/** Input to create a User */
+export type UserCreateInput = {
   collapsedSidebar?: Scalars["Boolean"]
   freeAiTasksAvailable?: InputMaybe<Scalars["Int"]>
   gpt4TasksAvailable?: InputMaybe<Scalars["Int"]>
@@ -416,28 +416,28 @@ export type UserDetailsCreateInput = {
   paidSubscriptionValidUntilDate?: InputMaybe<Scalars["Date"]>
 }
 
-export type UserDetailsCreatePayload = {
-  __typename?: "UserDetailsCreatePayload"
-  userDetails?: Maybe<UserDetails>
+export type UserCreatePayload = {
+  __typename?: "UserCreatePayload"
+  user?: Maybe<User>
 }
 
-export type UserDetailsDeletePayload = {
-  __typename?: "UserDetailsDeletePayload"
+export type UserDeletePayload = {
+  __typename?: "UserDeletePayload"
   deletedId: Scalars["ID"]
 }
 
-export type UserDetailsEdge = {
-  __typename?: "UserDetailsEdge"
+export type UserEdge = {
+  __typename?: "UserEdge"
   cursor: Scalars["String"]
-  node: UserDetails
+  node: User
 }
 
-export type UserDetailsOrderByInput = {
+export type UserOrderByInput = {
   createdAt?: InputMaybe<OrderByDirection>
 }
 
-/** Input to update a UserDetails */
-export type UserDetailsUpdateInput = {
+/** Input to update a User */
+export type UserUpdateInput = {
   collapsedSidebar?: InputMaybe<Scalars["Boolean"]>
   freeAiTasksAvailable?: InputMaybe<IntOperationsInput>
   gpt4TasksAvailable?: InputMaybe<IntOperationsInput>
@@ -445,9 +445,9 @@ export type UserDetailsUpdateInput = {
   paidSubscriptionValidUntilDate?: InputMaybe<Scalars["Date"]>
 }
 
-export type UserDetailsUpdatePayload = {
-  __typename?: "UserDetailsUpdatePayload"
-  userDetails?: Maybe<UserDetails>
+export type UserUpdatePayload = {
+  __typename?: "UserUpdatePayload"
+  user?: Maybe<User>
 }
 
 export type TodoFragment = {
@@ -611,16 +611,16 @@ export type SubtaskDeleteMutation = {
   } | null
 }
 
-export type UserDetailsQueryVariables = Exact<{ [key: string]: never }>
+export type UserQueryVariables = Exact<{ [key: string]: never }>
 
-export type UserDetailsQuery = {
+export type UserQuery = {
   __typename?: "Query"
-  userDetailsCollection?: {
-    __typename?: "UserDetailsConnection"
+  userCollection?: {
+    __typename?: "UserConnection"
     edges?: Array<{
-      __typename?: "UserDetailsEdge"
+      __typename?: "UserEdge"
       node: {
-        __typename?: "UserDetails"
+        __typename?: "User"
         id: string
         freeAiTasksAvailable?: number | null
         paidSubscriptionValidUntilDate?: any | null
@@ -631,28 +631,28 @@ export type UserDetailsQuery = {
   } | null
 }
 
-export type UserDetailsCreateMutationVariables = Exact<{
-  userDetails: UserDetailsCreateInput
+export type UserCreateMutationVariables = Exact<{
+  user: UserCreateInput
 }>
 
-export type UserDetailsCreateMutation = {
+export type UserCreateMutation = {
   __typename?: "Mutation"
-  userDetailsCreate?: {
-    __typename?: "UserDetailsCreatePayload"
-    userDetails?: { __typename?: "UserDetails"; id: string } | null
+  userCreate?: {
+    __typename?: "UserCreatePayload"
+    user?: { __typename?: "User"; id: string } | null
   } | null
 }
 
-export type UserDetailsUpdateMutationVariables = Exact<{
+export type UserUpdateMutationVariables = Exact<{
   id: Scalars["ID"]
-  userDetails: UserDetailsUpdateInput
+  user: UserUpdateInput
 }>
 
-export type UserDetailsUpdateMutation = {
+export type UserUpdateMutation = {
   __typename?: "Mutation"
-  userDetailsUpdate?: {
-    __typename?: "UserDetailsUpdatePayload"
-    userDetails?: { __typename?: "UserDetails"; id: string } | null
+  userUpdate?: {
+    __typename?: "UserUpdatePayload"
+    user?: { __typename?: "User"; id: string } | null
   } | null
 }
 
@@ -663,8 +663,8 @@ export type SuggestedTasksQueryVariables = Exact<{
 
 export type SuggestedTasksQuery = {
   __typename?: "Query"
-  userDetails?: {
-    __typename?: "UserDetails"
+  user?: {
+    __typename?: "User"
     suggestions?: {
       __typename?: "SuggestionsPayload"
       rawResponse?: string | null
@@ -685,11 +685,15 @@ export type SuggestedTasksQuery = {
 
 export type StripeQueryVariables = Exact<{
   plan: Scalars["String"]
+  userId: Scalars["ID"]
 }>
 
 export type StripeQuery = {
   __typename?: "Query"
-  stripe?: { __typename?: "StripePayload"; stripeCheckoutUrl: string } | null
+  user?: {
+    __typename?: "User"
+    stripe?: { __typename?: "StripePayload"; stripeCheckoutUrl: string } | null
+  } | null
 }
 
 export const TodoFragmentDoc = {
@@ -1446,19 +1450,19 @@ export const SubtaskDeleteDocument = {
   SubtaskDeleteMutation,
   SubtaskDeleteMutationVariables
 >
-export const UserDetailsDocument = {
+export const UserDocument = {
   kind: "Document",
   definitions: [
     {
       kind: "OperationDefinition",
       operation: "query",
-      name: { kind: "Name", value: "UserDetails" },
+      name: { kind: "Name", value: "User" },
       selectionSet: {
         kind: "SelectionSet",
         selections: [
           {
             kind: "Field",
-            name: { kind: "Name", value: "userDetailsCollection" },
+            name: { kind: "Name", value: "userCollection" },
             arguments: [
               {
                 kind: "Argument",
@@ -1523,26 +1527,23 @@ export const UserDetailsDocument = {
       },
     },
   ],
-} as unknown as DocumentNode<UserDetailsQuery, UserDetailsQueryVariables>
-export const UserDetailsCreateDocument = {
+} as unknown as DocumentNode<UserQuery, UserQueryVariables>
+export const UserCreateDocument = {
   kind: "Document",
   definitions: [
     {
       kind: "OperationDefinition",
       operation: "mutation",
-      name: { kind: "Name", value: "UserDetailsCreate" },
+      name: { kind: "Name", value: "UserCreate" },
       variableDefinitions: [
         {
           kind: "VariableDefinition",
-          variable: {
-            kind: "Variable",
-            name: { kind: "Name", value: "userDetails" },
-          },
+          variable: { kind: "Variable", name: { kind: "Name", value: "user" } },
           type: {
             kind: "NonNullType",
             type: {
               kind: "NamedType",
-              name: { kind: "Name", value: "UserDetailsCreateInput" },
+              name: { kind: "Name", value: "UserCreateInput" },
             },
           },
         },
@@ -1552,14 +1553,14 @@ export const UserDetailsCreateDocument = {
         selections: [
           {
             kind: "Field",
-            name: { kind: "Name", value: "userDetailsCreate" },
+            name: { kind: "Name", value: "userCreate" },
             arguments: [
               {
                 kind: "Argument",
                 name: { kind: "Name", value: "input" },
                 value: {
                   kind: "Variable",
-                  name: { kind: "Name", value: "userDetails" },
+                  name: { kind: "Name", value: "user" },
                 },
               },
             ],
@@ -1568,7 +1569,7 @@ export const UserDetailsCreateDocument = {
               selections: [
                 {
                   kind: "Field",
-                  name: { kind: "Name", value: "userDetails" },
+                  name: { kind: "Name", value: "user" },
                   selectionSet: {
                     kind: "SelectionSet",
                     selections: [
@@ -1583,17 +1584,14 @@ export const UserDetailsCreateDocument = {
       },
     },
   ],
-} as unknown as DocumentNode<
-  UserDetailsCreateMutation,
-  UserDetailsCreateMutationVariables
->
-export const UserDetailsUpdateDocument = {
+} as unknown as DocumentNode<UserCreateMutation, UserCreateMutationVariables>
+export const UserUpdateDocument = {
   kind: "Document",
   definitions: [
     {
       kind: "OperationDefinition",
       operation: "mutation",
-      name: { kind: "Name", value: "UserDetailsUpdate" },
+      name: { kind: "Name", value: "UserUpdate" },
       variableDefinitions: [
         {
           kind: "VariableDefinition",
@@ -1605,15 +1603,12 @@ export const UserDetailsUpdateDocument = {
         },
         {
           kind: "VariableDefinition",
-          variable: {
-            kind: "Variable",
-            name: { kind: "Name", value: "userDetails" },
-          },
+          variable: { kind: "Variable", name: { kind: "Name", value: "user" } },
           type: {
             kind: "NonNullType",
             type: {
               kind: "NamedType",
-              name: { kind: "Name", value: "UserDetailsUpdateInput" },
+              name: { kind: "Name", value: "UserUpdateInput" },
             },
           },
         },
@@ -1623,7 +1618,7 @@ export const UserDetailsUpdateDocument = {
         selections: [
           {
             kind: "Field",
-            name: { kind: "Name", value: "userDetailsUpdate" },
+            name: { kind: "Name", value: "userUpdate" },
             arguments: [
               {
                 kind: "Argument",
@@ -1647,7 +1642,7 @@ export const UserDetailsUpdateDocument = {
                 name: { kind: "Name", value: "input" },
                 value: {
                   kind: "Variable",
-                  name: { kind: "Name", value: "userDetails" },
+                  name: { kind: "Name", value: "user" },
                 },
               },
             ],
@@ -1656,7 +1651,7 @@ export const UserDetailsUpdateDocument = {
               selections: [
                 {
                   kind: "Field",
-                  name: { kind: "Name", value: "userDetails" },
+                  name: { kind: "Name", value: "user" },
                   selectionSet: {
                     kind: "SelectionSet",
                     selections: [
@@ -1671,10 +1666,7 @@ export const UserDetailsUpdateDocument = {
       },
     },
   ],
-} as unknown as DocumentNode<
-  UserDetailsUpdateMutation,
-  UserDetailsUpdateMutationVariables
->
+} as unknown as DocumentNode<UserUpdateMutation, UserUpdateMutationVariables>
 export const SuggestedTasksDocument = {
   kind: "Document",
   definitions: [
@@ -1711,7 +1703,7 @@ export const SuggestedTasksDocument = {
         selections: [
           {
             kind: "Field",
-            name: { kind: "Name", value: "userDetails" },
+            name: { kind: "Name", value: "user" },
             arguments: [
               {
                 kind: "Argument",
@@ -1822,20 +1814,40 @@ export const StripeDocument = {
             },
           },
         },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "userId" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: { kind: "NamedType", name: { kind: "Name", value: "ID" } },
+          },
+        },
       ],
       selectionSet: {
         kind: "SelectionSet",
         selections: [
           {
             kind: "Field",
-            name: { kind: "Name", value: "stripe" },
+            name: { kind: "Name", value: "user" },
             arguments: [
               {
                 kind: "Argument",
-                name: { kind: "Name", value: "plan" },
+                name: { kind: "Name", value: "by" },
                 value: {
-                  kind: "Variable",
-                  name: { kind: "Name", value: "plan" },
+                  kind: "ObjectValue",
+                  fields: [
+                    {
+                      kind: "ObjectField",
+                      name: { kind: "Name", value: "id" },
+                      value: {
+                        kind: "Variable",
+                        name: { kind: "Name", value: "userId" },
+                      },
+                    },
+                  ],
                 },
               },
             ],
@@ -1844,7 +1856,26 @@ export const StripeDocument = {
               selections: [
                 {
                   kind: "Field",
-                  name: { kind: "Name", value: "stripeCheckoutUrl" },
+                  name: { kind: "Name", value: "stripe" },
+                  arguments: [
+                    {
+                      kind: "Argument",
+                      name: { kind: "Name", value: "plan" },
+                      value: {
+                        kind: "Variable",
+                        name: { kind: "Name", value: "plan" },
+                      },
+                    },
+                  ],
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "stripeCheckoutUrl" },
+                      },
+                    ],
+                  },
                 },
               ],
             },

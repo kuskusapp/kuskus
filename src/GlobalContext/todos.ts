@@ -168,7 +168,6 @@ export function createTodosState({ request }: { request: GrafbaseRequest }) {
           () => getTodoUpdateInput(todo),
           (payload) => {
             if (!todo.id) return
-            console.log(payload, "payload")
             request(TodoUpdateDocument, {
               id: todo.id,
               todo: payload,

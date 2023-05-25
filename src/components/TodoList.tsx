@@ -1,6 +1,6 @@
 import { Presence } from "@motionone/solid"
 import { createEventListener } from "@solid-primitives/event-listener"
-import { createShortcut, useKeyDownEvent } from "@solid-primitives/keyboard"
+import { createShortcut } from "@solid-primitives/keyboard"
 import {
   For,
   Match,
@@ -11,27 +11,25 @@ import {
   createEffect,
   createResource,
 } from "solid-js"
+import { isDev } from "solid-js/web"
 import { PageType, TodoListMode, useTodoList } from "~/GlobalContext/todo-list"
-import { createTodosForDev } from "~/lib/local"
-import SuggestedTodos from "./SuggestedTodos"
-import { createShortcuts } from "~/lib/primitives"
 import { Priority } from "~/GlobalContext/todos"
-import { wrapIndex } from "~/lib/lib"
 import NewSubtask from "~/components/NewSubtask"
 import NewTodo from "~/components/NewTodo"
 import Todo from "~/components/Todo"
 import TodoEdit from "~/components/TodoEdit"
 import TopBar from "~/components/TopBar"
-import { isDev } from "solid-js/web"
 import { SuggestedTasksDocument } from "~/graphql/schema"
+import { wrapIndex } from "~/lib/lib"
+import { createTodosForDev } from "~/lib/local"
+import { createShortcuts } from "~/lib/primitives"
 import ActionBar from "./ActionBar"
-import { useUserDetails } from "~/GlobalContext/userDetails"
-import clsx from "clsx"
-import TagSidebar from "./TagSidebar"
+import SuggestedTodos from "./SuggestedTodos"
+import { useUser } from "~/GlobalContext/user"
 
 export default function TodoList() {
   const todoList = useTodoList()
-  const userDetails = useUserDetails()
+  const user = useUser()
 
   function setPrority(i: Priority) {
     console.log(todoList.todosState, "todo state")
@@ -215,7 +213,6 @@ export default function TodoList() {
     )
   }
 
-  // TODO: make use of stripe checkout url
   const [suggestions] = createResource(
     () => {
       if (!todoList.inMode(TodoListMode.Suggest)) return
@@ -225,15 +222,17 @@ export default function TodoList() {
     async (todo) => {
       const res = await todoList.request(SuggestedTasksDocument, {
         task: todo.title,
-        userId: userDetails.userDetails.id!,
+        userId: user.user.id!,
       })
-      console.log(res, "res")
-      if (res.userDetails?.suggestions.needPayment) {
+      if (res.user?.suggestions.freeAiTaskUsed) {
+        user.decrementAiTask()
+      }
+      if (res.user?.suggestions.needPayment) {
         todoList.setMode(TodoListMode.Settings, { settingsState: "Upgrade" })
         return
       }
       // @ts-ignore
-      const suggestions = res.userDetails.suggestions.suggestedTasks.tasks
+      const suggestions = res.user.suggestions.suggestedTasks.tasks
       return suggestions && suggestions.length ? suggestions : undefined
     }
   )
@@ -341,17 +340,15 @@ export default function TodoList() {
                 </div>
               </div>
               <ActionBar />
-              {/* <Show
-              when={todoList.inMode(TodoListMode.Search)}
-              fallback={<ActionBar />}
-            >
-              <LocalSearch />
-            </Show> */}
             </div>
             <Presence>
               <Suspense>
                 <Show
-                  when={todoList.inMode(TodoListMode.Suggest) && suggestions()}
+                  when={
+                    todoList.inMode(TodoListMode.Suggest) &&
+                    suggestions.state === "ready" &&
+                    suggestions()
+                  }
                 >
                   {(suggestions) => (
                     <SuggestedTodos suggestions={suggestions()} />

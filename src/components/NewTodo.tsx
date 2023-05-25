@@ -21,9 +21,10 @@ export default function NewTodo() {
     if (e.code === "Enter") {
       batch(() => {
         if (title() !== "") {
+          let id
           switch (todoList.activePage()) {
             case "All":
-              todoList.todosState.addTodo({
+              id = todoList.todosState.addTodo({
                 title: title(),
                 note: note(),
                 done: false,
@@ -34,7 +35,7 @@ export default function NewTodo() {
               })
               break
             case "Today":
-              todoList.todosState.addTodo({
+              id = todoList.todosState.addTodo({
                 title: title(),
                 note: note(),
                 done: false,
@@ -45,7 +46,7 @@ export default function NewTodo() {
               })
               break
             case "Starred":
-              todoList.todosState.addTodo({
+              id = todoList.todosState.addTodo({
                 title: title(),
                 note: note(),
                 done: false,
@@ -55,19 +56,8 @@ export default function NewTodo() {
                 subtasks: [],
               })
               break
-            case "Done":
-              todoList.todosState.addTodo({
-                title: title(),
-                note: note(),
-                done: true,
-                starred: starred(),
-                priority: priority(),
-                dueDate: dueDate(),
-                subtasks: [],
-              })
-              break
           }
-          // todoList.setFocusedTodoKey(newTodoKey)
+          todoList.setFocusedTodoKey(id)
         }
 
         todoList.setMode(TodoListMode.Default)

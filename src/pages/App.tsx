@@ -7,10 +7,7 @@ import {
   TodoListProvider,
   createTodoListState,
 } from "~/GlobalContext/todo-list"
-import {
-  UserDetailsProvider,
-  createUserDetailsState,
-} from "~/GlobalContext/userDetails"
+import { UserProvider, createUserState } from "~/GlobalContext/user"
 import CollapsedSidebar from "~/components/CollapsedSidebar"
 import Modal from "~/components/Modal"
 import Settings from "~/components/Settings"
@@ -32,9 +29,10 @@ export default function App(props: { hankoCookie: string }) {
     try {
       return await grafbase.request(...(args as [any]))
     } catch (error) {
-      // if (error.response.error.includes("Unauthorized")) {
-      //   navigate("/auth")
-      // }
+      // TODO: gets into infinite loops sometimes
+      if (error.response.error.includes("Unauthorized")) {
+        navigate("/auth")
+      }
       logError({
         error: "grafbase client error",
         metadata: `error: ${JSON.stringify(error)}`,
@@ -43,7 +41,7 @@ export default function App(props: { hankoCookie: string }) {
   }
 
   const todoList = createTodoListState({ request })
-  const userDetailsState = createUserDetailsState({ request })
+  const userState = createUserState({ request })
 
   createShortcuts({
     "Control+1"() {
@@ -63,12 +61,12 @@ export default function App(props: { hankoCookie: string }) {
 
   return (
     <div class=" bg-white dark:bg-black">
-      <UserDetailsProvider value={userDetailsState}>
+      <UserProvider value={userState}>
         <TodoListProvider value={todoList}>
           <div class="flex flex-col h-screen">
             <div class="flex grow h-full overflow-hidden">
               <Show
-                when={userDetailsState.userDetails.collapsedSidebar}
+                when={userState.user.collapsedSidebar}
                 // when={true}
                 fallback={<Sidebar />}
               >
@@ -85,7 +83,7 @@ export default function App(props: { hankoCookie: string }) {
             />
           </Show>
         </TodoListProvider>
-      </UserDetailsProvider>
+      </UserProvider>
     </div>
   )
 }

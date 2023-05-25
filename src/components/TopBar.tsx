@@ -1,17 +1,14 @@
-import { useUserDetails } from "~/GlobalContext/userDetails"
-import { autofocus } from "@solid-primitives/autofocus"
+import { createSignal } from "solid-js"
+import { useTodoList } from "~/GlobalContext/todo-list"
 import Icon from "./Icon"
-import { Show, createSignal } from "solid-js"
-import { TodoListMode, useTodoList } from "~/GlobalContext/todo-list"
+import { useUser } from "~/GlobalContext/user"
 
 interface Props {
   title: string
 }
 
 export default function TopBar(props: Props) {
-  const userDetails = useUserDetails()
-  const todoList = useTodoList()
-  const [showFilterSearch, setShowFilterSearch] = createSignal(false)
+  const user = useUser()
 
   return (
     <>
@@ -36,7 +33,7 @@ export default function TopBar(props: Props) {
           <div
             class="cursor-pointer"
             onClick={() => {
-              userDetails.setCollapsedSidebar()
+              user.setCollapsedSidebar()
             }}
           >
             <Icon name="Sidebar" />

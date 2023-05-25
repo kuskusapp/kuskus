@@ -107,8 +107,8 @@ mutation SubtaskDelete($id: ID!) {
   }
 }
 
-query UserDetails {
-  userDetailsCollection(first: 1) {
+query User {
+  userCollection(first: 1) {
     edges {
       node {
         id
@@ -121,24 +121,24 @@ query UserDetails {
   }
 }
 
-mutation UserDetailsCreate($userDetails: UserDetailsCreateInput!) {
-  userDetailsCreate(input: $userDetails) {
-    userDetails {
+mutation UserCreate($user: UserCreateInput!) {
+  userCreate(input: $user) {
+    user {
       id
     }
   }
 }
 
-mutation UserDetailsUpdate($id: ID!, $userDetails: UserDetailsUpdateInput!) {
-  userDetailsUpdate(by: { id: $id }, input: $userDetails) {
-    userDetails {
+mutation UserUpdate($id: ID!, $user: UserUpdateInput!) {
+  userUpdate(by: { id: $id }, input: $user) {
+    user {
       id
     }
   }
 }
 
 query SuggestedTasks($task: String!, $userId: ID!) {
-  userDetails(by: { id: $userId }) {
+  user(by: { id: $userId }) {
     suggestions(task: $task) {
       rawResponse
       suggestedTasks {
@@ -154,8 +154,10 @@ query SuggestedTasks($task: String!, $userId: ID!) {
   }
 }
 
-query Stripe($plan: String!) {
-  stripe(plan: $plan) {
-    stripeCheckoutUrl
+query Stripe($plan: String!, $userId: ID!) {
+  user(by: { id: $userId }) {
+    stripe(plan: $plan) {
+      stripeCheckoutUrl
+    }
   }
 }

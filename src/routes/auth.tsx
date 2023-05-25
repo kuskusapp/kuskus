@@ -1,13 +1,12 @@
 import { makeEventListener } from "@solid-primitives/event-listener"
 import { register } from "@teamhanko/hanko-elements"
+import { Hanko } from "@teamhanko/hanko-frontend-sdk"
 import { GraphQLClient } from "graphql-request"
 import { onMount } from "solid-js"
 import { useNavigate } from "solid-start"
-import {
-  UserDetailsCreateDocument,
-  UserDetailsDocument,
-} from "~/graphql/schema"
+import { UserCreateDocument, UserDocument } from "~/graphql/schema"
 import { getHankoCookie } from "~/lib/auth"
+import { log, logError } from "~/lib/tinybird"
 
 export default function Auth() {
   const navigate = useNavigate()
@@ -27,10 +26,10 @@ export default function Auth() {
       navigate("/")
     }
 
-    // register hank component
+    // register hanko component
     // https://github.com/teamhanko/hanko/blob/main/frontend/elements/README.md#script
-    register({ shadow: true, injectStyles: true }).catch((error) => {
-      // TODO: handle error
+    register({ shadow: true, injectStyles: true }).catch(async (error) => {
+      await logError({ error: "Hanko register error", metadata: error })
     })
   })
 
@@ -38,6 +37,10 @@ export default function Auth() {
     document,
     "hankoAuthSuccess",
     async (e) => {
+      // const hanko = new Hanko("http://localhost:3000")
+      // const hankoUser = await hanko.user.getCurrent()
+      // console.log(hankoUser.)
+
       const hankoCookie = await getHankoCookie()
       const client = new GraphQLClient(import.meta.env.VITE_GRAFBASE_API_URL, {
         headers: {
@@ -45,18 +48,16 @@ export default function Auth() {
         },
       })
 
-      // TODO: does not look good but is needed for stripe to work
-      // we need to have userDetails to 100% be present in resolver
-      // the id from userDetails is our way to identify the user
-      const userDetails = await client.request(UserDetailsDocument)
+      // TODO: should be improved ideally, ask grafbase devs how
+      const user = await client.request(UserDocument)
       // TODO: why possibly undefined? fix.
-      if (userDetails.userDetailsCollection?.edges?.length > 0) {
+      if (user.userCollection?.edges?.length > 0) {
         navigate("/")
         return
       }
-      // crete empty userDetails if it does not exist
-      await client.request(UserDetailsCreateDocument, {
-        userDetails: {},
+      // crete empty user model if it does not exist
+      await client.request(UserCreateDocument, {
+        user: {},
       })
       navigate("/")
     },
@@ -154,13 +155,13 @@ export default function Auth() {
               {/* TODO: should be fixed with new hanko-auth version */}
               {/* currently vite variables don't work.. */}
               {/* dev! */}
-              {/* <hanko-auth
-                api={"https://e879ccc9-285e-49d3-b37e-b569f0db4035.hanko.io"}
-              /> */}
-              {/* production! */}
               <hanko-auth
-                api={"https://fae8e48b-e39d-4066-86a6-df7d5a449db9.hanko.io"}
+                api={"https://e879ccc9-285e-49d3-b37e-b569f0db4035.hanko.io"}
               />
+              {/* production! */}
+              {/* <hanko-auth
+                api={"https://fae8e48b-e39d-4066-86a6-df7d5a449db9.hanko.io"}
+              /> */}
             </div>
           </div>
         </div>

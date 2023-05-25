@@ -1,14 +1,14 @@
 import clsx from "clsx"
 import { Match, Show, Switch, createSignal } from "solid-js"
 import { TodoListMode, useTodoList } from "~/GlobalContext/todo-list"
-import { useUserDetails } from "~/GlobalContext/userDetails"
 import Instruction from "./HelpItem"
 import Icon from "./Icon"
 import Keybind from "./Keybind"
+import { useUser } from "~/GlobalContext/user"
 
 export default function Settings() {
   const todoList = useTodoList()
-  const userDetails = useUserDetails()
+  const user = useUser()
   const initial = todoList.getModeData(TodoListMode.Settings)
   const [show, setShow] = createSignal(
     initial?.settingsState ? initial.settingsState : "Help"
@@ -205,9 +205,8 @@ export default function Settings() {
                   <div class="flex flex-col gap-5 justify-center items-center">
                     <Show
                       when={
-                        new Date(
-                          userDetails.userDetails.paidSubscriptionValidUntilDate
-                        ) > new Date()
+                        new Date(user.user.paidSubscriptionValidUntilDate) >
+                        new Date()
                       }
                       fallback={
                         <>
@@ -216,8 +215,7 @@ export default function Settings() {
                           </div>
                           <div class="opacity-60 flex flex-col items-center justify-center">
                             <div>
-                              {10 -
-                                userDetails.userDetails.freeAiTasksAvailable}
+                              {10 - user.user.freeAiTasksAvailable}
                               /10 AI suggestions used
                             </div>
                             <div>{todoList.todos.length}/10 tasks used</div>

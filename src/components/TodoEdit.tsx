@@ -11,7 +11,6 @@ import {
   createMemo,
   createSignal,
   onCleanup,
-  untrack,
 } from "solid-js"
 import { todayDate } from "~/lib/lib"
 import {
@@ -36,14 +35,6 @@ export default function TodoEdit(props: {
   const [starred, setStarred] = createSignal(props.todo.starred)
   const [tags, setTags] = createSignal(props.todo.tags)
   const [searchTags, setSearchTags] = createSignal(false)
-
-  // createEventListener(document, "click", (e) => {
-  //   console.log("click..")
-  //   if (!searchTags()) {
-  //     return
-  //   }
-  //   setSearchTags(false)
-  // })
 
   const fuse = createMemo(
     () =>
@@ -75,8 +66,6 @@ export default function TodoEdit(props: {
     }
 
     if ("subtasks" in todoList.flatTasks()[todoList.focusedTodoIndex()]) {
-      console.log("updating")
-      console.log(tags())
       // UPDATE TASK
       batch(() => {
         todoList.todosState.updateTodo(props.todo.key, (p) => ({
@@ -137,7 +126,7 @@ export default function TodoEdit(props: {
   })
 
   let titleRef!: HTMLTextAreaElement,
-    noteRef!: HTMLInputElement,
+    noteRef!: HTMLTextAreaElement,
     datePickerRef!: HTMLInputElement,
     tagInputRef!: HTMLInputElement
 
@@ -175,6 +164,10 @@ export default function TodoEdit(props: {
           </div>
           <div class="w-full h-full">
             <textarea
+              onfocus={() => {
+                setSearchTags(false)
+                setShowCalendar(false)
+              }}
               value={title()}
               autofocus
               ref={titleRef}
@@ -281,6 +274,10 @@ export default function TodoEdit(props: {
               setNote(e.target.value)
               e.target.style.height = "auto"
               e.target.style.height = e.target.scrollHeight + "px"
+            }}
+            onfocus={() => {
+              setSearchTags(false)
+              setShowCalendar(false)
             }}
             placeholder="Notes"
             value={props.todo.note ? props.todo.note : ""}
@@ -409,7 +406,6 @@ export default function TodoEdit(props: {
                               class="rounded bg-zinc-200 dark:bg-neutral-700 pl-2 p-1"
                               onClick={() => {
                                 if (tags() !== null) {
-                                  console.log(tags())
                                   if (tags() !== undefined) {
                                     setTags([...tags(), searchTagsQuery()])
                                   } else {
@@ -444,6 +440,7 @@ export default function TodoEdit(props: {
               <div
                 onClick={() => {
                   setSearchTags(!searchTags())
+                  setShowCalendar(false)
                 }}
               >
                 <Icon name="Tag" />
@@ -467,6 +464,9 @@ export default function TodoEdit(props: {
           >
             <input
               autofocus
+              onfocus={() => {
+                setSearchTags(false)
+              }}
               ref={datePickerRef}
               style={{ width: "6.5rem" }}
               class="bg-transparent text-sm opacity-70 outline-none"

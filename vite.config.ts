@@ -15,7 +15,7 @@ export default defineConfig({
       /* additional options */
       autoname: true, // e.g. enable autoname
       locator: {
-        targetIDE: "vscode",
+        targetIDE: "vscode-insiders",
         componentLocation: true,
         jsxLocation: true,
       },

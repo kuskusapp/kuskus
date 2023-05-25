@@ -8,49 +8,10 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 type StripePlan = "normalMonthly" | "normalYearly" | "proMonthly" | "proYearly"
 
 export default async function Resolver(
-  _: any,
+  { id }: any,
   { plan }: { plan: StripePlan },
   context: any
 ) {
-  // TODO: there should probably be a better way than userDetailsCollection
-  // I try to make sure there is only one userDetails per user
-  // sadly grafbase can't enforce that yet so I have to do this..
-  let userDetailsQuery = `
-    {
-      userDetailsCollection(first: 1) {
-        edges {
-          node {
-            id
-            freeAiTasksAvailable
-            paidSubscriptionValidUntilDate
-            languageModelUsed
-          }
-        }
-      }
-    }
-  `
-
-  let res = await fetch(process.env.API_OF_GRAFBASE!, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Accept: "application/json",
-      "x-api-key": context.request.headers["x-api-key"],
-    },
-    body: JSON.stringify({
-      query: userDetailsQuery,
-    }),
-  })
-  if (!res.ok) {
-    // TODO: should this throw error?
-    // maybe should return graphql back with `error: ` field?
-    throw new Error(`HTTP error! status: ${res.status}`)
-  }
-
-  const userDetailsJson = await res.json()
-  const userDetailsId =
-    userDetailsJson.data.userDetailsCollection.edges[0].node.id
-
   try {
     switch (plan) {
       case "normalMonthly":
@@ -58,7 +19,7 @@ export default async function Resolver(
           success_url: process.env.STRIPE_SUCCESS_URL!,
           mode: "subscription",
           metadata: {
-            userDetailsId: userDetailsId,
+            userId: id,
           },
           line_items: [
             {
@@ -75,7 +36,7 @@ export default async function Resolver(
           success_url: process.env.STRIPE_SUCCESS_URL!,
           mode: "subscription",
           metadata: {
-            userDetailsId: userDetailsId,
+            userId: id,
           },
           line_items: [
             {
@@ -92,7 +53,7 @@ export default async function Resolver(
           success_url: process.env.STRIPE_SUCCESS_URL!,
           mode: "subscription",
           metadata: {
-            userDetailsId: userDetailsId,
+            userId: id,
           },
           line_items: [
             {
@@ -110,7 +71,7 @@ export default async function Resolver(
           success_url: process.env.STRIPE_SUCCESS_URL!,
           mode: "subscription",
           metadata: {
-            userDetailsId: userDetailsId,
+            userId: id,
           },
           line_items: [
             {

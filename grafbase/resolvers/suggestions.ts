@@ -2,8 +2,6 @@ import { Redis } from "@upstash/redis/cloudflare"
 import { suggestionsv3, suggestionsv4, SuggestedTasks } from "@kuskusapp/ai"
 import { z } from "zod"
 import { Tinybird } from "@chronark/zod-bird"
-// import { GraphQLClient } from "graphql-request"
-// import { UserDetailsDocument } from "~/graphql/schema"
 
 const tb = new Tinybird({ token: process.env.TINYBIRD_API_KEY! })
 
@@ -42,7 +40,6 @@ export default async function Resolver(
     paidSubscriptionValidUntilDate,
     freeAiTasksAvailable,
     languageModelUsed,
-    id,
   }: any,
   { task }: any
 ) {
