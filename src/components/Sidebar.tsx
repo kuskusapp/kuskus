@@ -52,17 +52,21 @@ export default function Sidebar() {
               display: none
 
             }
-
           }
-
-
-          `}
+          #sidebar {
+            border-right: solid 3px rgb(200,200,200, 0.5)
+          }
+          @media (prefers-color-scheme: dark) {
+            #sidebar {
+              border-right: solid 3px rgb(43, 43, 43, 0.5);
+            }
+          }
+        `}
       </style>
       <div
-        class="w-screen bg-white dark:bg-neutral-900 text-base "
+        class="w-screen bg-gray-100 dark:bg-neutral-900 text-base "
         style={{
           width: "18%",
-          "border-right": "solid 3px rgb(43, 43, 43, 0.5)",
         }}
         id="sidebar"
       >

@@ -15,9 +15,22 @@ export default function TopBar(props: Props) {
 
   return (
     <>
+      <style>
+        {`
+          #TopBar {
+            border-bottom: solid 3px rgb(200, 200, 200, 0.5)
+          }
+          @media (prefers-color-scheme: dark) {
+            #TopBar {
+              border-bottom: solid 3px rgb(43, 43, 43, 0.5)
+            }
+          }
+
+        `}
+      </style>
       <div
         class="p-5 flex justify-between bg-gray-100 dark:bg-neutral-900 items-center"
-        style={{ "border-bottom": "solid 3px rgb(43, 43, 43, 0.5)" }}
+        id="TopBar"
       >
         <div class="flex gap-2 items-center">
           <div

@@ -146,7 +146,7 @@ export default function SuggestedTodos(props: {
       style={{
         width: "40%",
       }}
-      class="gap-2 flex flex-col items-center h-full overflow-hidden"
+      class="flex flex-col items-center h-full overflow-hidden"
     >
       <Motion.div
         initial={{ "font-size": "0px" }}
@@ -154,20 +154,13 @@ export default function SuggestedTodos(props: {
         transition={{ duration: 0 }}
         // TODO: improve the animation on showing the text, text appears squished..
         exit={{ display: "none" }}
-        style={{
-          "border-radius": "10px",
-          color: "rgba(255, 255, 255, 0.5)",
-        }}
         class="bg-gray-100 dark:bg-neutral-900 w-full p-3 text-lg text-center"
       >
         {/* TODO: fix this ts-ignore as well as all others.. */}
         Suggested tasks for {/* @ts-ignore */}
         {todoList.focusedTodo()!.title}
       </Motion.div>
-      <div
-        class="h-full bg-gray-100 dark:bg-neutral-900 overflow-scroll w-full"
-        style={{ "border-radius": "10px" }}
-      >
+      <div class="h-full bg-gray-100 dark:bg-neutral-900 overflow-scroll w-full">
         <div
           class="flex flex-col h-full overflow-scroll"
           style={{ "border-radius": "10px" }}
