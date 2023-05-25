@@ -75,6 +75,7 @@ export function createTodoListState(
   const [activePage, setActivePage] = createSignal(PageType.All)
 
   const [selectedTagInSidebar, setSelectedTagInSidebar] = createSignal("")
+  const [newTag, setNewTag] = createSignal(false)
 
   const [focusedTodoKey, setFocusedTodoKey] = createSignal<TodoKey | null>(null)
   const isTodoFocused = createSelector<TodoKey | null, TodoKey>(focusedTodoKey)
@@ -230,6 +231,8 @@ export function createTodoListState(
     setMode,
     addNewTask,
     addNewSubtask,
+    newTag,
+    setNewTag,
     localSearchData: createMemo(() => getModeData(TodoListMode.Search)?.[0]()),
     startLocalSearch() {
       batch(() => {

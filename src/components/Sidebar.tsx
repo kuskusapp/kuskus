@@ -18,6 +18,10 @@ export default function Sidebar() {
           #Title {
             display: none
           }
+          #tags {
+            display: inline;
+            transition: all 2s;
+          }
           #TitleWrapper {
             display: flex;
             justify-content: space-between;
@@ -40,15 +44,30 @@ export default function Sidebar() {
               display: inline
             }
 
+
           }
+          @media (min-width: 1200px){
+            #tags {
+              width: 0%;
+              display: none
+
+            }
+
+          }
+
+
           `}
       </style>
-      <div class="w-screen  text-base " style={{ width: "18%" }} id="sidebar">
-        <div class="flex flex-col gap-2  h-full">
-          <div
-            class="flex flex-col gap-1 bg-gray-100 dark:bg-neutral-900 p-2"
-            style={{ "border-radius": "10px" }}
-          >
+      <div
+        class="w-screen bg-neutral-900 text-base "
+        style={{
+          width: "18%",
+          "border-right": "solid 3px rgb(43, 43, 43, 0.5)",
+        }}
+        id="sidebar"
+      >
+        <div class="flex flex-col px-2 py-2 h-full">
+          <div class="flex flex-col gap-1 bg-gray-100 dark:bg-neutral-900 p-2">
             <div
               id="TitleWrapper"
               class={clsx(
@@ -106,7 +125,7 @@ export default function Sidebar() {
               onClick={() => todoList.updateActivePage(PageType.Starred)}
             >
               <div>
-                <Icon name="Star" />
+                <Icon name="Star" width={"26px"} height={"26px"} />
               </div>
               <span id="Title" class="pl-1 overflow-hidden">
                 Starred
@@ -136,8 +155,8 @@ export default function Sidebar() {
             </div>
           </div>
           <div
+            id="tags"
             class="flex flex-col bg-gray-100 dark:bg-neutral-900 gap-1 p-2 grow"
-            style={{ "border-radius": "10px" }}
           >
             <For
               each={Array.from(todoList.currentlyUsedTagsWithCount().keys())}

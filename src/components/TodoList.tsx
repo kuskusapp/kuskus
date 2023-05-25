@@ -26,6 +26,8 @@ import { isDev } from "solid-js/web"
 import { SuggestedTasksDocument } from "~/graphql/schema"
 import ActionBar from "./ActionBar"
 import { useUserDetails } from "~/GlobalContext/userDetails"
+import clsx from "clsx"
+import TagSidebar from "./TagSidebar"
 
 export default function TodoList() {
   const todoList = useTodoList()
@@ -58,7 +60,7 @@ export default function TodoList() {
 
   createEffect(() => {
     createShortcuts(
-      todoList.inMode(TodoListMode.Default)
+      todoList.inMode(TodoListMode.Default) && !todoList.newTag()
         ? {
             // Edit focused todo
             Enter() {
@@ -122,8 +124,8 @@ export default function TodoList() {
             Backspace() {
               const focused = todoList.focusedTodo(),
                 index = todoList.focusedTodoIndex()
+              console.log("hi")
               if (!focused) return
-
               batch(() => {
                 if (focused.type === "subtask") {
                   todoList.todosState.removeSubtask(
@@ -236,115 +238,129 @@ export default function TodoList() {
   )
 
   return (
-    <div
-      id="page"
-      class="flex w-full h-full grow overflow-auto justify-between relative"
-    >
-      <div
-        class="flex flex-col justify-between rounded relative w-full  drop gap-2"
-        ref={(el) => {
-          createEventListener(
-            el,
-            "click",
-            (e) => {
-              if (e.target === el) {
-                todoList.setFocusedTodoKey(null)
-              }
-            },
-            { passive: true }
-          )
-        }}
-      >
-        <TopBar
-          title={
-            isDev
-              ? `${PageType[todoList.activePage()]} mode:${
-                  TodoListMode[todoList.mode()]
-                } (dev)`
-              : PageType[todoList.activePage()]
+    <>
+      <style>
+        {`
+        #TagsBar {
+          display: none
+        }
+        @media (min-width: 1200px){
+          #TagsBar {
+            display: inline
           }
-        />
-        <div class="grow flex gap-2 w-full overflow-hidden">
-          <div class="flex flex-col gap-2 w-full">
-            <div
-              class="grow bg-gray-100 dark:bg-neutral-900 overflow-scroll"
-              style={{ "border-radius": "10px" }}
-            >
-              <div
-                class="p-2 overflow-scroll"
-                style={{ "padding-bottom": "200px" }}
-                ref={(el) => {
-                  createEventListener(
-                    el,
-                    "click",
-                    (e) => {
-                      if (e.target === el) todoList.setFocusedTodoKey(null)
-                    },
-                    { passive: true }
-                  )
-                }}
-              >
-                <For each={todoList.flatTasks()}>
-                  {(todo) => {
-                    if (todo.type === "new-subtask") {
-                      return <NewSubtask subtask={todo} />
-                    }
-                    return (
-                      <Switch>
-                        <Match
-                          when={
-                            todoList.inMode(TodoListMode.Edit) &&
-                            todoList.isTodoFocused(todo.key)
-                          }
-                        >
-                          <TodoEdit
-                            todo={todo}
-                            initialEditNote={
-                              todoList.getModeData(TodoListMode.Edit)!
-                                .initEditingNote
-                            }
-                          />
-                        </Match>
-                        <Match when={true}>
-                          <Todo
-                            todo={todo}
-                            subtask={todo.type === "subtask"}
-                            loadingSuggestions={
-                              suggestions.loading &&
-                              todoList.isTodoFocused(todo.key)
-                            }
-                          />
-                        </Match>
-                      </Switch>
+
+        }
+      `}
+      </style>
+      <div
+        id="page"
+        class="flex w-full h-full grow overflow-auto justify-between"
+      >
+        <div
+          class="flex flex-col justify-between w-full  drop"
+          ref={(el) => {
+            createEventListener(
+              el,
+              "click",
+              (e) => {
+                if (e.target === el) {
+                  todoList.setFocusedTodoKey(null)
+                }
+              },
+              { passive: true }
+            )
+          }}
+        >
+          <TopBar
+            title={
+              isDev
+                ? `${PageType[todoList.activePage()]} mode:${
+                    TodoListMode[todoList.mode()]
+                  } (dev)`
+                : PageType[todoList.activePage()]
+            }
+          />
+
+          <div class="grow flex  w-full overflow-hidden">
+            {/* <TagSidebar /> */}
+            <div class="flex flex-col  w-full">
+              <div class="grow bg-gray-100 dark:bg-neutral-900 overflow-scroll">
+                <div
+                  class="p-2 overflow-scroll"
+                  style={{ "padding-bottom": "200px" }}
+                  ref={(el) => {
+                    createEventListener(
+                      el,
+                      "click",
+                      (e) => {
+                        if (e.target === el) todoList.setFocusedTodoKey(null)
+                      },
+                      { passive: true }
                     )
                   }}
-                </For>
-                <Show when={todoList.inMode(TodoListMode.NewTodo)}>
-                  <NewTodo />
-                </Show>
+                >
+                  <For each={todoList.flatTasks()}>
+                    {(todo) => {
+                      if (todo.type === "new-subtask") {
+                        return <NewSubtask subtask={todo} />
+                      }
+                      return (
+                        <Switch>
+                          <Match
+                            when={
+                              todoList.inMode(TodoListMode.Edit) &&
+                              todoList.isTodoFocused(todo.key)
+                            }
+                          >
+                            <TodoEdit
+                              todo={todo}
+                              initialEditNote={
+                                todoList.getModeData(TodoListMode.Edit)!
+                                  .initEditingNote
+                              }
+                            />
+                          </Match>
+                          <Match when={true}>
+                            <Todo
+                              todo={todo}
+                              subtask={todo.type === "subtask"}
+                              loadingSuggestions={
+                                suggestions.loading &&
+                                todoList.isTodoFocused(todo.key)
+                              }
+                            />
+                          </Match>
+                        </Switch>
+                      )
+                    }}
+                  </For>
+                  <Show when={todoList.inMode(TodoListMode.NewTodo)}>
+                    <NewTodo />
+                  </Show>
+                </div>
               </div>
-            </div>
-            <ActionBar />
-            {/* <Show
+              <ActionBar />
+              {/* <Show
               when={todoList.inMode(TodoListMode.Search)}
               fallback={<ActionBar />}
             >
               <LocalSearch />
             </Show> */}
+            </div>
+            <Presence>
+              <Suspense>
+                <Show
+                  when={todoList.inMode(TodoListMode.Suggest) && suggestions()}
+                >
+                  {(suggestions) => (
+                    <SuggestedTodos suggestions={suggestions()} />
+                  )}
+                </Show>
+              </Suspense>
+            </Presence>
           </div>
-          <Presence>
-            <Suspense>
-              <Show
-                when={todoList.inMode(TodoListMode.Suggest) && suggestions()}
-              >
-                {(suggestions) => (
-                  <SuggestedTodos suggestions={suggestions()} />
-                )}
-              </Show>
-            </Suspense>
-          </Presence>
         </div>
       </div>
-    </div>
+    </>
   )
 }

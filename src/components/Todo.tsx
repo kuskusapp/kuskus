@@ -1,6 +1,6 @@
 import { Motion } from "@motionone/solid"
 import clsx from "clsx"
-import { For, Show, createSignal } from "solid-js"
+import { For, Show, createEffect, createSignal } from "solid-js"
 import { isToday } from "~/lib/lib"
 import {
   ClientSubtask,
@@ -10,6 +10,8 @@ import {
 } from "../GlobalContext/todo-list"
 import Icon from "./Icon"
 import Loader from "./Loader"
+import ContextMenu from "./ContextMenu"
+import { todo } from "node:test"
 
 export default function Todo(props: {
   todo: ClientTodo | ClientSubtask
@@ -18,6 +20,20 @@ export default function Todo(props: {
 }) {
   const todoList = useTodoList()
   const [triggerAnimation, setTriggerAnimation] = createSignal(false)
+  const [points, setPoints] = createSignal({
+    x: 0,
+    y: 0,
+  })
+  const [showContextMenu, setShowContextMenu] = createSignal(false)
+  const [daysLeft, setDaysLeft] = createSignal("")
+
+  createEffect(() => {
+    const handleClick = () => setShowContextMenu(false)
+    document.addEventListener("click", handleClick)
+    return () => {
+      document.removeEventListener("click", handleClick)
+    }
+  })
 
   return (
     <>
@@ -40,8 +56,16 @@ export default function Todo(props: {
       </style>
       <Motion.div>
         <div
+          oncontextmenu={(e) => {
+            e.preventDefault()
+            setShowContextMenu(true)
+            setPoints({
+              x: e.pageX,
+              y: e.pageY,
+            })
+          }}
           class={clsx(
-            "flex cursor-default pl-1.5 justify-between p-2 dark:border-neutral-700 mb-1 rounded-lg",
+            "flex cursor-default pl-1.5 justify-between p-2 dark:border-neutral-700 mb-1 rounded-lg items-center",
             props.todo.note && "min-h-min",
             props.subtask && "ml-4",
             todoList.isTodoFocused(props.todo.key) &&
@@ -63,6 +87,11 @@ export default function Todo(props: {
             }
           }}
         >
+          {showContextMenu() &&
+            todoList.focusedTodoKey() === props.todo.key && (
+              <ContextMenu top={points().y} left={points().x} />
+            )}
+
           <div
             style={{ display: "flex" }}
             class={
@@ -80,6 +109,7 @@ export default function Todo(props: {
                     setTriggerAnimation(false)
                   }, 500)
                 }}
+                style={{ "padding-top": "1px" }}
               >
                 <Icon name={props.todo.done ? "SquareCheck" : "Square"} />
               </div>
@@ -124,6 +154,8 @@ export default function Todo(props: {
                       ? `StarWithPriority${props.todo.priority}`
                       : `Star`
                   }
+                  width={"22px"}
+                  height={"22px"}
                 />
               </div>
             </Show>

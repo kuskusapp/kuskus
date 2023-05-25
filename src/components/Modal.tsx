@@ -36,28 +36,12 @@ export default function Modal(props: Props) {
       }}
       class="fixed bottom-0 right-0 h-screen w-screen"
     >
-      <div class="items-center h-full w-full flex justify-center" ref={ref}>
-        <div
-          style={{
-            "border-radius": "10px",
-          }}
-          class=" bg-gray-100 dark:bg-stone-900 h-5/6 flex w-11/12"
-        >
+      <div
+        class="items-center h-full w-full flex justify-center h-screen"
+        ref={ref}
+      >
+        <div class="h-full w-full bg-gray-100 dark:bg-stone-900">
           <div class="w-full h-full flex flex-col">
-            <nav
-              style={{
-                "border-radius": "10px 10px 0 0",
-              }}
-              class="flex items-end justify-between pl-4 pr-3 pb-1 pt-2"
-            >
-              <div class="opacity-60">{props.title}</div>
-              <div
-                class="cursor-pointer opacity-60"
-                onClick={() => props.onClose()}
-              >
-                <Icon name="Cross" />
-              </div>
-            </nav>
             <div class="h-full w-full overflow-hidden">{props.children}</div>
           </div>
         </div>

@@ -47,7 +47,7 @@ export default function FixedSidebar() {
       </style>
       <div
         style={{
-          width: "47vw",
+          width: "50vw",
         }}
         class="h-screen"
       >

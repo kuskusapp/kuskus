@@ -9,7 +9,10 @@ export default function ActionBar() {
   return (
     <div
       class="flex justify-between w-full items-center pl-5 pr-5 p-2 bg-gray-100 dark:bg-neutral-900"
-      style={{ "border-radius": "10px", "min-height": "50px" }}
+      style={{
+        "min-height": "50px",
+        "border-top": "solid 3px rgb(43, 43, 43, 0.5)",
+      }}
     >
       <Show
         when={!todoList.inMode(TodoListMode.Search)}

@@ -30,7 +30,7 @@ export default async function Resolver(
     }
   `
 
-  let res = await fetch(process.env.GRAFBASE_API_URL!, {
+  let res = await fetch(process.env.API_OF_GRAFBASE!, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

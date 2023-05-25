@@ -21,16 +21,53 @@ export default function NewTodo() {
     if (e.code === "Enter") {
       batch(() => {
         if (title() !== "") {
-          const newTodoKey = todoList.todosState.addTodo({
-            title: title(),
-            note: note(),
-            done: false,
-            starred: starred(),
-            priority: priority(),
-            dueDate: dueDate(),
-            subtasks: [],
-          })
-          todoList.setFocusedTodoKey(newTodoKey)
+          switch (todoList.activePage()) {
+            case "All":
+              todoList.todosState.addTodo({
+                title: title(),
+                note: note(),
+                done: false,
+                starred: starred(),
+                priority: priority(),
+                dueDate: dueDate(),
+                subtasks: [],
+              })
+              break
+            case "Today":
+              todoList.todosState.addTodo({
+                title: title(),
+                note: note(),
+                done: false,
+                starred: starred(),
+                priority: priority(),
+                dueDate: todayDate(),
+                subtasks: [],
+              })
+              break
+            case "Starred":
+              todoList.todosState.addTodo({
+                title: title(),
+                note: note(),
+                done: false,
+                starred: true,
+                priority: priority(),
+                dueDate: dueDate(),
+                subtasks: [],
+              })
+              break
+            case "Done":
+              todoList.todosState.addTodo({
+                title: title(),
+                note: note(),
+                done: true,
+                starred: starred(),
+                priority: priority(),
+                dueDate: dueDate(),
+                subtasks: [],
+              })
+              break
+          }
+          // todoList.setFocusedTodoKey(newTodoKey)
         }
 
         todoList.setMode(TodoListMode.Default)

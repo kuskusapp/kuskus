@@ -16,16 +16,25 @@ export default function CollapsedSidebar() {
             container-type: inline-size;
             container-name: sidebar;
           }
-
+          #tags {
+            display: inline
+          }
+          @media (min-width: 1200px){
+            #tags {
+              width: 0%;
+              display: none
+              
+            }
+          }
 
           `}
       </style>
       <div class="  text-base " style={{ width: "70px" }} id="sidebar">
-        <div class="flex flex-col gap-2  h-full">
-          <div
-            class="flex flex-col gap-2 bg-gray-100 dark:bg-neutral-900 py-4 p-2"
-            style={{ "border-radius": "10px" }}
-          >
+        <div
+          class="flex flex-col gap-2  h-full bg-neutral-900"
+          style={{ "border-right": "solid 3px rgb(43, 43, 43, 0.5)" }}
+        >
+          <div class="flex flex-col gap-2 bg-gray-100 dark:bg-neutral-900 py-4 p-2">
             <div
               id="TitleWrapper"
               class={clsx(
@@ -105,7 +114,7 @@ export default function CollapsedSidebar() {
               onClick={() => todoList.updateActivePage(PageType.Starred)}
             >
               <div class="relative">
-                <Icon name="Star" />
+                <Icon name="Star" width={"26px"} height={"26px"} />
 
                 <div
                   class={clsx(
@@ -144,7 +153,7 @@ export default function CollapsedSidebar() {
           </div>
           <div
             class="flex flex-col bg-gray-100 dark:bg-neutral-900 p-2 gap-2 py-4 grow"
-            style={{ "border-radius": "10px" }}
+            id="tags"
           >
             <For
               each={Array.from(todoList.currentlyUsedTagsWithCount().keys())}

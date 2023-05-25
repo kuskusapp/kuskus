@@ -79,11 +79,11 @@ export default function TodoEdit(props: {
           tags: tags(),
           dueDate: showCalendar() && !dueDate() ? todayDate() : dueDate(),
         }))
+
         todoList.setMode(TodoListMode.Default)
       })
       return
     }
-
     // UPDATE SUBTASK
     batch(() => {
       todoList.todosState.updateSubtask(
@@ -155,10 +155,13 @@ export default function TodoEdit(props: {
   })
 
   return (
-    <Motion.div class="flex flex-col cursor-default pl-1.5 pr-1.5 dark:bg-neutral-800 bg-zinc-200 py-2 transition-all rounded-lg w-full">
-      <div class="w-full h-full flex justify-between px-2 ">
-        <div class="flex grow gap-2 items-center h-full">
-          <div>
+    <Motion.div class="flex flex-col cursor-default relative pl-1.5 pr-1.5 dark:bg-neutral-800 bg-zinc-200 py-2 transition-all rounded-lg w-full">
+      <div
+        class="w-full h-full flex justify-between"
+        style={{ "padding-right": "0.375rem" }}
+      >
+        <div class="flex grow gap-1 items-start h-full">
+          <div style={{ "padding-top": "3.5px" }}>
             <Icon name={"Square"} />
           </div>
           <div class="w-full h-full">
@@ -240,7 +243,9 @@ export default function TodoEdit(props: {
             {priority() === 3 && <Icon name={"StarWithPriority3"} />}
             {priority() === 2 && <Icon name={"StarWithPriority2"} />}
             {priority() === 1 && <Icon name={"StarWithPriority1"} />}
-            {priority() === 0 && <Icon name={"Star"} />}
+            {priority() === 0 && (
+              <Icon name={"Star"} width={"22px"} height={"22px"} />
+            )}
           </div>
         </Show>
       </div>
@@ -248,7 +253,7 @@ export default function TodoEdit(props: {
         style={{ "padding-right": "0.375rem" }}
         class="flex justify-between items-end w-full relative"
       >
-        <div class="pl-9 grow">
+        <div class="pl-6 grow">
           <textarea
             autofocus
             ref={noteRef}
@@ -278,67 +283,6 @@ export default function TodoEdit(props: {
             class=" flex transition-all min-w-fit gap-2 rounded cursor-pointer"
             style={{ "padding-top": "1.5px" }}
           >
-            <Show when={searchTags()}>
-              <div
-                id="tagsearch"
-                class="flex w-full bg-zinc-200 dark:bg-neutral-800 z-20 rounded pl-1"
-                style={{}}
-              >
-                <div
-                  class="absolute z-30 flex gap-1 flex-col"
-                  style={{
-                    right: "61px",
-
-                    bottom: "-154px",
-                    width: "150px",
-                  }}
-                >
-                  <div
-                    class="rounded w-full z-10 bg-zinc-200 dark:bg-neutral-800"
-                    style={{
-                      height: "150px",
-                      border: "solid 1px rgba(80,80,80,0.5)",
-                    }}
-                  >
-                    <div class="flex flex-col overflow-scroll py-2 px-2">
-                      <Show
-                        when={
-                          filteredTags().length === 0 &&
-                          searchTagsQuery() !== "" &&
-                          !tags()?.includes(searchTagsQuery())
-                        }
-                      >
-                        <div
-                          class="rounded bg-zinc-200 dark:bg-neutral-700 pl-2 p-1"
-                          onClick={() => {
-                            if (tags() !== null) {
-                              setTags([...tags(), searchTagsQuery()])
-                              setSearchTagsQuery("")
-                            } else {
-                              setTags([searchTagsQuery()])
-                              setSearchTagsQuery("")
-                            }
-                          }}
-                        >
-                          Create new tag "{searchTagsQuery()}"
-                        </div>
-                      </Show>
-                      <For each={filteredTags()}>
-                        {(tag) => (
-                          <div
-                            onClick={() => {
-                              setTags([...tags(), tag])
-                            }}
-                          >
-                            {tag}
-                          </div>
-                        )}
-                      </For>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </Show>
             <div
               style={{
                 "padding-top": "1px",
@@ -364,41 +308,109 @@ export default function TodoEdit(props: {
                 )}
               </For>
               <Show when={searchTags()}>
-                <div
-                  style={{
-                    width: "150px",
-                    border: "solid 1px rgba(80,80,80,0.5)",
-                  }}
-                  class="flex gap-1 bg-zinc-200 dark:bg-neutral-800 pl-0.5 px-6 rounded"
-                >
-                  <div class="opacity-60">
-                    <Icon name="Search" />
-                  </div>
-
-                  <input
-                    class="bg-zinc-200 dark:bg-neutral-800 text-sm rounded pl-0.5 outline-none"
-                    ref={tagInputRef}
-                    value={searchTagsQuery()}
-                    autofocus
+                <div>
+                  <div
                     style={{
-                      width: "100px",
+                      width: "150px",
+                      border: "solid 1px rgba(80,80,80,0.5)",
                     }}
-                    type="text"
-                    onKeyPress={(e) => {
-                      if (e.key === "Enter" && searchTagsQuery() !== "") {
-                        if (tags() !== null) {
-                          setTags([...tags(), searchTagsQuery()])
-                        } else {
-                          setTags([searchTagsQuery()])
+                    class="flex gap-1 bg-zinc-200 dark:bg-neutral-800 pl-0.5 px-6 rounded"
+                  >
+                    <div class="opacity-60">
+                      <Icon name="Search" />
+                    </div>
+
+                    <input
+                      class="bg-zinc-200 dark:bg-neutral-800 text-sm rounded pl-0.5 outline-none"
+                      ref={tagInputRef}
+                      value={searchTagsQuery()}
+                      autofocus
+                      style={{
+                        width: "100px",
+                      }}
+                      type="text"
+                      onKeyPress={(e) => {
+                        if (e.key === "Enter" && searchTagsQuery() !== "") {
+                          if (tags() !== null) {
+                            if (tags() !== undefined) {
+                              setTags([...tags(), searchTagsQuery()])
+                            } else {
+                              setTags([searchTagsQuery()])
+                            }
+                          } else {
+                            setTags([searchTagsQuery()])
+                          }
+                          setSearchTagsQuery("")
                         }
-                        setSearchTagsQuery("")
-                      }
-                    }}
-                    oninput={(e) => {
-                      setSearchTagsQuery(e.target.value)
-                    }}
-                    placeholder="Search"
-                  />
+                      }}
+                      oninput={(e) => {
+                        setSearchTagsQuery(e.target.value)
+                      }}
+                      placeholder="Search"
+                    />
+                  </div>
+                  <div
+                    id="tagsearch"
+                    class="flex w-full bg-zinc-200 dark:bg-neutral-800 z-20 rounded pl-1"
+                    style={{}}
+                  >
+                    <div
+                      class="absolute z-30 flex gap-1 flex-col mt-7 ml-2"
+                      style={{
+                        right: "62px",
+                        bottom: "-152px",
+                        width: "150px",
+                      }}
+                    >
+                      <div
+                        class="rounded w-full z-10 bg-zinc-200 dark:bg-neutral-800"
+                        style={{
+                          height: "150px",
+                          border: "solid 1px rgba(80,80,80,0.5)",
+                        }}
+                      >
+                        <div class="flex flex-col overflow-scroll py-2 px-2">
+                          <Show
+                            when={
+                              filteredTags().length === 0 &&
+                              searchTagsQuery() !== "" &&
+                              !tags()?.includes(searchTagsQuery())
+                            }
+                          >
+                            <div
+                              class="rounded bg-zinc-200 dark:bg-neutral-700 pl-2 p-1"
+                              onClick={() => {
+                                if (tags() !== null) {
+                                  console.log(tags())
+                                  if (tags() !== undefined) {
+                                    setTags([...tags(), searchTagsQuery()])
+                                  } else {
+                                    setTags([searchTagsQuery()])
+                                  }
+                                } else {
+                                  setTags([searchTagsQuery()])
+                                }
+                                setSearchTagsQuery("")
+                              }}
+                            >
+                              Create new tag "{searchTagsQuery()}"
+                            </div>
+                          </Show>
+                          <For each={filteredTags()}>
+                            {(tag) => (
+                              <div
+                                onClick={() => {
+                                  setTags([...tags(), tag])
+                                }}
+                              >
+                                {tag}
+                              </div>
+                            )}
+                          </For>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </Show>
               <div
@@ -406,7 +418,6 @@ export default function TodoEdit(props: {
                   setSearchTags(!searchTags())
                 }}
               >
-                {" "}
                 <Icon name="Tag" />
               </div>
             </div>

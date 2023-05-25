@@ -33,12 +33,26 @@ interface Props {
     | "Cursor"
     | "Keyboard"
     | "Close"
+    | "Circle"
   width?: string
   height?: string
 }
 
 export default function Icon(props: Props) {
   switch (props.name) {
+    case "Circle":
+      return (
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="8"
+          height="8"
+          fill="currentColor"
+          class="bi bi-circle-fill"
+          viewBox="0 0 16 16"
+        >
+          <circle cx="8" cy="8" r="8" />
+        </svg>
+      )
     case "Calendar":
       return (
         <svg
@@ -212,7 +226,12 @@ export default function Icon(props: Props) {
       )
     case "Star":
       return (
-        <svg width="28" height="28" fill="none" viewBox="0 0 24 24">
+        <svg
+          width={props.width}
+          height={props.height}
+          fill="none"
+          viewBox="0 0 24 24"
+        >
           <path
             stroke="currentColor"
             stroke-linecap="round"
@@ -656,7 +675,7 @@ export default function Icon(props: Props) {
       )
     case "Cursor":
       return (
-        <svg width="20" height="20" fill="none" viewBox="0 0 24 24">
+        <svg width="40" height="40" fill="none" viewBox="0 0 24 24">
           <path
             stroke="currentColor"
             stroke-linecap="round"
@@ -676,8 +695,8 @@ export default function Icon(props: Props) {
     case "Keyboard":
       return (
         <svg
-          width="20"
-          height="20"
+          width="40"
+          height="40"
           viewBox="0 0 24 24"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"

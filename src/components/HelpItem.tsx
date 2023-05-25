@@ -8,34 +8,39 @@ interface Props {
 
 export default function Instruction(props: Props) {
   return (
-    <div id="singularhelp" class="flex flex-col gap-2 p-2">
+    <div
+      id="singularhelp"
+      class="flex"
+      style={{
+        "border-right": "solid 3px rgba(43, 43, 43, 0.5)",
+      }}
+    >
       <div
         id="titleOfHelp"
-        class="flex justify-center gap-4 items-center text-xl font-semibold"
+        class="flex gap-4 h-full justify-end items-center p-4 text-xl font-semibold text-end"
+        style={{
+          width: "20%",
+          "border-right": "solid 3px rgba(43, 43, 43, 0.5)",
+        }}
       >
         {props.problem}
       </div>{" "}
-      <div class="text-sm ">
-        <div class="flex mx-5 gap-4 justify-between">
+      <div class="text-sm grow h-full w-1/2">
+        <div
+          class="flex gap-3  h-full justify-between"
+          style={{ "border-top": "solid 3px rgba(43, 43, 43, 0.5)" }}
+        >
           <div
             id="keyboardtab"
-            class="w-1/2 rounded-lg p-2"
-            style={{ border: "solid 1px rgba(80,80,80,0.7)" }}
+            class="w-1/2 p-4 "
+            style={{ "border-right": "solid 3px rgba(43, 43, 43, 0.5)" }}
           >
-            <div class="flex items-center justify-center">
-              <Icon name={"Keyboard"} />
-            </div>
+            <div class="flex items-center justify-center"></div>
 
             <div>{props.keyboardInstruction}</div>
           </div>
-          <div
-            class="w-1/2 rounded-lg p-2"
-            id="mousetab"
-            style={{ border: "solid 1px rgba(80,80,80,0.7)" }}
-          >
-            <div class="flex items-center justify-center">
-              <Icon name="Cursor" />
-            </div>
+          <div class="w-1/2 rounded-lg p-2" id="mousetab">
+            <div class="flex items-center justify-center"></div>
             <div>{props.mouseInstruction}</div>
           </div>
         </div>

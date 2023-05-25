@@ -44,7 +44,9 @@ export default function Features() {
         <div id="NavContainer" class="flex justify-between px-40 p-5">
           <div
             onClick={() => setShow("Features")}
-            class={clsx(show() === "Features" && "font-bold")}
+            class={clsx(
+              show() === "Features" && "font-bold text-blue-400 opacity-90"
+            )}
             id="Nav"
           >
             Features

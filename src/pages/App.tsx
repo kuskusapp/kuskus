@@ -66,7 +66,7 @@ export default function App(props: { hankoCookie: string }) {
       <UserDetailsProvider value={userDetailsState}>
         <TodoListProvider value={todoList}>
           <div class="flex flex-col h-screen">
-            <div class="flex grow gap-2 p-2 h-full overflow-hidden">
+            <div class="flex grow h-full overflow-hidden">
               <Show
                 when={userDetailsState.userDetails.collapsedSidebar}
                 // when={true}
