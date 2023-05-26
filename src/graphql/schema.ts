@@ -10,22 +10,31 @@ export type MakeOptional<T, K extends keyof T> = Omit<T, K> & {
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
   [SubKey in K]: Maybe<T[SubKey]>
 }
+export type MakeEmpty<
+  T extends { [key: string]: unknown },
+  K extends keyof T
+> = { [_ in K]?: never }
+export type Incremental<T> =
+  | T
+  | {
+      [P in keyof T]?: P extends " $fragmentName" | "__typename" ? T[P] : never
+    }
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
-  ID: string
-  String: string
-  Boolean: boolean
-  Int: number
-  Float: number
-  Date: any
-  DateTime: any
+  ID: { input: string | number; output: string }
+  String: { input: string; output: string }
+  Boolean: { input: boolean; output: boolean }
+  Int: { input: number; output: number }
+  Float: { input: number; output: number }
+  Date: { input: any; output: any }
+  DateTime: { input: any; output: any }
 }
 
 /** Possible operations for an Int field */
 export type IntOperationsInput = {
-  decrement?: InputMaybe<Scalars["Int"]>
-  increment?: InputMaybe<Scalars["Int"]>
-  set?: InputMaybe<Scalars["Int"]>
+  decrement?: InputMaybe<Scalars["Int"]["input"]>
+  increment?: InputMaybe<Scalars["Int"]["input"]>
+  set?: InputMaybe<Scalars["Int"]["input"]>
 }
 
 export type Mutation = {
@@ -96,10 +105,10 @@ export enum OrderByDirection {
 
 export type PageInfo = {
   __typename?: "PageInfo"
-  endCursor?: Maybe<Scalars["String"]>
-  hasNextPage: Scalars["Boolean"]
-  hasPreviousPage: Scalars["Boolean"]
-  startCursor?: Maybe<Scalars["String"]>
+  endCursor?: Maybe<Scalars["String"]["output"]>
+  hasNextPage: Scalars["Boolean"]["output"]
+  hasPreviousPage: Scalars["Boolean"]["output"]
+  startCursor?: Maybe<Scalars["String"]["output"]>
 }
 
 export type Query = {
@@ -123,10 +132,10 @@ export type QuerySubtaskArgs = {
 }
 
 export type QuerySubtaskCollectionArgs = {
-  after?: InputMaybe<Scalars["String"]>
-  before?: InputMaybe<Scalars["String"]>
-  first?: InputMaybe<Scalars["Int"]>
-  last?: InputMaybe<Scalars["Int"]>
+  after?: InputMaybe<Scalars["String"]["input"]>
+  before?: InputMaybe<Scalars["String"]["input"]>
+  first?: InputMaybe<Scalars["Int"]["input"]>
+  last?: InputMaybe<Scalars["Int"]["input"]>
   orderBy?: InputMaybe<SubtaskOrderByInput>
 }
 
@@ -135,10 +144,10 @@ export type QueryTodoArgs = {
 }
 
 export type QueryTodoCollectionArgs = {
-  after?: InputMaybe<Scalars["String"]>
-  before?: InputMaybe<Scalars["String"]>
-  first?: InputMaybe<Scalars["Int"]>
-  last?: InputMaybe<Scalars["Int"]>
+  after?: InputMaybe<Scalars["String"]["input"]>
+  before?: InputMaybe<Scalars["String"]["input"]>
+  first?: InputMaybe<Scalars["Int"]["input"]>
+  last?: InputMaybe<Scalars["Int"]["input"]>
   orderBy?: InputMaybe<TodoOrderByInput>
 }
 
@@ -147,38 +156,38 @@ export type QueryUserArgs = {
 }
 
 export type QueryUserCollectionArgs = {
-  after?: InputMaybe<Scalars["String"]>
-  before?: InputMaybe<Scalars["String"]>
-  first?: InputMaybe<Scalars["Int"]>
-  last?: InputMaybe<Scalars["Int"]>
+  after?: InputMaybe<Scalars["String"]["input"]>
+  before?: InputMaybe<Scalars["String"]["input"]>
+  first?: InputMaybe<Scalars["Int"]["input"]>
+  last?: InputMaybe<Scalars["Int"]["input"]>
   orderBy?: InputMaybe<UserOrderByInput>
 }
 
 export type StripePayload = {
   __typename?: "StripePayload"
-  stripeCheckoutUrl: Scalars["String"]
+  stripeCheckoutUrl: Scalars["String"]["output"]
 }
 
 export type Subtask = {
   __typename?: "Subtask"
-  cached?: Maybe<Scalars["String"]>
+  cached?: Maybe<Scalars["String"]["output"]>
   /** when the model was created */
-  createdAt: Scalars["DateTime"]
-  done: Scalars["Boolean"]
-  dueDate?: Maybe<Scalars["String"]>
+  createdAt: Scalars["DateTime"]["output"]
+  done: Scalars["Boolean"]["output"]
+  dueDate?: Maybe<Scalars["String"]["output"]>
   /** Unique identifier */
-  id: Scalars["ID"]
-  note?: Maybe<Scalars["String"]>
-  priority: Scalars["Int"]
-  starred: Scalars["Boolean"]
-  tags?: Maybe<Array<Maybe<Scalars["String"]>>>
-  title: Scalars["String"]
+  id: Scalars["ID"]["output"]
+  note?: Maybe<Scalars["String"]["output"]>
+  priority: Scalars["Int"]["output"]
+  starred: Scalars["Boolean"]["output"]
+  tags?: Maybe<Array<Maybe<Scalars["String"]["output"]>>>
+  title: Scalars["String"]["output"]
   /** when the model was updated */
-  updatedAt: Scalars["DateTime"]
+  updatedAt: Scalars["DateTime"]["output"]
 }
 
 export type SubtaskByInput = {
-  id?: InputMaybe<Scalars["ID"]>
+  id?: InputMaybe<Scalars["ID"]["input"]>
 }
 
 export type SubtaskConnection = {
@@ -190,14 +199,14 @@ export type SubtaskConnection = {
 
 /** Input to create a Subtask */
 export type SubtaskCreateInput = {
-  cached?: InputMaybe<Scalars["String"]>
-  done?: Scalars["Boolean"]
-  dueDate?: InputMaybe<Scalars["String"]>
-  note?: InputMaybe<Scalars["String"]>
-  priority?: Scalars["Int"]
-  starred?: Scalars["Boolean"]
-  tags?: InputMaybe<Array<InputMaybe<Scalars["String"]>>>
-  title: Scalars["String"]
+  cached?: InputMaybe<Scalars["String"]["input"]>
+  done?: Scalars["Boolean"]["input"]
+  dueDate?: InputMaybe<Scalars["String"]["input"]>
+  note?: InputMaybe<Scalars["String"]["input"]>
+  priority?: Scalars["Int"]["input"]
+  starred?: Scalars["Boolean"]["input"]
+  tags?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>
+  title: Scalars["String"]["input"]
 }
 
 export type SubtaskCreatePayload = {
@@ -207,12 +216,12 @@ export type SubtaskCreatePayload = {
 
 export type SubtaskDeletePayload = {
   __typename?: "SubtaskDeletePayload"
-  deletedId: Scalars["ID"]
+  deletedId: Scalars["ID"]["output"]
 }
 
 export type SubtaskEdge = {
   __typename?: "SubtaskEdge"
-  cursor: Scalars["String"]
+  cursor: Scalars["String"]["output"]
   node: Subtask
 }
 
@@ -222,39 +231,39 @@ export type SubtaskOrderByInput = {
 
 /** Input to create a Subtask for the SubtaskToTodo relation of Todo */
 export type SubtaskToTodoCreateSubtask = {
-  cached?: InputMaybe<Scalars["String"]>
-  done?: Scalars["Boolean"]
-  dueDate?: InputMaybe<Scalars["String"]>
-  note?: InputMaybe<Scalars["String"]>
-  priority?: Scalars["Int"]
-  starred?: Scalars["Boolean"]
-  tags?: InputMaybe<Array<InputMaybe<Scalars["String"]>>>
-  title: Scalars["String"]
+  cached?: InputMaybe<Scalars["String"]["input"]>
+  done?: Scalars["Boolean"]["input"]
+  dueDate?: InputMaybe<Scalars["String"]["input"]>
+  note?: InputMaybe<Scalars["String"]["input"]>
+  priority?: Scalars["Int"]["input"]
+  starred?: Scalars["Boolean"]["input"]
+  tags?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>
+  title: Scalars["String"]["input"]
 }
 
 /** Input to link to or create a Subtask for the SubtaskToTodo relation of Todo */
 export type SubtaskToTodoCreateSubtaskRelation = {
   create?: InputMaybe<SubtaskToTodoCreateSubtask>
-  link?: InputMaybe<Scalars["ID"]>
+  link?: InputMaybe<Scalars["ID"]["input"]>
 }
 
 /** Input to link/unlink to or create a Subtask for the SubtaskToTodo relation of Todo */
 export type SubtaskToTodoUpdateSubtaskRelation = {
   create?: InputMaybe<SubtaskToTodoCreateSubtask>
-  link?: InputMaybe<Scalars["ID"]>
-  unlink?: InputMaybe<Scalars["ID"]>
+  link?: InputMaybe<Scalars["ID"]["input"]>
+  unlink?: InputMaybe<Scalars["ID"]["input"]>
 }
 
 /** Input to update a Subtask */
 export type SubtaskUpdateInput = {
-  cached?: InputMaybe<Scalars["String"]>
-  done?: InputMaybe<Scalars["Boolean"]>
-  dueDate?: InputMaybe<Scalars["String"]>
-  note?: InputMaybe<Scalars["String"]>
+  cached?: InputMaybe<Scalars["String"]["input"]>
+  done?: InputMaybe<Scalars["Boolean"]["input"]>
+  dueDate?: InputMaybe<Scalars["String"]["input"]>
+  note?: InputMaybe<Scalars["String"]["input"]>
   priority?: InputMaybe<IntOperationsInput>
-  starred?: InputMaybe<Scalars["Boolean"]>
-  tags?: InputMaybe<Array<InputMaybe<Scalars["String"]>>>
-  title?: InputMaybe<Scalars["String"]>
+  starred?: InputMaybe<Scalars["Boolean"]["input"]>
+  tags?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>
+  title?: InputMaybe<Scalars["String"]["input"]>
 }
 
 export type SubtaskUpdatePayload = {
@@ -264,53 +273,53 @@ export type SubtaskUpdatePayload = {
 
 export type SuggestedTask = {
   __typename?: "SuggestedTask"
-  note?: Maybe<Scalars["String"]>
-  task: Scalars["String"]
+  note?: Maybe<Scalars["String"]["output"]>
+  task: Scalars["String"]["output"]
 }
 
 export type SuggestedTasks = {
   __typename?: "SuggestedTasks"
-  intro?: Maybe<Scalars["String"]>
+  intro?: Maybe<Scalars["String"]["output"]>
   tasks: Array<Maybe<SuggestedTask>>
 }
 
 export type SuggestionsPayload = {
   __typename?: "SuggestionsPayload"
-  freeAiTaskUsed?: Maybe<Scalars["Boolean"]>
-  needPayment?: Maybe<Scalars["Boolean"]>
-  rawResponse?: Maybe<Scalars["String"]>
+  freeAiTaskUsed?: Maybe<Scalars["Boolean"]["output"]>
+  needPayment?: Maybe<Scalars["Boolean"]["output"]>
+  rawResponse?: Maybe<Scalars["String"]["output"]>
   suggestedTasks?: Maybe<SuggestedTasks>
 }
 
 export type Todo = {
   __typename?: "Todo"
-  cached?: Maybe<Scalars["String"]>
+  cached?: Maybe<Scalars["String"]["output"]>
   /** when the model was created */
-  createdAt: Scalars["DateTime"]
-  done: Scalars["Boolean"]
-  dueDate?: Maybe<Scalars["String"]>
+  createdAt: Scalars["DateTime"]["output"]
+  done: Scalars["Boolean"]["output"]
+  dueDate?: Maybe<Scalars["String"]["output"]>
   /** Unique identifier */
-  id: Scalars["ID"]
-  note?: Maybe<Scalars["String"]>
-  priority: Scalars["Int"]
-  starred: Scalars["Boolean"]
+  id: Scalars["ID"]["output"]
+  note?: Maybe<Scalars["String"]["output"]>
+  priority: Scalars["Int"]["output"]
+  starred: Scalars["Boolean"]["output"]
   subtasks?: Maybe<SubtaskConnection>
-  tags?: Maybe<Array<Maybe<Scalars["String"]>>>
-  title: Scalars["String"]
+  tags?: Maybe<Array<Maybe<Scalars["String"]["output"]>>>
+  title: Scalars["String"]["output"]
   /** when the model was updated */
-  updatedAt: Scalars["DateTime"]
+  updatedAt: Scalars["DateTime"]["output"]
 }
 
 export type TodoSubtasksArgs = {
-  after?: InputMaybe<Scalars["String"]>
-  before?: InputMaybe<Scalars["String"]>
-  first?: InputMaybe<Scalars["Int"]>
-  last?: InputMaybe<Scalars["Int"]>
+  after?: InputMaybe<Scalars["String"]["input"]>
+  before?: InputMaybe<Scalars["String"]["input"]>
+  first?: InputMaybe<Scalars["Int"]["input"]>
+  last?: InputMaybe<Scalars["Int"]["input"]>
   orderBy?: InputMaybe<TodoOrderByInput>
 }
 
 export type TodoByInput = {
-  id?: InputMaybe<Scalars["ID"]>
+  id?: InputMaybe<Scalars["ID"]["input"]>
 }
 
 export type TodoConnection = {
@@ -322,15 +331,15 @@ export type TodoConnection = {
 
 /** Input to create a Todo */
 export type TodoCreateInput = {
-  cached?: InputMaybe<Scalars["String"]>
-  done?: Scalars["Boolean"]
-  dueDate?: InputMaybe<Scalars["String"]>
-  note?: InputMaybe<Scalars["String"]>
-  priority?: Scalars["Int"]
-  starred?: Scalars["Boolean"]
+  cached?: InputMaybe<Scalars["String"]["input"]>
+  done?: Scalars["Boolean"]["input"]
+  dueDate?: InputMaybe<Scalars["String"]["input"]>
+  note?: InputMaybe<Scalars["String"]["input"]>
+  priority?: Scalars["Int"]["input"]
+  starred?: Scalars["Boolean"]["input"]
   subtasks?: InputMaybe<Array<InputMaybe<SubtaskToTodoCreateSubtaskRelation>>>
-  tags?: InputMaybe<Array<InputMaybe<Scalars["String"]>>>
-  title: Scalars["String"]
+  tags?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>
+  title: Scalars["String"]["input"]
 }
 
 export type TodoCreatePayload = {
@@ -340,12 +349,12 @@ export type TodoCreatePayload = {
 
 export type TodoDeletePayload = {
   __typename?: "TodoDeletePayload"
-  deletedId: Scalars["ID"]
+  deletedId: Scalars["ID"]["output"]
 }
 
 export type TodoEdge = {
   __typename?: "TodoEdge"
-  cursor: Scalars["String"]
+  cursor: Scalars["String"]["output"]
   node: Todo
 }
 
@@ -355,15 +364,15 @@ export type TodoOrderByInput = {
 
 /** Input to update a Todo */
 export type TodoUpdateInput = {
-  cached?: InputMaybe<Scalars["String"]>
-  done?: InputMaybe<Scalars["Boolean"]>
-  dueDate?: InputMaybe<Scalars["String"]>
-  note?: InputMaybe<Scalars["String"]>
+  cached?: InputMaybe<Scalars["String"]["input"]>
+  done?: InputMaybe<Scalars["Boolean"]["input"]>
+  dueDate?: InputMaybe<Scalars["String"]["input"]>
+  note?: InputMaybe<Scalars["String"]["input"]>
   priority?: InputMaybe<IntOperationsInput>
-  starred?: InputMaybe<Scalars["Boolean"]>
+  starred?: InputMaybe<Scalars["Boolean"]["input"]>
   subtasks?: InputMaybe<Array<InputMaybe<SubtaskToTodoUpdateSubtaskRelation>>>
-  tags?: InputMaybe<Array<InputMaybe<Scalars["String"]>>>
-  title?: InputMaybe<Scalars["String"]>
+  tags?: InputMaybe<Array<InputMaybe<Scalars["String"]["input"]>>>
+  title?: InputMaybe<Scalars["String"]["input"]>
 }
 
 export type TodoUpdatePayload = {
@@ -373,31 +382,31 @@ export type TodoUpdatePayload = {
 
 export type User = {
   __typename?: "User"
-  collapsedSidebar: Scalars["Boolean"]
+  collapsedSidebar: Scalars["Boolean"]["output"]
   /** when the model was created */
-  createdAt: Scalars["DateTime"]
-  freeAiTasksAvailable?: Maybe<Scalars["Int"]>
-  gpt4TasksAvailable?: Maybe<Scalars["Int"]>
+  createdAt: Scalars["DateTime"]["output"]
+  freeAiTasksAvailable?: Maybe<Scalars["Int"]["output"]>
+  gpt4TasksAvailable?: Maybe<Scalars["Int"]["output"]>
   /** Unique identifier */
-  id: Scalars["ID"]
-  languageModelUsed: Scalars["String"]
-  paidSubscriptionValidUntilDate?: Maybe<Scalars["Date"]>
+  id: Scalars["ID"]["output"]
+  languageModelUsed: Scalars["String"]["output"]
+  paidSubscriptionValidUntilDate?: Maybe<Scalars["Date"]["output"]>
   stripe?: Maybe<StripePayload>
   suggestions?: Maybe<SuggestionsPayload>
   /** when the model was updated */
-  updatedAt: Scalars["DateTime"]
+  updatedAt: Scalars["DateTime"]["output"]
 }
 
 export type UserStripeArgs = {
-  plan: Scalars["String"]
+  plan: Scalars["String"]["input"]
 }
 
 export type UserSuggestionsArgs = {
-  task: Scalars["String"]
+  task: Scalars["String"]["input"]
 }
 
 export type UserByInput = {
-  id?: InputMaybe<Scalars["ID"]>
+  id?: InputMaybe<Scalars["ID"]["input"]>
 }
 
 export type UserConnection = {
@@ -409,11 +418,11 @@ export type UserConnection = {
 
 /** Input to create a User */
 export type UserCreateInput = {
-  collapsedSidebar?: Scalars["Boolean"]
-  freeAiTasksAvailable?: InputMaybe<Scalars["Int"]>
-  gpt4TasksAvailable?: InputMaybe<Scalars["Int"]>
-  languageModelUsed?: Scalars["String"]
-  paidSubscriptionValidUntilDate?: InputMaybe<Scalars["Date"]>
+  collapsedSidebar?: Scalars["Boolean"]["input"]
+  freeAiTasksAvailable?: InputMaybe<Scalars["Int"]["input"]>
+  gpt4TasksAvailable?: InputMaybe<Scalars["Int"]["input"]>
+  languageModelUsed?: Scalars["String"]["input"]
+  paidSubscriptionValidUntilDate?: InputMaybe<Scalars["Date"]["input"]>
 }
 
 export type UserCreatePayload = {
@@ -423,12 +432,12 @@ export type UserCreatePayload = {
 
 export type UserDeletePayload = {
   __typename?: "UserDeletePayload"
-  deletedId: Scalars["ID"]
+  deletedId: Scalars["ID"]["output"]
 }
 
 export type UserEdge = {
   __typename?: "UserEdge"
-  cursor: Scalars["String"]
+  cursor: Scalars["String"]["output"]
   node: User
 }
 
@@ -438,11 +447,11 @@ export type UserOrderByInput = {
 
 /** Input to update a User */
 export type UserUpdateInput = {
-  collapsedSidebar?: InputMaybe<Scalars["Boolean"]>
+  collapsedSidebar?: InputMaybe<Scalars["Boolean"]["input"]>
   freeAiTasksAvailable?: InputMaybe<IntOperationsInput>
   gpt4TasksAvailable?: InputMaybe<IntOperationsInput>
-  languageModelUsed?: InputMaybe<Scalars["String"]>
-  paidSubscriptionValidUntilDate?: InputMaybe<Scalars["Date"]>
+  languageModelUsed?: InputMaybe<Scalars["String"]["input"]>
+  paidSubscriptionValidUntilDate?: InputMaybe<Scalars["Date"]["input"]>
 }
 
 export type UserUpdatePayload = {
@@ -527,7 +536,7 @@ export type TodoCreateMutation = {
 }
 
 export type TodoUpdateMutationVariables = Exact<{
-  id: Scalars["ID"]
+  id: Scalars["ID"]["input"]
   todo: TodoUpdateInput
 }>
 
@@ -540,7 +549,7 @@ export type TodoUpdateMutation = {
 }
 
 export type TodoDeleteMutationVariables = Exact<{
-  id: Scalars["ID"]
+  id: Scalars["ID"]["input"]
 }>
 
 export type TodoDeleteMutation = {
@@ -549,8 +558,8 @@ export type TodoDeleteMutation = {
 }
 
 export type SubtaskLinkMutationVariables = Exact<{
-  taskId: Scalars["ID"]
-  subtaskId: Scalars["ID"]
+  taskId: Scalars["ID"]["input"]
+  subtaskId: Scalars["ID"]["input"]
 }>
 
 export type SubtaskLinkMutation = {
@@ -587,7 +596,7 @@ export type SubtaskCreateMutation = {
 }
 
 export type SubtaskUpdateMutationVariables = Exact<{
-  id: Scalars["ID"]
+  id: Scalars["ID"]["input"]
   subtask: SubtaskUpdateInput
 }>
 
@@ -600,7 +609,7 @@ export type SubtaskUpdateMutation = {
 }
 
 export type SubtaskDeleteMutationVariables = Exact<{
-  id: Scalars["ID"]
+  id: Scalars["ID"]["input"]
 }>
 
 export type SubtaskDeleteMutation = {
@@ -644,7 +653,7 @@ export type UserCreateMutation = {
 }
 
 export type UserUpdateMutationVariables = Exact<{
-  id: Scalars["ID"]
+  id: Scalars["ID"]["input"]
   user: UserUpdateInput
 }>
 
@@ -657,8 +666,8 @@ export type UserUpdateMutation = {
 }
 
 export type SuggestedTasksQueryVariables = Exact<{
-  task: Scalars["String"]
-  userId: Scalars["ID"]
+  task: Scalars["String"]["input"]
+  userId: Scalars["ID"]["input"]
 }>
 
 export type SuggestedTasksQuery = {
@@ -684,8 +693,8 @@ export type SuggestedTasksQuery = {
 }
 
 export type StripeQueryVariables = Exact<{
-  plan: Scalars["String"]
-  userId: Scalars["ID"]
+  plan: Scalars["String"]["input"]
+  userId: Scalars["ID"]["input"]
 }>
 
 export type StripeQuery = {
