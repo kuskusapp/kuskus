@@ -476,10 +476,14 @@ export default function Settings() {
                         class="relative rounded-xl flex flex-col h-full w-full p-6 px-10 gap-2 hover:text-blue-300 hover:opacity-60 cursor-pointer"
                         onClick={async () => {
                           const res = await todoList.request(StripeDocument, {
-                            plan: "test",
+                            plan: "proYear",
                             userId: user.user.id!,
                           })
-                          window.open(res.user?.stripe?.stripeCheckoutUrl)
+                          if (res.user?.stripe?.stripeCheckoutUrl) {
+                            window.open(res.user?.stripe?.stripeCheckoutUrl)
+                            return
+                          }
+                          // TODO: show error, say try again, something happened.
                         }}
                       >
                         <div

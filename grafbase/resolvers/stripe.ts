@@ -81,22 +81,9 @@ export default async function Resolver(
         return {
           stripeCheckoutUrl: proYear.url,
         }
-      case "test":
-        const test = await stripe.checkout.sessions.create({
-          success_url: process.env.STRIPE_SUCCESS_URL!,
-          mode: "subscription",
-          metadata: {
-            userId: id,
-          },
-          line_items: [
-            {
-              quantity: 1,
-              price: process.env.STRIPE_TEST_SUBSCRIPTION!,
-            },
-          ],
-        })
+      default:
         return {
-          stripeCheckoutUrl: test.url,
+          stripeCheckoutUrl: null,
         }
     }
   } catch (error) {
