@@ -9,8 +9,7 @@ type StripePlan = "normalMonthly" | "normalYearly" | "proMonthly" | "proYearly"
 
 export default async function Resolver(
   { id }: any,
-  { plan }: { plan: StripePlan },
-  context: any
+  { plan }: { plan: StripePlan }
 ) {
   try {
     switch (plan) {

@@ -5,6 +5,7 @@ import Instruction from "./HelpItem"
 import Icon from "./Icon"
 import Keybind from "./Keybind"
 import { useUser } from "~/GlobalContext/user"
+import { StripeDocument } from "~/graphql/schema"
 
 export default function Settings() {
   const todoList = useTodoList()
@@ -221,7 +222,7 @@ export default function Settings() {
                             <div>{todoList.todos.length}/10 tasks used</div>
                           </div>
                           <button
-                            class="flex items-center justify-center bg-neutral-800 p-2 px-6 hover:opacity-60 rounded-2xl cursor-pointer"
+                            class="flex items-center justify-center bg-neutral-200 dark:bg-neutral-800 p-2 px-6 hover:opacity-60 rounded-2xl cursor-pointer"
                             onClick={() => setShow("Upgrade")}
                           >
                             Upgrade
@@ -362,6 +363,13 @@ export default function Settings() {
                       <div
                         id="Plan"
                         class="relative rounded-xl flex flex-col h-full w-full p-6 px-10 gap-2 hover:text-blue-300 hover:opacity-60 cursor-pointer"
+                        onClick={async () => {
+                          const res = await todoList.request(StripeDocument, {
+                            plan: "normalMonthly",
+                            userId: user.user.id!,
+                          })
+                          window.open(res.user?.stripe?.stripeCheckoutUrl)
+                        }}
                       >
                         <div
                           class="font-semibold"
@@ -391,6 +399,13 @@ export default function Settings() {
                       <div
                         id="Plan"
                         class="relative rounded-xl flex flex-col h-full w-full p-6 px-10 gap-2 hover:text-blue-300 hover:opacity-60 cursor-pointer"
+                        onClick={async () => {
+                          const res = await todoList.request(StripeDocument, {
+                            plan: "normalYearly",
+                            userId: user.user.id!,
+                          })
+                          window.open(res.user?.stripe?.stripeCheckoutUrl)
+                        }}
                       >
                         <div
                           class="font-semibold"
@@ -422,6 +437,13 @@ export default function Settings() {
                       <div
                         id="Plan"
                         class="relative rounded-xl flex flex-col h-full w-full p-6 px-10 gap-2 hover:text-blue-300 hover:opacity-60 cursor-pointer"
+                        onClick={async () => {
+                          const res = await todoList.request(StripeDocument, {
+                            plan: "proMonthly",
+                            userId: user.user.id!,
+                          })
+                          window.open(res.user?.stripe?.stripeCheckoutUrl)
+                        }}
                       >
                         <div
                           class="font-semibold"
@@ -452,6 +474,13 @@ export default function Settings() {
                       <div
                         id="Plan"
                         class="relative rounded-xl flex flex-col h-full w-full p-6 px-10 gap-2 hover:text-blue-300 hover:opacity-60 cursor-pointer"
+                        onClick={async () => {
+                          const res = await todoList.request(StripeDocument, {
+                            plan: "proYearly",
+                            userId: user.user.id!,
+                          })
+                          window.open(res.user?.stripe?.stripeCheckoutUrl)
+                        }}
                       >
                         <div
                           class="font-semibold"

@@ -1,12 +1,11 @@
 import { makeEventListener } from "@solid-primitives/event-listener"
 import { register } from "@teamhanko/hanko-elements"
-import { Hanko } from "@teamhanko/hanko-frontend-sdk"
 import { GraphQLClient } from "graphql-request"
 import { onMount } from "solid-js"
 import { useNavigate } from "solid-start"
 import { UserCreateDocument, UserDocument } from "~/graphql/schema"
 import { getHankoCookie } from "~/lib/auth"
-import { log, logError } from "~/lib/tinybird"
+import { logError } from "~/lib/tinybird"
 
 export default function Auth() {
   const navigate = useNavigate()
@@ -37,9 +36,8 @@ export default function Auth() {
     document,
     "hankoAuthSuccess",
     async (e) => {
-      // const hanko = new Hanko("http://localhost:3000")
-      // const hankoUser = await hanko.user.getCurrent()
-      // console.log(hankoUser.)
+      // const hankoEmailClient = new EmailClient(import.meta.env.HANKO_API_URL)
+      // const signedInEmail = await hankoEmailClient.list()[0].address
 
       const hankoCookie = await getHankoCookie()
       const client = new GraphQLClient(import.meta.env.VITE_GRAFBASE_API_URL, {

@@ -32,8 +32,6 @@ export default function TodoList() {
   const user = useUser()
 
   function setPrority(i: Priority) {
-    console.log(todoList.todosState, "todo state")
-    console.log(todoList.flatTasks(), "flat tasks")
     const focusedTodoValue = todoList.focusedTodoKey()
     if (!focusedTodoValue) return
 
