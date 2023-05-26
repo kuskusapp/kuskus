@@ -475,7 +475,6 @@ export default function Settings() {
                         id="Plan"
                         class="relative rounded-xl flex flex-col h-full w-full p-6 px-10 gap-2 hover:text-blue-300 hover:opacity-60 cursor-pointer"
                         onClick={async () => {
-                          console.log(user.user.id, "user id")
                           const res = await todoList.request(StripeDocument, {
                             plan: "test",
                             userId: user.user.id!,
