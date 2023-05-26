@@ -219,7 +219,7 @@ export default function Settings() {
                               {10 - user.user.freeAiTasksAvailable}
                               /10 AI suggestions used
                             </div>
-                            <div>{todoList.todos.length}/10 tasks used</div>
+                            {/* <div>{todoList.todos.length}/20 tasks used</div> */}
                           </div>
                           <button
                             class="flex items-center justify-center bg-neutral-200 dark:bg-neutral-800 p-2 px-6 hover:opacity-60 rounded-2xl cursor-pointer"

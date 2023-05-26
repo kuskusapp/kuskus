@@ -19,6 +19,7 @@ export default async function Resolver(
           mode: "subscription",
           metadata: {
             userId: id,
+            subscriptionType: "normal",
           },
           line_items: [
             {
@@ -36,6 +37,7 @@ export default async function Resolver(
           mode: "subscription",
           metadata: {
             userId: id,
+            subscriptionType: "normal",
           },
           line_items: [
             {
@@ -53,6 +55,7 @@ export default async function Resolver(
           mode: "subscription",
           metadata: {
             userId: id,
+            subscriptionType: "pro",
           },
           line_items: [
             {
@@ -70,6 +73,7 @@ export default async function Resolver(
           mode: "subscription",
           metadata: {
             userId: id,
+            subscriptionType: "pro",
           },
           line_items: [
             {
