@@ -1,8 +1,11 @@
 import { useNavigate } from "solid-start"
 import Icon from "../Icon"
+import { Show, createSignal } from "solid-js"
+import { Motion } from "@motionone/solid"
 
 export default function FixedSidebar() {
   const navigate = useNavigate()
+  const [showDownload, setShowDownload] = createSignal(false)
   return (
     <>
       <style>
@@ -85,14 +88,62 @@ export default function FixedSidebar() {
               It's very keyboard driven.
             </p>
             <div class="flex flex-col items-center mt-5">
-              <button
-                class="text-white flex w-full justify-center p-3 bg-black mb-2 rounded-md active:translate-y-0.5 hover:bg-green-600 hover:border-green-600 hover:-translate-y-1 transition-all"
-                onClick={() => {}}
-                style={{ opacity: "0.8" }}
-              >
-                Download
-                {/* <Icon name="" /> */}
-              </button>
+              <div class="w-full flex flex-col gap-2 mb-2">
+                <button
+                  class="text-white flex w-full justify-center p-3 bg-black rounded-md active:translate-y-0.5 hover:bg-green-600 hover:border-green-600 hover:-translate-y-1 transition-all"
+                  onClick={() => {
+                    setShowDownload(!showDownload())
+                  }}
+                  style={{ opacity: "0.8" }}
+                >
+                  Download
+                  {/* <Icon name="" /> */}
+                </button>
+                <Show when={showDownload()}>
+                  <Motion.div class="flex flex-col w-full gap-2 justify-between items-center">
+                    <Motion.div
+                      initial={{ transform: "translateY(-20px)" }}
+                      animate={{ transform: "translateY(0px)" }}
+                      transition={{ duration: 0.2 }}
+                      class="p-3 flex w-full items-center justify-center rounded bg-blue-500 opacity-80"
+                    >
+                      {/* TODO: have links not be hard coded, take latest release? */}
+                      <a
+                        href="https://github.com/kuskusapp/kuskus/releases/download/app-v0.0.1/KusKus_0.0.1_universal.dmg"
+                        class="cursor-pointer"
+                      >
+                        macOS
+                      </a>
+                    </Motion.div>
+                    <Motion.div
+                      initial={{ transform: "translateY(-20px)" }}
+                      animate={{ transform: "translateY(0px)" }}
+                      transition={{ duration: 0.2 }}
+                      class="p-3 flex w-full items-center justify-center rounded bg-blue-500 opacity-80"
+                    >
+                      <a
+                        href="https://github.com/kuskusapp/kuskus/releases/download/app-v0.0.1/KusKus_0.0.1_x64_en-US.msi"
+                        class="cursor-pointer"
+                      >
+                        Windows
+                      </a>
+                    </Motion.div>
+                    <Motion.div
+                      initial={{ transform: "translateY(-20px)" }}
+                      animate={{ transform: "translateY(0px)" }}
+                      transition={{ duration: 0.2 }}
+                      class="p-3 flex w-full items-center justify-center rounded bg-blue-500 opacity-80"
+                    >
+                      <a
+                        href="https://github.com/kuskusapp/kuskus/releases/download/app-v0.0.1/kus-kus_0.0.1_amd64.AppImage"
+                        class="cursor-pointer"
+                      >
+                        Linux
+                      </a>
+                    </Motion.div>
+                  </Motion.div>
+                </Show>
+              </div>
               <div class="flex gap-3 relative">
                 <button
                   class="text-white flex justify-center p-3 bg-black w-32 rounded-md active:translate-y-0.5 hover:bg-white hover:text-black hover:-translate-y-1 transition-all"

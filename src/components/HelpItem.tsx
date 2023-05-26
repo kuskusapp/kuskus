@@ -36,9 +36,10 @@ export default function Instruction(props: Props) {
       <div id="singularhelp" class="flex h-full">
         <div
           id="titleOfHelp"
-          class="flex  gap-4 h-full justify-end items-center p-4 text-xl font-semibold text-end"
+          class="flex  gap-4  justify-end items-center p-4 text-xl font-semibold text-end h-full"
           style={{
             width: "20%",
+            "min-width": "160px",
           }}
         >
           {props.problem}

@@ -6,7 +6,7 @@ dependencies:
     version: 0.0.3
   '@graphql-codegen/cli':
     specifier: ^4.0.0
-    version: 4.0.0(@babel/core@7.21.8)(@types/node@20.2.4)(graphql@16.6.0)
+    version: 4.0.0(@babel/core@7.21.8)(@types/node@20.2.5)(graphql@16.6.0)
   '@graphql-codegen/typed-document-node':
     specifier: ^5.0.0
     version: 5.0.0(graphql@16.6.0)
@@ -62,8 +62,8 @@ dependencies:
     specifier: 0.4.0-alpha
     version: 0.4.0-alpha
   '@types/node':
-    specifier: ^20.2.4
-    version: 20.2.4
+    specifier: ^20.2.5
+    version: 20.2.5
   clsx:
     specifier: ^1.2.1
     version: 1.2.1
@@ -90,10 +90,10 @@ dependencies:
     version: 1.7.5
   solid-start:
     specifier: ^0.2.26
-    version: 0.2.26(@solidjs/meta@0.28.5)(@solidjs/router@0.8.2)(solid-js@1.7.5)(solid-start-cloudflare-pages@0.2.26)(solid-start-node@0.2.26)(vite@4.3.8)
+    version: 0.2.26(@solidjs/meta@0.28.5)(@solidjs/router@0.8.2)(solid-js@1.7.5)(solid-start-cloudflare-pages@0.2.26)(solid-start-node@0.2.26)(vite@4.3.9)
   solid-start-cloudflare-pages:
     specifier: ^0.2.26
-    version: 0.2.26(solid-start@0.2.26)(vite@4.3.8)
+    version: 0.2.26(solid-start@0.2.26)(vite@4.3.9)
   split.js:
     specifier: ^1.6.5
     version: 1.6.5
@@ -121,11 +121,11 @@ devDependencies:
     specifier: ^2.8.8
     version: 2.8.8
   solid-devtools:
-    specifier: ^0.27.0-next.0
-    version: 0.27.0-next.0(solid-js@1.7.5)(solid-start@0.2.26)(vite@4.3.8)
+    specifier: ^0.27.0
+    version: 0.27.0(solid-js@1.7.5)(solid-start@0.2.26)(vite@4.3.9)
   solid-start-node:
     specifier: ^0.2.26
-    version: 0.2.26(solid-start@0.2.26)(undici@5.22.0)(vite@4.3.8)
+    version: 0.2.26(solid-start@0.2.26)(undici@5.22.0)(vite@4.3.9)
   tailwindcss:
     specifier: ^3.3.2
     version: 3.3.2
@@ -133,8 +133,8 @@ devDependencies:
     specifier: ^5.0.4
     version: 5.0.4
   vite:
-    specifier: ^4.3.8
-    version: 4.3.8(@types/node@20.2.4)
+    specifier: ^4.3.9
+    version: 4.3.9(@types/node@20.2.5)
 
 packages:
 
@@ -1567,7 +1567,7 @@ packages:
     dev: true
     optional: true
 
-  /@graphql-codegen/cli@4.0.0(@babel/core@7.21.8)(@types/node@20.2.4)(graphql@16.6.0):
+  /@graphql-codegen/cli@4.0.0(@babel/core@7.21.8)(@types/node@20.2.5)(graphql@16.6.0):
     resolution: {integrity: sha512-wmJXs48Apu+dXQ7utHa3cY1ulFJuflrqpbkhLwxfIAHjSfQouWCn2k7Udq+5PqbCLTDdbUQvw6vGZ5hgud0XuQ==}
     hasBin: true
     peerDependencies:
@@ -1581,12 +1581,12 @@ packages:
       '@graphql-tools/apollo-engine-loader': 8.0.0(graphql@16.6.0)
       '@graphql-tools/code-file-loader': 8.0.0(@babel/core@7.21.8)(graphql@16.6.0)
       '@graphql-tools/git-loader': 8.0.0(@babel/core@7.21.8)(graphql@16.6.0)
-      '@graphql-tools/github-loader': 8.0.0(@babel/core@7.21.8)(@types/node@20.2.4)(graphql@16.6.0)
+      '@graphql-tools/github-loader': 8.0.0(@babel/core@7.21.8)(@types/node@20.2.5)(graphql@16.6.0)
       '@graphql-tools/graphql-file-loader': 8.0.0(graphql@16.6.0)
       '@graphql-tools/json-file-loader': 8.0.0(graphql@16.6.0)
       '@graphql-tools/load': 8.0.0(graphql@16.6.0)
-      '@graphql-tools/prisma-loader': 8.0.1(@types/node@20.2.4)(graphql@16.6.0)
-      '@graphql-tools/url-loader': 8.0.0(@types/node@20.2.4)(graphql@16.6.0)
+      '@graphql-tools/prisma-loader': 8.0.1(@types/node@20.2.5)(graphql@16.6.0)
+      '@graphql-tools/url-loader': 8.0.0(@types/node@20.2.5)(graphql@16.6.0)
       '@graphql-tools/utils': 10.0.0(graphql@16.6.0)
       '@parcel/watcher': 2.1.0
       '@whatwg-node/fetch': 0.8.8
@@ -1595,7 +1595,7 @@ packages:
       debounce: 1.2.1
       detect-indent: 6.1.0
       graphql: 16.6.0
-      graphql-config: 5.0.1(@types/node@20.2.4)(graphql@16.6.0)
+      graphql-config: 5.0.1(@types/node@20.2.5)(graphql@16.6.0)
       inquirer: 8.2.5
       is-glob: 4.0.3
       jiti: 1.18.2
@@ -1806,7 +1806,7 @@ packages:
       - utf-8-validate
     dev: false
 
-  /@graphql-tools/executor-http@1.0.0(@types/node@20.2.4)(graphql@16.6.0):
+  /@graphql-tools/executor-http@1.0.0(@types/node@20.2.5)(graphql@16.6.0):
     resolution: {integrity: sha512-7R9IWRN1Iszyayd4qgguITLLTmRUZ3wSS5umK0xwShB8mFQ5cSsVx6rewPhGIwGEenN6e9ahwcGX9ytuLlw55g==}
     engines: {node: '>=16.0.0'}
     peerDependencies:
@@ -1818,7 +1818,7 @@ packages:
       dset: 3.1.2
       extract-files: 11.0.0
       graphql: 16.6.0
-      meros: 1.2.1(@types/node@20.2.4)
+      meros: 1.2.1(@types/node@20.2.5)
       tslib: 2.5.0
       value-or-promise: 1.0.12
     transitivePeerDependencies:
@@ -1874,14 +1874,14 @@ packages:
       - supports-color
     dev: false
 
-  /@graphql-tools/github-loader@8.0.0(@babel/core@7.21.8)(@types/node@20.2.4)(graphql@16.6.0):
+  /@graphql-tools/github-loader@8.0.0(@babel/core@7.21.8)(@types/node@20.2.5)(graphql@16.6.0):
     resolution: {integrity: sha512-VuroArWKcG4yaOWzV0r19ElVIV6iH6UKDQn1MXemND0xu5TzrFme0kf3U9o0YwNo0kUYEk9CyFM0BYg4he17FA==}
     engines: {node: '>=16.0.0'}
     peerDependencies:
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
     dependencies:
       '@ardatan/sync-fetch': 0.0.1
-      '@graphql-tools/executor-http': 1.0.0(@types/node@20.2.4)(graphql@16.6.0)
+      '@graphql-tools/executor-http': 1.0.0(@types/node@20.2.5)(graphql@16.6.0)
       '@graphql-tools/graphql-tag-pluck': 8.0.0(@babel/core@7.21.8)(graphql@16.6.0)
       '@graphql-tools/utils': 10.0.0(graphql@16.6.0)
       '@whatwg-node/fetch': 0.9.0
@@ -1986,13 +1986,13 @@ packages:
       tslib: 2.5.0
     dev: false
 
-  /@graphql-tools/prisma-loader@8.0.1(@types/node@20.2.4)(graphql@16.6.0):
+  /@graphql-tools/prisma-loader@8.0.1(@types/node@20.2.5)(graphql@16.6.0):
     resolution: {integrity: sha512-bl6e5sAYe35Z6fEbgKXNrqRhXlCJYeWKBkarohgYA338/SD9eEhXtg3Cedj7fut3WyRLoQFpHzfiwxKs7XrgXg==}
     engines: {node: '>=16.0.0'}
     peerDependencies:
       graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
     dependencies:
-      '@graphql-tools/url-loader': 8.0.0(@types/node@20.2.4)(graphql@16.6.0)
+      '@graphql-tools/url-loader': 8.0.0(@types/node@20.2.5)(graphql@16.6.0)
       '@graphql-tools/utils': 10.0.0(graphql@16.6.0)
       '@types/js-yaml': 4.0.5
       '@types/json-stable-stringify': 1.0.34
@@ -2047,7 +2047,7 @@ packages:
       value-or-promise: 1.0.12
     dev: false
 
-  /@graphql-tools/url-loader@8.0.0(@types/node@20.2.4)(graphql@16.6.0):
+  /@graphql-tools/url-loader@8.0.0(@types/node@20.2.5)(graphql@16.6.0):
     resolution: {integrity: sha512-rPc9oDzMnycvz+X+wrN3PLrhMBQkG4+sd8EzaFN6dypcssiefgWKToXtRKI8HHK68n2xEq1PyrOpkjHFJB+GwA==}
     engines: {node: '>=16.0.0'}
     peerDependencies:
@@ -2056,7 +2056,7 @@ packages:
       '@ardatan/sync-fetch': 0.0.1
       '@graphql-tools/delegate': 10.0.0(graphql@16.6.0)
       '@graphql-tools/executor-graphql-ws': 1.0.0(graphql@16.6.0)
-      '@graphql-tools/executor-http': 1.0.0(@types/node@20.2.4)(graphql@16.6.0)
+      '@graphql-tools/executor-http': 1.0.0(@types/node@20.2.5)(graphql@16.6.0)
       '@graphql-tools/executor-legacy-ws': 1.0.0(graphql@16.6.0)
       '@graphql-tools/utils': 10.0.0(graphql@16.6.0)
       '@graphql-tools/wrap': 10.0.0(graphql@16.6.0)
@@ -2499,12 +2499,12 @@ packages:
   /@sideway/pinpoint@2.0.0:
     resolution: {integrity: sha512-RNiOoTPkptFtSVzQevY/yWtZwf/RxyVnPy/OcA9HBM3MlGDnBEYL5B41H0MTn0Uec8Hi+2qUtTfG2WWZBmMejQ==}
 
-  /@solid-devtools/debugger@0.22.0-next.0(solid-js@1.7.5):
-    resolution: {integrity: sha512-IrbebDrfhADHEEivXq4RbNhDUNZj5SZjBXUm2oztrjAL7ADE4NpG1H8p7b4g5kLgP3DgwKNrSqHnh94gsxnqfw==}
+  /@solid-devtools/debugger@0.22.0(solid-js@1.7.5):
+    resolution: {integrity: sha512-OLSgzc+dZP1QMynnze6Kfs+W32XC3mBzXzTCqu3iSvlpdGZnYszwzDPWJmv0Ea9nmRk4pHkxa1D3rJlXyTjTbQ==}
     peerDependencies:
       solid-js: ^1.7.0
     dependencies:
-      '@solid-devtools/shared': 0.12.0-next.0(solid-js@1.7.5)
+      '@solid-devtools/shared': 0.12.0(solid-js@1.7.5)
       '@solid-primitives/bounds': 0.0.111(solid-js@1.7.5)
       '@solid-primitives/cursor': 0.0.109(solid-js@1.7.5)
       '@solid-primitives/event-bus': 1.0.7(solid-js@1.7.5)
@@ -2518,8 +2518,8 @@ packages:
       type-fest: 3.11.0
     dev: true
 
-  /@solid-devtools/shared@0.12.0-next.0(solid-js@1.7.5):
-    resolution: {integrity: sha512-ACj0z8iVGKKfH+CE3U6XE9tfoQ9hc94We5rRBgJh9LSqmE3FWTJLWwjwgO1gn88DqavNAggbbEqXPxkiNielvg==}
+  /@solid-devtools/shared@0.12.0(solid-js@1.7.5):
+    resolution: {integrity: sha512-BQk2rLyKfNxfp+Y+3o/ZbPqO0TnM4pRJZwxoUthxHL6wM7AN6es4asQpoMnLJjvV/mjdFMzNVrqTnuDAoJuEmA==}
     peerDependencies:
       solid-js: ^1.7.0
     dependencies:
@@ -2912,7 +2912,7 @@ packages:
   /@types/better-sqlite3@7.6.4:
     resolution: {integrity: sha512-dzrRZCYPXIXfSR1/surNbJ/grU3scTaygS0OMzjlGf71i9sc2fGyHPXXiXmEvNIoE0cGwsanEFMVJxPXmco9Eg==}
     dependencies:
-      '@types/node': 20.2.4
+      '@types/node': 20.2.5
 
   /@types/cookie@0.5.1:
     resolution: {integrity: sha512-COUnqfB2+ckwXXSFInsFdOAWQzCCx+a5hq2ruyj+Vjund94RJQd4LG2u9hnvJrTgunKAaax7ancBYlDrNYxA0g==}
@@ -2932,8 +2932,8 @@ packages:
     resolution: {integrity: sha512-s2cfwagOQAS8o06TcwKfr9Wx11dNGbH2E9vJz1cqV+a/LOyhWNLUNd6JSRYNzvB4d29UuJX2M0Dj9vE1T8fRXw==}
     dev: false
 
-  /@types/node@20.2.4:
-    resolution: {integrity: sha512-ni5f8Xlf4PwnT/Z3f0HURc3ZSw8UyrqMqmM3L5ysa7VjHu8c3FOmIo1nKCcLrV/OAmtf3N4kFna/aJqxsfEtnA==}
+  /@types/node@20.2.5:
+    resolution: {integrity: sha512-JJulVEQXmiY9Px5axXHeYGLSjhkZEnD+MDPDGbCbIAbMslkKwmygtZFy1X6s/075Yo94sf8GuSlFfPzysQrWZQ==}
 
   /@types/resolve@1.20.2:
     resolution: {integrity: sha512-60BCwRFOZCQhDncwQdxxeOEEkbc5dIMccYLwbxsS4TUNeVECQ/pBJ0j09mrHOl/JJvpRPGwO9SvE4nR2Nb/a4Q==}
@@ -2944,7 +2944,7 @@ packages:
   /@types/ws@8.5.4:
     resolution: {integrity: sha512-zdQDHKUgcX/zBc4GrwsE/7dVdAD8JR4EuiAXiiUhhfyIJXXb2+PrGshFyeXWQPMmmZ2XxgaqclgpIC7eTXc1mg==}
     dependencies:
-      '@types/node': 20.2.4
+      '@types/node': 20.2.5
 
   /@whatwg-node/events@0.0.3:
     resolution: {integrity: sha512-IqnKIDWfXBJkvy/k6tzskWTc2NK3LcqHlb+KHGCrjOCH4jfQckRX0NAiIcC/vIqQkzLYw2r2CTSwAxcrtcD6lA==}
@@ -4028,7 +4028,7 @@ packages:
       '@grafbase/cli-x86_64-unknown-linux-musl': 0.21.1
     dev: true
 
-  /graphql-config@5.0.1(@types/node@20.2.4)(graphql@16.6.0):
+  /graphql-config@5.0.1(@types/node@20.2.5)(graphql@16.6.0):
     resolution: {integrity: sha512-cOi5RUK1QOoqwfzCeyVxRn6nsFqzjq7rs93ZvqT+gNxTgmhpROg3ZetgdbhC/yUWnguDM4S9GoHak+Xh9jLZeA==}
     engines: {node: '>= 16.0.0', pnpm: 7.32.4}
     peerDependencies:
@@ -4042,7 +4042,7 @@ packages:
       '@graphql-tools/json-file-loader': 8.0.0(graphql@16.6.0)
       '@graphql-tools/load': 8.0.0(graphql@16.6.0)
       '@graphql-tools/merge': 9.0.0(graphql@16.6.0)
-      '@graphql-tools/url-loader': 8.0.0(@types/node@20.2.4)(graphql@16.6.0)
+      '@graphql-tools/url-loader': 8.0.0(@types/node@20.2.5)(graphql@16.6.0)
       '@graphql-tools/utils': 10.0.0(graphql@16.6.0)
       cosmiconfig: 8.1.3
       graphql: 16.6.0
@@ -4548,7 +4548,7 @@ packages:
     resolution: {integrity: sha512-8q7VEgMJW4J8tcfVPy8g09NcQwZdbwFEqhe/WZkoIzjn/3TGDwtOCYtXGxA3O8tPzpczCCDgv+P2P5y00ZJOOg==}
     engines: {node: '>= 8'}
 
-  /meros@1.2.1(@types/node@20.2.4):
+  /meros@1.2.1(@types/node@20.2.5):
     resolution: {integrity: sha512-R2f/jxYqCAGI19KhAvaxSOxALBMkaXWH2a7rOyqQw+ZmizX5bKkEYWLzdhC+U82ZVVPVp6MCXe3EkVligh+12g==}
     engines: {node: '>=13'}
     peerDependencies:
@@ -4557,7 +4557,7 @@ packages:
       '@types/node':
         optional: true
     dependencies:
-      '@types/node': 20.2.4
+      '@types/node': 20.2.5
     dev: false
 
   /micromatch@4.0.5:
@@ -5421,8 +5421,8 @@ packages:
       tslib: 2.5.0
     dev: false
 
-  /solid-devtools@0.27.0-next.0(solid-js@1.7.5)(solid-start@0.2.26)(vite@4.3.8):
-    resolution: {integrity: sha512-n/tJKAOmmQMrc9c3nj5F//hQvSt0j/yvvbie1Tq5/4bPl9S7F0dSI4Q4xav9FSnylkH5x8dM/OCWfy4riqtFzw==}
+  /solid-devtools@0.27.0(solid-js@1.7.5)(solid-start@0.2.26)(vite@4.3.9):
+    resolution: {integrity: sha512-uLNi/zD9gQNdfV4wdVqNvh9BgkgEMHy4kc2W6SqhaxLKaaUdph+9SW1MD8v6DIgJnS5CdDEKuAjmN6keAcM9Jg==}
     peerDependencies:
       solid-js: ^1.7.0
       solid-start: ^0.2.20
@@ -5436,11 +5436,11 @@ packages:
       '@babel/core': 7.21.8
       '@babel/plugin-syntax-typescript': 7.21.4(@babel/core@7.21.8)
       '@babel/types': 7.21.5
-      '@solid-devtools/debugger': 0.22.0-next.0(solid-js@1.7.5)
-      '@solid-devtools/shared': 0.12.0-next.0(solid-js@1.7.5)
+      '@solid-devtools/debugger': 0.22.0(solid-js@1.7.5)
+      '@solid-devtools/shared': 0.12.0(solid-js@1.7.5)
       solid-js: 1.7.5
-      solid-start: 0.2.26(@solidjs/meta@0.28.5)(@solidjs/router@0.8.2)(solid-js@1.7.5)(solid-start-cloudflare-pages@0.2.26)(solid-start-node@0.2.26)(vite@4.3.8)
-      vite: 4.3.8(@types/node@20.2.4)
+      solid-start: 0.2.26(@solidjs/meta@0.28.5)(@solidjs/router@0.8.2)(solid-js@1.7.5)(solid-start-cloudflare-pages@0.2.26)(solid-start-node@0.2.26)(vite@4.3.9)
+      vite: 4.3.9(@types/node@20.2.5)
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -5471,7 +5471,7 @@ packages:
       '@babel/types': 7.21.5
       solid-js: 1.7.5
 
-  /solid-start-cloudflare-pages@0.2.26(solid-start@0.2.26)(vite@4.3.8):
+  /solid-start-cloudflare-pages@0.2.26(solid-start@0.2.26)(vite@4.3.9):
     resolution: {integrity: sha512-l+Zg0zazQaHdTsY9N9yqOyX/C/YFBceF3wN7Z4luimS3bc3G9LqHbekypDTl/SHzl2izRGtw8XbRN8SiIVICmQ==}
     peerDependencies:
       solid-start: '*'
@@ -5489,9 +5489,9 @@ packages:
       '@types/ws': 8.5.4
       miniflare: 2.14.0
       rollup: 3.21.5
-      solid-start: 0.2.26(@solidjs/meta@0.28.5)(@solidjs/router@0.8.2)(solid-js@1.7.5)(solid-start-cloudflare-pages@0.2.26)(solid-start-node@0.2.26)(vite@4.3.8)
+      solid-start: 0.2.26(@solidjs/meta@0.28.5)(@solidjs/router@0.8.2)(solid-js@1.7.5)(solid-start-cloudflare-pages@0.2.26)(solid-start-node@0.2.26)(vite@4.3.9)
       terser: 5.17.2
-      vite: 4.3.8(@types/node@20.2.4)
+      vite: 4.3.9(@types/node@20.2.5)
       ws: 8.13.0
     transitivePeerDependencies:
       - '@miniflare/storage-redis'
@@ -5500,7 +5500,7 @@ packages:
       - ioredis
       - utf-8-validate
 
-  /solid-start-node@0.2.26(solid-start@0.2.26)(undici@5.22.0)(vite@4.3.8):
+  /solid-start-node@0.2.26(solid-start@0.2.26)(undici@5.22.0)(vite@4.3.9):
     resolution: {integrity: sha512-8vciTGoQV+lIlCUSVHJPazlaoKDRfBowDkPeBr/EZdmtbcMOKoJYf/APPQWFspylF+nhzunMf0+zJP90VtMEYg==}
     peerDependencies:
       solid-start: '*'
@@ -5514,14 +5514,14 @@ packages:
       polka: 1.0.0-next.22
       rollup: 3.21.5
       sirv: 2.0.3
-      solid-start: 0.2.26(@solidjs/meta@0.28.5)(@solidjs/router@0.8.2)(solid-js@1.7.5)(solid-start-cloudflare-pages@0.2.26)(solid-start-node@0.2.26)(vite@4.3.8)
+      solid-start: 0.2.26(@solidjs/meta@0.28.5)(@solidjs/router@0.8.2)(solid-js@1.7.5)(solid-start-cloudflare-pages@0.2.26)(solid-start-node@0.2.26)(vite@4.3.9)
       terser: 5.17.2
       undici: 5.22.0
-      vite: 4.3.8(@types/node@20.2.4)
+      vite: 4.3.9(@types/node@20.2.5)
     transitivePeerDependencies:
       - supports-color
 
-  /solid-start@0.2.26(@solidjs/meta@0.28.5)(@solidjs/router@0.8.2)(solid-js@1.7.5)(solid-start-cloudflare-pages@0.2.26)(solid-start-node@0.2.26)(vite@4.3.8):
+  /solid-start@0.2.26(@solidjs/meta@0.28.5)(@solidjs/router@0.8.2)(solid-js@1.7.5)(solid-start-cloudflare-pages@0.2.26)(solid-start-node@0.2.26)(vite@4.3.9):
     resolution: {integrity: sha512-kne2HZlnSMzsirdnvNs1CsDqBl0L0uvKKt1t4de1CH7JIngyqoMcER97jTE0Ejr84KknANaKAdvJAzZcL7Ueng==}
     hasBin: true
     peerDependencies:
@@ -5584,13 +5584,13 @@ packages:
       set-cookie-parser: 2.6.0
       sirv: 2.0.3
       solid-js: 1.7.5
-      solid-start-cloudflare-pages: 0.2.26(solid-start@0.2.26)(vite@4.3.8)
-      solid-start-node: 0.2.26(solid-start@0.2.26)(undici@5.22.0)(vite@4.3.8)
+      solid-start-cloudflare-pages: 0.2.26(solid-start@0.2.26)(vite@4.3.9)
+      solid-start-node: 0.2.26(solid-start@0.2.26)(undici@5.22.0)(vite@4.3.9)
       terser: 5.17.2
       undici: 5.22.0
-      vite: 4.3.8(@types/node@20.2.4)
-      vite-plugin-inspect: 0.7.26(rollup@3.21.5)(vite@4.3.8)
-      vite-plugin-solid: 2.7.0(solid-js@1.7.5)(vite@4.3.8)
+      vite: 4.3.9(@types/node@20.2.5)
+      vite-plugin-inspect: 0.7.26(rollup@3.21.5)(vite@4.3.9)
+      vite-plugin-solid: 2.7.0(solid-js@1.7.5)(vite@4.3.9)
       wait-on: 6.0.1(debug@4.3.4)
     transitivePeerDependencies:
       - supports-color
@@ -5675,7 +5675,7 @@ packages:
     resolution: {integrity: sha512-4yY9gNFznBI6fZtR0B4y2a+o2EJe+s7p4DiHECKphwa36zYIczpWzO1g4dF0PF3lhTRw5FWTaHGBjwaD5FEiDQ==}
     engines: {node: '>=12.*'}
     dependencies:
-      '@types/node': 20.2.4
+      '@types/node': 20.2.5
       qs: 6.11.1
     dev: false
 
@@ -5948,7 +5948,7 @@ packages:
     resolution: {integrity: sha512-BNGbWLfd0eUPabhkXUVm0j8uuvREyTh5ovRa/dyow/BqAbZJyC+5fU+IzQOzmAKzYqYRAISoRhdQr3eIZ/PXqg==}
     engines: {node: '>= 0.8'}
 
-  /vite-plugin-inspect@0.7.26(rollup@3.21.5)(vite@4.3.8):
+  /vite-plugin-inspect@0.7.26(rollup@3.21.5)(vite@4.3.9):
     resolution: {integrity: sha512-gRjBay+OxLr/Dr+HXlfJVXZH0cqhE5hkkBvo2du2cA1LGUBnV8Aym89AdPrURkSpTk3Rvw9dNWM2VLIuw6RKJg==}
     engines: {node: '>=14'}
     peerDependencies:
@@ -5960,12 +5960,12 @@ packages:
       fs-extra: 11.1.1
       picocolors: 1.0.0
       sirv: 2.0.3
-      vite: 4.3.8(@types/node@20.2.4)
+      vite: 4.3.9(@types/node@20.2.5)
     transitivePeerDependencies:
       - rollup
       - supports-color
 
-  /vite-plugin-solid@2.7.0(solid-js@1.7.5)(vite@4.3.8):
+  /vite-plugin-solid@2.7.0(solid-js@1.7.5)(vite@4.3.9):
     resolution: {integrity: sha512-avp/Jl5zOp/Itfo67xtDB2O61U7idviaIp4mLsjhCa13PjKNasz+IID0jYTyqUp9SFx6/PmBr6v4KgDppqompg==}
     peerDependencies:
       solid-js: ^1.7.2
@@ -5978,13 +5978,13 @@ packages:
       merge-anything: 5.1.6
       solid-js: 1.7.5
       solid-refresh: 0.5.2(solid-js@1.7.5)
-      vite: 4.3.8(@types/node@20.2.4)
-      vitefu: 0.2.4(vite@4.3.8)
+      vite: 4.3.9(@types/node@20.2.5)
+      vitefu: 0.2.4(vite@4.3.9)
     transitivePeerDependencies:
       - supports-color
 
-  /vite@4.3.8(@types/node@20.2.4):
-    resolution: {integrity: sha512-uYB8PwN7hbMrf4j1xzGDk/lqjsZvCDbt/JC5dyfxc19Pg8kRm14LinK/uq+HSLNswZEoKmweGdtpbnxRtrAXiQ==}
+  /vite@4.3.9(@types/node@20.2.5):
+    resolution: {integrity: sha512-qsTNZjO9NoJNW7KnOrgYwczm0WctJ8m/yqYAMAK9Lxt4SoySUfS5S8ia9K7JHpa3KEeMfyF8LoJ3c5NeBJy6pg==}
     engines: {node: ^14.18.0 || >=16.0.0}
     hasBin: true
     peerDependencies:
@@ -6008,14 +6008,14 @@ packages:
       terser:
         optional: true
     dependencies:
-      '@types/node': 20.2.4
+      '@types/node': 20.2.5
       esbuild: 0.17.18
       postcss: 8.4.23
       rollup: 3.21.5
     optionalDependencies:
       fsevents: 2.3.2
 
-  /vitefu@0.2.4(vite@4.3.8):
+  /vitefu@0.2.4(vite@4.3.9):
     resolution: {integrity: sha512-fanAXjSaf9xXtOOeno8wZXIhgia+CZury481LsDaV++lSvcU2R9Ch2bPh3PYFyoHW+w9LqAeYRISVQjUIew14g==}
     peerDependencies:
       vite: ^3.0.0 || ^4.0.0
@@ -6023,7 +6023,7 @@ packages:
       vite:
         optional: true
     dependencies:
-      vite: 4.3.8(@types/node@20.2.4)
+      vite: 4.3.9(@types/node@20.2.5)
 
   /wait-on@6.0.1(debug@4.3.4):
     resolution: {integrity: sha512-zht+KASY3usTY5u2LgaNqn/Cd8MukxLGjdcZxT2ns5QzDmTFc4XoWBgC+C/na+sMRZTuVygQoMYwdcVjHnYIVw==}

@@ -1,5 +1,5 @@
 import clsx from "clsx"
-import { Match, Show, Switch, createSignal } from "solid-js"
+import { Match, Show, Switch, createEffect, createSignal } from "solid-js"
 import { TodoListMode, useTodoList } from "~/GlobalContext/todo-list"
 import Instruction from "./HelpItem"
 import Icon from "./Icon"
@@ -14,7 +14,16 @@ export default function Settings() {
   const [show, setShow] = createSignal(
     initial?.settingsState ? initial.settingsState : "Help"
   )
-
+  const [showSidebar, setShowSidebar] = createSignal(true)
+  const [breakPoint, setBreakPoint] = createSignal(false)
+  createEffect(() => {
+    showSidebar()
+    if (window.innerWidth < 600) {
+      setBreakPoint(true)
+    } else {
+      setBreakPoint(false)
+    }
+  })
   return (
     <>
       <style>
@@ -29,12 +38,23 @@ export default function Settings() {
         }
         #Sidebar {
           border-right: solid 3px rgba(200,200,200, 0.5);
+          position: absolute;
+          height: 100vh;
+          width: 100vw;
+          bottom: 0;
+          right: 0;
+          z-index: 100;
+
         }
         #helpNav {
           border-bottom: solid 3px rgba(200,200,200, 0.5),
+          font-size: 20px;
+
         }
         #helpTitle {
-          border-right: solid 3px rgba(200,200,200, 0.5)
+          border-right: solid 3px rgba(200,200,200, 0.5);
+          padding-top: 10px;
+          padding-bottom: 10px;
         }
         #instructions {
           border-bottom: solid 3px rgba(200,200,200, 0.5)
@@ -56,6 +76,37 @@ export default function Settings() {
             border-bottom: solid 3px rgba(43, 43, 43, 0.5)
           }
         }
+        #Plans {
+          display: flex;
+          flex-direction: column;
+        }
+        #Plan {
+          height: 250px;
+        }
+        @media (min-width:1100px) {
+          #Plans {
+            display: flex;
+            flex-direction: row;
+          }
+        }
+        @media (min-width:600px) {
+
+          #Plan {
+            height: 100%;
+          }
+          #helpNav {
+            font-size: 20px;
+
+          }
+          #helpTitle{
+            padding-top: 24px;
+            padding-bottom: 24px;
+          }
+          #Sidebar {
+            position: static;
+            width: 16%;
+          }
+        }
 
       `}
       </style>
@@ -69,87 +120,104 @@ export default function Settings() {
           </div>
         </div>
         <div class="flex h-full w-full">
-          <div
-            class="flex justify-between flex-col  dark:bg-stone-900 bg-gray-100 pr-1"
-            style={{
-              width: "16%",
-            }}
-            id="Sidebar"
-          >
-            <div>
+          <Show when={showSidebar()}>
+            <div
+              class="flex justify-between flex-col dark:bg-stone-900 bg-gray-100 pr-1"
+              style={{
+                "min-width": "150px",
+              }}
+              id="Sidebar"
+            >
               <div>
-                <div
-                  class=" p-5 font-bold flex items-center "
-                  style={{ "font-size": "28px", height: "104.22px" }}
-                >
-                  Settings
-                </div>
-                <div
-                  class="p-2 pt-0 pr-0 pl-3 flex flex-col  gap-1 pl-5"
-                  style={{ "font-size": "18px", "margin-right": "-6px" }}
-                >
-                  {/* <div
-          class={clsx(
-            "cursor-pointer",
-            show() === "Preferences" && "font-bold"
-          )}
-          onClick={() => setShow("Preferences")}
-        >
-          Preferences
-        </div> */}
-
+                <div>
                   <div
-                    class={clsx(
-                      "cursor-pointer",
-                      show() === "Keyboard" &&
-                        "font-bold text-blue-300 border-r-4 border-blue-300"
-                    )}
-                    onClick={() => setShow("Keyboard")}
+                    class=" p-5  flex items-center justify-between"
+                    style={{ height: "104.22px" }}
                   >
-                    Keyboard
+                    <div
+                      class="font-bold flex items-center "
+                      style={{ "font-size": "28px" }}
+                    >
+                      Settings
+                    </div>
                   </div>
                   <div
-                    class={clsx(
-                      "cursor-pointer",
-                      show() === "Account" &&
-                        "font-bold text-blue-300 border-r-4 border-blue-300"
-                    )}
-                    onClick={() => setShow("Account")}
+                    class="p-2 pt-0 pr-0 pl-3 flex flex-col  gap-1"
+                    style={{ "font-size": "18px", "margin-right": "-6px" }}
                   >
-                    Account
-                  </div>
-                  <div
-                    class={clsx(
-                      "cursor-pointer",
-                      show() === "Help" &&
-                        "font-bold text-blue-300 border-r-4 border-blue-300"
-                    )}
-                    onClick={() => setShow("Help")}
-                  >
-                    Help
-                  </div>
-                  <div
-                    class={clsx(
-                      "cursor-pointer",
-                      show() === "Upgrade" &&
-                        "font-bold text-blue-300 border-r-4 border-blue-300"
-                    )}
-                    onClick={() => setShow("Upgrade")}
-                  >
-                    Upgrade
+                    <div
+                      class={clsx(
+                        "cursor-pointer",
+                        show() === "Keyboard" &&
+                          "font-bold text-blue-300 border-r-4 border-blue-300"
+                      )}
+                      onClick={() => {
+                        setShow("Keyboard")
+                        if (breakPoint()) {
+                          setShowSidebar(false)
+                        }
+                      }}
+                    >
+                      Keyboard
+                    </div>
+                    <div
+                      class={clsx(
+                        "cursor-pointer",
+                        show() === "Account" &&
+                          "font-bold text-blue-300 border-r-4 border-blue-300"
+                      )}
+                      onClick={() => {
+                        setShow("Account")
+                        if (breakPoint()) {
+                          setShowSidebar(false)
+                        }
+                      }}
+                    >
+                      Account
+                    </div>
+                    <div
+                      class={clsx(
+                        "cursor-pointer",
+                        show() === "Help" &&
+                          "font-bold text-blue-300 border-r-4 border-blue-300"
+                      )}
+                      onClick={() => {
+                        setShow("Help")
+                        if (breakPoint()) {
+                          setShowSidebar(false)
+                        }
+                      }}
+                    >
+                      Help
+                    </div>
+                    <div
+                      class={clsx(
+                        "cursor-pointer",
+                        show() === "Upgrade" &&
+                          "font-bold text-blue-300 border-r-4 border-blue-300"
+                      )}
+                      onClick={() => {
+                        setShow("Upgrade")
+                        if (breakPoint()) {
+                          setShowSidebar(false)
+                        }
+                      }}
+                    >
+                      Upgrade
+                    </div>
                   </div>
                 </div>
               </div>
+              <div
+                class="flex cursor-pointer self-center pb-4 text-xl text-red-500 font-bold"
+                onClick={() => {
+                  // TODO: sign out with hanko, clear cookie?
+                }}
+              >
+                Sign out
+              </div>
             </div>
-            <div
-              class="flex cursor-pointer self-center pb-4 text-xl text-red-500 font-bold"
-              onClick={() => {
-                // TODO: sign out with hanko, clear cookie?
-              }}
-            >
-              Sign out
-            </div>
-          </div>
+          </Show>
           <div class=" h-full w-full">
             <Switch>
               <Match when={show() === "Preferences"}>
@@ -164,8 +232,20 @@ export default function Settings() {
               </Match>
               <Match when={show() === "Keyboard"}>
                 <div class="h-full">
-                  <div class="font-bold p-7" style={{ "font-size": "28px" }}>
-                    Keyboard Shortcuts
+                  <div class="flex items-center">
+                    <Show when={breakPoint()}>
+                      <div
+                        class="pl-5"
+                        onClick={() => {
+                          setShowSidebar(true)
+                        }}
+                      >
+                        <Icon name="Sidebar"></Icon>
+                      </div>
+                    </Show>
+                    <div class="font-bold p-7" style={{ "font-size": "28px" }}>
+                      Keyboard Shortcuts
+                    </div>
                   </div>
                   <div class="h-full w-full overflow-scroll">
                     <h1 class="bg-neutral-300 font-semibold p-1 dark:bg-neutral-700">
@@ -211,6 +291,16 @@ export default function Settings() {
                       }
                       fallback={
                         <>
+                          <Show when={breakPoint()}>
+                            <div
+                              class="absolute top-5 left-5"
+                              onClick={() => {
+                                setShowSidebar(true)
+                              }}
+                            >
+                              <Icon name="Sidebar"></Icon>
+                            </div>
+                          </Show>
                           <div class="font-bold text-4xl">
                             You are on free plan
                           </div>
@@ -241,17 +331,31 @@ export default function Settings() {
               <Match when={show() === "Help"}>
                 <div class="w-full h-full flex flex-col items-center justify-between overflow-auto">
                   <div class="overflow-scroll h-full w-full flex flex-col justify-center items-center">
-                    <div class=" w-full flex" id="helpNav">
+                    <div class=" w-full flex items-center" id="helpNav">
                       <div
-                        class="font-bold p-6 pl-4"
-                        style={{
-                          "font-size": "36px",
-                          width: "20%",
-                        }}
+                        class="flex items-center p-6 pl-4 gap-5"
                         id="helpTitle"
+                        style={{ width: "20%", "min-width": "160px" }}
                       >
-                        Help
+                        <Show when={breakPoint()}>
+                          <div
+                            onClick={() => {
+                              setShowSidebar(true)
+                            }}
+                          >
+                            <Icon name="Sidebar"></Icon>
+                          </div>
+                        </Show>
+                        <div
+                          class="font-bold grow"
+                          style={{
+                            "font-size": "36px",
+                          }}
+                        >
+                          Help
+                        </div>
                       </div>
+
                       <div
                         class="flex items-center justify-center"
                         style={{ width: "80%" }}
@@ -264,7 +368,10 @@ export default function Settings() {
                         </div>
                       </div>
                     </div>
-                    <div class="flex flex-col h-full w-full" id="instructions">
+                    <div
+                      class="flex flex-col h-full w-full overflow-auto"
+                      id="instructions"
+                    >
                       <Instruction
                         problem="Adding a task"
                         keyboardInstruction="Press n key"
@@ -321,7 +428,7 @@ export default function Settings() {
                         mouseInstruction=""
                       />
                     </div>
-                    <div class="flex w-full h-1/2 flex-col gap-5 text-2xl font-semibold justify-between items-center overflow-scroll">
+                    <div class="flex w-full h-1/4 flex-col gap-5 text-2xl font-semibold justify-between items-center overflow-scroll">
                       <div class="flex w-full h-full justify-center items-center gap-5 p-5">
                         {/* TODO: add github icon */}
                         <a
@@ -347,9 +454,16 @@ export default function Settings() {
                 </div>
               </Match>
               <Match when={show() === "Upgrade"}>
-                <div>
-                  <div class="flex flex-col w-full h-full">
-                    <div class="flex flex-col gap-1 p-7">
+                <div class="overflow-auto w-full h-full">
+                  <div class="flex flex-col">
+                    <div class="flex items-center gap-5 gap-1 p-7">
+                      <div
+                        onClick={() => {
+                          setShowSidebar(true)
+                        }}
+                      >
+                        <Icon name="Sidebar"></Icon>
+                      </div>
                       <div
                         class="font-semibold"
                         style={{ "font-size": "32px" }}
@@ -358,8 +472,8 @@ export default function Settings() {
                       </div>{" "}
                     </div>
                   </div>
-                  <div class="w-full h-full px-5 flex flex-col gap-5 ">
-                    <div class="flex gap-5 h-full">
+                  <div class="w-full h-full px-5 flex flex-col gap-5 overflow-scroll pb-5">
+                    <div id="Plans" class="flex gap-5">
                       <div
                         id="Plan"
                         class="relative rounded-xl flex flex-col h-full w-full p-6 px-10 gap-2 hover:text-blue-300 hover:opacity-60 cursor-pointer"
@@ -407,11 +521,19 @@ export default function Settings() {
                           window.open(res.user?.stripe?.stripeCheckoutUrl)
                         }}
                       >
-                        <div
-                          class="font-semibold"
-                          style={{ "font-size": "24px" }}
-                        >
-                          General Yearly Plan
+                        <div class="flex items-center gap-2">
+                          <div
+                            class="font-semibold"
+                            style={{ "font-size": "24px" }}
+                          >
+                            General
+                          </div>
+                          <div
+                            class="absolute top-3 right-3 bg-neutral-800 rounded-lg px-2 flex items-center justify-center"
+                            style={{ height: "30px" }}
+                          >
+                            -20%
+                          </div>
                         </div>
                         <div class="opacity-60">
                           <div class="flex items-center gap-1">
@@ -433,7 +555,7 @@ export default function Settings() {
                         </div>
                       </div>
                     </div>
-                    <div class="flex gap-5">
+                    <div id="Plans" class="flex gap-5">
                       <div
                         id="Plan"
                         class="relative rounded-xl flex flex-col h-full w-full p-6 px-10 gap-2 hover:text-blue-300 hover:opacity-60 cursor-pointer"
@@ -492,6 +614,12 @@ export default function Settings() {
                         >
                           Premium Yearly Plan
                         </div>
+                        <div
+                          class="absolute top-3 right-3 bg-neutral-800 rounded-lg px-2 flex items-center justify-center"
+                          style={{ height: "30px" }}
+                        >
+                          -20%
+                        </div>
                         <div class="opacity-60">
                           <div class="flex items-center gap-1">
                             <Icon name="Circle"></Icon>{" "}
@@ -507,7 +635,7 @@ export default function Settings() {
                             style={{ "font-size": "28px" }}
                             class="font-bold"
                           >
-                            $200
+                            $250
                           </span>
                           <span class="opacity-60 font-bold">per Year</span>
                         </div>

@@ -31,17 +31,25 @@ export default function Features() {
         transition: 0.3s;
       }
       #NavContainer {
-        border-bottom: solid 1px rgba(38, 40, 60, 0.29)
+        border-bottom: solid 1px rgba(38, 40, 60, 0.29);
+        
       }
+      @media (min-width: 1024px){
+        #NavContainer {
+          
+        }
+      }
+      
       `}</style>
       <div
         style={{
           "border-color": "rgba(7, 25, 61, 0.2)",
           "background-color": "rgba(1, 1, 4, 0.4)",
         }}
-        class=" h-screen lg:border-l-4 text-white"
+        class="min-h-screen h-full lg:border-l-4 text-white"
+        id="features"
       >
-        <div id="NavContainer" class="flex justify-between px-40 p-5">
+        <div id="NavContainer" class="flex justify-between px-10 p-5">
           <div
             onClick={() => setShow("Features")}
             class={clsx(
@@ -73,7 +81,10 @@ export default function Features() {
             Join
           </div> */}
         </div>
-        <div class="flex flex-col pl-16 pt-20 gap-6">
+        <div
+          class="flex flex-col px-16 pt-20 gap-6"
+          style={{ "padding-bottom": "300px" }}
+        >
           <Switch>
             <Match when={show() === "Pricing"}>
               <div></div>
