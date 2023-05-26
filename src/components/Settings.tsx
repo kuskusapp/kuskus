@@ -365,7 +365,7 @@ export default function Settings() {
                         class="relative rounded-xl flex flex-col h-full w-full p-6 px-10 gap-2 hover:text-blue-300 hover:opacity-60 cursor-pointer"
                         onClick={async () => {
                           const res = await todoList.request(StripeDocument, {
-                            plan: "normalMonthly",
+                            plan: "normalMonth",
                             userId: user.user.id!,
                           })
                           window.open(res.user?.stripe?.stripeCheckoutUrl)
@@ -375,7 +375,7 @@ export default function Settings() {
                           class="font-semibold"
                           style={{ "font-size": "24px" }}
                         >
-                          General
+                          General Plan
                         </div>
                         <div class="opacity-60">
                           <div class="flex items-center gap-1">
@@ -401,7 +401,7 @@ export default function Settings() {
                         class="relative rounded-xl flex flex-col h-full w-full p-6 px-10 gap-2 hover:text-blue-300 hover:opacity-60 cursor-pointer"
                         onClick={async () => {
                           const res = await todoList.request(StripeDocument, {
-                            plan: "normalYearly",
+                            plan: "normalYear",
                             userId: user.user.id!,
                           })
                           window.open(res.user?.stripe?.stripeCheckoutUrl)
@@ -411,7 +411,7 @@ export default function Settings() {
                           class="font-semibold"
                           style={{ "font-size": "24px" }}
                         >
-                          General
+                          General Yearly Plan
                         </div>
                         <div class="opacity-60">
                           <div class="flex items-center gap-1">
@@ -439,7 +439,7 @@ export default function Settings() {
                         class="relative rounded-xl flex flex-col h-full w-full p-6 px-10 gap-2 hover:text-blue-300 hover:opacity-60 cursor-pointer"
                         onClick={async () => {
                           const res = await todoList.request(StripeDocument, {
-                            plan: "proMonthly",
+                            plan: "proMonth",
                             userId: user.user.id!,
                           })
                           window.open(res.user?.stripe?.stripeCheckoutUrl)
@@ -449,7 +449,7 @@ export default function Settings() {
                           class="font-semibold"
                           style={{ "font-size": "24px" }}
                         >
-                          Premium
+                          Premium Plan
                         </div>
                         <div class="opacity-60">
                           <div class="flex items-center gap-1">
@@ -476,7 +476,7 @@ export default function Settings() {
                         class="relative rounded-xl flex flex-col h-full w-full p-6 px-10 gap-2 hover:text-blue-300 hover:opacity-60 cursor-pointer"
                         onClick={async () => {
                           const res = await todoList.request(StripeDocument, {
-                            plan: "proYearly",
+                            plan: "test",
                             userId: user.user.id!,
                           })
                           window.open(res.user?.stripe?.stripeCheckoutUrl)
@@ -486,7 +486,7 @@ export default function Settings() {
                           class="font-semibold"
                           style={{ "font-size": "24px" }}
                         >
-                          Premium
+                          Premium Yearly Plan
                         </div>
                         <div class="opacity-60">
                           <div class="flex items-center gap-1">
