@@ -107,6 +107,15 @@ export default function Settings() {
             width: 16%;
           }
         }
+        #SwitchOn {
+          display: flex;
+          justify-content: start;
+        
+        }
+        #SwitchOff {
+          display: flex;
+          justify-content: end;
+        }
 
       `}
       </style>
@@ -204,6 +213,21 @@ export default function Settings() {
                       }}
                     >
                       Upgrade
+                    </div>
+                    <div
+                      class={clsx(
+                        "cursor-pointer",
+                        show() === "Options" &&
+                          "font-bold text-blue-300 border-r-4 border-blue-300"
+                      )}
+                      onClick={() => {
+                        setShow("Options")
+                        if (breakPoint()) {
+                          setShowSidebar(false)
+                        }
+                      }}
+                    >
+                      Options
                     </div>
                   </div>
                 </div>
@@ -639,6 +663,36 @@ export default function Settings() {
                           </span>
                           <span class="opacity-60 font-bold">per Year</span>
                         </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </Match>
+              <Match when={show() === "Options"}>
+                <div class="w-full">
+                  <div class="font-bold p-5" style={{ "font-size": "32px" }}>
+                    Options
+                  </div>
+
+                  <div
+                    class=" flex flex-col w-full items-center justify-center"
+                    style={{
+                      "padding-left": "200px",
+                      "padding-right": "200px",
+                      "padding-top": "50px",
+                    }}
+                  >
+                    <div class="flex justify-between w-full items-center">
+                      <div>title</div>
+                      <div
+                        id={false ? "SwitchOn" : "SwitchOff"}
+                        class={clsx(
+                          "rounded-xl p-1 border flex items-center border-white bg-blue-500 opacity-90",
+                          false && "bg-gray-100"
+                        )}
+                        style={{ width: "36px" }}
+                      >
+                        <div class="rounded-xl bg-white p-1.5 flex justify-center items-center"></div>
                       </div>
                     </div>
                   </div>
