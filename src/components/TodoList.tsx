@@ -19,13 +19,14 @@ import NewTodo from "~/components/NewTodo"
 import Todo from "~/components/Todo"
 import TodoEdit from "~/components/TodoEdit"
 import TopBar from "~/components/TopBar"
-import { SuggestedTasksDocument } from "~/graphql/schema"
+import { ExplainTaskDocument, SuggestedTasksDocument } from "~/graphql/schema"
 import { wrapIndex } from "~/lib/lib"
 import { createTodosForDev } from "~/lib/local"
 import { createShortcuts } from "~/lib/primitives"
 import ActionBar from "./ActionBar"
 import SuggestedTodos from "./SuggestedTodos"
 import { useUser } from "~/GlobalContext/user"
+import ExplainedTodo from "./ExplainedTodo"
 
 export default function TodoList() {
   const todoList = useTodoList()
@@ -251,17 +252,18 @@ export default function TodoList() {
       return focused && focused.type === "todo" && focused
     },
     async (todo) => {
-      const res = await todoList.request(SuggestedTasksDocument, {
+      const res = await todoList.request(ExplainTaskDocument, {
         task: todo.title,
         userId: user.user.id!,
       })
-      if (res.user?.suggestions.needPayment) {
-        todoList.setMode(TodoListMode.Settings, { settingsState: "Upgrade" })
-        return
-      }
-      if (res.user?.suggestions.freeAiTaskUsed) {
-        user.decrementAiTask()
-      }
+      console.log(res, "res")
+      // if (res.user?.suggestions.needPayment) {
+      //   todoList.setMode(TodoListMode.Settings, { settingsState: "Upgrade" })
+      //   return
+      // }
+      // if (res.user?.suggestions.freeAiTaskUsed) {
+      //   user.decrementAiTask()
+      // }
       // @ts-ignore
       const explanation = res.user.explain.rawResponse
       return explanation
@@ -384,6 +386,15 @@ export default function TodoList() {
                   {(suggestions) => (
                     <SuggestedTodos suggestions={suggestions()} />
                   )}
+                </Show>
+                <Show
+                  when={
+                    todoList.inMode(TodoListMode.Explain) &&
+                    suggestions.state === "ready" &&
+                    explanation()
+                  }
+                >
+                  <ExplainedTodo explanation={explanation()} />
                 </Show>
               </Suspense>
             </Presence>

@@ -21,19 +21,21 @@ function SuggestedTodo(props: {
   accepted: boolean
 }) {
   return (
-    <div
-      class={clsx(
-        "p-2 m-2 mb-2 grid-cols-5 col-span-5 min-w-0",
-        props.isFocused && "bg-zinc-200 dark:bg-neutral-700 rounded-lg",
-        props.accepted && "opacity-50"
-      )}
-      onClick={props.onClick}
-    >
-      <div>{props.task.split(":")[0]}</div>
-      <div class="opacity-60 text-sm pl-5 text-start text-ellipsis">
-        {props.task.split(":")[1]}
+    <>
+      <div
+        class={clsx(
+          "p-2 m-2 mb-2 grid-cols-5 col-span-5 min-w-0",
+          props.isFocused && "bg-zinc-200 dark:bg-neutral-700 rounded-lg",
+          props.accepted && "opacity-50"
+        )}
+        onClick={props.onClick}
+      >
+        <div>{props.task.split(":")[0]}</div>
+        <div class="opacity-60 text-sm pl-5 text-start text-ellipsis">
+          {props.task.split(":")[1]}
+        </div>
       </div>
-    </div>
+    </>
   )
 }
 
@@ -138,51 +140,66 @@ export default function SuggestedTodos(props: {
   })
 
   return (
-    <Motion.div
-      initial={{ transform: "translateX(20px)", opacity: 0 }}
-      animate={{ transform: "translateX(0px)", opacity: 1 }}
-      transition={{ duration: 1 }}
-      exit={{ width: "0px" }}
-      style={{
-        width: "40%",
-      }}
-      class="flex flex-col items-center h-full overflow-hidden"
-    >
+    <>
+      <style>
+        {`
+       #suggestedTodos {
+        border-left: solid 3px rgba(200,200,200, 0.5);
+      }
+      @media (prefers-color-scheme: dark) {
+        #suggestedTodos {
+          border-left: solid 3px rgba(43, 43, 43, 0.5);
+        }
+      }
+      `}
+      </style>
       <Motion.div
-        initial={{ "font-size": "0px" }}
-        animate={{ "font-size": "18px" }}
-        transition={{ duration: 0 }}
-        // TODO: improve the animation on showing the text, text appears squished..
-        exit={{ display: "none" }}
-        class="bg-gray-100 dark:bg-neutral-900 w-full p-3 text-lg text-center"
+        id="suggestTodos"
+        initial={{ transform: "translateX(20px)", opacity: 0 }}
+        animate={{ transform: "translateX(0px)", opacity: 1 }}
+        transition={{ duration: 1 }}
+        exit={{ width: "0px" }}
+        style={{
+          width: "40%",
+        }}
+        class="flex flex-col items-center h-full overflow-hidden"
       >
-        {/* TODO: fix this ts-ignore as well as all others.. */}
-        Suggested tasks for {/* @ts-ignore */}
-        {todoList.focusedTodo()!.title}
-      </Motion.div>
-      <div class="h-full bg-gray-100 dark:bg-neutral-900 overflow-scroll w-full">
-        <div
-          class="flex flex-col h-full overflow-scroll"
-          style={{ "border-radius": "10px" }}
+        <Motion.div
+          initial={{ "font-size": "0px" }}
+          animate={{ "font-size": "18px" }}
+          transition={{ duration: 0 }}
+          // TODO: improve the animation on showing the text, text appears squished..
+          exit={{ display: "none" }}
+          class="bg-gray-100 dark:bg-neutral-900 w-full p-3 text-lg text-center"
         >
-          {filteredSuggestions().map((todo, index) => (
-            <SuggestedTodo
-              task={todo.task}
-              isFocused={index === focusedSuggestion()}
-              onClick={() => setFocusedSuggestion(index)}
-              accepted={filteredSuggestions()[index].accepted}
-            />
-          ))}
+          {/* TODO: fix this ts-ignore as well as all others.. */}
+          Suggested tasks for {/* @ts-ignore */}
+          {todoList.focusedTodo()!.title}
+        </Motion.div>
+        <div class="h-full bg-gray-100 dark:bg-neutral-900 overflow-scroll w-full">
+          <div
+            class="flex flex-col h-full overflow-scroll"
+            style={{ "border-radius": "10px" }}
+          >
+            {filteredSuggestions().map((todo, index) => (
+              <SuggestedTodo
+                task={todo.task}
+                isFocused={index === focusedSuggestion()}
+                onClick={() => setFocusedSuggestion(index)}
+                accepted={filteredSuggestions()[index].accepted}
+              />
+            ))}
+          </div>
         </div>
-      </div>
 
-      {/* <div>chat</div> */}
-      {/* <div class="m-3 w-4/5">
+        {/* <div>chat</div> */}
+        {/* <div class="m-3 w-4/5">
         <input
           class="w-full rounded p-2 text-sm pl-4 dark:bg-neutral-800 bg-white"
           placeholder="Ask"
         ></input>
       </div> */}
-    </Motion.div>
+      </Motion.div>
+    </>
   )
 }

@@ -30,6 +30,13 @@ export type Scalars = {
   DateTime: { input: any; output: any }
 }
 
+export type ExplainTaskPayload = {
+  __typename?: "ExplainTaskPayload"
+  freeAiTaskUsed?: Maybe<Scalars["Boolean"]["output"]>
+  needPayment?: Maybe<Scalars["Boolean"]["output"]>
+  rawResponse?: Maybe<Scalars["String"]["output"]>
+}
+
 /** Possible operations for an Int field */
 export type IntOperationsInput = {
   decrement?: InputMaybe<Scalars["Int"]["input"]>
@@ -385,6 +392,7 @@ export type User = {
   collapsedSidebar: Scalars["Boolean"]["output"]
   /** when the model was created */
   createdAt: Scalars["DateTime"]["output"]
+  explain?: Maybe<ExplainTaskPayload>
   freeAiTasksAvailable?: Maybe<Scalars["Int"]["output"]>
   gpt4TasksAvailable?: Maybe<Scalars["Int"]["output"]>
   /** Unique identifier */
@@ -395,6 +403,10 @@ export type User = {
   suggestions?: Maybe<SuggestionsPayload>
   /** when the model was updated */
   updatedAt: Scalars["DateTime"]["output"]
+}
+
+export type UserExplainArgs = {
+  task: Scalars["String"]["input"]
 }
 
 export type UserStripeArgs = {
@@ -688,6 +700,24 @@ export type SuggestedTasksQuery = {
           note?: string | null
         } | null>
       } | null
+    } | null
+  } | null
+}
+
+export type ExplainTaskQueryVariables = Exact<{
+  task: Scalars["String"]["input"]
+  userId: Scalars["ID"]["input"]
+}>
+
+export type ExplainTaskQuery = {
+  __typename?: "Query"
+  user?: {
+    __typename?: "User"
+    explain?: {
+      __typename?: "ExplainTaskPayload"
+      rawResponse?: string | null
+      needPayment?: boolean | null
+      freeAiTaskUsed?: boolean | null
     } | null
   } | null
 }
@@ -1804,6 +1834,104 @@ export const SuggestedTasksDocument = {
     },
   ],
 } as unknown as DocumentNode<SuggestedTasksQuery, SuggestedTasksQueryVariables>
+export const ExplainTaskDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "query",
+      name: { kind: "Name", value: "ExplainTask" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: { kind: "Variable", name: { kind: "Name", value: "task" } },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "String" },
+            },
+          },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: {
+            kind: "Variable",
+            name: { kind: "Name", value: "userId" },
+          },
+          type: {
+            kind: "NonNullType",
+            type: { kind: "NamedType", name: { kind: "Name", value: "ID" } },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "user" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "by" },
+                value: {
+                  kind: "ObjectValue",
+                  fields: [
+                    {
+                      kind: "ObjectField",
+                      name: { kind: "Name", value: "id" },
+                      value: {
+                        kind: "Variable",
+                        name: { kind: "Name", value: "userId" },
+                      },
+                    },
+                  ],
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                {
+                  kind: "Field",
+                  name: { kind: "Name", value: "explain" },
+                  arguments: [
+                    {
+                      kind: "Argument",
+                      name: { kind: "Name", value: "task" },
+                      value: {
+                        kind: "Variable",
+                        name: { kind: "Name", value: "task" },
+                      },
+                    },
+                  ],
+                  selectionSet: {
+                    kind: "SelectionSet",
+                    selections: [
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "rawResponse" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "needPayment" },
+                      },
+                      {
+                        kind: "Field",
+                        name: { kind: "Name", value: "freeAiTaskUsed" },
+                      },
+                    ],
+                  },
+                },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<ExplainTaskQuery, ExplainTaskQueryVariables>
 export const StripeDocument = {
   kind: "Document",
   definitions: [
