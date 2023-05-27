@@ -153,13 +153,13 @@ export default function Auth() {
               {/* TODO: should be fixed with new hanko-auth version */}
               {/* currently vite variables don't work.. */}
               {/* dev! */}
-              {/* <hanko-auth
-                api={"https://e879ccc9-285e-49d3-b37e-b569f0db4035.hanko.io"}
-              /> */}
-              {/* production! */}
               <hanko-auth
-                api={"https://fae8e48b-e39d-4066-86a6-df7d5a449db9.hanko.io"}
+                api={"https://e879ccc9-285e-49d3-b37e-b569f0db4035.hanko.io"}
               />
+              {/* production! */}
+              {/* <hanko-auth
+                api={"https://fae8e48b-e39d-4066-86a6-df7d5a449db9.hanko.io"}
+              /> */}
             </div>
           </div>
         </div>

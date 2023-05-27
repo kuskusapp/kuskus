@@ -54,7 +54,10 @@ export default function FixedSidebar() {
         }}
         class="h-screen"
       >
-        <div class="lg:top-0 lg:left-0 lg:fixed flex justify-center items-center h-screen w-screen lg:w-1/2">
+        <div
+          class="lg:top-0 lg:left-0 lg:fixed flex justify-center items-start h-screen w-screen lg:w-1/2"
+          style={{ "padding-top": "30vh" }}
+        >
           <div class="flex flex-col justify-center items-center">
             <div class="flex items-center gap-3">
               {/* TODO: not sure why it wants fetchpriority.. */}

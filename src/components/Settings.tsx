@@ -83,6 +83,16 @@ export default function Settings() {
         #Plan {
           height: 250px;
         }
+        #DisabledPlan {
+            border: solid 3px rgba(200,200,200, 0.5);
+            transition: all 1s ease-out;
+        }
+
+        #DisabledPlan:hover {
+          border: solid 3px rgba(200,200,200, 0.5);
+          opacity: 0.5;
+          color: black;
+        }
         @media (min-width:1100px) {
           #Plans {
             display: flex;
@@ -110,7 +120,7 @@ export default function Settings() {
         #SwitchOn {
           display: flex;
           justify-content: start;
-        
+
         }
         #SwitchOff {
           display: flex;
@@ -214,7 +224,7 @@ export default function Settings() {
                     >
                       Upgrade
                     </div>
-                    <div
+                    {/* <div
                       class={clsx(
                         "cursor-pointer",
                         show() === "Options" &&
@@ -228,7 +238,7 @@ export default function Settings() {
                       }}
                     >
                       Options
-                    </div>
+                    </div> */}
                   </div>
                 </div>
               </div>
@@ -480,7 +490,7 @@ export default function Settings() {
               <Match when={show() === "Upgrade"}>
                 <div class="overflow-auto w-full h-full">
                   <div class="flex flex-col">
-                    <div class="flex items-center gap-5 gap-1 p-7">
+                    <div class="flex items-center gap-5  p-7">
                       <div
                         onClick={() => {
                           setShowSidebar(true)
@@ -499,22 +509,35 @@ export default function Settings() {
                   <div class="w-full h-full px-5 flex flex-col gap-5 overflow-scroll pb-5">
                     <div id="Plans" class="flex gap-5">
                       <div
-                        id="Plan"
-                        class="relative rounded-xl flex flex-col h-full w-full p-6 px-10 gap-2 hover:text-blue-300 hover:opacity-60 cursor-pointer"
+                        id={false ? "Plan" : "DisabledPlan"}
+                        class={clsx(
+                          "relative rounded-xl flex flex-col h-full w-full p-6 px-10 gap-2 hover:text-blue-300  hover:opacity-60 cursor-pointer",
+                          true && "opacity-50 hover:text-black"
+                        )}
                         onClick={async () => {
-                          const res = await todoList.request(StripeDocument, {
-                            plan: "normalMonth",
-                            userId: user.user.id!,
-                          })
-                          window.open(res.user?.stripe?.stripeCheckoutUrl)
+                          let disabled = true
+                          if (!disabled) {
+                            const res = await todoList.request(StripeDocument, {
+                              plan: "normalMonth",
+                              userId: user.user.id!,
+                            })
+                            window.open(res.user?.stripe?.stripeCheckoutUrl)
+                          }
                         }}
                       >
                         <div
-                          class="font-semibold"
+                          class="font-semibold "
                           style={{ "font-size": "24px" }}
                         >
                           General Plan
                         </div>
+                        <Show when={true}>
+                          <div class="absolute top-3 right-3 font-bold">
+                            <div class="flex items-center justify-center">
+                              In use
+                            </div>
+                          </div>
+                        </Show>
                         <div class="opacity-60">
                           <div class="flex items-center gap-1">
                             <Icon name="Circle"></Icon>{" "}
@@ -534,9 +557,10 @@ export default function Settings() {
                           <span class="opacity-60 font-bold">per month</span>
                         </div>
                       </div>
+
                       <div
                         id="Plan"
-                        class="relative rounded-xl flex flex-col h-full w-full p-6 px-10 gap-2 hover:text-blue-300 hover:opacity-60 cursor-pointer"
+                        class="relative rounded-xl flex flex-col h-full w-full p-6 px-10 gap-2 hover:text-blue-500 hover:opacity-60 cursor-pointer"
                         onClick={async () => {
                           const res = await todoList.request(StripeDocument, {
                             plan: "normalYear",
@@ -553,7 +577,7 @@ export default function Settings() {
                             General
                           </div>
                           <div
-                            class="absolute top-3 right-3 bg-neutral-800 rounded-lg px-2 flex items-center justify-center"
+                            class="absolute top-3 right-3 bg-gray-200 dark:bg-neutral-800 rounded-lg px-2 flex items-center justify-center"
                             style={{ height: "30px" }}
                           >
                             -20%
@@ -582,7 +606,7 @@ export default function Settings() {
                     <div id="Plans" class="flex gap-5">
                       <div
                         id="Plan"
-                        class="relative rounded-xl flex flex-col h-full w-full p-6 px-10 gap-2 hover:text-blue-300 hover:opacity-60 cursor-pointer"
+                        class="relative rounded-xl flex flex-col h-full w-full p-6 px-10 gap-2 hover:text-blue-500 hover:opacity-60 cursor-pointer"
                         onClick={async () => {
                           const res = await todoList.request(StripeDocument, {
                             plan: "proMonth",
@@ -619,7 +643,7 @@ export default function Settings() {
                       </div>
                       <div
                         id="Plan"
-                        class="relative rounded-xl flex flex-col h-full w-full p-6 px-10 gap-2 hover:text-blue-300 hover:opacity-60 cursor-pointer"
+                        class="relative rounded-xl flex flex-col h-full w-full p-6 px-10 gap-2 hover:text-blue-500 hover:opacity-60 cursor-pointer"
                         onClick={async () => {
                           const res = await todoList.request(StripeDocument, {
                             plan: "proYear",
@@ -639,7 +663,7 @@ export default function Settings() {
                           Premium Yearly Plan
                         </div>
                         <div
-                          class="absolute top-3 right-3 bg-neutral-800 rounded-lg px-2 flex items-center justify-center"
+                          class="absolute top-3 right-3 bg-gray-200 dark:bg-neutral-800 rounded-lg px-2 flex items-center justify-center"
                           style={{ height: "30px" }}
                         >
                           -20%
@@ -688,7 +712,7 @@ export default function Settings() {
                         id={false ? "SwitchOn" : "SwitchOff"}
                         class={clsx(
                           "rounded-xl p-1 border flex items-center border-white bg-blue-500 opacity-90",
-                          false && "bg-gray-100"
+                          true && ""
                         )}
                         style={{ width: "36px" }}
                       >
