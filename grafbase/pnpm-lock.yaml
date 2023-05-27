@@ -5,8 +5,8 @@ dependencies:
     specifier: ^0.0.3
     version: 0.0.3
   '@kuskusapp/ai':
-    specifier: ^0.1.11
-    version: 0.1.11(typescript@5.0.4)
+    specifier: ^0.1.22
+    version: 0.1.22(typescript@5.0.4)
   '@upstash/redis':
     specifier: ^1.20.6
     version: 1.20.6
@@ -257,12 +257,11 @@ packages:
       '@jridgewell/sourcemap-codec': 1.4.14
     dev: false
 
-  /@kuskusapp/ai@0.1.11(typescript@5.0.4):
-    resolution: {integrity: sha512-i1SCNNg2mGreZ4Bbsiw/UjvatouEX1UUXE1+VkvHYzGW6PfU8oWogDCFmfLtdIJO0QbTGzd4IvJcryp2RsSDrA==}
+  /@kuskusapp/ai@0.1.22(typescript@5.0.4):
+    resolution: {integrity: sha512-jsp9KqNc9zYPmTXX0OOk/nfw8ca9YQUYEV9fWPz09sdwkS4eXT7lK3wcLRb1Cx4DM4UiVCrmPtudWFeBYtky4w==}
     peerDependencies:
       typescript: ^5.0.0
     dependencies:
-      dotenv: 16.0.3
       mdast-util-from-markdown: 1.3.0
       mdast-util-to-markdown: 1.5.0
       mdast-util-to-string: 3.2.0
@@ -460,11 +459,6 @@ packages:
     engines: {node: '>=8'}
     dependencies:
       path-type: 4.0.0
-    dev: false
-
-  /dotenv@16.0.3:
-    resolution: {integrity: sha512-7GO6HghkA5fYG9TYnNxi14/7K9f5occMlp3zXAuSxn7CKCxt9xbNWG7yF8hTCSUchlfWSe3uLmlPfigevRItzQ==}
-    engines: {node: '>=12'}
     dev: false
 
   /esbuild@0.17.19:

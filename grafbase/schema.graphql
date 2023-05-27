@@ -27,9 +27,16 @@ type SuggestedTask {
   note: String
 }
 
+type ExplainTaskPayload {
+  rawResponse: String
+  needPayment: Boolean
+  freeAiTaskUsed: Boolean
+}
+
 type User @model {
   # email: String! @unique # TODO: need to make it work with Hanko well
   suggestions(task: String!): SuggestionsPayload @resolver(name: "suggestions")
+  explain(task: String!): ExplainTaskPayload @resolver(name: "explain")
   stripe(plan: String!): StripePayload @resolver(name: "stripe")
   paidSubscriptionValidUntilDate: Date # of this form: 2023-05-12
   freeAiTasksAvailable: Int @default(value: 10) # times user can use gpt-3 AI suggestions for free

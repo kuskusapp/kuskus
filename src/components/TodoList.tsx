@@ -190,6 +190,14 @@ export default function TodoList() {
                 todoList.setMode(TodoListMode.Suggest)
               }
             },
+            // Explain task
+            E() {
+              const focused = todoList.focusedTodo()
+
+              if (focused && focused.type === "todo") {
+                todoList.setMode(TodoListMode.Explain)
+              }
+            },
           }
         : {
             Escape() {
@@ -222,16 +230,41 @@ export default function TodoList() {
         task: todo.title,
         userId: user.user.id!,
       })
-      if (res.user?.suggestions.freeAiTaskUsed) {
-        user.decrementAiTask()
-      }
       if (res.user?.suggestions.needPayment) {
         todoList.setMode(TodoListMode.Settings, { settingsState: "Upgrade" })
         return
       }
+      // TODO: decrement gpt-4 use
+      if (res.user?.suggestions.freeAiTaskUsed) {
+        user.decrementAiTask()
+      }
       // @ts-ignore
       const suggestions = res.user.suggestions.suggestedTasks.tasks
       return suggestions && suggestions.length ? suggestions : undefined
+    }
+  )
+
+  const [explanation] = createResource(
+    () => {
+      if (!todoList.inMode(TodoListMode.Explain)) return
+      const focused = todoList.focusedTodo()
+      return focused && focused.type === "todo" && focused
+    },
+    async (todo) => {
+      const res = await todoList.request(SuggestedTasksDocument, {
+        task: todo.title,
+        userId: user.user.id!,
+      })
+      if (res.user?.suggestions.needPayment) {
+        todoList.setMode(TodoListMode.Settings, { settingsState: "Upgrade" })
+        return
+      }
+      if (res.user?.suggestions.freeAiTaskUsed) {
+        user.decrementAiTask()
+      }
+      // @ts-ignore
+      const explanation = res.user.explain.rawResponse
+      return explanation
     }
   )
 

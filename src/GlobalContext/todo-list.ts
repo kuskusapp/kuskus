@@ -41,6 +41,7 @@ export enum TodoListMode {
   NewSubtask,
   Search,
   Suggest,
+  Explain,
   Settings,
   Filtered,
 }

@@ -154,6 +154,16 @@ query SuggestedTasks($task: String!, $userId: ID!) {
   }
 }
 
+query ExplainTask($task: String!, $userId: ID!) {
+  user(by: { id: $userId }) {
+    explain(task: $task) {
+      rawResponse
+      needPayment
+      freeAiTaskUsed
+    }
+  }
+}
+
 query Stripe($plan: String!, $userId: ID!) {
   user(by: { id: $userId }) {
     stripe(plan: $plan) {
