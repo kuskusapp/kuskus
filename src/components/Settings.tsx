@@ -642,6 +642,10 @@ export default function Settings() {
                           </div>
                           <div class="flex items-center gap-1">
                             <Icon name="Circle"></Icon>{" "}
+                            <div>Unlimited AI (GPT-3)</div>
+                          </div>
+                          <div class="flex items-center gap-1">
+                            <Icon name="Circle"></Icon>{" "}
                             <div>1500 state of the art AI tasks</div>
                           </div>
                         </div>
@@ -686,6 +690,10 @@ export default function Settings() {
                           <div class="flex items-center gap-1">
                             <Icon name="Circle"></Icon>{" "}
                             <div>Unlimited Todos</div>
+                          </div>
+                          <div class="flex items-center gap-1">
+                            <Icon name="Circle"></Icon>{" "}
+                            <div>Unlimited AI (GPT-3)</div>
                           </div>
                           <div class="flex items-center gap-1">
                             <Icon name="Circle"></Icon>{" "}
