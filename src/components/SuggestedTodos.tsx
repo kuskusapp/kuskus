@@ -80,11 +80,11 @@ export default function SuggestedTodos(props: {
     todoList.todosState.addSubtask(todoList.focusedTodoKey()!, {
       type: "subtask",
       title: suggestion.task,
+      note: suggestion.note,
       done: false,
       starred: false,
       priority: 0,
       dueDate: "",
-      note: "",
       parent: todoList.focusedTodo() as ClientTodo,
     })
     if (filteredSuggestions().every((s) => s.accepted === true)) {
