@@ -40,8 +40,8 @@ export enum TodoListMode {
   NewTodo,
   NewSubtask,
   Search,
-  Suggest,
-  Explain,
+  ShowSuggestions,
+  ShowExplanation,
   Settings,
   Filtered,
 }
@@ -77,6 +77,8 @@ export function createTodoListState(
 
   const [selectedTagInSidebar, setSelectedTagInSidebar] = createSignal("")
   const [newTag, setNewTag] = createSignal(false)
+
+  const [aiLoadingForTodo, setAiLoadingForTodo] = createSignal<TodoKey | null>() // can also be subtask
 
   const [focusedTodoKey, setFocusedTodoKey] = createSignal<TodoKey | null>(null)
   const isTodoFocused = createSelector<TodoKey | null, TodoKey>(focusedTodoKey)
@@ -219,6 +221,8 @@ export function createTodoListState(
     focusedTodo,
     currentlyUsedTagsWithCount,
     focusedTodoKey,
+    aiLoadingForTodo,
+    setAiLoadingForTodo,
     focusedTodoIndex,
     getTodoByKey,
     isTodoFocused,

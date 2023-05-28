@@ -44,6 +44,10 @@ export default function SuggestedTodos(props: {
 }) {
   const todoList = useTodoList()
 
+  onMount(() => {
+    console.log("mounted")
+  })
+
   const [focusedSuggestion, setFocusedSuggestion] = createSignal(0)
   const [filteredSuggestions, setFilteredSuggestions] = createSignal(
     props.suggestions.map((s) => {

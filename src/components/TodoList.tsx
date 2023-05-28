@@ -9,7 +9,9 @@ import {
   Switch,
   batch,
   createEffect,
+  createMemo,
   createResource,
+  untrack,
 } from "solid-js"
 import { isDev } from "solid-js/web"
 import { PageType, TodoListMode, useTodoList } from "~/GlobalContext/todo-list"
@@ -185,21 +187,28 @@ export default function TodoList() {
             F() {
               todoList.startLocalSearch()
             },
+            R() {
+              // console.log("run")
+              // todoList.aiLoadingForTodo() === todo.key
+              // console.log(todoList.focusedTodo())
+              // console.log("runs..")
+              console.log(suggestions())
+              // todoList.aiLoadingForTodo() ===
+              //   todo?.parent.key)
+            },
             // Suggestions
             A() {
-              const focused = todoList.focusedTodo()
-
-              if (focused && focused.type === "todo") {
-                todoList.setMode(TodoListMode.Suggest)
+              if (todoList.aiLoadingForTodo()) {
+                return
               }
+              todoList.setAiLoadingForTodo(todoList.focusedTodoKey())
             },
             // Explain task
             E() {
-              const focused = todoList.focusedTodo()
-
-              if (focused && focused.type === "todo") {
-                todoList.setMode(TodoListMode.Explain)
-              }
+              // const focused = todoList.focusedTodo()
+              // if (focused && focused.type === "todo") {
+              //   todoList.setMode(TodoListMode.Explain)
+              // }
             },
           }
         : {
@@ -223,38 +232,48 @@ export default function TodoList() {
   }
 
   createEffect(() => {
-    console.log(suggestions.state)
+    console.log(suggestions(), "suggestions ...")
   })
 
-  const delay = (ms) => {
+  const delay = (ms: any) => {
     return new Promise((resolve) => setTimeout(resolve, ms))
   }
 
   const [suggestions] = createResource(
     () => {
-      if (!todoList.inMode(TodoListMode.Suggest)) return
-      const focused = todoList.focusedTodo()
-      return focused && focused.type === "todo" && focused
+      let todo
+      // if (todoList.inMode(TodoListMode.ShowSuggestions)) return suggestions()
+      if (!todoList.aiLoadingForTodo()) return
+      untrack(() => {
+        const focused = todoList.focusedTodo()
+        todo = focused && focused.type === "todo" && focused
+      })
+      return todo
     },
     async (todo) => {
-      console.log("runs..")
-      await delay(5000)
-      return
+      // console.log(todo, "todo")
+      // console.log(todoList.flatTasks())
+      // await delay(2000)
       const res = await todoList.request(SuggestedTasksDocument, {
         task: todo.title,
         userId: user.user.id!,
       })
-      if (res.user?.suggestions.needPayment) {
-        todoList.setMode(TodoListMode.Settings, { settingsState: "Upgrade" })
-        return
-      }
-      // TODO: decrement gpt-4 use
-      if (res.user?.suggestions.freeAiTaskUsed) {
-        user.decrementAiTask()
-      }
+      // console.log(res, "res")
+      // if (res.user?.suggestions.needPayment) {
+      //   todoList.setMode(TodoListMode.Settings, { settingsState: "Upgrade" })
+      //   return
+      // }
+      // // TODO: decrement gpt-4 use
+      // if (res.user?.suggestions.freeAiTaskUsed) {
+      //   user.decrementAiTask()
+      // }
       // @ts-ignore
       const suggestions = res.user.suggestions.suggestedTasks.tasks
-      console.log(suggestions, "suggestions")
+      // console.log(suggestions, "suggestions")
+      console.log(suggestions && suggestions.length ? suggestions : undefined)
+
+      // todoList.setMode(TodoListMode.ShowSuggestions)
+      todoList.setAiLoadingForTodo(null)
       return suggestions && suggestions.length ? suggestions : undefined
     }
   )
@@ -372,8 +391,7 @@ export default function TodoList() {
                               todo={todo}
                               subtask={todo.type === "subtask"}
                               aiLoading={
-                                (suggestions.loading || explanation.loading) &&
-                                todoList.isTodoFocused(todo.key)
+                                todoList.aiLoadingForTodo() === todo.key
                               }
                             />
                           </Match>
@@ -392,8 +410,8 @@ export default function TodoList() {
               <Suspense>
                 <Show
                   when={
-                    todoList.inMode(TodoListMode.Suggest) &&
-                    suggestions.state === "ready" &&
+                    todoList.inMode(TodoListMode.ShowSuggestions) &&
+                    todoList.aiLoadingForTodo() === null &&
                     suggestions()
                   }
                 >
@@ -403,8 +421,7 @@ export default function TodoList() {
                 </Show>
                 <Show
                   when={
-                    todoList.inMode(TodoListMode.Explain) &&
-                    suggestions.state === "ready" &&
+                    todoList.inMode(TodoListMode.ShowExplanation) &&
                     explanation()
                   }
                 >
