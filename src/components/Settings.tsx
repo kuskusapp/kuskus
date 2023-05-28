@@ -521,7 +521,11 @@ export default function Settings() {
                               plan: "normalMonth",
                               userId: user.user.id!,
                             })
-                            window.open(res.user?.stripe?.stripeCheckoutUrl)
+                            const stripeCheckout =
+                              res.user?.stripe?.stripeCheckoutUrl
+                            if (stripeCheckout) {
+                              window.location.href = stripeCheckout
+                            }
                           }
                         }}
                       >
@@ -566,7 +570,12 @@ export default function Settings() {
                             plan: "normalYear",
                             userId: user.user.id!,
                           })
-                          window.open(res.user?.stripe?.stripeCheckoutUrl)
+
+                          const stripeCheckout =
+                            res.user?.stripe?.stripeCheckoutUrl
+                          if (stripeCheckout) {
+                            window.location.href = stripeCheckout
+                          }
                         }}
                       >
                         <div class="flex items-center gap-2">
@@ -612,7 +621,12 @@ export default function Settings() {
                             plan: "proMonth",
                             userId: user.user.id!,
                           })
-                          window.open(res.user?.stripe?.stripeCheckoutUrl)
+
+                          const stripeCheckout =
+                            res.user?.stripe?.stripeCheckoutUrl
+                          if (stripeCheckout) {
+                            window.location.href = stripeCheckout
+                          }
                         }}
                       >
                         <div
@@ -649,11 +663,11 @@ export default function Settings() {
                             plan: "proYear",
                             userId: user.user.id!,
                           })
-                          if (res.user?.stripe?.stripeCheckoutUrl) {
-                            window.open(res.user?.stripe?.stripeCheckoutUrl)
-                            return
+                          const stripeCheckout =
+                            res.user?.stripe?.stripeCheckoutUrl
+                          if (stripeCheckout) {
+                            window.location.href = stripeCheckout
                           }
-                          // TODO: show error, say try again, something happened.
                         }}
                       >
                         <div
