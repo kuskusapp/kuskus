@@ -35,7 +35,8 @@ function SuggestedTodo(props: {
           {props.task.split(":")[1]}
         </div>
       </div>
-    </>
+      <div class="text-sm opacity-60">{props.note}</div>
+    </div>
   )
 }
 
@@ -85,11 +86,11 @@ export default function SuggestedTodos(props: {
     todoList.todosState.addSubtask(todoList.focusedTodoKey()!, {
       type: "subtask",
       title: suggestion.task,
+      note: suggestion.note,
       done: false,
       starred: false,
       priority: 0,
       dueDate: "",
-      note: "",
       parent: todoList.focusedTodo() as ClientTodo,
     })
     if (filteredSuggestions().every((s) => s.accepted === true)) {
