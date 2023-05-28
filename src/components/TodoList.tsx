@@ -57,7 +57,9 @@ export default function TodoList() {
 
   createEffect(() => {
     createShortcuts(
-      todoList.inMode(TodoListMode.Default) && !todoList.newTag()
+      todoList.inMode(TodoListMode.Default) ||
+        suggestions.state === "refreshing" ||
+        explanation.state === "refreshing"
         ? {
             // Edit focused todo
             Enter() {
@@ -220,6 +222,14 @@ export default function TodoList() {
     )
   }
 
+  createEffect(() => {
+    console.log(suggestions.state)
+  })
+
+  const delay = (ms) => {
+    return new Promise((resolve) => setTimeout(resolve, ms))
+  }
+
   const [suggestions] = createResource(
     () => {
       if (!todoList.inMode(TodoListMode.Suggest)) return
@@ -227,6 +237,9 @@ export default function TodoList() {
       return focused && focused.type === "todo" && focused
     },
     async (todo) => {
+      console.log("runs..")
+      await delay(5000)
+      return
       const res = await todoList.request(SuggestedTasksDocument, {
         task: todo.title,
         userId: user.user.id!,
@@ -241,6 +254,7 @@ export default function TodoList() {
       }
       // @ts-ignore
       const suggestions = res.user.suggestions.suggestedTasks.tasks
+      console.log(suggestions, "suggestions")
       return suggestions && suggestions.length ? suggestions : undefined
     }
   )
@@ -357,8 +371,8 @@ export default function TodoList() {
                             <Todo
                               todo={todo}
                               subtask={todo.type === "subtask"}
-                              loadingSuggestions={
-                                suggestions.loading &&
+                              aiLoading={
+                                (suggestions.loading || explanation.loading) &&
                                 todoList.isTodoFocused(todo.key)
                               }
                             />

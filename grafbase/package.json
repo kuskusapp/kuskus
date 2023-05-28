@@ -11,7 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "@chronark/zod-bird": "^0.0.3",
-    "@kuskusapp/ai": "^0.1.22",
+    "@kuskusapp/ai": "^0.1.23",
     "@upstash/redis": "^1.20.6",
     "stripe": "^12.7.0",
     "zod": "^3.21.4"

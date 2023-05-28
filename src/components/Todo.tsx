@@ -15,7 +15,7 @@ import ContextMenu from "./ContextMenu"
 export default function Todo(props: {
   todo: ClientTodo | ClientSubtask
   subtask: boolean
-  loadingSuggestions: boolean
+  aiLoading: boolean
 }) {
   const todoList = useTodoList()
   const [triggerAnimation, setTriggerAnimation] = createSignal(false)
@@ -120,7 +120,7 @@ export default function Todo(props: {
             style={{ "padding-right": "0.375rem" }}
             class="flex gap-3 items-center overflow-auto rounded-lg"
           >
-            {props.loadingSuggestions && <Loader />}
+            {props.aiLoading && <Loader />}
             <div class="opacity-50 " style={{ "font-size": "14.8px" }}>
               {props.todo?.dueDate && isToday(props.todo.dueDate)
                 ? "Today"
