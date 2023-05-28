@@ -33,6 +33,7 @@ function SuggestedTodo(props: {
       <div class="opacity-60 text-sm pl-5 text-start text-ellipsis">
         {props.task.split(":")[1]}
       </div>
+      <div class="text-sm opacity-60">{props.note}</div>
     </div>
   )
 }
@@ -168,6 +169,7 @@ export default function SuggestedTodos(props: {
           {filteredSuggestions().map((todo, index) => (
             <SuggestedTodo
               task={todo.task}
+              note={todo.note}
               isFocused={index === focusedSuggestion()}
               onClick={() => setFocusedSuggestion(index)}
               accepted={filteredSuggestions()[index].accepted}
