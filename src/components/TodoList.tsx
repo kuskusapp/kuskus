@@ -35,8 +35,8 @@ export default function TodoList() {
   const user = useUser()
 
   function setPrority(i: Priority) {
-    const focusedTodoValue = todoList.focusedTodoKey()
-    if (!focusedTodoValue) return
+    const focusedTodoKey = todoList.focusedTodoKey()
+    if (!focusedTodoKey) return
 
     // update subtask
     // TODO: does not work
@@ -50,8 +50,8 @@ export default function TodoList() {
       // )
     } else {
       // update task
-      todoList.todosState.updateTodo(focusedTodoValue, (todo) => ({
-        ...todo,
+      todoList.todosState.updateTodo(focusedTodoKey, (todo) => ({
+        title: todo.title,
         priority: i,
       }))
     }
@@ -367,6 +367,7 @@ export default function TodoList() {
                 >
                   <For each={todoList.flatTasks()}>
                     {(todo) => {
+                      // console.log("why no run...")
                       if (todo.type === "new-subtask") {
                         return <NewSubtask subtask={todo} />
                       }

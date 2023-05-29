@@ -36,7 +36,7 @@ function SuggestedTodo(props: {
         </div>
       </div>
       <div class="text-sm opacity-60">{props.note}</div>
-    </div>
+    </>
   )
 }
 

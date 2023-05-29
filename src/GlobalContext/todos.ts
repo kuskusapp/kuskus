@@ -244,6 +244,7 @@ export function createTodosState({ request }: { request: GrafbaseRequest }) {
       )
     },
     updateTodo: (key: TodoKey, setter: StoreSetter<ClientTodo, [number]>) => {
+      console.log(key)
       setTodos((t) => t.key === key, setter)
     },
     removeTodo: (key: TodoKey) => {

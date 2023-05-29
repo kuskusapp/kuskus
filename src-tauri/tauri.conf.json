@@ -43,10 +43,12 @@
     "windows": [
       {
         "fullscreen": false,
+        "maximized": true,
         "resizable": true,
-        "title": "KusKus",
+        "title": "",
         "width": 800,
-        "height": 600
+        "height": 600,
+        "titleBarStyle": "Overlay"
       }
     ]
   }

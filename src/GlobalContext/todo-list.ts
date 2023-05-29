@@ -143,8 +143,25 @@ export function createTodoListState(
     todosState.todos.filter(filterPredicateMap[activePage()]).sort(compareTodos)
   )
 
-  const flatTasks = createMemo(() =>
-    orderedTodos()
+  const flatTasks = createMemo((p) => {
+    // console.log(flatTasks(), "flat tasks before")
+    // console.log(p, "previous")
+    // console.log(
+    //   orderedTodos()
+    //     .map((t) => {
+    //       const list: (NewSubtask | ClientSubtask | ClientTodo)[] = [
+    //         t,
+    //         ...t.subtasks,
+    //       ]
+    //       const ns = getModeData(TodoListMode.NewSubtask)
+    //       if (ns?.parent === t.key) list.push(ns)
+    //       return list
+    //     })
+    //     .flat(),
+    //   "flat tasks after"
+    // )
+
+    return orderedTodos()
       .map((t) => {
         const list: (NewSubtask | ClientSubtask | ClientTodo)[] = [
           t,
@@ -155,7 +172,7 @@ export function createTodoListState(
         return list
       })
       .flat()
-  )
+  })
 
   // TODO: make sure memo runs no more than needed..
   // list containing all unique tag names used + the count
