@@ -27,10 +27,10 @@ g.query("webIndex", {
   args: {},
   returns: inline({
     public: inline({
-      field: g.boolean(),
+      labels: g.string().list(),
     }).optional(),
     auth: inline({
-      field: g.boolean(),
+      labels: g.string().list(),
     }).optional(),
   }),
   resolver: "web/index",

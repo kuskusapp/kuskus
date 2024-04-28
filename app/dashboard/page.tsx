@@ -1,24 +1,25 @@
 import { createClient } from "edgedb"
 import e from "@/dbschema/edgeql-js"
 
-import Items from "@/components/Items"
 import Link from "next/link"
+import Items from "@/components/Items"
 
 export default async function Home() {
   const client = createClient()
-
-  const itemsQuery = e.select(e.Item, (_item) => ({
-    id: true,
-    name: true,
-    created: true,
-    updated: true,
-    created_by: {
+  const items = await e
+    .select(e.Item, (_item) => ({
+      id: true,
       name: true,
-      email: true,
-    },
-  }))
+      created: true,
+      updated: true,
+      created_by: {
+        name: true,
+        email: true,
+      },
+    }))
+    .run(client)
 
-  const items = await itemsQuery.run(client)
+  console.log(items, "items")
 
   return (
     <>

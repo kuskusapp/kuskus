@@ -212,7 +212,7 @@ ${JSON.stringify(existingConfig, null, 2)}`,
         type: "input",
         name: "relyingPartyOrigin",
         message: "Enter the relying party origin:",
-        default: "http://localhost:3000",
+        default: "http://localhost:3001",
       },
     ])
     query += `
@@ -232,7 +232,7 @@ ${JSON.stringify(existingConfig, null, 2)}`,
         message: "Enter the redirect URL:",
         default:
           existingConfig.ui?.redirect_to ??
-          "http://localhost:3000/auth/builtin/callback",
+          "http://localhost:3001/auth/builtin/callback",
         required: true,
       },
       {
@@ -241,7 +241,7 @@ ${JSON.stringify(existingConfig, null, 2)}`,
         message: "Enter the redirect URL on signup:",
         default:
           existingConfig.ui?.redirect_to_on_signup ??
-          "http://localhost:3000/auth/builtin/callback?isSignUp=true",
+          "http://localhost:3001/auth/builtin/callback?isSignUp=true",
         required: false,
       },
       {

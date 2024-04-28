@@ -4,10 +4,10 @@ import Link from "next/link"
 import { IoIosSearch } from "react-icons/io"
 import { PiSignInThin } from "react-icons/pi"
 import NextSteps from "@/components/NextSteps"
-import { Image } from "@unpic/react"
 
 export default async function Home() {
-  // const session = auth.getSession()
+  const session = auth.getSession()
+  console.log(session, "session")
 
   return (
     <div>

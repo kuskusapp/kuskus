@@ -14,11 +14,11 @@
 export type Schema = {
   'Inline0': {
     __typename?: 'Inline0';
-    field: boolean;
+    labels: Array<string>;
   };
   'Inline1': {
     __typename?: 'Inline1';
-    field: boolean;
+    labels: Array<string>;
   };
   'Inline2': {
     __typename?: 'Inline2';

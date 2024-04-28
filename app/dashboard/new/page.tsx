@@ -7,11 +7,9 @@ import Link from "next/link"
 const addItem = async (name: string) => {
   "use server"
   const session = auth.getSession()
-
   const newItemQuery = e.insert(e.Item, {
     name,
   })
-
   newItemQuery.run(session.client)
 }
 
