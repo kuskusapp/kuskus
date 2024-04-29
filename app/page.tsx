@@ -3,7 +3,6 @@ import { auth } from "@/edgedb"
 import Link from "next/link"
 import { IoIosSearch } from "react-icons/io"
 import { PiSignInThin } from "react-icons/pi"
-import NextSteps from "@/components/NextSteps"
 
 export default async function Home() {
   const session = auth.getSession()
