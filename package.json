@@ -17,16 +17,17 @@
     "@heroicons/react": "^2.1.3",
     "@tailwindcss/forms": "^0.5.7",
     "edgedb": "^1.5.4",
+    "google-map-react": "^2.2.1",
     "next": "14.2.3",
     "react": "^18",
     "react-dom": "^18",
-    "watcher": "^2.3.1",
-    "react-icons": "^5.1.0"
+    "react-icons": "^5.1.0",
+    "watcher": "^2.3.1"
   },
   "devDependencies": {
-    "bun-types": "canary",
     "@edgedb/generate": "~0.5.3",
     "@eslint/eslintrc": "3.x",
+    "@grafbase/sdk": "^0.22.0",
     "@ngneat/falso": "^7.2.0",
     "@types/inquirer": "^9.0.7",
     "@types/node": "^20",
@@ -35,6 +36,7 @@
     "@typescript-eslint/eslint-plugin": "7.x",
     "@typescript-eslint/parser": "7.x",
     "autoprefixer": "^10.4.19",
+    "bun-types": "canary",
     "esbuild-runner": "^2.2.2",
     "eslint": "9.x",
     "eslint-config-next": "14.2.3",
@@ -43,8 +45,7 @@
     "postcss": "^8",
     "prettier": "3.x",
     "tailwindcss": "^3.4.3",
-    "typescript": "^5",
-    "@grafbase/sdk": "^0.22.0"
+    "typescript": "^5"
   },
   "prettier": {
     "semi": false

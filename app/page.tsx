@@ -1,12 +1,13 @@
-import React, { useRef } from "react"
-import { auth } from "@/edgedb"
+"use client"
+import React, { useRef, useEffect, useState } from "react"
+// import { auth } from "@/edgedb"
 import Link from "next/link"
 import { IoIosSearch } from "react-icons/io"
 import { PiSignInThin } from "react-icons/pi"
 
-export default async function Home() {
-  const session = auth.getSession()
-  console.log(session, "session")
+export default function Home() {
+  // const session = auth.getSession()
+  const [inputFocused, setInputFocused] = useState(false)
 
   return (
     <div>
@@ -19,7 +20,8 @@ export default async function Home() {
             <>
               {/* {!signedIn ? ( */}
               <Link
-                href={auth.getBuiltinUIUrl()}
+                // href={auth.getBuiltinUIUrl()}
+                href=".."
                 className="text-sm font-semibold leading-6 text-gray-800"
               >
                 <button className="before:ease relative overflow-hidden bg-neutral-700 px-4 py-2 rounded-full text-white flex flex-row justify-center items-center font-light shadow-2xl transition-all before:absolute before:right-0 before:top-0 before:h-12 before:w-6 before:translate-x-12 before:rotate-6 before:bg-white before:opacity-10 before:duration-700 hover:shadow-gray-800 hover:before:-translate-x-40">
@@ -29,7 +31,8 @@ export default async function Home() {
               </Link>
               {/* ) : ( */}
               <Link
-                href={auth.getBuiltinUISignUpUrl()}
+                // href={auth.getBuiltinUISignUpUrl()}
+                href=".."
                 className="text-sm font-semibold leading-6 text-gray-900"
               >
                 <button className="before:ease relative overflow-hidden bg-black px-4 py-2 rounded-full text-white flex flex-row justify-center items-center font-light shadow-2xl transition-all before:absolute before:right-0 before:top-0 before:h-12 before:w-6 before:translate-x-12 before:rotate-6 before:bg-white before:opacity-10 before:duration-700 hover:shadow-gray-800 hover:before:-translate-x-40 border border-white border-opacity-20">
@@ -82,24 +85,27 @@ export default async function Home() {
               KusKus
             </h1>
             <p className="text-xl font-light text-white text-opacity-45 mt-5 text-center">
-              Enhance your dining experience with our user-friendly app that
-              allows you to read and write reviews for dishes at local eateries,
-              <span className="text-white">
-                {" "}
-                helping you make informed dining choices every time
+              Share and rate food spots in just a few clicks.
+              <span className="text-white text-opacity-45 display: block">
+                Your guide to gastronomic gems nearby -
+              </span>
+              <span className="text-white display: block">
+                Discover new flavors every day!
               </span>
             </p>
           </div>
           <div className="relative h-10 w-350">
             <IoIosSearch
               className="absolute right-0 mr-3 text-white justify-center"
-              size={18}
+              size={inputFocused ? 21 : 18}
               style={{ top: "50%", transform: "translateY(-50%)" }}
             />
             <input
-              className="peer w-full h-full bg-transparent text-white font-sans font-normal outline outline-0 focus:outline-0 disabled:bg-blue-gray-50 disabled:border-0 transition-all placeholder-shown:border placeholder-shown:border-white placeholder-shown:border-t-white border focus:border-2 border-t-transparent focus:border-t-transparent text-sm px-3 py-2.5 rounded-[7px] border-white focus:border-white"
+              className="peer w-full h-full justify-center bg-transparent text-white font-sans font-normal outline-0 focus:outline-0 disabled:bg-blue-gray-50 disabled:border-0 transition-all placeholder-shown:border placeholder-shown:border-white placeholder-shown:border-t-white border focus:border-2 border-t-transparent focus:border-t-transparent text-sm px-3 py-2.5 rounded-[7px] border-white focus:border-white"
               placeholder=" "
-              style={{ width: "500px", height: "50px" }}
+              style={{ width: "500px", padding: "1.5rem 2rem" }}
+              onFocus={() => setInputFocused(true)}
+              onBlur={() => setInputFocused(false)}
             />
             <label className="text-white flex w-full h-full select-none pointer-events-none absolute left-0 font-normal !overflow-visible truncate peer-placeholder-shown:text-white leading-tight peer-focus:leading-tight peer-disabled:text-transparent peer-disabled:peer-placeholder-shown:text-white transition-all -top-1.5 peer-placeholder-shown:text-sm text-[11px] peer-focus:text-[11px] before:content[' '] before:block before:box-border before:w-2.5 before:h-1.5 before:mt-[6.5px] before:mr-1 peer-placeholder-shown:before:border-transparent before:rounded-tl-md before:border-t peer-focus:before:border-t-2 before:border-l peer-focus:before:border-l-2 before:pointer-events-none before:transition-all peer-disabled:before:border-transparent after:content[' '] after:block after:flex-grow after:box-border after:w-2.5 after:h-1.5 after:mt-[6.5px] after:ml-1 peer-placeholder-shown:after:border-transparent after:rounded-tr-md after:border-t peer-focus:after:border-t-2 after:border-r peer-focus:after:border-r-2 after:pointer-events-none after:transition-all peer-disabled:after:border-transparent peer-placeholder-shown:leading-[3.75] text-white peer-focus:text-white before:border-white peer-focus:before:!border-white after:border-white peer-focus:after:!border-white">
               Enter the name of the dish or restaurant...
@@ -127,8 +133,8 @@ export default async function Home() {
           </div>
         </div>
         <div className="mt-5">
-          <h2 className="text-m text-left text-2xl font-bold text-black mb-5 ml-10">
-            Just for you
+          <h2 className="text-m text-left text-2xl font-bold text-black mb-5">
+            Spots near you
           </h2>
           <div className="flex flex-row space-x-7"></div>
         </div>
