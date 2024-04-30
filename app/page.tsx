@@ -2,7 +2,7 @@
 import React, { useRef, useEffect, useState } from "react"
 // import { auth } from "@/edgedb"
 import Link from "next/link"
-import { IoIosSearch } from "react-icons/io"
+import { IoIosSearch, IoIosArrowForward, IoIosArrowDown } from "react-icons/io"
 import { PiSignInThin } from "react-icons/pi"
 
 export default function Home() {
@@ -11,14 +11,19 @@ export default function Home() {
 
   return (
     <div>
-      <header className="absolute inset-x-0 top-0 z-50 py-5 bg-black">
+      <header className="absolute inset-x-0 top-0 z-50 mx-10 py-5">
         <nav
           className="flex items-center justify-betwween p-2 lg:px-8"
           aria-label="Global"
         >
           <div className="flex flex-1 justify-end space-x-2">
             <>
-              {/* {!signedIn ? ( */}
+              <div className="absolute left-10 flex flex-row space-x-7">
+                {" "}
+                <h3>KusKus</h3>
+                <h3>Explore</h3>
+                <h3>About</h3>
+              </div>
               <Link
                 // href={auth.getBuiltinUIUrl()}
                 href=".."
@@ -63,80 +68,35 @@ export default function Home() {
       </header>
       <main className="flex flex-col items-center mt-20 h-screen">
         <div
-          style={{
-            backgroundImage: `url("https://images.unsplash.com/photo-1499028344343-cd173ffc68a9?q=80&w=3270&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D")`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            backgroundRepeat: "no-repeat",
-            minHeight: "600px",
-            width: "100%",
-            zIndex: 1,
-            flexShrink: 0,
-            alignItems: "center",
-            display: "flex",
-            flexDirection: "column",
-          }}
+          className="justify-center flex flex-col mt-5 mb-10"
+          style={{ maxWidth: "40em" }}
         >
-          <div
-            className="justify-center flex flex-col mt-5 mb-10"
-            style={{ maxWidth: "40em" }}
-          >
-            <h1 className="text-7xl font-bold text-white mb-3 text-center">
-              KusKus
-            </h1>
-            <p className="text-xl font-light text-white text-opacity-45 mt-5 text-center">
-              Share and rate food spots in just a few clicks.
-              <span className="text-white text-opacity-45 display: block">
-                Your guide to gastronomic gems nearby -
-              </span>
-              <span className="text-white display: block">
-                Discover new flavors every day!
-              </span>
-            </p>
-          </div>
-          <div className="relative h-10 w-350">
-            <IoIosSearch
-              className="absolute right-0 mr-3 text-white justify-center"
-              size={inputFocused ? 21 : 18}
-              style={{ top: "50%", transform: "translateY(-50%)" }}
-            />
-            <input
-              className="peer w-full h-full justify-center bg-transparent text-white font-sans font-normal outline-0 focus:outline-0 disabled:bg-blue-gray-50 disabled:border-0 transition-all placeholder-shown:border placeholder-shown:border-white placeholder-shown:border-t-white border focus:border-2 border-t-transparent focus:border-t-transparent text-sm px-3 py-2.5 rounded-[7px] border-white focus:border-white"
-              placeholder=" "
-              style={{ width: "500px", padding: "1.5rem 2rem" }}
-              onFocus={() => setInputFocused(true)}
-              onBlur={() => setInputFocused(false)}
-            />
-            <label className="text-white flex w-full h-full select-none pointer-events-none absolute left-0 font-normal !overflow-visible truncate peer-placeholder-shown:text-white leading-tight peer-focus:leading-tight peer-disabled:text-transparent peer-disabled:peer-placeholder-shown:text-white transition-all -top-1.5 peer-placeholder-shown:text-sm text-[11px] peer-focus:text-[11px] before:content[' '] before:block before:box-border before:w-2.5 before:h-1.5 before:mt-[6.5px] before:mr-1 peer-placeholder-shown:before:border-transparent before:rounded-tl-md before:border-t peer-focus:before:border-t-2 before:border-l peer-focus:before:border-l-2 before:pointer-events-none before:transition-all peer-disabled:before:border-transparent after:content[' '] after:block after:flex-grow after:box-border after:w-2.5 after:h-1.5 after:mt-[6.5px] after:ml-1 peer-placeholder-shown:after:border-transparent after:rounded-tr-md after:border-t peer-focus:after:border-t-2 after:border-r peer-focus:after:border-r-2 after:pointer-events-none after:transition-all peer-disabled:after:border-transparent peer-placeholder-shown:leading-[3.75] text-white peer-focus:text-white before:border-white peer-focus:before:!border-white after:border-white peer-focus:after:!border-white">
-              Enter the name of the dish or restaurant...
-            </label>
-          </div>
-          <div className="mt-5">
-            <h2 className="text-2xl font-bold text-white mt-7 text-center">
-              What's your favorite cuisine?
-            </h2>
-          </div>
-          <div className="flex flex-row mt-10">
-            {["asian", "american", "chinese", "italian", "mexican", "thai"].map(
-              (item) => (
-                <button
-                  key={item}
-                  className=" text-black bg-white hover:bg-black hover:text-white font-light text-center border border-black border-opacity-40 p-4 mx-2 rounded-full"
-                  style={{
-                    transition: "background-color 0.5s ease, color 0.5s ease",
-                  }}
-                >
-                  {item.toUpperCase()}
-                </button>
-              ),
-            )}
-          </div>
+          <h1 className="text-6xl font-m text-black mb-3 text-center">
+            Share and rate food
+          </h1>
+          <p className="text-xl font-light text-black text-opacity-45 mt-5 text-center">
+            KusKus is community for food lovers,
+            <span className="text-black display: block">
+              who love to see new places and share them
+            </span>
+          </p>
         </div>
-        <div className="mt-5">
-          <h2 className="text-m text-left text-2xl font-bold text-black mb-5">
-            Spots near you
-          </h2>
-          <div className="flex flex-row space-x-7"></div>
+        <div className="relative h-10">
+          <IoIosSearch
+            className="absolute right-0 mr-3 text-black justify-center"
+            size={inputFocused ? 21 : 18}
+            style={{ top: "50%", transform: "translateY(-50%)" }}
+          />
+          <input
+            className="peer w-full h-full justify-center bg-transparent text-black font-sans font-normal outline-0 focus:outline-0 disabled:bg-blue-gray-50 disabled:border-0 transition-all placeholder-shown:border placeholder-shown:border-black placeholder-shown:border-t-white border focus:border-2 border-t-transparent focus:border-t-transparent text-sm px-3 py-2.5 rounded-[7px] border-black focus:border-black"
+            placeholder=" "
+            style={{ width: "65em", padding: "1.5rem 2rem" }}
+            onFocus={() => setInputFocused(true)}
+            onBlur={() => setInputFocused(false)}
+          />
+          <label className="text-black flex w-full h-full select-none pointer-events-none absolute left-0 font-normal !overflow-visible truncate peer-placeholder-shown:text-black leading-tight peer-focus:leading-tight peer-disabled:text-transparent peer-disabled:peer-placeholder-shown:text-black transition-all -top-1.5 peer-placeholder-shown:text-sm text-[11px] peer-focus:text-[11px] before:content[' '] before:block before:box-border before:w-2.5 before:h-1.5 before:mt-[6.5px] before:mr-1 peer-placeholder-shown:before:border-transparent before:rounded-tl-md before:border-t peer-focus:before:border-t-2 before:border-l peer-focus:before:border-l-2 before:pointer-events-none before:transition-all peer-disabled:before:border-transparent after:content[' '] after:block after:flex-grow after:box-border after:w-2.5 after:h-1.5 after:mt-[6.5px] after:ml-1 peer-placeholder-shown:after:border-transparent after:rounded-tr-md after:border-t peer-focus:after:border-t-2 after:border-r peer-focus:after:border-r-2 after:pointer-events-none after:transition-all peer-disabled:after:border-transparent peer-placeholder-shown:leading-[3.75] text-black peer-focus:text-black before:border-black peer-focus:before:!border-black after:border-black peer-focus:after:!border-black">
+            Enter name of dish or restaurant
+          </label>
         </div>
       </main>
     </div>
