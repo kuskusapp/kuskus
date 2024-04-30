@@ -8,6 +8,21 @@ import { PiSignInThin } from "react-icons/pi"
 export default function Home() {
   // const session = auth.getSession()
   const [inputFocused, setInputFocused] = useState(false)
+  const [hoveredDish, setHoveredDish] = useState<number | null>(null)
+
+  const dishes = [
+    "Coffee",
+    "Smoothie",
+    "Pasta",
+    "Ramen",
+    "Tacos",
+    "Steak",
+    "Curry",
+    "Pizza",
+    "Sushi",
+    "Burger",
+    "Salad",
+  ]
 
   return (
     <div>
@@ -74,29 +89,49 @@ export default function Home() {
           <h1 className="text-6xl font-m text-black mb-3 text-center">
             Share and rate food
           </h1>
-          <p className="text-xl font-light text-black text-opacity-45 mt-5 text-center">
+          <p className="text-xl font-light text-black text-opacity-50 mt-5 text-center">
             KusKus is community for food lovers,
-            <span className="text-black display: block">
+            <span className="display: block">
               who love to see new places and share them
             </span>
           </p>
         </div>
-        <div className="relative h-10">
+        <div className="relative flex items-center justify-center h-10">
           <IoIosSearch
-            className="absolute right-0 mr-3 text-black justify-center"
-            size={inputFocused ? 21 : 18}
+            className="absolute left-0 ml-3 text-black"
+            size={inputFocused ? 22 : 18}
             style={{ top: "50%", transform: "translateY(-50%)" }}
           />
           <input
-            className="peer w-full h-full justify-center bg-transparent text-black font-sans font-normal outline-0 focus:outline-0 disabled:bg-blue-gray-50 disabled:border-0 transition-all placeholder-shown:border placeholder-shown:border-black placeholder-shown:border-t-white border focus:border-2 border-t-transparent focus:border-t-transparent text-sm px-3 py-2.5 rounded-[7px] border-black focus:border-black"
+            className="border border-neutral-500 rounded-full pl-10 pr-36 py-3"
             placeholder=" "
-            style={{ width: "65em", padding: "1.5rem 2rem" }}
+            style={{ width: "50em" }}
             onFocus={() => setInputFocused(true)}
             onBlur={() => setInputFocused(false)}
           />
-          <label className="text-black flex w-full h-full select-none pointer-events-none absolute left-0 font-normal !overflow-visible truncate peer-placeholder-shown:text-black leading-tight peer-focus:leading-tight peer-disabled:text-transparent peer-disabled:peer-placeholder-shown:text-black transition-all -top-1.5 peer-placeholder-shown:text-sm text-[11px] peer-focus:text-[11px] before:content[' '] before:block before:box-border before:w-2.5 before:h-1.5 before:mt-[6.5px] before:mr-1 peer-placeholder-shown:before:border-transparent before:rounded-tl-md before:border-t peer-focus:before:border-t-2 before:border-l peer-focus:before:border-l-2 before:pointer-events-none before:transition-all peer-disabled:before:border-transparent after:content[' '] after:block after:flex-grow after:box-border after:w-2.5 after:h-1.5 after:mt-[6.5px] after:ml-1 peer-placeholder-shown:after:border-transparent after:rounded-tr-md after:border-t peer-focus:after:border-t-2 after:border-r peer-focus:after:border-r-2 after:pointer-events-none after:transition-all peer-disabled:after:border-transparent peer-placeholder-shown:leading-[3.75] text-black peer-focus:text-black before:border-black peer-focus:before:!border-black after:border-black peer-focus:after:!border-black">
-            Enter name of dish or restaurant
-          </label>
+          <button
+            className="absolute right-0 mr-1 px-4 py-2 rounded-full text-white bg-blue-400 hover:bg-blue-600 focus:outline-none focus:ring"
+            style={{ top: "50%", transform: "translateY(-50%)" }}
+          >
+            or find places near you
+          </button>
+        </div>
+        <div className="flex flex-row mt-10">
+          {dishes.map((dish, index) => (
+            <button
+              key={index}
+              className="bg-transparent border border-black rounded-full px-4 py-2 m-1 hover:bg-lime-200 hover:-rotate-3 transition-transform duration-600 ease-in-out relative overflow-hidden flex items-center"
+              onMouseEnter={() => setHoveredDish(index)}
+              onMouseLeave={() => setHoveredDish(null)}
+            >
+              {dish}
+              <span
+                className={`absolute mr-1 right-0 transition-opacity duration-700 ease-in-out hover:rotate-180 ${hoveredDish === index ? "opacity-100" : "opacity-0"}`}
+              >
+                ?
+              </span>
+            </button>
+          ))}
         </div>
       </main>
     </div>
