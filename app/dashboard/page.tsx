@@ -1,36 +1,24 @@
 import e from "@/dbschema/edgeql-js"
-import { createClient } from "edgedb"
 import { auth } from "@/edgedb"
 
 export default async function Home() {
-  const client = createClient()
-  const session = auth.getSession()
+  let session = auth.getSession()
+  const client = session.client
+  const authenticated = await session.isSignedIn()
+
   let authData
   let publicData
-  if (session.authToken) {
+
+  try {
     authData = await e
       .select(e.Item, (_item) => ({
         id: true,
-        name: true,
-        created: true,
-        updated: true,
-        created_by: {
-          name: true,
-          email: true,
-        },
       }))
       .run(client)
-  } else {
+  } catch (error) {
     publicData = await e
       .select(e.Item, (_item) => ({
-        id: true,
         name: true,
-        created: true,
-        updated: true,
-        created_by: {
-          name: true,
-          email: true,
-        },
       }))
       .run(client)
   }
