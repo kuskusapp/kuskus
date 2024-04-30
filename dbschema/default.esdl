@@ -20,6 +20,7 @@ module default {
     bio: str;
 
     multi followingPlaces: Place;
+    multi createdPosts: Post;
 
     # TODO: should be geo location (coordinates)
     # location: str;

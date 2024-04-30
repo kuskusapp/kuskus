@@ -1,5 +1,5 @@
 import e from "@/dbschema/edgeql-js"
-import { auth } from "@/edgedb"
+import { auth } from "@/edgedb-next-client"
 
 export default async function Profile(props: any) {
   let session = auth.getSession()
@@ -11,13 +11,15 @@ export default async function Profile(props: any) {
 
   if (authenticated) {
     authData = await e
-      .select(e.Item, (_item) => ({
-        id: true,
+      .select(e.Post, (post) => ({
+        name: true,
+        photoUrl: true,
+        filter: e.op(post.created_by, "?=", e.global.current_user),
       }))
       .run(client)
   } else {
     publicData = await e
-      .select(e.Item, (_item) => ({
+      .select(e.Post, (post) => ({
         name: true,
       }))
       .run(client)

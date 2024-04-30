@@ -1,4 +1,6 @@
-const email = process.env.email!
+import { createPost } from "@/edgedb/crud/mutations"
+
+// const email = process.env.email!
 
 async function seed() {
   // checkSeedDbConnection()
@@ -25,17 +27,20 @@ async function seed() {
   }
 }
 
-// async function base() {
-// 	await deleteUser(email)
-// 	await createUser(process.env.email!)
+async function web() {
+  await createPost(
+    {
+      photoUrl: "https://avatars.githubusercontent.com/u/6391776?v=4",
+      description: "profile image",
+    },
+    "d6baa570-049a-11ef-b969-074fde013f53",
+  )
+}
+
+// function checkSeedDbConnection() {
+//   if (process.env.EDGEDB_DATABASE !== "seed") {
+//     throw new Error("Seed db connection not set")
+//   }
 // }
 
-async function web() {
-  // await base()
-}
-
-function checkSeedDbConnection() {
-  if (process.env.EDGEDB_DATABASE !== "seed") {
-    throw new Error("Seed db connection not set")
-  }
-}
+await seed()
