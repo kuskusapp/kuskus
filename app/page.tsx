@@ -2,12 +2,13 @@
 import React, { useRef, useEffect, useState } from "react"
 // import { auth } from "@/edgedb"
 import Link from "next/link"
-import { IoIosSearch, IoIosArrowForward, IoIosArrowDown } from "react-icons/io"
+import { IoIosSearch, IoIosArrowUp, IoIosArrowDown } from "react-icons/io"
 import { PiSignInThin } from "react-icons/pi"
 
 export default function Home() {
   // const session = auth.getSession()
   const [inputFocused, setInputFocused] = useState(false)
+  const [activeItem, setActiveItem] = useState<string | null>(null)
   const [hoveredDish, setHoveredDish] = useState<number | null>(null)
 
   const dishes = [
@@ -24,6 +25,12 @@ export default function Home() {
     "Salad",
   ]
 
+  const menuItems = [
+    { name: "KusKus", key: "kusKus" },
+    { name: "Explore", key: "explore" },
+    { name: "About", key: "about" },
+  ]
+
   return (
     <div>
       <header className="absolute inset-x-0 top-0 z-50 mx-10 py-5">
@@ -33,18 +40,30 @@ export default function Home() {
         >
           <div className="flex flex-1 justify-end space-x-2">
             <>
-              <div className="absolute left-10 flex flex-row space-x-7">
-                {" "}
-                <h3>KusKus</h3>
-                <h3>Explore</h3>
-                <h3>About</h3>
+              <div className="absolute left-10 flex flex-row space-x-5">
+                {menuItems.map((item) => (
+                  <div
+                    key={item.key}
+                    className="flex items-center space-x-2"
+                    onClick={() =>
+                      setActiveItem(item.key === activeItem ? null : item.key)
+                    }
+                  >
+                    <h3>{item.name}</h3>
+                    {activeItem === item.key ? (
+                      <IoIosArrowUp />
+                    ) : (
+                      <IoIosArrowDown />
+                    )}
+                  </div>
+                ))}
               </div>
               <Link
                 // href={auth.getBuiltinUIUrl()}
                 href=".."
                 className="text-sm font-semibold leading-6 text-gray-800"
               >
-                <button className="before:ease relative overflow-hidden bg-neutral-700 px-4 py-2 rounded-full text-white flex flex-row justify-center items-center font-light shadow-2xl transition-all before:absolute before:right-0 before:top-0 before:h-12 before:w-6 before:translate-x-12 before:rotate-6 before:bg-white before:opacity-10 before:duration-700 hover:shadow-gray-800 hover:before:-translate-x-40">
+                <button className="before:ease relative overflow-hidden bg-white px-4 py-2 rounded-full text-black flex flex-row justify-center items-center font-light transition-all before:absolute before:right-0 before:top-0 before:h-12 before:w-6 before:translate-x-12 before:rotate-6 before:bg-gray-500 before:opacity-10 before:duration-700 hover:shadow-gray-800 hover:before:-translate-x-40 border border-black">
                   <PiSignInThin size={20} className="mr-1" />
                   Sign in
                 </button>
@@ -55,7 +74,7 @@ export default function Home() {
                 href=".."
                 className="text-sm font-semibold leading-6 text-gray-900"
               >
-                <button className="before:ease relative overflow-hidden bg-black px-4 py-2 rounded-full text-white flex flex-row justify-center items-center font-light shadow-2xl transition-all before:absolute before:right-0 before:top-0 before:h-12 before:w-6 before:translate-x-12 before:rotate-6 before:bg-white before:opacity-10 before:duration-700 hover:shadow-gray-800 hover:before:-translate-x-40 border border-white border-opacity-20">
+                <button className="before:ease relative overflow-hidden bg-black px-4 py-2 rounded-full text-white flex flex-row justify-center items-center font-light transition-all before:absolute before:right-0 before:top-0 before:h-12 before:w-6 before:translate-x-12 before:rotate-6 before:bg-white before:opacity-20 before:duration-700 hover:shadow-gray-800 hover:before:-translate-x-40 border border-white border-opacity-20">
                   <svg
                     aria-hidden="true"
                     focusable="false"
@@ -104,15 +123,40 @@ export default function Home() {
           />
           <input
             className="border border-neutral-500 rounded-full pl-10 pr-36 py-3"
-            placeholder=" "
+            placeholder="Search for a place or a dish..."
             style={{ width: "50em" }}
             onFocus={() => setInputFocused(true)}
             onBlur={() => setInputFocused(false)}
           />
           <button
-            className="absolute right-0 mr-1 px-4 py-2 rounded-full text-white bg-blue-400 hover:bg-blue-600 focus:outline-none focus:ring"
+            className="absolute flex flex-row right-0 mr-1 px-4 py-2 rounded-full text-white bg-blue-400 hover:bg-blue-600 focus:outline-none focus:ring"
             style={{ top: "50%", transform: "translateY(-50%)" }}
           >
+            <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
+              <circle
+                cx="12"
+                cy="12"
+                r="7.25"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.5"
+              />
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.5"
+                d="M15.25 12C15.25 16.5 13.2426 19.25 12 19.25C10.7574 19.25 8.75 16.5 8.75 12C8.75 7.5 10.7574 4.75 12 4.75C13.2426 4.75 15.25 7.5 15.25 12Z"
+              />
+              <path
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.5"
+                d="M5 12H12H19"
+              />
+            </svg>
             or find places near you
           </button>
         </div>
@@ -120,13 +164,13 @@ export default function Home() {
           {dishes.map((dish, index) => (
             <button
               key={index}
-              className="bg-transparent border border-black rounded-full px-4 py-2 m-1 hover:bg-lime-200 hover:-rotate-3 transition-transform duration-600 ease-in-out relative overflow-hidden flex items-center"
+              className="bg-transparent border border-black rounded-full px-4 py-2 m-1 hover:bg-gray-200 hover:-rotate-3 transition-transform duration-600 ease-in-out relative overflow-hidden flex items-center"
               onMouseEnter={() => setHoveredDish(index)}
               onMouseLeave={() => setHoveredDish(null)}
             >
               {dish}
               <span
-                className={`absolute mr-1 right-0 transition-opacity duration-700 ease-in-out hover:rotate-180 ${hoveredDish === index ? "opacity-100" : "opacity-0"}`}
+                className={`absolute mr-2 right-0 transition-opacity duration-700 ease-in-out hover:rotate-180 ${hoveredDish === index ? "opacity-100" : "opacity-0"}`}
               >
                 ?
               </span>
