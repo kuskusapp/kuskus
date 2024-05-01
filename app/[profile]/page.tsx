@@ -1,5 +1,6 @@
 import e from "@/dbschema/edgeql-js"
 import { auth } from "@/edgedb-next-client"
+import { observable } from "@legendapp/state"
 
 export default async function Profile(props: any) {
   let session = auth.getSession()
@@ -8,6 +9,8 @@ export default async function Profile(props: any) {
 
   let authData
   let publicData
+  // const authData$ = observable()
+  // const publicData$ = observable()
 
   if (authenticated) {
     authData = await e

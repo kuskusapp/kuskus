@@ -39,3 +39,4 @@ dbschema/interfaces.ts
 # other
 .env
 pnpm-lock.yaml
+cli/run.ts
