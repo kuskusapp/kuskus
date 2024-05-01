@@ -17,9 +17,9 @@ export default async function DashboardLayout({
   const session = auth.getSession()
   const signedIn = await session.isSignedIn()
 
-  if (!signedIn) {
-    redirect(auth.getBuiltinUIUrl())
-  }
+  // if (!signedIn) {
+  //   redirect(auth.getBuiltinUIUrl())
+  // }
 
   return (
     <div className="min-h-full">

@@ -1,9 +1,44 @@
+import e from "@/dbschema/edgeql-js"
+import { auth } from "@/edgedb-next-client"
+
 export default async function Profile(props: any) {
+  let session = auth.getSession()
+  const client = session.client
+  const authenticated = await session.isSignedIn()
+
+  let authData
+  let publicData
+
+  if (authenticated) {
+    authData = await e
+      .select(e.Post, (post) => ({
+        name: true,
+        photoUrl: true,
+        filter: e.op(post.created_by, "?=", e.global.current_user),
+      }))
+      .run(client)
+  } else {
+    publicData = await e
+      .select(e.Post, (post) => ({
+        name: true,
+      }))
+      .run(client)
+  }
+
   return (
     <>
-      <header className="flex justify-between items-center pb-4">
-        Profile name is {props.params.profile}
-      </header>
+      {authData && (
+        <header className="flex justify-between items-center pb-4">
+          <div>Authenticated data:</div>
+          {JSON.stringify(authData)}
+        </header>
+      )}
+      {publicData && (
+        <header className="flex justify-between items-center pb-4">
+          <div>Public data:</div>
+          {JSON.stringify(publicData)}
+        </header>
+      )}
     </>
   )
 }

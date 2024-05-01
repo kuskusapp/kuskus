@@ -9,13 +9,13 @@ export default async function Home() {
   let authData
   let publicData
 
-  try {
+  if (authenticated) {
     authData = await e
       .select(e.Item, (_item) => ({
         id: true,
       }))
       .run(client)
-  } catch (error) {
+  } else {
     publicData = await e
       .select(e.Item, (_item) => ({
         name: true,
@@ -28,11 +28,13 @@ export default async function Home() {
       {authData && (
         <header className="flex justify-between items-center pb-4">
           <div>Authenticated data:</div>
+          {JSON.stringify(authData)}
         </header>
       )}
       {publicData && (
         <header className="flex justify-between items-center pb-4">
           <div>Public data:</div>
+          {JSON.stringify(publicData)}
         </header>
       )}
     </>
