@@ -8,6 +8,7 @@ body {
   background-color: white;
 }
 
+/* to hide the scroll bar in comments sidebar */
 .flex-grow::-webkit-scrollbar {
   display: none;
 }
