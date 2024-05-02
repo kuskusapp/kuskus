@@ -24,3 +24,25 @@ export async function profileAuth(
     }))
     .run(client)
 }
+
+export async function profilePublic(
+  userId?: string | null,
+  clientPassed?: edgedb.Executor,
+) {
+  const user = userId
+    ? e.cast(e.User, e.uuid(userId))
+    : e.select(e.global.current_user)
+
+  return await e
+    .select(user, (u) => ({
+      name: true,
+      bio: true,
+      place: true,
+      profilePhotoUrl: true,
+      createdPosts: {
+        photoUrl: true,
+        description: true,
+      },
+    }))
+    .run(client)
+}
