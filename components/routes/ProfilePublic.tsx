@@ -1,7 +1,9 @@
 "use client"
 
+import { profilePublicReturn } from "@/edgedb/crud/queries"
+
 interface Props {
-  data: any
+  data: profilePublicReturn
 }
 
 export default function ProfilePublic(props: Props) {
