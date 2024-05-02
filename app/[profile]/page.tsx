@@ -1,50 +1,50 @@
-"use client"
+// "use client"
+import { auth } from "@/edgedb-next-client"
 import Image from "next/image"
-import { useState } from "react"
-// import { profileAuth, profilePublic } from "@/edgedb/crud/queries"
+import { profileAuth, profilePublic } from "@/edgedb/crud/queries"
 
-export default function Profile(props: any) {
-  // let session = auth.getSession()
-  // const client = session.client
-  // const authenticated = await session.isSignedIn()
+export default async function Profile(props: any) {
+  let session = auth.getSession()
+  const client = session.client
+  const authenticated = await session.isSignedIn()
 
   let authData
   let publicData
 
-  // if (authenticated) {
-  //   authData = await profileAuth(null, client)
-  //   console.log(authData, "auth data")
-  // } else {
-  //   publicData = await profilePublic()
-  //   console.log(publicData, "public data")
+  if (authenticated) {
+    authData = await profileAuth(null, client)
+    console.log(authData, "auth data")
+  } else {
+    publicData = await profilePublic()
+    console.log(publicData, "public data")
+  }
+
+  // const tabs = ["Photos", "Places", "Lists", "Following", "Followers"]
+  // const [selectedTab, setSelectedTab] = useState<string>("Photos")
+  // const [following, SetFollowing] = useState<boolean>(false)
+  // const [postsState, setPostsState] = useState<{
+  //   [key: number]: { liked: boolean; fillColor: string; likesCount: number }
+  // }>({})
+
+  // const likePost = (index: number) => {
+  //   const newState = { ...postsState }
+  //   if (newState[index]) {
+  //     newState[index] = {
+  //       liked: !newState[index].liked,
+  //       fillColor: newState[index].liked ? "none" : "white",
+  //       likesCount: newState[index].liked
+  //         ? newState[index].likesCount - 1
+  //         : newState[index].likesCount + 1,
+  //     }
+  //   } else {
+  //     newState[index] = { liked: true, fillColor: "white", likesCount: 1 }
+  //   }
+  //   setPostsState(newState)
   // }
 
-  const tabs = ["Photos", "Places", "Lists", "Following", "Followers"]
-  const [selectedTab, setSelectedTab] = useState<string>("Photos")
-  const [following, SetFollowing] = useState<boolean>(false)
-  const [postsState, setPostsState] = useState<{
-    [key: number]: { liked: boolean; fillColor: string; likesCount: number }
-  }>({})
-
-  const likePost = (index: number) => {
-    const newState = { ...postsState }
-    if (newState[index]) {
-      newState[index] = {
-        liked: !newState[index].liked,
-        fillColor: newState[index].liked ? "none" : "white",
-        likesCount: newState[index].liked
-          ? newState[index].likesCount - 1
-          : newState[index].likesCount + 1,
-      }
-    } else {
-      newState[index] = { liked: true, fillColor: "white", likesCount: 1 }
-    }
-    setPostsState(newState)
-  }
-
-  const followUser = () => {
-    SetFollowing(!following)
-  }
+  // const followUser = () => {
+  //   SetFollowing(!following)
+  // }
 
   return (
     <>
@@ -67,7 +67,7 @@ export default function Profile(props: any) {
           {JSON.stringify(publicData)}
         </header>
       )}
-      <div className="bg-white grid grid-cols-3 p-7">
+      {/* <div className="bg-white grid grid-cols-3 p-7">
         <header className="col-span-1 pl-8">
           <div className="flex items-start">
             <img
@@ -226,7 +226,7 @@ export default function Profile(props: any) {
           {selectedTab === "Following" && <div></div>}
           {selectedTab === "Followers" && <div></div>}
         </main>
-      </div>
+      </div> */}
     </>
   )
 }
