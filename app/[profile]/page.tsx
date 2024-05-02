@@ -2,27 +2,19 @@ import ProfileAuth from "@/components/routes/ProfileAuth"
 import ProfilePublic from "@/components/routes/ProfilePublic"
 import { auth } from "@/edgedb-next-client"
 import { profileAuth, profilePublic } from "@/edgedb/crud/queries"
+import type { PageProps } from "./$types"
 
-export default async function Profile({
-  params,
-  searchParams,
-}: {
-  params: { slug: string }
-  searchParams?: { [key: string]: string | string[] | undefined }
-}) {
-  let session = auth.getSession()
+export default async function Profile({ params }: PageProps) {
+  const session = auth.getSession()
+
   const client = session.client
   const authenticated = await session.isSignedIn()
 
-  const authData = authenticated ? await profileAuth.run(client, {}) : null
-  const publicData = !authenticated
-    ? await profilePublic.run(client, params.profile)
-    : null
+  if (!authenticated) {
+    const data = await profilePublic.run(client, { username: params.profile })
+    return <ProfilePublic data={data} />
+  }
 
-  return (
-    <>
-      {authData && <ProfileAuth data={authData} />}
-      {publicData && <ProfilePublic data={publicData} />}
-    </>
-  )
+  const data = await profileAuth.run(client, {})
+  return <ProfileAuth data={data} />
 }

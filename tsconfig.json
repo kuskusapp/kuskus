@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "rootDirs": [".", ".next-types"],
     "target": "esnext",
     "module": "esnext",
     "moduleResolution": "bundler",
@@ -30,5 +31,5 @@
     ".next/types/**/*.ts",
     "**/*.(mts|ts)"
   ],
-  "exclude": ["node_modules"],
+  "exclude": ["node_modules"]
 }

@@ -40,3 +40,4 @@ dbschema/interfaces.ts
 .env
 pnpm-lock.yaml
 cli/run.ts
+.next-types
