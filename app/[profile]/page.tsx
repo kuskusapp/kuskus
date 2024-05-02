@@ -1,7 +1,6 @@
-// "use client"
 import { auth } from "@/edgedb-next-client"
-import Image from "next/image"
 import { profileAuth, profilePublic } from "@/edgedb/crud/queries"
+import Image from "next/image"
 
 export default async function Profile(props: any) {
   let session = auth.getSession()
@@ -12,11 +11,10 @@ export default async function Profile(props: any) {
   let publicData
 
   if (authenticated) {
-    authData = await profileAuth(null, client)
+    authData = await profileAuth(client)
     console.log(authData, "auth data")
   } else {
-    publicData = await profilePublic()
-    console.log(publicData, "public data")
+    publicData = await profilePublic(props.params.profile)
   }
 
   // const tabs = ["Photos", "Places", "Lists", "Following", "Followers"]
@@ -48,17 +46,10 @@ export default async function Profile(props: any) {
 
   return (
     <>
-      {/* testing queries */}
       {authData && (
         <header className="flex justify-between items-center pb-4">
           <div>Authenticated data:</div>
           {JSON.stringify(authData)}
-          <Image
-            src={"https://images.kuskus.app/github-profile"}
-            width={500}
-            height={500}
-            alt="Picture of the author"
-          />
         </header>
       )}
       {publicData && (

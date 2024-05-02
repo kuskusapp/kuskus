@@ -4,8 +4,8 @@ import { edgedb } from "@/dbschema/edgeql-js/imports"
 
 // https://discord.com/channels/841451783728529451/1235266238977150976 useful context in making the query
 export async function profileAuth(
+  client: edgedb.Executor,
   userId?: string | null,
-  clientPassed?: edgedb.Executor,
 ) {
   const user = userId
     ? e.cast(e.User, e.uuid(userId))
@@ -25,16 +25,10 @@ export async function profileAuth(
     .run(client)
 }
 
-export async function profilePublic(
-  userId?: string | null,
-  clientPassed?: edgedb.Executor,
-) {
-  const user = userId
-    ? e.cast(e.User, e.uuid(userId))
-    : e.select(e.global.current_user)
-
+export async function profilePublic(username: string) {
   return await e
-    .select(user, (u) => ({
+    .select(e.User, (u) => ({
+      filter: e.op(u.name, "=", username),
       name: true,
       bio: true,
       place: true,
