@@ -9,6 +9,12 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      scrollbarHide: {
+        "&::-webkit-scrollbar": {
+          display: "none",
+        },
+        "scrollbar-width": "none",
+      },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":

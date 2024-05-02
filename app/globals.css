@@ -7,3 +7,7 @@ body {
   height: 100%;
   background-color: white;
 }
+
+.flex-grow::-webkit-scrollbar {
+  display: none;
+}
