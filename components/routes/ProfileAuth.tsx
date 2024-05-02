@@ -45,9 +45,11 @@ export default observer(function ProfileAuth(props: Props) {
       <div className="bg-white grid grid-cols-3 p-7">
         <header className="col-span-1 pl-8">
           <div className="flex items-start">
-            <img
-              src="exampleimage.jpg"
+            <Image
+              src={local$.profilePhotoUrl.get()!}
               alt="avatar"
+              width={100}
+              height={100}
               className="rounded-full w-55 h-55 mb-5"
             />
             <div className="flex flex-col ml-4 space-y-2">
@@ -149,7 +151,6 @@ export default observer(function ProfileAuth(props: Props) {
               {local$.createdPosts.get()!.map((post, index) => (
                 <div key={index} className="relative aspect-square group">
                   <Image
-                    // src={"/black.png"}
                     src={post.photoUrl}
                     alt={`Photo ${index + 1}`}
                     width={300}
@@ -188,11 +189,12 @@ export default observer(function ProfileAuth(props: Props) {
           {selectedTab === "Places" && (
             <div className="flex flex-col">
               <div className="flex flex-row items-center">
-                <img
-                  src="black"
+                <Image
+                  // src="black"
+                  src={local$.profilePhotoUrl.get()!}
                   alt="avatar"
                   className="rounded-full w-50 h-50 mr-5 mb-5 z-10"
-                ></img>
+                ></Image>
                 <h4>place</h4>
               </div>
             </div>
