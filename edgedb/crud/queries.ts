@@ -4,11 +4,20 @@ import e, { type $infer } from "../../dbschema/edgeql-js"
 export const profileAuth = e.params(
   { userId: e.optional(e.uuid) },
   ({ userId }) => {
-    const user = e.op(e.cast(e.User, userId), "??", e.global.current_user)
+    // TODO: has bug https://discord.com/channels/841451783728529451/1235593775447937054/1235711795939774514
+    // const user = e.op(e.cast(e.User, userId), "??", e.global.current_user)
+    const user = e.op(
+      e.cast(e.User, userId),
+      "if",
+      e.op("exists", userId),
+      "else",
+      e.global.current_user,
+    )
     return e.select(user, () => ({
       name: true,
       bio: true,
       place: true,
+      displayName: true,
       profilePhotoUrl: true,
       createdPosts: {
         photoUrl: true,
