@@ -2,16 +2,25 @@ import { client } from "@/edgedb"
 import e from "../../dbschema/edgeql-js"
 import { edgedb } from "@/dbschema/edgeql-js/imports"
 
-// name, prettyName, city, description, [Posts]
+// https://discord.com/channels/841451783728529451/1235266238977150976 useful context in making the query
 export async function profileAuth(
   userId?: string | null,
   clientPassed?: edgedb.Executor,
 ) {
-  await e
-    .select(e.Post, (post) => ({
+  const user = userId
+    ? e.cast(e.User, e.uuid(userId))
+    : e.select(e.global.current_user)
+
+  return await e
+    .select(user, (u) => ({
       name: true,
-      photoUrl: true,
-      filter: e.op(post.created_by, "?=", e.cast(e.User, e.uuid(userUuid))),
+      bio: true,
+      place: true,
+      profilePhotoUrl: true,
+      createdPosts: {
+        photoUrl: true,
+        description: true,
+      },
     }))
     .run(client)
 }

@@ -1,6 +1,6 @@
 import e from "@/dbschema/edgeql-js"
 import { auth } from "@/edgedb-next-client"
-import { observable } from "@legendapp/state"
+import Image from "next/image"
 
 export default async function Profile(props: any) {
   let session = auth.getSession()
@@ -9,8 +9,6 @@ export default async function Profile(props: any) {
 
   let authData
   let publicData
-  // const authData$ = observable()
-  // const publicData$ = observable()
 
   if (authenticated) {
     authData = await e
@@ -34,6 +32,12 @@ export default async function Profile(props: any) {
         <header className="flex justify-between items-center pb-4">
           <div>Authenticated data:</div>
           {JSON.stringify(authData)}
+          <Image
+            src={"https://images.kuskus.app/github-profile"}
+            width={500}
+            height={500}
+            alt="Picture of the author"
+          />
         </header>
       )}
       {publicData && (

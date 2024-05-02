@@ -8,7 +8,10 @@
     "auth:setup": "pnpm esr password-auth-setup.ts",
     "generate:edgeql": "npx @edgedb/generate edgeql-js",
     "generate:interfaces": "npx @edgedb/generate interfaces",
-    "generate:all": "pnpm generate:edgeql && pnpm generate:interfaces"
+    "generate:all": "pnpm generate:edgeql && pnpm generate:interfaces",
+    "seed": "bun --watch cli/seed.ts",
+    "db:migrate": "edgedb migration create && edgedb migration apply && npx @edgedb/generate edgeql-js",
+    "cli": "bun --watch cli/run.ts"
   },
   "version": "0.1.0",
   "dependencies": {
@@ -17,6 +20,7 @@
     "@heroicons/react": "^2.1.3",
     "@legendapp/state": "^2.1.13",
     "@tailwindcss/forms": "^0.5.7",
+    "cloudflare-r2-edge": "^0.0.2",
     "edgedb": "^1.5.4",
     "next": "14.2.3",
     "react": "^18",

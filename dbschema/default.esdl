@@ -18,15 +18,23 @@ module default {
     email: str;
     displayName: str;
     bio: str;
+    # city or country
+    place: str;
 
-    multi followingPlaces: Place;
-    multi createdPosts: Post;
+
+    createdPosts := .<created_by[is Post];
+    # createdPosts := <created_by[is Post]
+
+    # createdPosts := .<created_by[is Post]
+    # multi followingPlaces: Place;
+    # multi createdPosts: Post;
+    # foll := .<created_by[is Post]
 
     # TODO: should be geo location (coordinates)
     # location: str;
 
     # url to photo
-    profilePhoto: str;
+    profilePhotoUrl: str;
 
     # TODO: check how
     # multi followingUsers: User;
@@ -57,11 +65,10 @@ module default {
     # url to photo
     profilePhoto: str;
   }
+  # kuskus.app/posts/{edgedb-post-uuid}
   type Post {
     # url to photo
     # TODO: in future, maybe Post can have multiple photos
-    # kuskus.app/posts/{name}
-    required name: str;
     required photoUrl: str;
     description: str;
     # TODO: add date created etc.
