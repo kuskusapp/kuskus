@@ -285,8 +285,12 @@ export default function Place(props: any) {
         </div>
         <div className="mt-2 mb-2 relative w-full">
           <textarea
-            className="form-input w-full pl-3 pr-10 border-none resize-none overflow-hidden"
-            style={{ minHeight: "40px" }}
+            className="w-full pl-3 pr-10 border-none resize-none overflow-hidden"
+            style={{
+              minHeight: "40px",
+              borderTop: "1px solid #ccc",
+              outline: "none",
+            }}
             placeholder="comment..."
             value={newComment}
             onChange={(event) =>
