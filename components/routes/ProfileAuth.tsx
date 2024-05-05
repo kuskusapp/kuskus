@@ -52,7 +52,6 @@ export default observer(function ProfileAuth(props: Props) {
               <Input
                 onChange={(e) => {
                   local$.bio.set(e.target.value)
-                  console.log(e.target.value, "value")
                   updateUserAction({ bio: e.target.value })
                 }}
               />

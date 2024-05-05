@@ -16,8 +16,10 @@ export const updateUserAction = actionClient
   .action(async ({ parsedInput: { bio, place, displayName } }) => {
     const session = auth.getSession()
     const client = session.client
-    await updateUser.run(client, { bio, place, displayName })
-
-    // TODO: consider better errors
-    return { failure: "Error with EdgeDB" }
+    try {
+      await updateUser.run(client, { bio, place, displayName })
+    } catch {
+      // TODO: consider better errors
+      return { failure: "Error with EdgeDB" }
+    }
   })
