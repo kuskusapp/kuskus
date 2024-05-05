@@ -2,7 +2,6 @@
 
 import { profileAuthReturn } from "@/edgedb/crud/queries"
 import { observer, useObservable } from "@legendapp/state/react"
-import { useState } from "react"
 import Image from "next/image"
 import { TextField, Label, Input } from "react-aria-components"
 import { updateUserAction } from "@/app/actions"
@@ -12,35 +11,40 @@ interface Props {
 }
 
 export default observer(function ProfileAuth(props: Props) {
-  const local$ = useObservable(props.data)
+  const server$ = useObservable(props.data)
+  const local$ = useObservable({
+    following: false,
+    tabs: ["Photos", "Places", "Lists", "Following", "Followers"],
+    selectedTab: "Photos",
+    postsState: { liked: true, fillColor: "", likesCount: 0 },
+  })
 
-  // TODO: move this into local$ where it makes sense
-  const [following, SetFollowing] = useState(false)
-  const tabs = ["Photos", "Places", "Lists", "Following", "Followers"]
-  const [selectedTab, setSelectedTab] = useState<string>("Photos")
-  const [postsState, setPostsState] = useState<{
-    [key: number]: { liked: boolean; fillColor: string; likesCount: number }
-  }>({})
+  // const [selectedTab, setSelectedTab] = useState<string>("Photos")
+  // const [postsState, setPostsState] = useState<{
+  //   [key: number]: { liked: boolean; fillColor: string; likesCount: number }
+  // }>({})
 
-  const followUser = () => {
-    // TODO: fix
-    // SetFollowing(!following)
-  }
-  const likePost = (index: number) => {
-    // const newState = { ...postsState }
-    // if (newState[index]) {
-    //   newState[index] = {
-    //     liked: !newState[index].liked,
-    //     fillColor: newState[index].liked ? "none" : "white",
-    //     likesCount: newState[index].liked
-    //       ? newState[index].likesCount - 1
-    //       : newState[index].likesCount + 1,
-    //   }
-    // } else {
-    //   newState[index] = { liked: true, fillColor: "white", likesCount: 1 }
-    // }
-    // setPostsState(newState)
-  }
+  // TODO: action
+  // const followUser = () => {
+  //   // TODO: fix
+  //   // SetFollowing(!following)
+  // }
+  // TODO: action
+  // const likePost = (index: number) => {
+  //   // const newState = { ...postsState }
+  //   // if (newState[index]) {
+  //   //   newState[index] = {
+  //   //     liked: !newState[index].liked,
+  //   //     fillColor: newState[index].liked ? "none" : "white",
+  //   //     likesCount: newState[index].liked
+  //   //       ? newState[index].likesCount - 1
+  //   //       : newState[index].likesCount + 1,
+  //   //   }
+  //   // } else {
+  //   //   newState[index] = { liked: true, fillColor: "white", likesCount: 1 }
+  //   // }
+  //   // setPostsState(newState)
+  // }
 
   return (
     <>
@@ -52,26 +56,31 @@ export default observer(function ProfileAuth(props: Props) {
               <Input
                 onChange={(e) => {
                   // TODO: rollback bio on error, and show error (maybe try again?) (keep optimistic updates)
-                  local$.bio.set(e.target.value)
+                  server$.bio.set(e.target.value)
+
                   updateUserAction({ bio: e.target.value })
                 }}
               />
             </TextField>
             <Image
-              src={local$.profilePhotoUrl.get()!}
+              src={server$.profilePhotoUrl.get()!}
               alt="avatar"
               width={100}
               height={100}
               className="rounded-full w-55 h-55 mb-5"
             />
             <div className="flex flex-col ml-4 space-y-2">
-              <h3 className="text-base">{local$.displayName.get()}</h3>
-              <h3 className="text-neutral-500 text-xs">@{local$.name.get()}</h3>
-              <h3 className="text-s">{local$.place.get()}</h3>
+              <h3 className="text-base">{server$.displayName.get()}</h3>
+              <h3 className="text-neutral-500 text-xs">
+                @{server$.name.get()}
+              </h3>
+              <h3 className="text-s">{server$.place.get()}</h3>
             </div>
           </div>
           <button
-            onClick={followUser}
+            onClick={() => {
+              // TODO: follow user action
+            }}
             className="text-black flex flex-row items-center justify-center px-2 py-1 rounded-lg"
             style={{
               position: "absolute",
@@ -83,13 +92,13 @@ export default observer(function ProfileAuth(props: Props) {
               border: "1px solid #ccc",
             }}
           >
-            {following ? (
+            {local$.following ? (
               <svg
                 width="24"
                 height="24"
                 fill="none"
                 viewBox="0 0 24 24"
-                style={{ color: following ? "#4F7942" : "black" }}
+                style={{ color: local$.following ? "#4F7942" : "black" }}
               >
                 <path
                   stroke="currentColor"
@@ -133,19 +142,23 @@ export default observer(function ProfileAuth(props: Props) {
                 />
               </svg>
             )}
-            <span style={{ color: following ? "#4F7942" : "black" }}>
-              {following ? "following" : "follow"}
+            <span style={{ color: local$.following ? "#4F7942" : "black" }}>
+              {local$.following ? "following" : "follow"}
             </span>
           </button>
           <div style={{ width: "100%" }}>
             <ul className="flex flex-row mt-5 space-x-4">
-              {tabs.map((tab) => (
+              {local$.tabs.map((tab) => (
                 <li
-                  key={tab}
-                  className={`cursor-pointer ${selectedTab === tab ? "font-normal" : "font-extralight"}`}
-                  onClick={() => setSelectedTab(tab)}
+                  // TODO: how to get key?
+                  // key={tab}
+                  className={`cursor-pointer ${local$.selectedTab === tab ? "font-normal" : "font-extralight"}`}
+                  onClick={() => {
+                    local$.selectedTab.set(tab)
+                  }}
                 >
-                  {tab}
+                  {/* TODO: fix */}
+                  {/* {tab} */}
                 </li>
               ))}
             </ul>
@@ -153,14 +166,15 @@ export default observer(function ProfileAuth(props: Props) {
               className="text-gray-900 text-s font-light mt-3 "
               style={{ width: "22em" }}
             >
-              {local$.bio.get()}
+              {server$.bio.get()}
             </p>
           </div>
         </header>
         <main className="col-span-2">
-          {selectedTab === "Photos" && (
+          {/* {local$.selectedTab === "Photos" && ( */}
+          {true && (
             <div className="grid grid-cols-4 gap-1">
-              {local$.createdPosts.get()!.map((post, index) => (
+              {server$.createdPosts.get()!.map((post, index) => (
                 <div key={index} className="relative aspect-square group">
                   {/* TODO: make bigger */}
                   <Image
@@ -174,12 +188,15 @@ export default observer(function ProfileAuth(props: Props) {
                     <h3 className="text-base">place</h3>
                     <div
                       className="flex flex-row items-center"
-                      onClick={() => likePost(index)}
+                      onClick={() => {
+                        // likePost(index)
+                      }}
                     >
                       <svg
                         width="24"
                         height="24"
-                        fill={postsState[index]?.fillColor || "none"}
+                        // TODO: fix
+                        // fill={local$.postsState[index]?.fillColor || "none"}
                         viewBox="0 0 24 24"
                       >
                         <path
@@ -192,7 +209,8 @@ export default observer(function ProfileAuth(props: Props) {
                           clipRule="evenodd"
                         />
                       </svg>
-                      <h3>{postsState[index]?.likesCount || 0}</h3>
+                      {/* TODO:  */}
+                      {/* <h3>{local$.postsState[index]?.likesCount || 0}</h3> */}
                     </div>
                   </div>
                 </div>
@@ -200,12 +218,13 @@ export default observer(function ProfileAuth(props: Props) {
             </div>
           )}
           {/* TODO: map over places */}
-          {selectedTab === "Places" && (
+          {/* TODO:  */}
+          {/* {local$.selectedTab === "Places" && (
             <div className="flex flex-col">
               <div className="flex flex-row items-center">
                 <Image
                   // TODO: change
-                  src={local$.profilePhotoUrl.get()!}
+                  src={server$.profilePhotoUrl.get()!}
                   alt="avatar"
                   width={300}
                   height={400}
@@ -214,10 +233,10 @@ export default observer(function ProfileAuth(props: Props) {
                 <h4>place</h4>
               </div>
             </div>
-          )}
-          {selectedTab === "Lists" && <div>Lists</div>}
+          )} */}
+          {/* {selectedTab === "Lists" && <div>Lists</div>}
           {selectedTab === "Following" && <div></div>}
-          {selectedTab === "Followers" && <div></div>}
+          {selectedTab === "Followers" && <div></div>} */}
         </main>
       </div>
     </>
