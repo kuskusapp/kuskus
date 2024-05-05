@@ -2,21 +2,22 @@
 
 import { z } from "zod"
 import { actionClient } from "@/lib/safe-action"
+import { updateUser } from "@/edgedb/crud/mutations"
+import { auth } from "@/edgedb-next-client"
 
-// This schema is used to validate input from client.
 const schema = z.object({
-  username: z.string().min(3).max(10),
-  password: z.string().min(8).max(100),
+  bio: z.string().optional(),
+  place: z.string().optional(),
+  displayName: z.string().optional(),
 })
 
-export const loginUser = actionClient
+export const updateUserAction = actionClient
   .schema(schema)
-  .action(async ({ parsedInput: { username, password } }) => {
-    if (username === "johndoe" && password === "123456") {
-      return {
-        success: "Successfully logged in",
-      }
-    }
+  .action(async ({ parsedInput: { bio, place, displayName } }) => {
+    const session = auth.getSession()
+    const client = session.client
+    await updateUser.run(client, { bio, place, displayName })
 
-    return { failure: "Incorrect credentials" }
+    // TODO: consider better errors
+    return { failure: "Error with EdgeDB" }
   })

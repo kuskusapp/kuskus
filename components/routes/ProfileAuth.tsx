@@ -5,6 +5,7 @@ import { observer, useObservable } from "@legendapp/state/react"
 import { useState } from "react"
 import Image from "next/image"
 import { TextField, Label, Input } from "react-aria-components"
+import { updateUserAction } from "@/app/update-user-action"
 
 interface Props {
   data: profileAuthReturn
@@ -52,6 +53,7 @@ export default observer(function ProfileAuth(props: Props) {
                 onChange={(e) => {
                   local$.bio.set(e.target.value)
                   console.log(e.target.value, "value")
+                  updateUserAction({ bio: e.target.value })
                 }}
               />
             </TextField>
