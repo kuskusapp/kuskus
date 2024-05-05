@@ -1,6 +1,4 @@
-import { client } from "@/edgedb"
 import e from "../../dbschema/edgeql-js"
-import { edgedb } from "@/dbschema/edgeql-js/imports"
 
 export async function createPost(
   data: {
@@ -8,15 +6,38 @@ export async function createPost(
     description?: string
   },
   userId?: string | null,
-  clientPassed?: edgedb.Executor,
 ) {
-  return await e
-    .insert(e.Post, {
-      photoUrl: data.photoUrl,
-      description: data.description,
-      created_by: userId
-        ? e.cast(e.User, e.uuid(userId))
-        : e.cast(e.User, e.set()),
-    })
-    .run(client)
+  return await e.insert(e.Post, {
+    photoUrl: data.photoUrl,
+    description: data.description,
+    created_by: userId
+      ? e.cast(e.User, e.uuid(userId))
+      : e.cast(e.User, e.set()),
+  })
 }
+
+export const updateUser = e.params(
+  {
+    userId: e.optional(e.uuid),
+    bio: e.optional(e.str),
+    place: e.optional(e.str),
+    displayName: e.optional(e.str),
+  },
+  ({ userId, bio, place, displayName }) => {
+    const user = e.op(
+      e.cast(e.User, userId),
+      "if",
+      e.op("exists", userId),
+      "else",
+      e.global.current_user,
+    )
+
+    return e.update(user, (u) => ({
+      set: {
+        bio: e.op(bio, "??", u.bio),
+        place: e.op(place, "??", u.place),
+        displayName: e.op(displayName, "??", u.displayName),
+      },
+    }))
+  },
+)

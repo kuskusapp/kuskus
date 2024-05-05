@@ -4,6 +4,7 @@ import { profileAuthReturn } from "@/edgedb/crud/queries"
 import { observer, useObservable } from "@legendapp/state/react"
 import { useState } from "react"
 import Image from "next/image"
+import { TextField, Label, Input } from "react-aria-components"
 
 interface Props {
   data: profileAuthReturn
@@ -45,6 +46,15 @@ export default observer(function ProfileAuth(props: Props) {
       <div className="bg-white grid grid-cols-3 p-7">
         <header className="col-span-1 pl-8">
           <div className="flex items-start">
+            <TextField>
+              <Label>Bio</Label>
+              <Input
+                onChange={(e) => {
+                  local$.bio.set(e.target.value)
+                  console.log(e.target.value, "value")
+                }}
+              />
+            </TextField>
             <Image
               src={local$.profilePhotoUrl.get()!}
               alt="avatar"
@@ -150,6 +160,7 @@ export default observer(function ProfileAuth(props: Props) {
             <div className="grid grid-cols-4 gap-1">
               {local$.createdPosts.get()!.map((post, index) => (
                 <div key={index} className="relative aspect-square group">
+                  {/* TODO: make bigger */}
                   <Image
                     src={post.photoUrl}
                     alt={`Photo ${index + 1}`}
@@ -186,13 +197,16 @@ export default observer(function ProfileAuth(props: Props) {
               ))}
             </div>
           )}
+          {/* TODO: map over places */}
           {selectedTab === "Places" && (
             <div className="flex flex-col">
               <div className="flex flex-row items-center">
                 <Image
-                  // src="black"
+                  // TODO: change
                   src={local$.profilePhotoUrl.get()!}
                   alt="avatar"
+                  width={300}
+                  height={400}
                   className="rounded-full w-50 h-50 mr-5 mb-5 z-10"
                 ></Image>
                 <h4>place</h4>

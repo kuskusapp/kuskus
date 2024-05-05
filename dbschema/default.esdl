@@ -67,6 +67,7 @@ module default {
   }
   # kuskus.app/posts/{edgedb-post-uuid}
   type Post {
+    # TODO: add place
     # url to photo
     # TODO: in future, maybe Post can have multiple photos
     required photoUrl: str;
