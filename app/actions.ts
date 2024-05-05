@@ -5,14 +5,13 @@ import { actionClient } from "@/lib/safe-action"
 import { updateUser } from "@/edgedb/crud/mutations"
 import { auth } from "@/edgedb-next-client"
 
-const schema = z.object({
+const updateUserSchema = z.object({
   bio: z.string().optional(),
   place: z.string().optional(),
   displayName: z.string().optional(),
 })
-
 export const updateUserAction = actionClient
-  .schema(schema)
+  .schema(updateUserSchema)
   .action(async ({ parsedInput: { bio, place, displayName } }) => {
     const session = auth.getSession()
     const client = session.client

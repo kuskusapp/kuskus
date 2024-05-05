@@ -5,7 +5,7 @@ import { observer, useObservable } from "@legendapp/state/react"
 import { useState } from "react"
 import Image from "next/image"
 import { TextField, Label, Input } from "react-aria-components"
-import { updateUserAction } from "@/app/update-user-action"
+import { updateUserAction } from "@/app/actions"
 
 interface Props {
   data: profileAuthReturn
@@ -51,6 +51,7 @@ export default observer(function ProfileAuth(props: Props) {
               <Label>Bio</Label>
               <Input
                 onChange={(e) => {
+                  // TODO: rollback bio on error, and show error (maybe try again?) (keep optimistic updates)
                   local$.bio.set(e.target.value)
                   updateUserAction({ bio: e.target.value })
                 }}
