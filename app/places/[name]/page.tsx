@@ -1,6 +1,7 @@
 "use client"
 import { useState, useEffect } from "react"
 import Image from "next/image"
+import Modal from "../../../components/Modal"
 
 export default function Place(props: any) {
   const [following, SetFollowing] = useState<boolean>(false)
@@ -61,6 +62,11 @@ export default function Place(props: any) {
   const closeModal = () => {
     setModalOpen(false)
   }
+  interface ModalProps {
+    selectedImage: string
+    postsState: any
+  }
+
   useEffect(() => {
     const handleEscape = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
@@ -274,36 +280,12 @@ export default function Place(props: any) {
         </div>
       </main>
       {modalOpen && (
-        <div
-          className="z-20 fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-75"
-          onClick={closeModal}
-        >
-          <div className="bg-white w-800 h-900 pl-8 pr-20 py-10 rounded-lg relative flex">
-            <button
-              onClick={closeModal}
-              className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 text-white rounded-full p-2"
-              style={{ zIndex: 10, top: "10px", right: "10px" }}
-            >
-              X
-            </button>
-            <div className="flex">
-              <Image
-                src={selectedImage}
-                alt="Modal Image"
-                width="600"
-                height="600"
-                style={{
-                  marginRight: "20px",
-                }}
-              />
-              <div className="space-y-5 w-80">
-                <p>Username</p>
-                <p>Place</p>
-                <p>{postsState[modalIndex]?.likesCount || 0}</p>
-              </div>
-            </div>
-          </div>
-        </div>
+        <Modal
+          selectedImage={selectedImage}
+          postsState={postsState}
+          closeModal={closeModal}
+          likesCount={postsState[modalIndex]?.likesCount || 0}
+        />
       )}
       <div className="sticky top-0 col-span-2 flex flex-col h-[calc(100vh-10px)] overflow-auto ml-5 mb-2 flex-grow scrollbarHide">
         <h2 className="text-neutral-700 text-left ml-2 mb-4">255 comments</h2>

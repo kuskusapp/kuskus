@@ -1,5 +1,5 @@
 "use client"
-
+import { useState } from "react"
 import { profileAuthReturn } from "@/edgedb/crud/queries"
 import { observer, useObservable } from "@legendapp/state/react"
 import Image from "next/image"
@@ -18,6 +18,32 @@ export default observer(function ProfileAuth(props: Props) {
     selectedTab: "Photos",
     postsState: { liked: true, fillColor: "", likesCount: 0 },
   })
+
+  // type PageProps = {
+  //   params: any
+  // }
+
+  // export default function ProfileAuth(props: Props) {
+  //   const [selectedImage, setSelectedImage] = useState("")
+  //   const [modalOpen, setModalOpen] = useState(false)
+  //   const [modalIndex, setModalIndex] = useState<number>(0)
+  //   const server$ = useObservable(props.data)
+  //   const local$ = useObservable({
+  //     following: false,
+  //     tabs: ["Photos", "Places", "Lists", "Following", "Followers"],
+  //     selectedTab: "Photos",
+  //     postsState: { liked: true, fillColor: "", likesCount: 0 },
+  //   })
+
+  //   const openModal = (imageSrc: string, index: number) => {
+  //     setSelectedImage(imageSrc)
+  //     setModalOpen(true)
+  //     setModalIndex(index)
+  //   }
+
+  //   const imageClick = (imageSrc: string, index: number) => {
+  //     openModal(imageSrc, index)
+  //   }
 
   // const [selectedTab, setSelectedTab] = useState<string>("Photos")
   // const [postsState, setPostsState] = useState<{
@@ -175,7 +201,11 @@ export default observer(function ProfileAuth(props: Props) {
           {true && (
             <div className="grid grid-cols-4 gap-1">
               {server$.createdPosts.get()!.map((post, index) => (
-                <div key={index} className="relative aspect-square group">
+                <div
+                  key={index}
+                  className="relative aspect-square group"
+                  // onClick={() => imageClick(post.photoUrl, index)}
+                >
                   {/* TODO: make bigger */}
                   <Image
                     src={post.photoUrl}
