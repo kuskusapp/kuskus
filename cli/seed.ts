@@ -23,6 +23,9 @@ async function seed() {
       case "profile":
         await profile()
         break
+      case "place":
+        await place()
+        break
       case "posts":
         await posts()
         break
@@ -55,6 +58,18 @@ async function profile() {
         profilePhotoUrl: "https://images.kuskus.app/nikiv-profile-image",
       },
     }))
+    .run(client)
+}
+
+async function place() {
+  await e
+    .insert(e.Place, {
+      name: "pulp",
+      displayName: "Pulp",
+      bio: "Cafe in Tbilisi, Georgia",
+      category: "cafe",
+      profilePhoto: "https://images.kuskus.app/nikiv-profile-image",
+    })
     .run(client)
 }
 

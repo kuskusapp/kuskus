@@ -26,7 +26,6 @@ export const profileAuth = e.params(
     }))
   },
 )
-
 export type profileAuthReturn = $infer<typeof profileAuth>
 
 export const profilePublic = e.params({ username: e.str }, ({ username }) => {
@@ -43,3 +42,25 @@ export const profilePublic = e.params({ username: e.str }, ({ username }) => {
   }))
 })
 export type profilePublicReturn = $infer<typeof profilePublic>
+
+export const placesAuth = e.params(
+  { placeName: e.str, userId: e.optional(e.uuid) },
+  ({ userId, placeName }) => {
+    const user = e.op(
+      e.cast(e.User, userId),
+      "if",
+      e.op("exists", userId),
+      "else",
+      e.global.current_user,
+    )
+    return e.select(e.Place, (place) => ({
+      filter: e.op(place.name, "=", placeName),
+      name: true,
+      displayName: true,
+      bio: true,
+      category: true,
+      profilePhoto: true,
+    }))
+  },
+)
+export type placesAuthReturn = $infer<typeof placesAuth>

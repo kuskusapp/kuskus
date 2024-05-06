@@ -1,5 +1,4 @@
 "use client"
-import { useState } from "react"
 import { profileAuthReturn } from "@/edgedb/crud/queries"
 import { observer, useObservable } from "@legendapp/state/react"
 import Image from "next/image"
