@@ -2,8 +2,8 @@ import React, { useState } from "react"
 import Image from "next/image"
 import ReactModal from "react-modal"
 
-interface ModalProps {
-  selectedImage: string
+interface Props {
+  imageUrl: string
   likesCount: number
   postsState: any
   closeModal: () => void
@@ -11,14 +11,15 @@ interface ModalProps {
   // profileName: string
 }
 
-const Modal: React.FC<ModalProps> = ({
-  selectedImage,
+const Modal: React.FC<Props> = ({
+  imageUrl,
   closeModal,
   // profileImage,
   // profileName,
   // postsState,
 }) => {
   const [isOpen, setIsOpen] = useState(true)
+  console.log(imageUrl, "image url")
 
   const handleCloseModal = () => {
     setIsOpen(false)
@@ -61,7 +62,7 @@ const Modal: React.FC<ModalProps> = ({
           }}
         >
           <Image
-            src={selectedImage}
+            src={imageUrl}
             alt="Modal Image"
             width="700"
             height="800" // idk how to fix it. fixed params required

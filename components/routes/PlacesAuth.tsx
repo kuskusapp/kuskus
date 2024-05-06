@@ -12,11 +12,13 @@ interface Props {
 export default observer(function PlacesAuth(props: Props) {
   const server$ = useObservable(props.data)
   // TODO: move all local state here
-  const local$ = useObservable({ following: false })
+  const local$ = useObservable({ following: false, modalOpen: false })
 
-  const [following, SetFollowing] = useState<boolean>(false)
+  // const [following, SetFollowing] = useState<boolean>(false)
   const [modalOpen, setModalOpen] = useState(false)
-  const [selectedImage, setSelectedImage] = useState("")
+  const [selectedImage, setSelectedImage] = useState(
+    "https://images.kuskus.app/nikiv-profile-image",
+  )
   const [modalIndex, setModalIndex] = useState<number>(0)
   const [postsState, setPostsState] = useState<{
     [key: number]: { liked: boolean; fillColor: string; likesCount: number }
@@ -33,7 +35,8 @@ export default observer(function PlacesAuth(props: Props) {
   const [newComment, setNewComment] = useState<string>("")
 
   const followPlace = () => {
-    SetFollowing(!following)
+    // SetFollowing(!following)
+    local$.following.set(!local$.following.get())
   }
 
   const commentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -47,6 +50,22 @@ export default observer(function PlacesAuth(props: Props) {
       setNewComment("")
     }
   }
+
+  // const likePost = (index: number) => {
+  //   const newState = { ...postsState }
+  //   if (newState[index]) {
+  //     newState[index] = {
+  //       liked: !newState[index].liked,
+  //       fillColor: newState[index].liked ? "none" : "white",
+  //       likesCount: newState[index].liked
+  //         ? newState[index].likesCount - 1
+  //         : newState[index].likesCount + 1,
+  //     }
+  //   } else {
+  //     newState[index] = { liked: true, fillColor: "white", likesCount: 1 }
+  //   }
+  //   setPostsState(newState)
+  // }
 
   const likePost = (index: number) => {
     const newState = { ...postsState }
@@ -117,13 +136,13 @@ export default observer(function PlacesAuth(props: Props) {
             border: "1px solid #ccc",
           }}
         >
-          {following ? (
+          {local$.following.get() ? (
             <svg
               width="24"
               height="24"
               fill="none"
               viewBox="0 0 24 24"
-              style={{ color: following ? "#4F7942" : "black" }}
+              style={{ color: local$.following.get() ? "#4F7942" : "black" }}
             >
               <path
                 stroke="currentColor"
@@ -167,8 +186,8 @@ export default observer(function PlacesAuth(props: Props) {
               />
             </svg>
           )}
-          <span style={{ color: following ? "#4F7942" : "black" }}>
-            {following ? "following" : "follow"}
+          <span style={{ color: local$.following ? "#4F7942" : "black" }}>
+            {local$.following ? "following" : "follow"}
           </span>
         </button>
         <div className="mt-4">
@@ -187,9 +206,7 @@ export default observer(function PlacesAuth(props: Props) {
             className="text-gray-900 text-s font-light mt-2 pr-4"
             style={{ width: "22em" }}
           >
-            text text text text text text text text text text text text text
-            text text text text text text text text text text text
-            {/* {props.params.description} */}
+            {/* {server$.bio.get()} */}
           </p>
           <div className="mt-4">
             <span className="text-gray-400 text-s font-light">
@@ -245,7 +262,12 @@ export default observer(function PlacesAuth(props: Props) {
             <div
               key={index}
               className="relative aspect-square group"
-              onClick={() => openModal(`/black.png`, index)}
+              onClick={() =>
+                openModal(
+                  `https://images.kuskus.app/nikiv-profile-image`,
+                  index,
+                )
+              }
             >
               <Image
                 src={"https://images.kuskus.app/nikiv-profile-image"}
@@ -291,7 +313,7 @@ export default observer(function PlacesAuth(props: Props) {
       </main>
       {modalOpen && (
         <Modal
-          selectedImage={selectedImage}
+          imageUrl={selectedImage}
           postsState={postsState}
           closeModal={closeModal}
           likesCount={postsState[modalIndex]?.likesCount || 0}
