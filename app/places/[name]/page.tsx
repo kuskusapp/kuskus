@@ -1,49 +1,26 @@
 "use client"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Image from "next/image"
 
 export default function Place(props: any) {
   const [following, SetFollowing] = useState<boolean>(false)
+  const [modalOpen, setModalOpen] = useState(false)
+  const [selectedImage, setSelectedImage] = useState("")
+  const [modalIndex, setModalIndex] = useState<number>(0)
   const [postsState, setPostsState] = useState<{
     [key: number]: { liked: boolean; fillColor: string; likesCount: number }
   }>({})
   const [comments, setComments] = useState<
     Array<{ id: number; name: string; text: string }>
   >([
-    { id: 1, name: "user1", text: "Pretty good" },
-    { id: 2, name: "user2", text: "Good" },
-    { id: 3, name: "user3", text: "Pretty good" },
-    {
-      id: 4,
-      name: "user4",
-      text: "text text text text text text text text text text text text text text text text text text text text ",
-    },
-    {
-      id: 5,
-      name: "user5",
-      text: "text text text text text text text text text text text text text text text text text text text text ",
-    },
-    { id: 6, name: "user6", text: "Good" },
-    { id: 7, name: "user7", text: "Pretty good" },
-    {
-      id: 8,
-      name: "user8",
-      text: "text text text text text text text text text text text text text text text text text text text text ",
-    },
-    { id: 9, name: "user9", text: "Pretty good" },
-    {
-      id: 10,
-      name: "user10",
-      text: "text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text text ",
-    },
-    { id: 11, name: "user11", text: "Pretty good" },
-    { id: 12, name: "user12", text: "Good" },
-    { id: 13, name: "user13", text: "Pretty good" },
-    { id: 14, name: "user14", text: "Good" },
-    { id: 15, name: "user15", text: "Pretty good" },
-    { id: 16, name: "user16", text: "Good" },
+    ...Array.from({ length: 16 }, (_, index) => ({
+      id: index + 1,
+      name: `user${index + 1}`,
+      text: "Pretty good",
+    })),
   ])
   const [newComment, setNewComment] = useState<string>("")
+
   const followPlace = () => {
     SetFollowing(!following)
   }
@@ -75,6 +52,26 @@ export default function Place(props: any) {
     }
     setPostsState(newState)
   }
+
+  const openModal = (imageSrc: string, index: number) => {
+    setSelectedImage(imageSrc)
+    setModalOpen(true)
+    setModalIndex(index)
+  }
+  const closeModal = () => {
+    setModalOpen(false)
+  }
+  useEffect(() => {
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        closeModal()
+      }
+    }
+    document.addEventListener("keydown", handleEscape)
+    return () => {
+      document.removeEventListener("keydown", handleEscape)
+    }
+  }, [])
 
   return (
     <div className="bg-white p-5 pb-0 grid grid-cols-7">
@@ -188,19 +185,19 @@ export default function Place(props: any) {
                   name: "place",
                   category: "category",
                   link: "/places/place1",
-                  img: "image1.jpg",
+                  img: "/image1.jpg",
                 },
                 {
                   name: "place",
                   category: "category",
                   link: "/places/place2",
-                  img: "image2.jpg",
+                  img: "/image2.jpg",
                 },
                 {
                   name: "place",
                   category: "category",
                   link: "/places/place3",
-                  img: "image3.jpg",
+                  img: "/image3.jpg",
                 },
               ].map((item) => (
                 <li
@@ -208,9 +205,11 @@ export default function Place(props: any) {
                   className="cursor-pointer flex items-center mb-3 font-light"
                 >
                   <a href={item.link} className="flex items-center">
-                    <img
+                    <Image
                       src={item.img}
                       alt={item.name}
+                      width={32}
+                      height={32}
                       className="rounded-full w-6 h-6 mr-2"
                     />
                     <div>
@@ -225,9 +224,13 @@ export default function Place(props: any) {
         </div>
       </header>
       <main className="col-span-3 flex justify-center">
-        <div className="grid grid-cols-4 gap-1">
+        <div className="grid grid-cols-3 gap-1">
           {Array.from({ length: 40 }).map((_, index) => (
-            <div key={index} className="relative aspect-square group">
+            <div
+              key={index}
+              className="relative aspect-square group"
+              onClick={() => openModal(`/black.png`, index)}
+            >
               <Image
                 src={"/black.png"}
                 alt={`Photo ${index + 1}`}
@@ -235,7 +238,13 @@ export default function Place(props: any) {
                 height={400}
                 className="w-full h-full object-cover hover:brightness-75"
               />
-              <div className="hidden group-hover:flex group-hover:opacity-100 opacity-0 transition-opacity duration-300 absolute flex-col bottom-10 left-0 text-white p-1 w-full justify-center items-center">
+              <div
+                className="hidden group-hover:flex group-hover:opacity-100 opacity-0 transition-opacity duration-300 absolute flex-row justify-between bottom-2 left-0 text-white px-3 w-full items-center"
+                style={{
+                  background:
+                    "linear-gradient(to top, rgba(0,0,0,0.7), rgba(0,0,0,0))",
+                }}
+              >
                 <h3 className="text-xs">by username</h3>
                 <div
                   className="flex flex-row items-center"
@@ -264,14 +273,48 @@ export default function Place(props: any) {
           ))}
         </div>
       </main>
+      {modalOpen && (
+        <div
+          className="z-20 fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black bg-opacity-75"
+          onClick={closeModal}
+        >
+          <div className="bg-white w-800 h-900 pl-8 pr-20 py-10 rounded-lg relative flex">
+            <button
+              onClick={closeModal}
+              className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 text-white rounded-full p-2"
+              style={{ zIndex: 10, top: "10px", right: "10px" }}
+            >
+              X
+            </button>
+            <div className="flex">
+              <Image
+                src={selectedImage}
+                alt="Modal Image"
+                width="600"
+                height="600"
+                style={{
+                  marginRight: "20px",
+                }}
+              />
+              <div className="space-y-5 w-80">
+                <p>Username</p>
+                <p>Place</p>
+                <p>{postsState[modalIndex]?.likesCount || 0}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
       <div className="sticky top-0 col-span-2 flex flex-col h-[calc(100vh-10px)] overflow-auto ml-5 mb-2 flex-grow scrollbarHide">
         <h2 className="text-neutral-700 text-left ml-2 mb-4">255 comments</h2>
         <div className="flex flex-col flex-grow overflow-auto">
           {comments.map((comment) => (
             <div key={comment.id} className="p-3 mb-2 flex items-start">
-              <img
+              <Image
                 src="/path/to/avatar.jpg"
                 alt="Avatar"
+                width={32}
+                height={32}
                 className="rounded-full w-8 h-8 mr-2"
               />
               <div>
