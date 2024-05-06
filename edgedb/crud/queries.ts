@@ -54,7 +54,7 @@ export const placesAuth = e.params(
       e.global.current_user,
     )
     return e.select(e.Place, (place) => ({
-      filter: e.op(place.name, "=", placeName),
+      filter_single: e.op(place.name, "=", placeName),
       name: true,
       displayName: true,
       bio: true,
