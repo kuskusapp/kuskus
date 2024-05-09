@@ -87,13 +87,13 @@ export default observer(function ProfileAuth(props: Props) {
                 }}
               />
             </TextField>
-            <Image
+            {/* <Image
               src={server$.profilePhotoUrl.get()!}
               alt="avatar"
               width={100}
               height={100}
               className="rounded-full w-55 h-55 mb-5"
-            />
+            /> */}
             <div className="flex flex-col ml-4 space-y-2">
               <h3 className="text-base">{server$.displayName.get()}</h3>
               <h3 className="text-neutral-500 text-xs">
