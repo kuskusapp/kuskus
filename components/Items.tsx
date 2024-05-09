@@ -1,6 +1,6 @@
 import { Item } from "@/dbschema/interfaces"
 import DeleteItem from "./DeleteItem"
-import { auth } from "@/edgedb"
+import { auth } from "@/edgedb-next-client"
 
 interface Props {
   items: (Omit<Item, "created_by"> & {

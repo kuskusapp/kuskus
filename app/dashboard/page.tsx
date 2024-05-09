@@ -1,5 +1,5 @@
 import e from "@/dbschema/edgeql-js"
-import { auth } from "@/edgedb"
+import { auth } from "@/edgedb-next-client"
 
 export default async function Home() {
   let session = auth.getSession()

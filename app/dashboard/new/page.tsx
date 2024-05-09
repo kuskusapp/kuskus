@@ -1,8 +1,8 @@
 import AddItem from "@/components/AddItem"
 import { ArrowLeftIcon } from "@heroicons/react/20/solid"
 import e from "@/dbschema/edgeql-js"
-import { auth } from "@/edgedb"
 import Link from "next/link"
+import { auth } from "@/edgedb-next-client"
 
 const addItem = async (name: string) => {
   "use server"
