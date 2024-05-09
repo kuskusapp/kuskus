@@ -175,8 +175,8 @@ export default observer(function ProfileAuth(props: Props) {
             <ul className="flex flex-row mt-5 space-x-4">
               {local$.tabs.map((tab) => (
                 <li
-                  // TODO: how to get key?
-                  // key={tab}
+                  // TODO: use proper key, ask legend state
+                  key={Math.random()}
                   className={`cursor-pointer ${local$.selectedTab === tab ? "font-normal" : "font-extralight"}`}
                   onClick={() => {
                     local$.selectedTab.set(tab)

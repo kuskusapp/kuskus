@@ -65,5 +65,6 @@
   },
   "prettier": {
     "semi": false
-  }
+  },
+  "license": "MIT"
 }
