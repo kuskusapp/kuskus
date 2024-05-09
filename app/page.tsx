@@ -4,6 +4,7 @@ import React, { useRef, useEffect, useState } from "react"
 import Link from "next/link"
 import { IoIosSearch, IoIosArrowUp, IoIosArrowDown } from "react-icons/io"
 import { PiSignInThin } from "react-icons/pi"
+import Icons from "@/components/Icons"
 
 export default function Home() {
   // const session = auth.getSession()
@@ -75,23 +76,7 @@ export default function Home() {
                 className="text-sm font-semibold leading-6 text-gray-900"
               >
                 <button className="before:ease relative overflow-hidden bg-black px-4 py-2 rounded-full text-white flex flex-row justify-center items-center font-light transition-all before:absolute before:right-0 before:top-0 before:h-12 before:w-6 before:translate-x-12 before:rotate-6 before:bg-white before:opacity-20 before:duration-700 hover:shadow-gray-800 hover:before:-translate-x-40 border border-white border-opacity-20">
-                  <svg
-                    aria-hidden="true"
-                    focusable="false"
-                    data-prefix="fal"
-                    width="1.5em"
-                    height="1.5em"
-                    data-icon="circle-arrow-up"
-                    className="svg-inline--fa fa-circle-arrow-up text-headline mr-1"
-                    role="img"
-                    xmlns="http://www.w3.org/2000/svg"
-                    viewBox="0 0 512 512"
-                  >
-                    <path
-                      fill="currentColor"
-                      d="M256 32a224 224 0 1 1 0 448 224 224 0 1 1 0-448zm0 480A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM363.3 228.7l-96-96c-6.2-6.2-16.4-6.2-22.6 0l-96 96c-6.2 6.2-6.2 16.4 0 22.6s16.4 6.2 22.6 0L240 182.6V368c0 8.8 7.2 16 16 16s16-7.2 16-16V182.6l68.7 68.7c6.2 6.2 16.4 6.2 22.6 0s6.2-16.4 0-22.6z"
-                    ></path>
-                  </svg>
+                  <Icons name="SignUp" size={[20, 20]} />
                   Sign up
                 </button>
               </Link>
@@ -132,31 +117,7 @@ export default function Home() {
             className="absolute flex flex-row right-0 mr-1 px-4 py-2 rounded-full text-white bg-blue-400 hover:bg-blue-600 focus:outline-none focus:ring"
             style={{ top: "50%", transform: "translateY(-50%)" }}
           >
-            <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
-              <circle
-                cx="12"
-                cy="12"
-                r="7.25"
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="1.5"
-              />
-              <path
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="1.5"
-                d="M15.25 12C15.25 16.5 13.2426 19.25 12 19.25C10.7574 19.25 8.75 16.5 8.75 12C8.75 7.5 10.7574 4.75 12 4.75C13.2426 4.75 15.25 7.5 15.25 12Z"
-              />
-              <path
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="1.5"
-                d="M5 12H12H19"
-              />
-            </svg>
+            <Icons name="World" />
             or find places near you
           </button>
         </div>
