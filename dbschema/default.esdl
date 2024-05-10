@@ -76,37 +76,5 @@ module default {
       rewrite insert using (datetime_of_statement());
       rewrite update using (datetime_of_statement());
     }
-    # access policy admin_has_full_access
-    #   allow all
-    #   using (global current_user.userRole ?= Role.admin);
-    # access policy creator_has_full_access
-    #   allow all
-    #   using (.created_by ?= global current_user);
-    # access policy others_read_only
-    #   allow select, insert;
-  }
-  # TODO: delete, left over from template
-  type Item {
-    required name: str;
-    required created_by: User {
-      default := global current_user;
-    }
-
-    created: datetime {
-      rewrite insert using (datetime_of_statement());
-    }
-    updated: datetime {
-      rewrite insert using (datetime_of_statement());
-      rewrite update using (datetime_of_statement());
-    }
-
-    access policy admin_has_full_access
-      allow all
-      using (global current_user.userRole ?= Role.admin);
-    access policy creator_has_full_access
-      allow all
-      using (.created_by ?= global current_user);
-    access policy others_read_only
-      allow select, insert;
   }
 }
