@@ -1,14 +1,59 @@
 "use client"
-import react, { useState } from "react"
-import { IoIosSearch } from "react-icons/io"
+import { useState } from "react"
+import Image from "next/image"
+import { IoIosSearch, IoIosArrowBack, IoIosArrowForward } from "react-icons/io"
+import { Swiper, SwiperSlide } from "swiper/react"
+import "swiper/css"
+import "swiper/css/navigation"
+import "swiper/css/pagination"
+
+const recommendedPlaces = [
+  {
+    id: "place1",
+    name: "Place 1",
+    category: "coffeeshop",
+    imageUrl: "/https://a.jpg",
+  },
+  {
+    id: "place2",
+    name: "Place 2",
+    category: "coffeeshop",
+    imageUrl: "/https://a.jpg",
+  },
+  {
+    id: "place3",
+    name: "Place 3",
+    category: "coffeeshop",
+    imageUrl: "/https://a.jpg",
+  },
+  {
+    id: "place4",
+    name: "Place 4",
+    category: "coffeeshop",
+    imageUrl: "/https://a.jpg",
+  },
+  {
+    id: "place5",
+    name: "Place 5",
+    category: "coffeeshop",
+    imageUrl: "/https://a.jpg",
+  },
+  {
+    id: "place6",
+    name: "Place 6",
+    category: "coffeeshop",
+    imageUrl: "/https://a.jpg",
+  },
+]
 
 export default function Search() {
   const [inputFocused, setInputFocused] = useState(false)
+
   return (
     <div className="bg-white justify-center p-10">
       <div
         className="relative flex items-center justify-center h-10 m-auto"
-        style={{ width: "70em" }}
+        style={{ width: "100%" }}
       >
         <IoIosSearch
           className="absolute left-0 ml-3 text-black"
@@ -59,7 +104,31 @@ export default function Search() {
           Places we recommend for you in{" "}
           <span className="">[City, Country]</span>
         </h2>
-        <div></div>
+        <Swiper
+          className="mt-10"
+          spaceBetween={20}
+          slidesPerView={4}
+          onSlideChange={() => console.log("slide change")}
+          onSwiper={(swiper) => console.log(swiper)}
+        >
+          {recommendedPlaces.map((place) => (
+            <SwiperSlide key={place.id}>
+              <div className="w-80 h-40 relative">
+                <Image
+                  className="rounded-lg"
+                  src={place.imageUrl}
+                  alt={place.name}
+                  layout="fill"
+                  objectFit="cover"
+                />
+              </div>
+              <div className="flex flex-col text-left pt-2 pl-2 space-y-1">
+                <p className="text-base">{place.name}</p>
+                <p className="text-xs">{place.category}</p>
+              </div>
+            </SwiperSlide>
+          ))}
+        </Swiper>
       </div>
     </div>
   )
