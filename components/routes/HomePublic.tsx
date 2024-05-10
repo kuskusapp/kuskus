@@ -1,9 +1,9 @@
 "use client"
-import { observer } from "@legendapp/state/react"
-import { useState } from "react"
 import Icons from "@/components/Icons"
+import { observer, useObservable } from "@legendapp/state/react"
 import Link from "next/link"
-import { IoIosArrowDown, IoIosArrowUp, IoIosSearch } from "react-icons/io"
+import { useState } from "react"
+import { IoIosSearch } from "react-icons/io"
 import { PiSignInThin } from "react-icons/pi"
 
 interface Props {
@@ -11,29 +11,33 @@ interface Props {
 }
 
 export default observer(function HomePublic(props: Props) {
+  const server$ = useObservable(props.data)
+  const local$ = useObservable({
+    inputFocused: false,
+    activeItem: null as string | null,
+    hoveredDish: null as number | null,
+    dishes: [
+      "Coffee",
+      "Smoothie",
+      "Pasta",
+      "Ramen",
+      "Tacos",
+      "Steak",
+      "Curry",
+      "Pizza",
+      "Sushi",
+      "Burger",
+      "Salad",
+    ],
+    menuItems: [
+      { name: "KusKus", key: "kusKus" },
+      { name: "Explore", key: "explore" },
+      { name: "About", key: "about" },
+    ],
+  })
   const [inputFocused, setInputFocused] = useState(false)
   const [activeItem, setActiveItem] = useState<string | null>(null)
   const [hoveredDish, setHoveredDish] = useState<number | null>(null)
-
-  const dishes = [
-    "Coffee",
-    "Smoothie",
-    "Pasta",
-    "Ramen",
-    "Tacos",
-    "Steak",
-    "Curry",
-    "Pizza",
-    "Sushi",
-    "Burger",
-    "Salad",
-  ]
-
-  const menuItems = [
-    { name: "KusKus", key: "kusKus" },
-    { name: "Explore", key: "explore" },
-    { name: "About", key: "about" },
-  ]
 
   return (
     <div>
@@ -45,20 +49,20 @@ export default observer(function HomePublic(props: Props) {
           <div className="flex flex-1 justify-end space-x-2">
             <>
               <div className="absolute left-10 flex flex-row space-x-5">
-                {menuItems.map((item) => (
+                {local$.menuItems.map((item) => (
                   <div
-                    key={item.key}
+                    // key={item.key}
                     className="flex items-center space-x-2"
-                    onClick={() =>
-                      setActiveItem(item.key === activeItem ? null : item.key)
-                    }
+                    onClick={() => {
+                      // setActiveItem(item.key === activeItem ? null : item.key)
+                    }}
                   >
-                    <h3>{item.name}</h3>
-                    {activeItem === item.key ? (
+                    {/* <h3>{item.name}</h3> */}
+                    {/* {activeItem === item.key ? (
                       <IoIosArrowUp />
                     ) : (
                       <IoIosArrowDown />
-                    )}
+                    )} */}
                   </div>
                 ))}
               </div>
@@ -125,14 +129,14 @@ export default observer(function HomePublic(props: Props) {
           </button>
         </div>
         <div className="flex flex-row mt-10">
-          {dishes.map((dish, index) => (
+          {local$.dishes.map((dish, index) => (
             <button
               key={index}
               className="bg-transparent border border-black rounded-full px-4 py-2 m-1 hover:bg-gray-200 hover:-rotate-3 transition-transform duration-600 ease-in-out relative overflow-hidden flex items-center"
               onMouseEnter={() => setHoveredDish(index)}
               onMouseLeave={() => setHoveredDish(null)}
             >
-              {dish}
+              {/* {dish} */}
               <span
                 className={`absolute mr-2 right-0 transition-opacity duration-700 ease-in-out hover:rotate-180 ${hoveredDish === index ? "opacity-100" : "opacity-0"}`}
               >
