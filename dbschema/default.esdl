@@ -10,7 +10,7 @@ module default {
   );
   type User {
     required identity: ext::auth::Identity;
-    required email: str {
+    email: str {
       constraint exclusive;
     };
     # kuskus.app/{name}
