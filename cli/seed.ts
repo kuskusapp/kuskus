@@ -8,7 +8,7 @@ import e from "../dbschema/edgeql-js"
 const userId = process.env.USER_ID!
 
 async function seed() {
-  // checkThatNotRunningInProduction()
+  checkThatNotRunningInProduction()
   const args = Bun.argv
   const command = args[2]
   try {
@@ -126,7 +126,6 @@ async function clear() {
 }
 
 function checkThatNotRunningInProduction() {
-  console.log(process.env.EDGEDB_INSTANCE, "wat")
   if (process.env.EDGEDB_INSTANCE === "nikitavoloboev/kuskus") {
     throw new Error(
       "Connected to production DB, don't run these seed commands on it",
