@@ -1,13 +1,13 @@
 "use client"
 import Icons from "@/components/Icons"
+import { homePublicResturn } from "@/edgedb/crud/queries"
 import { observer, useObservable } from "@legendapp/state/react"
 import Link from "next/link"
-import { useState } from "react"
 import { IoIosSearch } from "react-icons/io"
 import { PiSignInThin } from "react-icons/pi"
 
 interface Props {
-  data: any
+  data: homePublicResturn
 }
 
 export default observer(function HomePublic(props: Props) {
@@ -23,9 +23,6 @@ export default observer(function HomePublic(props: Props) {
       { name: "About", key: "about" },
     ],
   })
-  const [inputFocused, setInputFocused] = useState(false)
-  const [activeItem, setActiveItem] = useState<string | null>(null)
-  const [hoveredDish, setHoveredDish] = useState<number | null>(null)
 
   return (
     <div>
@@ -98,15 +95,19 @@ export default observer(function HomePublic(props: Props) {
         <div className="relative flex items-center justify-center h-10">
           <IoIosSearch
             className="absolute left-0 ml-3 text-black"
-            size={inputFocused ? 22 : 18}
+            size={local$.inputFocused.get() ? 22 : 18}
             style={{ top: "50%", transform: "translateY(-50%)" }}
           />
           <input
             className="border border-neutral-500 rounded-full pl-10 pr-36 py-3"
             placeholder="Search for a place or a dish..."
             style={{ width: "50em" }}
-            onFocus={() => setInputFocused(true)}
-            onBlur={() => setInputFocused(false)}
+            onFocus={() => {
+              // setInputFocused(true)
+            }}
+            onBlur={() => {
+              // setInputFocused(false)
+            }}
           />
           <button
             className="absolute flex flex-row right-0 mr-1 px-4 py-2 rounded-full text-white bg-blue-400 hover:bg-blue-600 focus:outline-none focus:ring"
@@ -121,12 +122,16 @@ export default observer(function HomePublic(props: Props) {
             <button
               key={index}
               className="bg-transparent border border-black rounded-full px-4 py-2 m-1 hover:bg-gray-200 hover:-rotate-3 transition-transform duration-600 ease-in-out relative overflow-hidden flex items-center"
-              onMouseEnter={() => setHoveredDish(index)}
-              onMouseLeave={() => setHoveredDish(null)}
+              onMouseEnter={() => {
+                // setHoveredDish(index)
+              }}
+              onMouseLeave={() => {
+                // setHoveredDish(null)
+              }}
             >
               {/* {dish} */}
               <span
-                className={`absolute mr-2 right-0 transition-opacity duration-700 ease-in-out hover:rotate-180 ${hoveredDish === index ? "opacity-100" : "opacity-0"}`}
+                className={`absolute mr-2 right-0 transition-opacity duration-700 ease-in-out hover:rotate-180 ${local$.hoveredDish.get() === index ? "opacity-100" : "opacity-0"}`}
               >
                 ?
               </span>
