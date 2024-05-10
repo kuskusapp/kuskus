@@ -2,46 +2,37 @@ using extension auth;
 
 module default {
   scalar type Role extending enum<admin, user>;
-
   global current_user := (
     assert_single((
-      select User { id, name, email, userRole }
+      select User
       filter .identity = global ext::auth::ClientTokenIdentity
     ))
   );
   type User {
     required identity: ext::auth::Identity;
-    # kuskus.app/{name}
-    required name: str {
+    required email: str {
       constraint exclusive;
     };
-    email: str;
+    # kuskus.app/{name}
+    name: str {
+      constraint exclusive;
+    };
+    # pretty name of user (same as X username/name split)
     displayName: str;
     bio: str;
+    # cloudflare r2 url with image
+    profilePhotoUrl: str;
     # city or country
     place: str;
 
-
+    # -- links
     createdPosts := .<created_by[is Post];
-    # createdPosts := <created_by[is Post]
 
-    # createdPosts := .<created_by[is Post]
-    # multi followingPlaces: Place;
-    # multi createdPosts: Post;
-    # foll := .<created_by[is Post]
-
-    # TODO: should be geo location (coordinates)
-    # location: str;
-
-    # url to photo
-    profilePhotoUrl: str;
-
-    # TODO: check how
-    # multi followingUsers: User;
+    # TODO: how roles work, add admin role
+    # admin can manage/edit places, they admin over [place-ids]
     userRole: Role {
       default := "user";
     };
-
     created: datetime {
       rewrite insert using (datetime_of_statement());
     }
