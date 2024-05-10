@@ -9,12 +9,10 @@ export const homePublic = e.select(
 )
 export type homePublicResturn = $infer<typeof homePublic>
 
-// context: https://discord.com/channels/841451783728529451/1235266238977150976 & https://discord.com/channels/841451783728529451/1235593775447937054
+// context: https://discord.com/channels/841451783728529451/1235266238977150976 & https://discord.com/channels/841451783728529451/1235593775447937054 & https://discord.com/channels/841451783728529451/1238547782537580754
 export const profileAuth = e.params(
   { userId: e.optional(e.uuid) },
   ({ userId }) => {
-    // TODO: has bug https://discord.com/channels/841451783728529451/1235593775447937054/1235711795939774514 (check up if fixed)
-    // const user = e.op(e.cast(e.User, userId), "??", e.global.current_user)
     const user = e.op(
       e.cast(e.User, userId),
       "if",
