@@ -2,7 +2,11 @@
 // TODO: create it from seed.ts too
 
 import { client } from "@/edgedb"
-import { createPost } from "@/edgedb/crud/mutations"
+import {
+  createGlobalState,
+  createPost,
+  updateGlobalState,
+} from "@/edgedb/crud/mutations"
 import e from "../dbschema/edgeql-js"
 
 const userId = process.env.USER_ID!
@@ -51,7 +55,7 @@ async function seed() {
 // /{name}
 async function profile() {
   await e
-    .update(e.User, (user) => ({
+    .update(e.User, () => ({
       filter_single: { id: userId },
       set: {
         name: "nikiv",
@@ -64,20 +68,22 @@ async function profile() {
     .run(client)
 }
 
-//
 async function home() {
-  // await e
-  //   .update(e.User, (user) => ({
-  //     filter_single: { id: userId },
-  //     set: {
-  //       name: "nikiv",
-  //       displayName: "Nikita",
-  //       place: "Tbilisi, Georgia",
-  //       bio: "Make kuskus.app",
-  //       profilePhotoUrl: "https://images.kuskus.app/nikiv-profile-image",
-  //     },
-  //   }))
-  //   .run(client)
+  await createGlobalState.run(client, {
+    popularDishes: [
+      "Coffee",
+      "Smoothie",
+      "Pasta",
+      "Ramen",
+      "Tacos",
+      "Steak",
+      "Curry",
+      "Pizza",
+      "Sushi",
+      "Burger",
+      "Salad",
+    ],
+  })
 }
 
 async function place() {
@@ -87,7 +93,7 @@ async function place() {
       displayName: "Pulp",
       bio: "Cafe in Tbilisi, Georgia",
       category: "cafe",
-      profilePhoto: "https://images.kuskus.app/nikiv-profile-image",
+      profilePhotoUrl: "https://images.kuskus.app/nikiv-profile-image",
     })
     .run(client)
 }

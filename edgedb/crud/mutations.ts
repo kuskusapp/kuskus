@@ -16,6 +16,19 @@ export async function createPost(
   })
 }
 
+export const createGlobalState = e.params(
+  {
+    popularDishes: e.optional(e.array(e.str)),
+  },
+  ({ popularDishes }) => {
+    return e.insert(e.GlobalState, {
+      popularDishes: e.array_unpack(
+        e.op(popularDishes, "??", e.cast(e.array(e.str), e.set())),
+      ),
+    })
+  },
+)
+
 export const updateUser = e.params(
   {
     userId: e.optional(e.uuid),
@@ -31,12 +44,28 @@ export const updateUser = e.params(
       "else",
       e.global.current_user,
     )
-
     return e.update(user, (u) => ({
       set: {
         bio: e.op(bio, "??", u.bio),
         place: e.op(place, "??", u.place),
         displayName: e.op(displayName, "??", u.displayName),
+      },
+    }))
+  },
+)
+
+export const updateGlobalState = e.params(
+  {
+    popularDishes: e.optional(e.array(e.str)),
+  },
+  ({ popularDishes }) => {
+    const globalState = e.assert_exists(e.assert_single(e.GlobalState))
+
+    return e.update(globalState, (global) => ({
+      set: {
+        popularDishes: e.array_unpack(
+          e.op(popularDishes, "??", e.cast(e.array(e.str), e.set())),
+        ),
       },
     }))
   },

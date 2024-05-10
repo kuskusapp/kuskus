@@ -77,4 +77,15 @@ module default {
       rewrite update using (datetime_of_statement());
     }
   }
+  # global state for app (not tied to anything)
+  type GlobalState {
+    # used in / route | TODO: can be computed later on demand
+    multi popularDishes: str;
+    trigger prohibit_subsequent_writes after insert for each do (
+      select assert(
+        (select count(GlobalState)) = 1,
+        message := "Cannot add another GlobalState object. Do an update instead."
+      )
+    );
+  }
 }
