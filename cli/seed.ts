@@ -2,17 +2,13 @@
 // TODO: create it from seed.ts too
 
 import { client } from "@/edgedb"
-import {
-  createGlobalState,
-  createPost,
-  updateGlobalState,
-} from "@/edgedb/crud/mutations"
+import { createGlobalState, createPost } from "@/edgedb/crud/mutations"
 import e from "../dbschema/edgeql-js"
 
 const userId = process.env.USER_ID!
 
 async function seed() {
-  // checkSeedDbConnection()
+  // checkThatNotRunningInProduction()
   const args = Bun.argv
   const command = args[2]
   try {
@@ -24,8 +20,8 @@ async function seed() {
       case "web":
         await web()
         break
-      case "home":
-        await home()
+      case "homePublic":
+        await homePublic()
         break
       case "profile":
         await profile()
@@ -68,7 +64,7 @@ async function profile() {
     .run(client)
 }
 
-async function home() {
+async function homePublic() {
   await createGlobalState.run(client, {
     popularDishes: [
       "Coffee",
@@ -129,10 +125,13 @@ async function clear() {
   await e.delete(e.Post).run(client)
 }
 
-// function checkSeedDbConnection() {
-//   if (process.env.EDGEDB_DATABASE !== "seed") {
-//     throw new Error("Seed db connection not set")
-//   }
-// }
+function checkThatNotRunningInProduction() {
+  console.log(process.env.EDGEDB_INSTANCE, "wat")
+  if (process.env.EDGEDB_INSTANCE === "nikitavoloboev/kuskus") {
+    throw new Error(
+      "Connected to production DB, don't run these seed commands on it",
+    )
+  }
+}
 
 await seed()
