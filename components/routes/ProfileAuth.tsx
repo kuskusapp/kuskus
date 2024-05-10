@@ -1,11 +1,10 @@
 "use client"
+import { updateUserAction } from "@/app/actions"
 import { profileAuthReturn } from "@/edgedb/crud/queries"
 import { observer, useObservable } from "@legendapp/state/react"
 import Image from "next/image"
-import { TextField, Label, Input } from "react-aria-components"
-import { updateUserAction } from "@/app/actions"
 import { useState } from "react"
-import Modal from "../Modal"
+import { Input, Label, TextField } from "react-aria-components"
 import NewModal from "../NewModal"
 
 interface Props {

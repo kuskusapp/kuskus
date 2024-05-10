@@ -82,13 +82,8 @@ module default {
     # used in / route | TODO: can be computed later on demand
     multi popularDishes: str;
   }
-  # TODO: waiting for fix https://discord.com/channels/841451783728529451/1238513266167386163/1238546401898533005
+  # context: https://discord.com/channels/841451783728529451/1238513266167386163/1238580664669044817
   abstract type Singleton {
-    trigger prohibit_subsequent_writes after insert for each do (
-      select assert(
-        (select count(__new__.__type__)) = 1,
-        message := "Cannot add another " ++ __new__.__type__.name ++ " object. Do an update instead."
-      )
-    );
+    delegated constraint exclusive on (true);
   }
 }
