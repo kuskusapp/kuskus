@@ -50,7 +50,7 @@ export default function Search() {
   const [inputFocused, setInputFocused] = useState(false)
 
   return (
-    <div className="bg-white justify-center p-10">
+    <div className="bg-white justify-center px-10 pt-10">
       <div
         className="relative flex items-center justify-center h-10 m-auto"
         style={{ width: "100%" }}
@@ -62,7 +62,7 @@ export default function Search() {
         />
         <input
           className="border border-neutral-500 rounded-full pl-10 pr-36 py-3"
-          placeholder="Search for a place or a dish..."
+          placeholder="Lets find something tasty! Type place or dish"
           style={{ width: "100%" }}
           onFocus={() => setInputFocused(true)}
           onBlur={() => setInputFocused(false)}
@@ -96,39 +96,70 @@ export default function Search() {
               d="M5 12H12H19"
             />
           </svg>
-          or find places near you
+          or discover nearby dining
         </button>
       </div>
-      <div className="pt-10">
-        <h2 className="text-xl font-normal">
-          Places we recommend for you in{" "}
-          <span className="">[City, Country]</span>
-        </h2>
-        <Swiper
-          className="mt-10"
-          spaceBetween={20}
-          slidesPerView={4}
-          onSlideChange={() => console.log("slide change")}
-          onSwiper={(swiper) => console.log(swiper)}
-        >
-          {recommendedPlaces.map((place) => (
-            <SwiperSlide key={place.id}>
-              <div className="w-80 h-40 relative">
-                <Image
-                  className="rounded-lg"
-                  src={place.imageUrl}
-                  alt={place.name}
-                  layout="fill"
-                  objectFit="cover"
-                />
-              </div>
-              <div className="flex flex-col text-left pt-2 pl-2 space-y-1">
-                <p className="text-base">{place.name}</p>
-                <p className="text-xs">{place.category}</p>
-              </div>
-            </SwiperSlide>
-          ))}
-        </Swiper>
+      <div className="pb-20 space-y-20">
+        <div className="pt-10">
+          <h2 className="text-2xl font-normal">
+            Places we recommend for you in{" "}
+            <span className="">[City, Country]</span>
+          </h2>
+          <Swiper
+            className="mt-10"
+            spaceBetween={20}
+            slidesPerView={4}
+            onSlideChange={() => console.log("slide change")}
+            onSwiper={(swiper) => console.log(swiper)}
+          >
+            {recommendedPlaces.map((place) => (
+              <SwiperSlide key={place.id}>
+                <div className="w-80 h-40 relative">
+                  <Image
+                    className="rounded-lg"
+                    src={place.imageUrl}
+                    alt={place.name}
+                    layout="fill"
+                    objectFit="cover"
+                  />
+                </div>
+                <div className="flex flex-col text-left pt-2 pl-2 space-y-1">
+                  <p className="text-base">{place.name}</p>
+                  <p className="text-xs">{place.category}</p>
+                </div>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
+
+        <div>
+          <h2 className="text-2xl font-normal">Just Opened! Check it Out</h2>
+          <Swiper
+            className="mt-10"
+            spaceBetween={20}
+            slidesPerView={4}
+            onSlideChange={() => console.log("slide change")}
+            onSwiper={(swiper) => console.log(swiper)}
+          >
+            {recommendedPlaces.map((place) => (
+              <SwiperSlide key={place.id}>
+                <div className="w-80 h-40 relative">
+                  <Image
+                    className="rounded-lg"
+                    src={place.imageUrl}
+                    alt={place.name}
+                    layout="fill"
+                    objectFit="cover"
+                  />
+                </div>
+                <div className="flex flex-col text-left pt-2 pl-2 space-y-1">
+                  <p className="text-base">{place.name}</p>
+                  <p className="text-xs">{place.category}</p>
+                </div>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        </div>
       </div>
     </div>
   )
