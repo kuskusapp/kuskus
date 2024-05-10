@@ -4,6 +4,9 @@ import { observer, useObservable } from "@legendapp/state/react"
 import Image from "next/image"
 import { TextField, Label, Input } from "react-aria-components"
 import { updateUserAction } from "@/app/actions"
+import { useState } from "react"
+import Modal from "../Modal"
+import NewModal from "../NewModal"
 
 interface Props {
   data: profileAuthReturn
@@ -11,6 +14,7 @@ interface Props {
 
 export default observer(function ProfileAuth(props: Props) {
   const server$ = useObservable(props.data)
+  const [showSettingsModal, setShowSettingsModal] = useState(true)
   const local$ = useObservable({
     following: false,
     tabs: ["Photos", "Places", "Lists", "Following", "Followers"],
@@ -74,6 +78,13 @@ export default observer(function ProfileAuth(props: Props) {
   return (
     <>
       <div className="bg-white grid grid-cols-3 p-7">
+        <div
+          onClick={() => {
+            setShowSettingsModal(true)
+          }}
+        >
+          Settings
+        </div>
         <header className="col-span-1 pl-8">
           <div className="flex items-start">
             <TextField>
@@ -267,6 +278,10 @@ export default observer(function ProfileAuth(props: Props) {
           {selectedTab === "Following" && <div></div>}
           {selectedTab === "Followers" && <div></div>} */}
         </main>
+        {showSettingsModal && (
+          // @ts-ignore
+          <NewModal setShowSettingsModal={setShowSettingsModal} />
+        )}
       </div>
     </>
   )
