@@ -1,7 +1,7 @@
 "use client"
 import { useState } from "react"
 import Image from "next/image"
-import { IoIosSearch, IoIosArrowBack, IoIosArrowForward } from "react-icons/io"
+import { IoIosSearch } from "react-icons/io"
 import { Swiper, SwiperSlide } from "swiper/react"
 import "swiper/css"
 import "swiper/css/navigation"
@@ -50,7 +50,28 @@ export default function Search() {
   const [inputFocused, setInputFocused] = useState(false)
 
   return (
-    <div className="bg-white justify-center px-10 pt-10">
+    <div className="bg-white justify-center px-5 pt-5">
+      {/* todo: change bg color */}
+      <div
+        className="mb-5 flex justify-center items-center space-x-4 rounded-full p-3"
+        style={{
+          width: "15%",
+          // borderColor: "rgba(255, 255, 255, 0.45)",
+          // borderWidth: 1,
+          // borderRadius: 10,
+          marginLeft: "auto",
+          marginRight: "10px",
+          justifyContent: "center",
+          backgroundColor: "rgb(21 24 28)",
+          boxShadow: "5px 5px 15px rgba(0, 0, 0, 0.3)",
+        }}
+      >
+        <IoIosSearch className="text-white" size={22} />
+        <IoIosSearch className="text-white" size={22} />
+        <IoIosSearch className="text-white" size={22} />
+        <IoIosSearch className="text-white" size={22} />
+      </div>
+
       <div
         className="relative flex items-center justify-center h-10 m-auto"
         style={{ width: "100%" }}
