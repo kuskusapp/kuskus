@@ -46,27 +46,29 @@ module default {
     required name: str {
       constraint exclusive;
     };
-    # pretty name like `Pulp`
+    # pretty name of place
     displayName: str;
     bio: str;
     # TODO: should be geo location (coordinates)
     # location: str;
     # coffee shop, bar, restaurant, etc.
     category: str;
-    # url to photo
-    profilePhoto: str;
+    # cloudflare r2 url with image
+    profilePhotoUrl: str;
   }
   # kuskus.app/posts/{edgedb-post-uuid}
   type Post {
-    # TODO: add place
-    # url to photo
-    # TODO: in future, maybe Post can have multiple photos
+    # cloudflare r2 url with image
     required photoUrl: str;
+    # TODO: allow multiple photos?
+
     description: str;
     # TODO: add date created etc.
     required created_by: User {
       default := global current_user;
     }
+    # TODO: add place
+    # place: str;
     created: datetime {
       rewrite insert using (datetime_of_statement());
     }

@@ -1,6 +1,6 @@
 // currently running commands inside assumes that user is already created through edgedb auth
 // TODO: create it from seed.ts too
-//
+
 import { client } from "@/edgedb"
 import { createPost } from "@/edgedb/crud/mutations"
 import e from "../dbschema/edgeql-js"
@@ -19,6 +19,9 @@ async function seed() {
       // 	break
       case "web":
         await web()
+        break
+      case "home":
+        await home()
         break
       case "profile":
         await profile()
@@ -59,6 +62,22 @@ async function profile() {
       },
     }))
     .run(client)
+}
+
+//
+async function home() {
+  // await e
+  //   .update(e.User, (user) => ({
+  //     filter_single: { id: userId },
+  //     set: {
+  //       name: "nikiv",
+  //       displayName: "Nikita",
+  //       place: "Tbilisi, Georgia",
+  //       bio: "Make kuskus.app",
+  //       profilePhotoUrl: "https://images.kuskus.app/nikiv-profile-image",
+  //     },
+  //   }))
+  //   .run(client)
 }
 
 async function place() {
