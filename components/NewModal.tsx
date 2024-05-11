@@ -1,6 +1,6 @@
 "use client"
 import { useState } from "react"
-import { PencilIcon, ArrowIcon } from "../public/svg/modal-icons"
+import { PencilIcon, ArrowIcon, CloseIcon } from "../public/svg/modal-icons"
 interface Props {
   setShowSettingsModal: (value: boolean) => void
 }
@@ -22,6 +22,14 @@ export default function NewModal(props: Props) {
         }}
         className="absolute top-0 z-20 left-0 w-full h-full backdrop-blur-[2px] "
       ></div>
+      <button
+        onClick={() => {
+          props.setShowSettingsModal(false)
+        }}
+        className="fixed mt-10 mr-40 top-0 right-20 bg-neutral-200 hover:bg-neutral-400 p-2 rounded-full z-50"
+      >
+        <CloseIcon className="w-5 h-5 color:neutral-300" />
+      </button>
       <div className="w-[720px] flex z-30 h-[600px] bg-white rounded-[20px] overflow-hidden">
         <div className="border-r border-black/20 h-full w-1/2">
           <div className="h-[80px] p-5 pb-4 text-[20px] font-semibold flex items-end border-b border-black/20">

@@ -33,3 +33,22 @@ export const ArrowIcon = ({ className }: { className?: string }) => (
     ></path>
   </svg>
 )
+
+export const CloseIcon = ({ className }: { className?: string }) => (
+  <svg className={className} fill="none" viewBox="0 0 24 24">
+    <path
+      stroke="currentColor"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="1.5"
+      d="M17.25 6.75L6.75 17.25"
+    ></path>
+    <path
+      stroke="currentColor"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="1.5"
+      d="M6.75 6.75L17.25 17.25"
+    ></path>
+  </svg>
+)
