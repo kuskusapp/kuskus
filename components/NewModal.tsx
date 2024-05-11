@@ -1,6 +1,6 @@
 "use client"
 import { useState } from "react"
-import { PencilIcon } from "../public/svg/pencil"
+import { PencilIcon, ArrowIcon } from "../public/svg/modal-icons"
 interface Props {
   setShowSettingsModal: (value: boolean) => void
 }
@@ -18,7 +18,7 @@ export default function NewModal(props: Props) {
       ></div>
       <div className="w-[720px] flex z-30 h-[600px] bg-white rounded-[20px] overflow-hidden">
         <div className="border-r border-black/20 h-full w-1/2">
-          <div className="h-[80px] p-5 pb-4 text-[20px] font-bold flex items-end border-b border-black/20">
+          <div className="h-[80px] p-5 pb-4 text-[20px] font-semibold flex items-end border-b border-black/20">
             Settings
           </div>
           <div className="flex flex-col overflow-auto max-h-[calc(100%-80px)] [&::-webkit-scrollbar]:hidden">
@@ -28,9 +28,12 @@ export default function NewModal(props: Props) {
                   onClick={() => {
                     setSelectedSetting(settings[index])
                   }}
-                  className="p-2 px-5 border-b border-black/20"
+                  className={`p-2 px-5 border-b border-black/20 flex justify-between items-center ${
+                    selectedSetting === element ? "bg-gray-100" : ""
+                  }`}
                 >
                   {element}
+                  <ArrowIcon className="color-black w-5 h-6" />
                 </div>
               )
             })}
@@ -39,12 +42,12 @@ export default function NewModal(props: Props) {
         <div className="h-full w-1/2">
           <div className="h-[80px] p-5 pb-4 justify-between flex items-end border-b border-black/20">
             <div className="text-[20px] font-semibold">{selectedSetting}</div>
-            <div className="bg-black rounded-full h-[34px] flex items-center px-4 py-2 font-semibold text-[12px] text-white">
+            <button className="bg-black rounded-full h-[34px] flex items-center px-4 py-2 font-semibold text-[12px] text-white hover:text-gray-200 hover:bg-neutral-800">
               Save
-            </div>
+            </button>
           </div>
 
-          <div className="overflow-auto max-h-[calc(100%-80px)] [&::-webkit-scrollbar]:hidden">
+          <div className="overflow-auto max-h-[calc(100%-80px)] [&::-webkit-scrollbar]:hidden cursor-pointer">
             {
               {
                 "Edit Profile": <EditProfile />,
