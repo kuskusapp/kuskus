@@ -51,14 +51,10 @@ export default function Search() {
 
   return (
     <div className="bg-white justify-center px-5 pt-5">
-      {/* todo: change bg color */}
       <div
         className="mb-5 flex justify-center items-center space-x-4 rounded-full p-3"
         style={{
           width: "15%",
-          // borderColor: "rgba(255, 255, 255, 0.45)",
-          // borderWidth: 1,
-          // borderRadius: 10,
           marginLeft: "auto",
           marginRight: "10px",
           justifyContent: "center",
