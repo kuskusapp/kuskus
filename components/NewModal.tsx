@@ -6,7 +6,13 @@ interface Props {
 }
 
 export default function NewModal(props: Props) {
-  const [settings, setSettings] = useState(["Edit Profile", "Preference"])
+  const [settings, setSettings] = useState([
+    "Edit Profile",
+    "Preference",
+    "Notifications",
+    "Sign Out",
+    "Delete Account",
+  ])
   const [selectedSetting, setSelectedSetting] = useState(settings[0])
   return (
     <div className="fixed z-10 top-0 left-0 w-screen text-black bg-black bg-opacity-45 h-screen flex items-center justify-center ">
@@ -33,7 +39,7 @@ export default function NewModal(props: Props) {
                   }`}
                 >
                   {element}
-                  <ArrowIcon className="color-black w-5 h-6" />
+                  <ArrowIcon className="color-black w-7 h-7" />
                 </div>
               )
             })}
@@ -52,6 +58,10 @@ export default function NewModal(props: Props) {
               {
                 "Edit Profile": <EditProfile />,
                 Preference: <Preference />,
+                Notifications: <Notifications />,
+
+                "Sign Out": <SignOut />,
+                "Delete Account": <DeleteAccount />,
               }[selectedSetting]
             }
           </div>
@@ -121,6 +131,19 @@ function EditProfile() {
     </div>
   )
 }
+
 function Preference() {
-  return <div>nothing here yet C:</div>
+  return <div>nothing here yet</div>
+}
+
+function Notifications() {
+  return <div>nothing here yet</div>
+}
+
+function SignOut() {
+  return <div>nothing here yet</div>
+}
+
+function DeleteAccount() {
+  return <div>nothing here yet</div>
 }
