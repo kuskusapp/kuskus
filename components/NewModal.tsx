@@ -1,7 +1,6 @@
 "use client"
-
 import { useState } from "react"
-
+import { PencilIcon } from "../public/svg/pencil"
 interface Props {
   setShowSettingsModal: (value: boolean) => void
 }
@@ -19,7 +18,7 @@ export default function NewModal(props: Props) {
       ></div>
       <div className="w-[720px] flex z-30 h-[600px] bg-white rounded-[20px] overflow-hidden">
         <div className="border-r border-black/20 h-full w-1/2">
-          <div className="h-[80px] p-5 pb-4 text-[24px] font-bold flex items-end border-b border-black/20">
+          <div className="h-[80px] p-5 pb-4 text-[20px] font-bold flex items-end border-b border-black/20">
             Settings
           </div>
           <div className="flex flex-col overflow-auto max-h-[calc(100%-80px)] [&::-webkit-scrollbar]:hidden">
@@ -39,8 +38,8 @@ export default function NewModal(props: Props) {
         </div>
         <div className="h-full w-1/2">
           <div className="h-[80px] p-5 pb-4 justify-between flex items-end border-b border-black/20">
-            <div className="text-[24px] font-bold">{selectedSetting}</div>
-            <div className="bg-white rounded-full h-[34px] flex items-center px-5 font-bold text-[14px] text-black">
+            <div className="text-[20px] font-semibold">{selectedSetting}</div>
+            <div className="bg-black rounded-full h-[34px] flex items-center px-4 py-2 font-semibold text-[12px] text-white">
               Save
             </div>
           </div>
@@ -60,32 +59,34 @@ export default function NewModal(props: Props) {
 }
 function EditProfile() {
   return (
-    <div className="flex flex-col gap-[20px] ">
+    <div className="flex flex-col gap-[12px]">
       <div className="w-full bg-gray-200 h-[400px] relative">
-        <div className="absolute bottom-2 left-2 rounded-full w-[50px] h-[50px] bg-neutral-900"></div>
+        <button className="absolute bottom-2 left-2 rounded-full w-[50px] h-[50px] bg-neutral-100 bg-opacity-70 hover:bg-opacity-90 flex items-center justify-center">
+          <PencilIcon className="w-6 h-6 text-neutral-700 opacity-50 hover:opacity-90" />
+        </button>
       </div>
       <div className="w-full">
-        <div className="font-light mb-[6px] text-black/50 px-4 text-[14px]">
+        <div className="font-light mb-[6px] text-black/50 px-4 text-[12px]">
           NAME
         </div>
         <input
           type="text"
           placeholder="Your name..."
-          className="outline-none bg-transparent border-x-0 border-black/20 w-full"
+          className="font-thin text-xs outline-none bg-transparent border-x-0 border-black/20 w-full"
         />
       </div>
-      <div className="w-full">
-        <div className="font-light mb-[6px] text-black/50 px-4 text-[14px]">
+      <div className="w-full ">
+        <div className="font-light mb-[6px] text-black/50 px-4 text-[12px]">
           USERNAME
         </div>
         <input
           type="text"
           placeholder="Your username..."
-          className="outline-none bg-transparent border-x-0 border-white/20 w-full"
+          className="font-thin text-xs outline-none bg-transparent border-x-0 border-black/20 w-full"
         />
       </div>
       <div className="w-full">
-        <div className="font-light mb-[6px] text-black/50 px-4 text-[14px]">
+        <div className="font-light mb-[3px] text-black/50 px-4 text-[12px]">
           WTF
         </div>
         <input
@@ -95,7 +96,7 @@ function EditProfile() {
         />
       </div>
       <div className="w-full">
-        <div className="font-light mb-[6px] text-black/50 px-4 text-[14px]">
+        <div className="font-light mb-[6px] text-black/50 px-4 text-[12px]">
           WTF
         </div>
         <input
@@ -105,7 +106,7 @@ function EditProfile() {
         />
       </div>
       <div className="w-full">
-        <div className="font-light mb-[6px] text-black/50 px-4 text-[14px]">
+        <div className="font-light mb-[6px] text-black/50 px-4 text-[12px]">
           ????
         </div>
         <input
