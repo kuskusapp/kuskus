@@ -27,3 +27,11 @@ body {
 .flex-grow::-webkit-scrollbar {
   display: none;
 }
+
+.settings-icon {
+  transition: transform 1000ms ease;
+}
+
+.settings-icon:hover {
+  transform: rotate(360deg);
+}

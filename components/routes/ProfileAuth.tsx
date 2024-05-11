@@ -6,6 +6,7 @@ import Image from "next/image"
 import { useState } from "react"
 import { Input, Label, TextField } from "react-aria-components"
 import NewModal from "../NewModal"
+import { SettingsIcon } from "../../public/svg/modal-icons"
 
 interface Props {
   data: profileAuthReturn
@@ -77,13 +78,25 @@ export default observer(function ProfileAuth(props: Props) {
   return (
     <>
       <div className="bg-white grid grid-cols-3 p-7">
-        <div
-          onClick={() => {
-            setShowSettingsModal(true)
-          }}
-        >
-          Settings
+        <div>
+          <button
+            onClick={() => {
+              setShowSettingsModal(true)
+            }}
+            className="hover:opacity-60 transition-opacity duration-300"
+          >
+            <SettingsIcon className="color-neutral-700 w-6 h-6 settings-icon" />
+          </button>
+          {/* <button
+            onClick={() => {
+              setShowSettingsModal(true)
+            }}
+            className="hover:opacity-60 transition-opacity duration-300"
+          >
+            <SettingsIcon className="color-neutral-700 w-6 h-6 transform" />
+          </button> */}
         </div>
+
         <header className="col-span-1 pl-8">
           <div className="flex items-start">
             <TextField>
