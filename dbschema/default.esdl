@@ -66,8 +66,8 @@ module default {
     fts::with_options(
       .description,
       language := fts::Language.eng
-    )
-  );
+      )
+    );
     required created_by: User {
       default := global current_user;
     }

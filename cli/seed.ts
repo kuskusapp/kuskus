@@ -111,6 +111,7 @@ async function posts() {
     await createPost.run(client, {
       photoUrl: roninImageUrl,
       description: "Lovely breakfast",
+      // description: "Lovely breakfast", TODO: call to python?
       userId: userId,
     })
   }
