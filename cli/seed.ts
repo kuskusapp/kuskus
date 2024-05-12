@@ -4,6 +4,8 @@
 import { client } from "@/edgedb"
 import { createGlobalState, createPost } from "@/edgedb/crud/mutations"
 import e from "../dbschema/edgeql-js"
+import * as path from "path"
+import { create } from "ronin"
 
 const userId = process.env.USER_ID!
 
@@ -96,18 +98,13 @@ async function place() {
 
 // adds some image posts to user
 async function posts() {
-  await createPost(
-    {
-      photoUrl: "https://images.kuskus.app/nikiv-post-1",
-    },
-    userId,
+  let imageBlob = await getFileRelativeToCurrentFolder(
+    import.meta.url,
+    "seed-images/nikiv-post-lovely-breakfast.jpg",
   )
-  await createPost(
-    {
-      photoUrl: "https://images.kuskus.app/nikiv-post-2",
-    },
-    userId,
-  )
+  await create.post.with({
+    photo: imageBlob,
+  })
 }
 
 async function web() {
@@ -134,3 +131,14 @@ function checkThatNotRunningInProduction() {
 }
 
 await seed()
+
+// currentFilePath has to be import.meta.url
+export async function getFileRelativeToCurrentFolder(
+  currentFilePath: string,
+  relativePath: string,
+) {
+  const directoryPath = path.dirname(currentFilePath)
+  const absolutePath = path.join(directoryPath, relativePath)
+  const file = Bun.file(absolutePath)
+  return await file
+}
