@@ -20,7 +20,7 @@ module default {
     # pretty name of user (same as X username/name split)
     displayName: str;
     bio: str;
-    # cloudflare r2 url with image
+    # ronin url with image
     profilePhotoUrl: str;
     # city or country
     place: str;
@@ -58,17 +58,13 @@ module default {
   }
   # kuskus.app/posts/{edgedb-post-uuid}
   type Post {
-    # cloudflare r2 url with image
+    # ronin url with image
     required photoUrl: str;
-    # TODO: allow multiple photos?
-
+    # user entered description for post
     description: str;
-    # TODO: add date created etc.
     required created_by: User {
       default := global current_user;
     }
-    # TODO: add place
-    # place: str;
     created: datetime {
       rewrite insert using (datetime_of_statement());
     }

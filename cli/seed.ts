@@ -99,12 +99,13 @@ async function place() {
 // adds some image posts to user
 async function posts() {
   let imageBlob = await getFileRelativeToCurrentFolder(
-    import.meta.url,
+    import.meta.dirname,
     "seed-images/nikiv-post-lovely-breakfast.jpg",
   )
-  await create.post.with({
+  const res = await create.post.with({
     photo: imageBlob,
   })
+  console.log(res, "res")
 }
 
 async function web() {
@@ -134,10 +135,9 @@ await seed()
 
 // currentFilePath has to be import.meta.url
 export async function getFileRelativeToCurrentFolder(
-  currentFilePath: string,
+  directoryPath: string,
   relativePath: string,
 ) {
-  const directoryPath = path.dirname(currentFilePath)
   const absolutePath = path.join(directoryPath, relativePath)
   const file = Bun.file(absolutePath)
   return await file
