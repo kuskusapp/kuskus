@@ -62,6 +62,12 @@ module default {
     required photoUrl: str;
     # user entered description for post
     description: str;
+    index fts::index on (
+    fts::with_options(
+      .description,
+      language := fts::Language.eng
+    )
+  );
     required created_by: User {
       default := global current_user;
     }

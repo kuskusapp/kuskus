@@ -6,6 +6,7 @@ import { createGlobalState, createPost } from "@/edgedb/crud/mutations"
 import e from "../dbschema/edgeql-js"
 import * as path from "path"
 import { create } from "ronin"
+import type { Post } from "@ronin/kus"
 
 const userId = process.env.USER_ID!
 
@@ -34,8 +35,8 @@ async function seed() {
       case "posts":
         await posts()
         break
-      case "clear":
-        await clear()
+      case "clearPosts":
+        await clearPosts()
         break
       case undefined:
         console.log("No command provided")
@@ -98,28 +99,34 @@ async function place() {
 
 // adds some image posts to user
 async function posts() {
-  let imageBlob = await getFileRelativeToCurrentFolder(
+  let image = await getFileRelativeToCurrentFolder(
     import.meta.dirname,
     "seed-images/nikiv-post-lovely-breakfast.jpg",
   )
   const res = await create.post.with({
-    photo: imageBlob,
+    photo: image as any,
   })
-  console.log(res, "res")
+  let roninImageUrl = res.photo.src
+  if (roninImageUrl) {
+    await createPost.run(client, {
+      photoUrl: roninImageUrl,
+      description: "Lovely breakfast",
+      userId: userId,
+    })
+  }
 }
 
 async function web() {
-  await createPost(
-    {
-      photoUrl: "https://avatars.githubusercontent.com/u/6391776?v=4",
-      description: "profile image",
-    },
-    "d6baa570-049a-11ef-b969-074fde013f53",
-  )
+  // await createPost(
+  //   {
+  //     photoUrl: "https://avatars.githubusercontent.com/u/6391776?v=4",
+  //     description: "profile image",
+  //   },
+  //   "d6baa570-049a-11ef-b969-074fde013f53",
+  // )
 }
 
-// TODO: add more, make configurable
-async function clear() {
+async function clearPosts() {
   await e.delete(e.Post).run(client)
 }
 
@@ -131,14 +138,14 @@ function checkThatNotRunningInProduction() {
   }
 }
 
-await seed()
-
 // currentFilePath has to be import.meta.url
-export async function getFileRelativeToCurrentFolder(
+export function getFileRelativeToCurrentFolder(
   directoryPath: string,
   relativePath: string,
 ) {
   const absolutePath = path.join(directoryPath, relativePath)
   const file = Bun.file(absolutePath)
-  return await file
+  return file
 }
+
+await seed()

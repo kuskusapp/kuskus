@@ -47,6 +47,7 @@
     "@edgedb/generate": "~0.5.3",
     "@eslint/eslintrc": "3.x",
     "@ngneat/falso": "^7.2.0",
+    "@ronin/kus": "^0.0.0-3430881564120",
     "@types/inquirer": "^9.0.7",
     "@types/node": "^20",
     "@types/react": "^18",

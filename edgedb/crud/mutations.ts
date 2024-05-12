@@ -1,20 +1,26 @@
 import e from "../../dbschema/edgeql-js"
 
-export async function createPost(
-  data: {
-    photoUrl: string
-    description?: string
+export const createPost = e.params(
+  {
+    photoUrl: e.str,
+    description: e.optional(e.str),
+    userId: e.optional(e.uuid),
   },
-  userId?: string | null,
-) {
-  return await e.insert(e.Post, {
-    photoUrl: data.photoUrl,
-    description: data.description,
-    created_by: userId
-      ? e.cast(e.User, e.uuid(userId))
-      : e.cast(e.User, e.set()),
-  })
-}
+  ({ photoUrl, description, userId }) => {
+    const user = e.op(
+      e.cast(e.User, userId),
+      "if",
+      e.op("exists", userId),
+      "else",
+      e.global.current_user,
+    )
+    return e.insert(e.Post, {
+      photoUrl,
+      description,
+      created_by: user,
+    })
+  },
+)
 
 export const createGlobalState = e.params(
   {
