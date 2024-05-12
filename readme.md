@@ -10,13 +10,15 @@ Started from [Next.js + EdgeDB + EdgeDB Auth template](https://github.com/edgedb
 bun i
 ```
 
-Install [EdgeDB](https://www.edgedb.com/) using:
+Install [EdgeDB](https://www.edgedb.com/) using:\
+(or update to version in [/edgedb.toml](https://github.com/kuskusapp/kuskus/blob/main/edgedb.toml) using `edgedb cli upgrade`)
 
 ```
 curl --proto '=https' --tlsv1.2 -sSf https://sh.edgedb.com | sh
 ```
 
-Create new EdgeDB instance:
+Create new EdgeDB instance:\
+(if it asks you for version, accept `main`)
 
 ```
 edgedb project init
@@ -28,7 +30,8 @@ Name instance `kuskus`. Apply migrations with:
 edgedb migration apply
 ```
 
-Setup auth with:
+Setup auth with:\
+(app name: "kuskus", and accept everything else)
 
 ```
 bun auth:setup
