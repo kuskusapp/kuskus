@@ -16,6 +16,7 @@
   },
   "version": "0.1.0",
   "dependencies": {
+    "@edgedb/ai": "^0.1.0-alpha.1",
     "@edgedb/auth-nextjs": "^0.3.1",
     "@headlessui/react": "^2.0.3",
     "@heroicons/react": "^2.1.3",

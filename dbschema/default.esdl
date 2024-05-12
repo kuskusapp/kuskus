@@ -1,4 +1,5 @@
 using extension auth;
+using extension ai;
 
 module default {
   scalar type Role extending enum<admin, user>;
@@ -68,6 +69,13 @@ module default {
       language := fts::Language.eng
       )
     );
+
+    # description of image by image model
+    aiDescription: str;
+    deferred index ext::ai::index(
+      embedding_model := 'text-embedding-3-small'
+    ) on (.aiDescription);
+
     required created_by: User {
       default := global current_user;
     }

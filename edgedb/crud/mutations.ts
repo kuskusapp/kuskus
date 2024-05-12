@@ -4,9 +4,10 @@ export const createPost = e.params(
   {
     photoUrl: e.str,
     description: e.optional(e.str),
+    aiDescription: e.optional(e.str),
     userId: e.optional(e.uuid),
   },
-  ({ photoUrl, description, userId }) => {
+  ({ photoUrl, description, userId, aiDescription }) => {
     const user = e.op(
       e.cast(e.User, userId),
       "if",
@@ -17,6 +18,7 @@ export const createPost = e.params(
     return e.insert(e.Post, {
       photoUrl,
       description,
+      aiDescription,
       created_by: user,
     })
   },

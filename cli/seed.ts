@@ -5,6 +5,7 @@ import { client } from "@/edgedb"
 import { createGlobalState, createPost } from "@/edgedb/crud/mutations"
 import e from "../dbschema/edgeql-js"
 import * as path from "path"
+import * as fs from "fs"
 import { create } from "ronin"
 import type { Post } from "@ronin/kus"
 
@@ -37,6 +38,9 @@ async function seed() {
         break
       case "clearPosts":
         await clearPosts()
+        break
+      case "query":
+        await query()
         break
       case undefined:
         console.log("No command provided")
@@ -99,22 +103,40 @@ async function place() {
 
 // adds some image posts to user
 async function posts() {
-  let image = await getFileRelativeToCurrentFolder(
-    import.meta.dirname,
+  let image = await getFileRelativeToCurrentFolderAsNodeBuffer(
     "seed-images/nikiv-post-lovely-breakfast.jpg",
   )
+  const imageDescription = await describeImage(image)
+  console.log(imageDescription)
+  return
   const res = await create.post.with({
     photo: image as any,
   })
   let roninImageUrl = res.photo.src
+  // let roninImageUrl = ".."
   if (roninImageUrl) {
     await createPost.run(client, {
-      photoUrl: roninImageUrl,
-      description: "Lovely breakfast",
-      // description: "Lovely breakfast", TODO: call to python?
+      // photoUrl: res.id,
+      photoUrl: "..",
+      aiDescription: imageDescription,
       userId: userId,
     })
   }
+}
+
+async function describeImage(imageBlob: any) {
+  const response = await fetch(
+    "https://api-inference.huggingface.co/models/nlpconnect/vit-gpt2-image-captioning",
+    {
+      headers: {
+        Authorization: `Bearer ${process.env.HUGGINGFACE_TOKEN}`,
+      },
+      method: "POST",
+      body: imageBlob,
+    },
+  )
+  const result = await response.json()
+  return result[0].generated_text
 }
 
 async function web() {
@@ -139,14 +161,12 @@ function checkThatNotRunningInProduction() {
   }
 }
 
-// currentFilePath has to be import.meta.url
-export function getFileRelativeToCurrentFolder(
-  directoryPath: string,
-  relativePath: string,
-) {
-  const absolutePath = path.join(directoryPath, relativePath)
-  const file = Bun.file(absolutePath)
-  return file
+// TODO: move functions to ts-utils & import them
+function getFileRelativeToCurrentFolder(relativePath: string) {
+  return Bun.file(path.join(import.meta.dirname, relativePath))
+}
+function getFileRelativeToCurrentFolderAsNodeBuffer(relativePath: string) {
+  return fs.readFileSync(path.join(import.meta.dirname, relativePath))
 }
 
 await seed()
