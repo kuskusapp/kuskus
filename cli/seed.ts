@@ -7,6 +7,11 @@ import * as fs from "fs"
 import * as path from "path"
 import { create } from "ronin"
 import e from "../dbschema/edgeql-js"
+import OpenAI from "openai"
+
+const openai = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+})
 
 const userId = process.env.USER_ID!
 
@@ -100,21 +105,23 @@ async function place() {
 // adds some image posts to user
 async function posts() {
   const images = readJPGFilesFromFolder("seed/foods")
-  const promises = images.map(async (image) => {
-    let imageDescription = await describeImage(image.buffer)
-    console.log(image.fileName)
-    console.log(imageDescription)
-  })
-  await Promise.all(promises)
-  return
-  let image = await getFileRelativeToCurrentFolderAsNodeBuffer(
-    "seed-foods/nikiv-post-lovely-breakfast.jpg",
-  )
-  // const imageDescription = console.log(imageDescription)
+  let testImage = images[2]
+  console.log(testImage, "test image")
+  // let imageDescription = await describeImage(testImage.buffer)
+  // console.log(testImage.fileName)
+  // console.log(imageDescription, "description")
   // return
-  // const res = await create.post.with({
-  //   photo: image as any,
+  // const promises = images.map(async (image) => {
+  //   let imageDescription = await describeImage(image.buffer)
+  //   console.log(image.fileName)
+  //   console.log(imageDescription)
   // })
+  // await Promise.all(promises)
+  // return
+  const res = await create.post.with({
+    photo: testImage as any,
+  })
+  console.log(res, "res")
   // let roninImageUrl = res.photo.src
   // // let roninImageUrl = ".."
   // if (roninImageUrl) {
@@ -128,18 +135,35 @@ async function posts() {
 }
 
 async function describeImage(imageBlob: any) {
-  const response = await fetch(
-    "https://api-inference.huggingface.co/models/nlpconnect/vit-gpt2-image-captioning",
-    {
-      headers: {
-        Authorization: `Bearer ${process.env.HUGGINGFACE_TOKEN}`,
+  try {
+    const response = await fetch(
+      // "https://api-inference.huggingface.co/models/unum-cloud/uform-gen",
+      "https://api-inference.huggingface.co/models/nlpconnect/vit-gpt2-image-captioning",
+      {
+        headers: {
+          Authorization: `Bearer ${process.env.HUGGINGFACE_TOKEN}`,
+        },
+        method: "POST",
+        body: imageBlob,
       },
-      method: "POST",
-      body: imageBlob,
-    },
-  )
-  const result = await response.json()
-  return result[0].generated_text
+    )
+
+    if (!response.ok) {
+      console.error("Failed to fetch:", response.status, response.statusText)
+      return "Error fetching image description"
+    }
+
+    const result = await response.json()
+    if (!result || result.length === 0 || !result[0].generated_text) {
+      console.error("Unexpected response format:", result)
+      return "Unexpected response format"
+    }
+
+    return result[0].generated_text
+  } catch (error) {
+    console.error("Error in describeImage:", error)
+    return "Error processing image description"
+  }
 }
 
 async function web() {
@@ -185,6 +209,34 @@ function readJPGFilesFromFolder(
       ),
     }))
   return jpgFiles
+}
+
+async function describeImageWithGpt4Vision(imageBuffer: Buffer) {
+  return
+  const base64Image = imageBuffer.toString("base64")
+  const response = await openai.chat.completions.create({
+    model: "gpt-4-turbo",
+    messages: [
+      {
+        role: "user",
+        content: [
+          { type: "text", text: "What’s in this image?" },
+          {
+            type: "image_url",
+            image_url: base64Image,
+          },
+        ],
+      },
+    ],
+  })
+
+  if (response.choices && response.choices.length > 0) {
+    console.log(response.choices[0].message.content.text)
+    return response.choices[0].message.content.text
+  } else {
+    console.error("No response or invalid response from OpenAI.")
+    return "Failed to get description"
+  }
 }
 
 await seed()
