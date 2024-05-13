@@ -1,13 +1,12 @@
 import { $ } from "bun"
-import Watcher from "watcher"
 
 async function main() {
   const args = Bun.argv
   const command = args[2]
   try {
     switch (command) {
-      case "runGrafbase":
-        await runGrafbase()
+      case "setup":
+        await setup()
         break
     }
   } catch (err) {
@@ -15,8 +14,8 @@ async function main() {
   }
 }
 
-async function runGrafbase() {
-  console.log("run grafbase")
+async function setup() {
+  await $`cd cli && git clone https://github.com/kuskusapp/seed`
 }
 
 await main()

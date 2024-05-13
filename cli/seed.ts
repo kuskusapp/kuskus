@@ -99,8 +99,13 @@ async function place() {
 
 // adds some image posts to user
 async function posts() {
+  const images = readJPGFilesFromFolder("seed/foods")
+  images.map((image) => {
+    console.log(image, "image")
+  })
+  return
   let image = await getFileRelativeToCurrentFolderAsNodeBuffer(
-    "seed-images/nikiv-post-lovely-breakfast.jpg",
+    "seed-foods/nikiv-post-lovely-breakfast.jpg",
   )
   const imageDescription = await describeImage(image)
   console.log(imageDescription)
@@ -163,6 +168,18 @@ function getFileRelativeToCurrentFolder(relativePath: string) {
 }
 function getFileRelativeToCurrentFolderAsNodeBuffer(relativePath: string) {
   return fs.readFileSync(path.join(import.meta.dirname, relativePath))
+}
+function readJPGFilesFromFolder(folderPath: string): Buffer[] {
+  const directoryPath = path.join(import.meta.dirname, folderPath)
+  const files = fs.readdirSync(directoryPath)
+  const jpgBuffers = files
+    .filter((file) => file.endsWith(".jpg"))
+    .map((jpgFile) =>
+      getFileRelativeToCurrentFolderAsNodeBuffer(
+        path.join(folderPath, jpgFile),
+      ),
+    )
+  return jpgBuffers
 }
 
 await seed()

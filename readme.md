@@ -43,6 +43,12 @@ Generate [EdgeDB-JS](https://github.com/edgedb/edgedb-js) types with:
 bun generate:all
 ```
 
+Sets up seed folder for [cli/seed.ts](cli/seed.ts) to work well.
+
+```
+bun setup
+```
+
 ## Run
 
 ```

@@ -12,7 +12,8 @@
     "generate:all": "pnpm generate:edgeql && pnpm generate:interfaces",
     "seed": "bun --watch cli/seed.ts",
     "db:migrate": "edgedb migration create && edgedb migration apply && npx @edgedb/generate edgeql-js",
-    "cli": "bun --watch cli/run.ts"
+    "cli": "bun --watch cli/run.ts",
+    "setup": "bun cmd.ts setup"
   },
   "version": "0.1.0",
   "dependencies": {
