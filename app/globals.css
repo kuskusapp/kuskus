@@ -35,3 +35,7 @@ body {
 .settings-icon:hover {
   transform: rotate(360deg);
 }
+
+.thin-icon {
+  stroke-width: 5
+}

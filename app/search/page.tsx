@@ -2,6 +2,13 @@
 import { useState } from "react"
 import Image from "next/image"
 import { IoIosSearch } from "react-icons/io"
+import {
+  GridIcon,
+  SearchIcon,
+  UserIcon,
+  NotificationIcon,
+  PlusIcon,
+} from "../../public/svg/search-icons"
 import { Swiper, SwiperSlide } from "swiper/react"
 import "swiper/css"
 import "swiper/css/navigation"
@@ -51,21 +58,35 @@ export default function Search() {
 
   return (
     <div className="bg-white justify-center px-5 pt-5">
-      <div
-        className="mb-5 flex justify-center items-center space-x-4 rounded-full p-3"
-        style={{
-          width: "15%",
-          marginLeft: "auto",
-          marginRight: "10px",
-          justifyContent: "center",
-          backgroundColor: "rgb(21 24 28)",
-          boxShadow: "5px 5px 15px rgba(0, 0, 0, 0.3)",
-        }}
-      >
-        <IoIosSearch className="text-white" size={22} />
-        <IoIosSearch className="text-white" size={22} />
-        <IoIosSearch className="text-white" size={22} />
-        <IoIosSearch className="text-white" size={22} />
+      <div className="flex flex-row space-x-2 justify-center">
+        <div
+          className="mb-5 flex justify-center items-center space-x-3 rounded-full py-2"
+          style={{
+            width: "13%",
+            marginLeft: "auto",
+            marginRight: "10px",
+            justifyContent: "center",
+            backgroundColor: "rgb(47 47 48)",
+            boxShadow: "5px 5px 15px rgba(0, 0, 0, 0.3)",
+          }}
+        >
+          <GridIcon className="text-white w-7 h-7" />
+          <SearchIcon className="text-white w-7 h-7" />
+          <UserIcon className="text-white w-7 h-7" />
+          <NotificationIcon className="text-white w-7 h-7" />
+        </div>
+
+        <button
+          style={{
+            backgroundColor: "rgb(47 47 48)",
+            width: "40px",
+            height: "40px",
+            boxShadow: "5px 5px 15px rgba(0, 0, 0, 0.3)",
+          }}
+          className="rounded-full items-center justify-center flex text-white focus:outline-none focus:ring"
+        >
+          <PlusIcon className="text-white w-7 h-7" />
+        </button>
       </div>
 
       <div
