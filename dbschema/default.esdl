@@ -72,9 +72,9 @@ module default {
 
     # description of image by image model
     aiDescription: str;
-    deferred index ext::ai::index(
-      embedding_model := 'text-embedding-3-small'
-    ) on (.aiDescription);
+    # deferred index ext::ai::index(
+    #   embedding_model := 'text-embedding-3-small'
+    # ) on (.aiDescription);
 
     required created_by: User {
       default := global current_user;

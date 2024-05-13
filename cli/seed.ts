@@ -3,11 +3,10 @@
 
 import { client } from "@/edgedb"
 import { createGlobalState, createPost } from "@/edgedb/crud/mutations"
-import e from "../dbschema/edgeql-js"
-import * as path from "path"
 import * as fs from "fs"
+import * as path from "path"
 import { create } from "ronin"
-import type { Post } from "@ronin/kus"
+import e from "../dbschema/edgeql-js"
 
 const userId = process.env.USER_ID!
 
@@ -38,9 +37,6 @@ async function seed() {
         break
       case "clearPosts":
         await clearPosts()
-        break
-      case "query":
-        await query()
         break
       case undefined:
         console.log("No command provided")
