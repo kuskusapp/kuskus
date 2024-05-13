@@ -100,29 +100,31 @@ async function place() {
 // adds some image posts to user
 async function posts() {
   const images = readJPGFilesFromFolder("seed/foods")
-  images.map((image) => {
-    console.log(image, "image")
+  const promises = images.map(async (image) => {
+    let imageDescription = await describeImage(image.buffer)
+    console.log(image.fileName)
+    console.log(imageDescription)
   })
+  await Promise.all(promises)
   return
   let image = await getFileRelativeToCurrentFolderAsNodeBuffer(
     "seed-foods/nikiv-post-lovely-breakfast.jpg",
   )
-  const imageDescription = await describeImage(image)
-  console.log(imageDescription)
-  return
-  const res = await create.post.with({
-    photo: image as any,
-  })
-  let roninImageUrl = res.photo.src
-  // let roninImageUrl = ".."
-  if (roninImageUrl) {
-    await createPost.run(client, {
-      // photoUrl: res.id,
-      photoUrl: "..",
-      aiDescription: imageDescription,
-      userId: userId,
-    })
-  }
+  // const imageDescription = console.log(imageDescription)
+  // return
+  // const res = await create.post.with({
+  //   photo: image as any,
+  // })
+  // let roninImageUrl = res.photo.src
+  // // let roninImageUrl = ".."
+  // if (roninImageUrl) {
+  //   await createPost.run(client, {
+  //     // photoUrl: res.id,
+  //     photoUrl: "..",
+  //     aiDescription: imageDescription,
+  //     userId: userId,
+  //   })
+  // }
 }
 
 async function describeImage(imageBlob: any) {
@@ -169,17 +171,20 @@ function getFileRelativeToCurrentFolder(relativePath: string) {
 function getFileRelativeToCurrentFolderAsNodeBuffer(relativePath: string) {
   return fs.readFileSync(path.join(import.meta.dirname, relativePath))
 }
-function readJPGFilesFromFolder(folderPath: string): Buffer[] {
+function readJPGFilesFromFolder(
+  folderPath: string,
+): { fileName: string; buffer: Buffer }[] {
   const directoryPath = path.join(import.meta.dirname, folderPath)
   const files = fs.readdirSync(directoryPath)
-  const jpgBuffers = files
+  const jpgFiles = files
     .filter((file) => file.endsWith(".jpg"))
-    .map((jpgFile) =>
-      getFileRelativeToCurrentFolderAsNodeBuffer(
+    .map((jpgFile) => ({
+      fileName: jpgFile,
+      buffer: getFileRelativeToCurrentFolderAsNodeBuffer(
         path.join(folderPath, jpgFile),
       ),
-    )
-  return jpgBuffers
+    }))
+  return jpgFiles
 }
 
 await seed()
