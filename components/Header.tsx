@@ -1,5 +1,4 @@
 "use client"
-import { useEffect, useState } from "react"
 import Link from "next/link"
 import {
   GridIcon,
@@ -8,25 +7,28 @@ import {
   NotificationIcon,
   PlusIcon,
 } from "../public/svg/search-icons"
+import { useObservable } from "@legendapp/state/react"
 
-// fix: links navigation not working
 export default function Header() {
-  const [activeLink, setActiveLink] = useState("")
-
-  const links = [
-    { href: "/places", label: "Places" },
-    { href: "/members", label: "Members" },
-    { href: "/foods", label: "Foods" },
-  ]
+  const local$ = useObservable({
+    activeLink: "",
+    links: [
+      { href: "/places", label: "Places" },
+      { href: "/members", label: "Members" },
+      { href: "/foods", label: "Foods" },
+    ],
+  })
 
   return (
     <>
       <div className="flex flex-row space-x-15">
+        {/* TODO: adding margin/padding to this `div` will break <Link */}
+        {/* https://github.com/vercel/next.js/issues/65739 */}
         <div className="flex flex-row space-x-4">
-          {links.map((link) => {
+          {local$.links.map((link) => {
             return (
-              <Link key={link.href} href={link.href}>
-                {link.label}
+              <Link key={link.href.get()} href={link.href.get()}>
+                {link.label.get()}
               </Link>
             )
           })}
