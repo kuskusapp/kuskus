@@ -21,32 +21,34 @@ export default function Header() {
 
   return (
     <>
-      <div className="mt-10 ml-10 flex flex-row space-x-15">
-        <div className="flex flex-row space-x-4">
-          {local$.links.map((link) => {
-            return (
-              <Link key={link.href.get()} href={link.href.get()}>
-                {link.label.get()}
-              </Link>
-            )
-          })}
+      <div className="flex flex-row items-center justify-between space-x-15 pt-[20px] px-4">
+        <div className="text-[34px] font-bold">
+          <div className="flex flex-row gap-3">
+            {...local$.links.map((link) => {
+              return (
+                <Link key={link.href.get()} href={link.href.get()}>
+                  {link.label.get()}
+                </Link>
+              )
+            })}
+          </div>
         </div>
         <div
           style={{
             position: "fixed",
             top: 20,
             right: 20,
-            width: "100%",
+            width: "fit-content",
             zIndex: 100,
           }}
-          className="flex flex-row space-x-2 justify-center"
+          className="flex flex-row gap-5 justify-center"
         >
           <div
-            className="mb-5 flex justify-center items-center space-x-3 rounded-full py-2"
+            className=" h-[50px] flex justify-center items-center space-x-3 rounded-full py-2 px-3"
             style={{
-              width: "13%",
+              // width: "13%",
               marginLeft: "auto",
-              marginRight: "10px",
+
               justifyContent: "center",
               backgroundColor: "rgb(47 47 48)",
               boxShadow: "5px 5px 15px rgba(0, 0, 0, 0.3)",
@@ -60,8 +62,8 @@ export default function Header() {
           <button
             style={{
               backgroundColor: "rgb(47 47 48)",
-              width: "40px",
-              height: "40px",
+              width: "50px",
+              height: "50px",
               boxShadow: "5px 5px 15px rgba(0, 0, 0, 0.3)",
             }}
             className="rounded-full items-center justify-center flex text-white focus:outline-none focus:ring"
