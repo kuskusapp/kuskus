@@ -16,28 +16,20 @@ export default function Header() {
   const links = [
     { href: "/places", label: "Places" },
     { href: "/members", label: "Members" },
-    { href: "/foods", label: "Dishes" },
+    { href: "/foods", label: "Foods" },
   ]
-
-  useEffect(() => {
-    console.log(links, "links")
-  }, [])
 
   return (
     <>
       <div className="flex flex-row space-x-15">
-        <div className="flex flex-row space-x-4 mt-8 ml-10">
-          {links.map((link) => (
-            <Link key={link.href} href={link.href}>
-              <p
-                className={`text-base font-semibold ${activeLink === link.href ? "text-neutral-900" : "text-neutral-500"}`}
-                style={{ cursor: "pointer" }}
-                onClick={() => setActiveLink(link.href)}
-              >
+        <div className="flex flex-row space-x-4">
+          {links.map((link) => {
+            return (
+              <Link key={link.href} href={link.href}>
                 {link.label}
-              </p>
-            </Link>
-          ))}
+              </Link>
+            )
+          })}
         </div>
         <div
           style={{
