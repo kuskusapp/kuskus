@@ -1,4 +1,5 @@
-import { useState } from "react"
+"use client"
+import { useEffect, useState } from "react"
 import Link from "next/link"
 import {
   GridIcon,
@@ -17,6 +18,10 @@ export default function Header() {
     { href: "/members", label: "Members" },
     { href: "/foods", label: "Dishes" },
   ]
+
+  useEffect(() => {
+    console.log(links, "links")
+  }, [])
 
   return (
     <>
