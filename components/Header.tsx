@@ -1,3 +1,4 @@
+import { useState } from "react"
 import Link from "next/link"
 import {
   GridIcon,
@@ -7,37 +8,32 @@ import {
   PlusIcon,
 } from "../public/svg/search-icons"
 
+// fix: links navigation not working
 export default function Header() {
+  const [activeLink, setActiveLink] = useState("")
+
+  const links = [
+    { href: "/searchplaces", label: "Places" },
+    { href: "/searchusers", label: "Members" },
+    { href: "/searchdishes", label: "Dishes" },
+  ]
+
   return (
     <>
       <div className="flex flex-row space-x-15">
         <div className="flex flex-row space-x-4 mt-8 ml-10">
-          <Link href="/searchlaces">
-            <p
-              className="text-base font-semibold text-neutral-500"
-              style={{ cursor: "pointer" }}
-            >
-              Places
-            </p>
-          </Link>
-          <Link href="/searchusers">
-            <p
-              className="text-base font-semibold text-neutral-500"
-              style={{ cursor: "pointer" }}
-            >
-              Members
-            </p>
-          </Link>
-          <Link href="/searchdishes">
-            <p
-              className="text-base font-semibold text-neutral-500"
-              style={{ cursor: "pointer" }}
-            >
-              Dishes
-            </p>
-          </Link>
+          {links.map((link) => (
+            <Link key={link.href} href={link.href}>
+              <p
+                className={`text-base font-semibold ${activeLink === link.href ? "text-neutral-900" : "text-neutral-500"}`}
+                style={{ cursor: "pointer" }}
+                onClick={() => setActiveLink(link.href)}
+              >
+                {link.label}
+              </p>
+            </Link>
+          ))}
         </div>
-
         <div
           style={{
             position: "fixed",
@@ -64,7 +60,6 @@ export default function Header() {
             <UserIcon className="text-white w-7 h-7" />
             <NotificationIcon className="text-white w-7 h-7" />
           </div>
-
           <button
             style={{
               backgroundColor: "rgb(47 47 48)",
