@@ -15,7 +15,7 @@ async function main() {
 }
 
 async function setup() {
-  await $`cd cli && git clone https://github.com/kuskusapp/seed`
+  await $`git clone https://github.com/kuskusapp/seed cli/seed`
 }
 
 await main()

@@ -5,13 +5,7 @@ import { client } from "@/edgedb"
 import { createGlobalState, createPost } from "@/edgedb/crud/mutations"
 import * as fs from "fs"
 import * as path from "path"
-import { create } from "ronin"
 import e from "../dbschema/edgeql-js"
-import OpenAI from "openai"
-
-// const openai = new OpenAI({
-//   apiKey: process.env.OPENAI_API_KEY,
-// })
 
 const userId = process.env.USER_ID!
 
@@ -106,7 +100,7 @@ async function place() {
 async function posts() {
   const images = readJPGFilesFromFolder("seed/foods")
   let testImage = images[2]
-  console.log(testImage, "test image")
+  // console.log(testImage, "test image")
   // let imageDescription = await describeImage(testImage.buffer)
   // console.log(testImage.fileName)
   // console.log(imageDescription, "description")
@@ -118,10 +112,10 @@ async function posts() {
   // })
   // await Promise.all(promises)
   // return
-  const res = await create.post.with({
-    photo: testImage as any,
-  })
-  console.log(res, "res")
+  // const res = await create.post.with({
+  //   photo: testImage.buffer,
+  // })
+  // console.log(res, "res")
   // let roninImageUrl = res.photo.src
   // // let roninImageUrl = ".."
   // if (roninImageUrl) {
@@ -209,34 +203,6 @@ function readJPGFilesFromFolder(
       ),
     }))
   return jpgFiles
-}
-
-async function describeImageWithGpt4Vision(imageBuffer: Buffer) {
-  return
-  const base64Image = imageBuffer.toString("base64")
-  const response = await openai.chat.completions.create({
-    model: "gpt-4-turbo",
-    messages: [
-      {
-        role: "user",
-        content: [
-          { type: "text", text: "What’s in this image?" },
-          {
-            type: "image_url",
-            image_url: base64Image,
-          },
-        ],
-      },
-    ],
-  })
-
-  if (response.choices && response.choices.length > 0) {
-    console.log(response.choices[0].message.content.text)
-    return response.choices[0].message.content.text
-  } else {
-    console.error("No response or invalid response from OpenAI.")
-    return "Failed to get description"
-  }
 }
 
 await seed()
