@@ -13,9 +13,9 @@ export default function Header() {
   const [activeLink, setActiveLink] = useState("")
 
   const links = [
-    { href: "/searchplaces", label: "Places" },
-    { href: "/searchusers", label: "Members" },
-    { href: "/searchdishes", label: "Dishes" },
+    { href: "/places", label: "Places" },
+    { href: "/members", label: "Members" },
+    { href: "/foods", label: "Dishes" },
   ]
 
   return (
