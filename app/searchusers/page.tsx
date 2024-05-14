@@ -16,53 +16,37 @@ import "swiper/css"
 import "swiper/css/navigation"
 import "swiper/css/pagination"
 
-const recommendedPlaces = [
+const recommendedUsers = [
   {
-    id: "place1",
-    name: "Place 1",
-    category: "coffeeshop",
+    id: "user1",
+    name: "user 1",
     imageUrl: "https://images.omrshn.dev/logisticcars.jpeg",
   },
   {
-    id: "place2",
-    name: "Place 2",
-    category: "coffeeshop",
+    id: "user2",
+    name: "user 2",
     imageUrl: "https://images.omrshn.dev/logisticcars.jpeg",
   },
   {
-    id: "place3",
-    name: "Place 3",
-    category: "coffeeshop",
+    id: "user3",
+    name: "user 3",
     imageUrl: "https://images.omrshn.dev/logisticcars.jpeg",
   },
   {
-    id: "place4",
-    name: "Place 4",
-    category: "coffeeshop",
-    imageUrl: "https://images.omrshn.dev/logisticcars.jpeg",
-  },
-  {
-    id: "place5",
-    name: "Place 5",
-    category: "coffeeshop",
-    imageUrl: "https://images.omrshn.dev/logisticcars.jpeg",
-  },
-  {
-    id: "place6",
-    name: "Place 6",
-    category: "coffeeshop",
+    id: "user4",
+    name: "user 4",
     imageUrl: "https://images.omrshn.dev/logisticcars.jpeg",
   },
 ]
 
-export default function Search() {
+export default function SearchUsers() {
   const [inputFocused, setInputFocused] = useState(false)
 
   return (
     <>
       <div className="flex flex-row space-x-15">
         <div className="flex flex-row space-x-4 mt-8 ml-10">
-          <Link href="/">
+          <Link href="/searchlaces">
             <p
               className="text-base font-semibold text-neutral-500"
               style={{ cursor: "pointer" }}
@@ -70,7 +54,7 @@ export default function Search() {
               Places
             </p>
           </Link>
-          <Link href="#">
+          <Link href="/searchusers">
             <p
               className="text-base font-semibold text-neutral-500"
               style={{ cursor: "pointer" }}
@@ -78,7 +62,7 @@ export default function Search() {
               Members
             </p>
           </Link>
-          <Link href="#">
+          <Link href="/searchdishes">
             <p
               className="text-base font-semibold text-neutral-500"
               style={{ cursor: "pointer" }}
@@ -140,7 +124,7 @@ export default function Search() {
           />
           <input
             className="border border-neutral-500 rounded-full pl-10 pr-36 py-3"
-            placeholder="Lets find something tasty! Type place or dish"
+            placeholder="Lets find your friends! Type name"
             style={{ width: "100%" }}
             onFocus={() => setInputFocused(true)}
             onBlur={() => setInputFocused(false)}
@@ -150,7 +134,7 @@ export default function Search() {
             style={{ top: "50%", transform: "translateY(-50%)" }}
           >
             <GlobeIcon className="w-7 h-7 color-white" />
-            or discover nearby dining
+            or discover nearby users
           </button>
         </div>
         <div className="pb-20 space-y-10">
@@ -166,78 +150,19 @@ export default function Search() {
               onSlideChange={() => console.log("slide change")}
               onSwiper={(swiper) => console.log(swiper)}
             >
-              {recommendedPlaces.map((place) => (
-                <SwiperSlide key={place.id}>
+              {recommendedUsers.map((user) => (
+                <SwiperSlide key={user.id}>
                   <div className="w-80 h-40 relative">
                     <Image
                       className="rounded-lg"
-                      src={place.imageUrl}
-                      alt={place.name}
+                      src={user.imageUrl}
+                      alt={user.name}
                       layout="fill"
                       objectFit="cover"
                     />
                   </div>
                   <div className="flex flex-col text-left pt-2 pl-2 space-y-1">
-                    <p className="text-base">{place.name}</p>
-                    <p className="text-xs">{place.category}</p>
-                  </div>
-                </SwiperSlide>
-              ))}
-            </Swiper>
-          </div>
-
-          <div>
-            <h2 className="text-2xl font-normal">Just Opened! Check it Out</h2>
-            <Swiper
-              className="mt-5"
-              spaceBetween={20}
-              slidesPerView={4}
-              onSlideChange={() => console.log("slide change")}
-              onSwiper={(swiper) => console.log(swiper)}
-            >
-              {recommendedPlaces.map((place) => (
-                <SwiperSlide key={place.id}>
-                  <div className="w-80 h-40 relative">
-                    <Image
-                      className="rounded-lg"
-                      src={place.imageUrl}
-                      alt={place.name}
-                      layout="fill"
-                      objectFit="cover"
-                    />
-                  </div>
-                  <div className="flex flex-col text-left pt-2 pl-2 space-y-1">
-                    <p className="text-base">{place.name}</p>
-                    <p className="text-xs">{place.category}</p>
-                  </div>
-                </SwiperSlide>
-              ))}
-            </Swiper>
-          </div>
-
-          <div>
-            <h2 className="text-2xl font-normal">Just Opened! Check it Out</h2>
-            <Swiper
-              className="mt-5"
-              spaceBetween={20}
-              slidesPerView={4}
-              onSlideChange={() => console.log("slide change")}
-              onSwiper={(swiper) => console.log(swiper)}
-            >
-              {recommendedPlaces.map((place) => (
-                <SwiperSlide key={place.id}>
-                  <div className="w-80 h-40 relative">
-                    <Image
-                      className="rounded-lg"
-                      src={place.imageUrl}
-                      alt={place.name}
-                      layout="fill"
-                      objectFit="cover"
-                    />
-                  </div>
-                  <div className="flex flex-col text-left pt-2 pl-2 space-y-1">
-                    <p className="text-base">{place.name}</p>
-                    <p className="text-xs">{place.category}</p>
+                    <p className="text-base">{user.name}</p>
                   </div>
                 </SwiperSlide>
               ))}

@@ -9,9 +9,9 @@ import { create } from "ronin"
 import e from "../dbschema/edgeql-js"
 import OpenAI from "openai"
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-})
+// const openai = new OpenAI({
+//   apiKey: process.env.OPENAI_API_KEY,
+// })
 
 const userId = process.env.USER_ID!
 
