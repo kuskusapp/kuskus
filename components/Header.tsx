@@ -21,7 +21,7 @@ export default function Header() {
 
   return (
     <>
-      <div className="flex flex-row space-x-15">
+      <div className="mt-10 ml-10 flex flex-row space-x-15">
         <div className="flex flex-row space-x-4">
           {local$.links.map((link) => {
             return (
