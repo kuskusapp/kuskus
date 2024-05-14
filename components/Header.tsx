@@ -22,8 +22,6 @@ export default function Header() {
   return (
     <>
       <div className="flex flex-row space-x-15">
-        {/* TODO: adding margin/padding to this `div` will break <Link */}
-        {/* https://github.com/vercel/next.js/issues/65739 */}
         <div className="flex flex-row space-x-4">
           {local$.links.map((link) => {
             return (
