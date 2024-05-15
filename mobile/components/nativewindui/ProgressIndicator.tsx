@@ -38,12 +38,7 @@ const ProgressIndicator = React.forwardRef<
     const indicator = useAnimatedStyle(() => {
       return {
         width: withSpring(
-          `${interpolate(
-            progress.value,
-            [0, 100],
-            [1, 100],
-            Extrapolation.CLAMP
-          )}%`,
+          `${interpolate(progress.value, [0, 100], [1, 100], Extrapolation.CLAMP)}%`,
           { overshootClamping: true }
         ),
       };
@@ -51,7 +46,7 @@ const ProgressIndicator = React.forwardRef<
 
     return (
       <View
-        role='progressbar'
+        role="progressbar"
         ref={ref}
         aria-valuemax={max}
         aria-valuemin={0}
@@ -63,18 +58,10 @@ const ProgressIndicator = React.forwardRef<
           now: value,
           text: getValueLabel(value, max),
         }}
-        className={cn(
-          'relative h-1 w-full overflow-hidden rounded-full',
-          className
-        )}
-        {...props}
-      >
-        <View className='absolute left-0 top-0 right-0 bottom-0 bg-muted opacity-20' />
-        <Animated.View
-          role='presentation'
-          style={indicator}
-          className={cn('h-full bg-primary')}
-        />
+        className={cn('relative h-1 w-full overflow-hidden rounded-full', className)}
+        {...props}>
+        <View className="absolute bottom-0 left-0 right-0 top-0 bg-muted opacity-20" />
+        <Animated.View role="presentation" style={indicator} className={cn('h-full bg-primary')} />
       </View>
     );
   }
@@ -89,7 +76,5 @@ function defaultGetValueLabel(value: number, max: number) {
 }
 
 function isValidValueNumber(value: any, max: number): value is number {
-  return (
-    typeof value === 'number' && !isNaN(value) && value <= max && value >= 0
-  );
+  return typeof value === 'number' && !isNaN(value) && value <= max && value >= 0;
 }

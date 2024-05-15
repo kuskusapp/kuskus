@@ -2,9 +2,9 @@
 import { observer } from "@legendapp/state/react"
 
 interface Props {
-  data: any
+	data: any
 }
 
 export default observer(function HomeAuth(props: Props) {
-  return <>authorised</>
+	return <>authorised</>
 })

@@ -5,15 +5,15 @@ import { profileAuth, profilePublic } from "@/edgedb/crud/queries"
 import type { PageProps } from "./$types"
 
 export default async function Profile({ params }: PageProps) {
-  const session = auth.getSession()
-  const client = session.client
-  const authenticated = await session.isSignedIn()
+	const session = auth.getSession()
+	const client = session.client
+	const authenticated = await session.isSignedIn()
 
-  if (!authenticated) {
-    const data = await profilePublic.run(client, { username: params.profile })
-    return <ProfilePublic data={data} />
-  }
+	if (!authenticated) {
+		const data = await profilePublic.run(client, { username: params.profile })
+		return <ProfilePublic data={data} />
+	}
 
-  const data = await profileAuth.run(client, {})
-  return <ProfileAuth data={data} />
+	const data = await profileAuth.run(client, {})
+	return <ProfileAuth data={data} />
 }

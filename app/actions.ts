@@ -7,39 +7,39 @@ import { auth } from "@/edgedb-next-client"
 import { profileAuthLoadMoreImages } from "@/edgedb/crud/queries"
 
 const updateUserSchema = z.object({
-  bio: z.string().optional(),
-  place: z.string().optional(),
-  displayName: z.string().optional(),
+	bio: z.string().optional(),
+	place: z.string().optional(),
+	displayName: z.string().optional(),
 })
 export const updateUserAction = actionClient
-  .schema(updateUserSchema)
-  .action(async ({ parsedInput: { bio, place, displayName } }) => {
-    const session = auth.getSession()
-    const client = session.client
-    try {
-      await updateUser.run(client, { bio, place, displayName })
-    } catch {
-      // TODO: consider better errors
-      return { failure: "Error with EdgeDB" }
-    }
-  })
+	.schema(updateUserSchema)
+	.action(async ({ parsedInput: { bio, place, displayName } }) => {
+		const session = auth.getSession()
+		const client = session.client
+		try {
+			await updateUser.run(client, { bio, place, displayName })
+		} catch {
+			// TODO: consider better errors
+			return { failure: "Error with EdgeDB" }
+		}
+	})
 
 const profileAuthGetMoreImagesSchema = z.object({
-  pageNumber: z.number(),
+	pageNumber: z.number(),
 })
 export const profileAuthGetMoreImagesAction = actionClient
-  .schema(profileAuthGetMoreImagesSchema)
-  .action(async ({ parsedInput: { pageNumber } }) => {
-    const session = auth.getSession()
-    const client = session.client
-    try {
-      const res = await profileAuthLoadMoreImages.run(client, { pageNumber })
-      return res
-    } catch {
-      // TODO: consider better errors
-      return { failure: "Error with EdgeDB" }
-    }
-  })
+	.schema(profileAuthGetMoreImagesSchema)
+	.action(async ({ parsedInput: { pageNumber } }) => {
+		const session = auth.getSession()
+		const client = session.client
+		try {
+			const res = await profileAuthLoadMoreImages.run(client, { pageNumber })
+			return res
+		} catch {
+			// TODO: consider better errors
+			return { failure: "Error with EdgeDB" }
+		}
+	})
 
 // const globalSearchSchema = z.object({
 //   query: z.string(),

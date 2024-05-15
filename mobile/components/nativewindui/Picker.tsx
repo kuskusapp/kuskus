@@ -16,10 +16,9 @@ export function Picker<T>({
   return (
     <View
       className={cn(
-        'bg-background border border-background ios:shadow-sm ios:shadow-black/5 rounded-md',
+        'ios:shadow-sm ios:shadow-black/5 rounded-md border border-background bg-background',
         className
-      )}
-    >
+      )}>
       <RNPicker
         mode={mode}
         style={

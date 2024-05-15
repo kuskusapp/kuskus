@@ -36,10 +36,7 @@ const Avatar = React.forwardRef<
     <RootContext.Provider value={{ alt, status, setStatus }}>
       <View
         ref={ref}
-        className={cn(
-          'relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full',
-          className
-        )}
+        className={cn('relative flex h-10 w-10 shrink-0 overflow-hidden rounded-full', className)}
         {...viewProps}
       />
     </RootContext.Provider>
@@ -51,9 +48,7 @@ Avatar.displayName = 'Avatar';
 function useRootContext() {
   const context = React.useContext(RootContext);
   if (!context) {
-    throw new Error(
-      'Avatar compound components cannot be rendered outside the Avatar component'
-    );
+    throw new Error('Avatar compound components cannot be rendered outside the Avatar component');
   }
   return context;
 }
@@ -63,13 +58,7 @@ const AvatarImage = React.forwardRef<
   Omit<React.ComponentPropsWithoutRef<typeof RNImage>, 'alt'> & AvatarImageProps
 >(
   (
-    {
-      onLoad: onLoadProps,
-      onError: onErrorProps,
-      onLoadingStatusChange,
-      className,
-      ...props
-    },
+    { onLoad: onLoadProps, onError: onErrorProps, onLoadingStatusChange, className, ...props },
     ref
   ) => {
     const { alt, setStatus, status } = useRootContext();

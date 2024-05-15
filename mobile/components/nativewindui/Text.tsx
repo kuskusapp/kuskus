@@ -4,12 +4,9 @@ import * as React from 'react';
 import { UITextView } from 'react-native-uitextview';
 import { cssInterop } from 'nativewind';
 
-
 import { cn } from '~/lib/cn';
 
-
 cssInterop(UITextView, { className: 'style' });
-
 
 const textVariants = cva('text-foreground', {
   variants: {
@@ -41,7 +38,6 @@ const textVariants = cva('text-foreground', {
 
 const TextClassContext = React.createContext<string | undefined>(undefined);
 
-
 function Text({
   className,
   variant,
@@ -56,7 +52,5 @@ function Text({
     />
   );
 }
-
-
 
 export { Text, TextClassContext, textVariants };

@@ -4,16 +4,16 @@ import type { PageProps } from "./$types"
 import PlacesAuth from "@/components/routes/PlacesAuth"
 
 export default async function Place({ params }: PageProps) {
-  const session = auth.getSession()
-  const client = session.client
-  const authenticated = await session.isSignedIn()
+	const session = auth.getSession()
+	const client = session.client
+	const authenticated = await session.isSignedIn()
 
-  if (!authenticated) {
-    // TODO: change for public
-    console.log("run?")
-    return <></>
-  }
+	if (!authenticated) {
+		// TODO: change for public
+		console.log("run?")
+		return <></>
+	}
 
-  const data = await placesAuth.run(client, { placeName: params.name })
-  return <PlacesAuth data={data} />
+	const data = await placesAuth.run(client, { placeName: params.name })
+	return <PlacesAuth data={data} />
 }
