@@ -1,10 +1,10 @@
-import { ActivityIndicator as RNActivityIndicator } from 'react-native';
+import { ActivityIndicator as RNActivityIndicator } from "react-native"
 
-import { useColorScheme } from '~/lib/useColorScheme';
+import { useColorScheme } from "~/lib/useColorScheme"
 
 export function ActivityIndicator(
-  props: React.ComponentPropsWithoutRef<typeof RNActivityIndicator>
+	props: React.ComponentPropsWithoutRef<typeof RNActivityIndicator>,
 ) {
-  const { colors } = useColorScheme();
-  return <RNActivityIndicator color={colors.primary} {...props} />;
+	const { colors } = useColorScheme()
+	return <RNActivityIndicator color={colors.primary} {...props} />
 }
