@@ -60,13 +60,18 @@ module default {
   # kuskus.app/posts/{edgedb-post-uuid}
   type Post {
     # ronin url with image
-    required photoUrl: str;
-    # ronin id for image TODO: remove when ronin lets you delete by photoUrl only
+    required imageUrl: str;
+    # ronin id for image
     required roninId: str;
-    # needed for seeding TODO: might be not needed
-    photoFileName: str {
+    imageWidth: str;
+    imageHeight: str;
+    imagePreviewBase64Hash: str;
+
+    # needed for seeding TODO: might be not needed (check seed.ts > posts() how it's used)
+    imageFileNameFromImport: str {
       constraint exclusive;
     };
+
     # user entered description for post
     description: str;
     index fts::index on (

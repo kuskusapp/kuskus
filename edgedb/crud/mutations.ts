@@ -2,20 +2,24 @@ import e from "../../dbschema/edgeql-js"
 
 export const createPost = e.params(
   {
-    photoUrl: e.str,
+    imageUrl: e.str,
     roninId: e.str,
-    photoFileName: e.optional(e.str),
-    description: e.optional(e.str),
+    imageWidth: e.optional(e.str),
+    imageHeight: e.optional(e.str),
+    imagePreviewBase64Hash: e.optional(e.str),
     aiDescription: e.optional(e.str),
+    imageFileNameFromImport: e.optional(e.str),
     userId: e.optional(e.uuid),
   },
   ({
-    photoUrl,
-    description,
-    userId,
-    aiDescription,
+    imageUrl,
     roninId,
-    photoFileName,
+    imageWidth,
+    imageHeight,
+    imagePreviewBase64Hash,
+    aiDescription,
+    imageFileNameFromImport,
+    userId,
   }) => {
     const user = e.op(
       e.cast(e.User, userId),
@@ -25,11 +29,13 @@ export const createPost = e.params(
       e.global.current_user,
     )
     return e.insert(e.Post, {
-      photoUrl,
+      imageUrl,
       roninId,
-      photoFileName,
-      description,
+      imageWidth,
+      imageHeight,
+      imagePreviewBase64Hash,
       aiDescription,
+      imageFileNameFromImport,
       created_by: user,
     })
   },

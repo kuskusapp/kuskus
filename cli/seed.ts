@@ -100,36 +100,44 @@ async function place() {
 // adds some image posts to user
 async function posts() {
   const images = readJPGFilesFromFolder("seed/foods")
-  const promises = images.map(async (image) => {
-    const roninPost = await get.post.with.fileName(image.fileName)
+  for (const image of images) {
+    const roninPost = await get.post.with.fileNameFromImport(image.fileName)
     let imageDescription = await describeImage(image.buffer)
 
     if (roninPost) {
-      await e
+      const dbPost = await e
         .insert(e.Post, {
-          photoUrl: roninPost.photo.src,
+          imageUrl: roninPost.photo.src,
           roninId: roninPost.id,
-          photoFileName: image.fileName,
+          imageWidth: roninPost.photo.meta.width,
+          imageHeight: roninPost.photo.meta.height,
+          imagePreviewBase64Hash: roninPost.photo.placeholder.base64,
           aiDescription: imageDescription,
+          imageFileNameFromImport: image.fileName,
           created_by: e.cast(e.User, e.uuid(userId)),
         })
         .run(client)
+      console.log(dbPost, "db post added from existing ronin post")
     } else {
       const res = await create.post.with({
         photo: image.buffer,
-        fileName: image.fileName,
+        fileNameFromImport: image.fileName,
         aiDescription: imageDescription,
       })
-      await createPost.run(client, {
-        photoUrl: res.photo.src,
+      console.log(res, "ronin post added")
+      const dbPost = await createPost.run(client, {
+        imageUrl: res.photo.src,
         roninId: res.id,
-        photoFileName: image.fileName,
+        imageWidth: res.photo.meta.width,
+        imageHeight: res.photo.meta.height,
+        imagePreviewBase64Hash: res.photo.placeholder.base64,
         aiDescription: imageDescription,
+        imageFileNameFromImport: image.fileName,
         userId: userId,
       })
+      console.log(dbPost, "db post added with ronin post")
     }
-  })
-  await Promise.all(promises)
+  }
 }
 
 async function describeImage(imageBlob: any) {
