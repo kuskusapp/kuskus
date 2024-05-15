@@ -6,6 +6,7 @@ import { createGlobalState, createPost } from "@/edgedb/crud/mutations"
 import * as fs from "fs"
 import * as path from "path"
 import e from "../dbschema/edgeql-js"
+import { create, drop } from "ronin"
 
 const userId = process.env.USER_ID!
 
@@ -100,32 +101,21 @@ async function place() {
 async function posts() {
   const images = readJPGFilesFromFolder("seed/foods")
   let testImage = images[2]
-  // console.log(testImage, "test image")
-  // let imageDescription = await describeImage(testImage.buffer)
-  // console.log(testImage.fileName)
-  // console.log(imageDescription, "description")
-  // return
-  // const promises = images.map(async (image) => {
-  //   let imageDescription = await describeImage(image.buffer)
-  //   console.log(image.fileName)
-  //   console.log(imageDescription)
-  // })
-  // await Promise.all(promises)
-  // return
-  // const res = await create.post.with({
-  //   photo: testImage.buffer,
-  // })
-  // console.log(res, "res")
-  // let roninImageUrl = res.photo.src
-  // // let roninImageUrl = ".."
-  // if (roninImageUrl) {
-  //   await createPost.run(client, {
-  //     // photoUrl: res.id,
-  //     photoUrl: "..",
-  //     aiDescription: imageDescription,
-  //     userId: userId,
-  //   })
-  // }
+  const promises = images.map(async (image) => {
+    let imageDescription = await describeImage(image.buffer)
+    const res = await create.post.with({
+      photo: testImage.buffer,
+      aiDescription: imageDescription,
+    })
+    console.log(res, "ronin res")
+    await createPost.run(client, {
+      photoUrl: res.photo.src,
+      roninId: res.id,
+      aiDescription: imageDescription,
+      userId: userId,
+    })
+  })
+  await Promise.all(promises)
 }
 
 async function describeImage(imageBlob: any) {
@@ -171,7 +161,17 @@ async function web() {
 }
 
 async function clearPosts() {
-  await e.delete(e.Post).run(client)
+  const posts = await e
+    .select(e.Post, () => ({
+      photoUrl: true,
+      photoId: true,
+    }))
+    .run(client)
+  console.log(posts, "posts")
+  posts.map(async (post) => {
+    await drop.post.with.id(post.photoId)
+  })
+  // await e.delete(e.Post).run(client)
 }
 
 function checkThatNotRunningInProduction() {

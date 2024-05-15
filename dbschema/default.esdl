@@ -61,6 +61,8 @@ module default {
   type Post {
     # ronin url with image
     required photoUrl: str;
+    # ronin id for image TODO: remove when ronin lets you delete by photoUrl only
+    required roninId: str;
     # user entered description for post
     description: str;
     index fts::index on (

@@ -3,11 +3,12 @@ import e from "../../dbschema/edgeql-js"
 export const createPost = e.params(
   {
     photoUrl: e.str,
+    roninId: e.str,
     description: e.optional(e.str),
     aiDescription: e.optional(e.str),
     userId: e.optional(e.uuid),
   },
-  ({ photoUrl, description, userId, aiDescription }) => {
+  ({ photoUrl, description, userId, aiDescription, roninId }) => {
     const user = e.op(
       e.cast(e.User, userId),
       "if",
@@ -17,6 +18,7 @@ export const createPost = e.params(
     )
     return e.insert(e.Post, {
       photoUrl,
+      roninId,
       description,
       aiDescription,
       created_by: user,

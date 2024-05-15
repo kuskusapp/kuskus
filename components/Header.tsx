@@ -46,9 +46,7 @@ export default function Header() {
           <div
             className=" h-[50px] flex justify-center items-center space-x-3 rounded-full py-2 px-3"
             style={{
-              // width: "13%",
               marginLeft: "auto",
-
               justifyContent: "center",
               backgroundColor: "rgb(47 47 48)",
               boxShadow: "5px 5px 15px rgba(0, 0, 0, 0.3)",
