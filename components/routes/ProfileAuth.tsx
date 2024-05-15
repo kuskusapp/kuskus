@@ -108,17 +108,28 @@ export default legend.observer(function ProfileAuth(props: ProfileAuthProps) {
 		})
 	}, [posts])
 
+	react.useEffect(() => {
+		function checkBottom() {
+			const FETCH_THRESHOLD = 600 // adjust
+			if (window.innerHeight + window.scrollY + FETCH_THRESHOLD >= document.body.offsetHeight) {
+				// TODO: fetch more posts
+	
+				server$.createdPosts.set([...server$.createdPosts.get()?? [], ...server$.createdPosts.get() ?? []])
+			}
+		}
+
+		window.addEventListener("scroll", checkBottom)
+		checkBottom()
+
+		return () => {
+			window.removeEventListener("scroll", checkBottom)
+		}
+	}, [])
+
 	return (
 		<div className="min-h-screen h-full text-black/60">
 			<Sidebar />
 			<div className="ml-[380px] min-h-full flex">
-				<button
-					onClick={async () => {
-						// TODO: fetch more images and append to props.data
-					}}
-				>
-					FETCH
-				</button>
 				<ImageGrid images={images} />
 			</div>
 		</div>
