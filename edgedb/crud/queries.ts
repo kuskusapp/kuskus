@@ -27,13 +27,38 @@ export const profileAuth = e.params(
       displayName: true,
       profilePhotoUrl: true,
       createdPosts: {
+        offset: 0,
+        limit: 6,
         photoUrl: true,
-        description: true,
+        // description: true,
+        // photoFileName: true,
       },
     }))
   },
 )
 export type profileAuthReturn = $infer<typeof profileAuth>
+
+export const profileAuthLoadMoreImages = e.params(
+  { userId: e.optional(e.uuid), pageNumber: e.int64 },
+  ({ userId, pageNumber }) => {
+    const user = e.op(
+      e.cast(e.User, userId),
+      "if",
+      e.op("exists", userId),
+      "else",
+      e.global.current_user,
+    )
+    return e.select(user, () => ({
+      createdPosts: {
+        offset: e.op(pageNumber, "*", 6),
+        limit: 6,
+        photoUrl: true,
+        // photoFileName: true,
+      },
+    }))
+  },
+)
+export type profileAuthLoadMoreImages = $infer<typeof profileAuthLoadMoreImages>
 
 export const profilePublic = e.params({ username: e.str }, ({ username }) => {
   return e.select(e.User, (u) => ({
