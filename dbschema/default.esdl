@@ -63,8 +63,8 @@ module default {
     required imageUrl: str;
     # ronin id for image
     required roninId: str;
-    imageWidth: str;
-    imageHeight: str;
+    imageWidth: int16;
+    imageHeight: int16;
     imagePreviewBase64Hash: str;
 
     # needed for seeding TODO: might be not needed (check seed.ts > posts() how it's used)

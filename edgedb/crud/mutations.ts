@@ -4,8 +4,8 @@ export const createPost = e.params(
   {
     imageUrl: e.str,
     roninId: e.str,
-    imageWidth: e.optional(e.str),
-    imageHeight: e.optional(e.str),
+    imageWidth: e.optional(e.int16),
+    imageHeight: e.optional(e.int16),
     imagePreviewBase64Hash: e.optional(e.str),
     aiDescription: e.optional(e.str),
     imageFileNameFromImport: e.optional(e.str),
