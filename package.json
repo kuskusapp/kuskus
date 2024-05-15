@@ -71,7 +71,8 @@
     "typescript": "^5"
   },
   "prettier": {
-    "semi": false
+    "semi": false,
+    "useTabs": true
   },
   "license": "MIT"
 }
