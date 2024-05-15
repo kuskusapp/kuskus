@@ -2,7 +2,7 @@
 import { observer, useObservable } from "@legendapp/state/react"
 import Image from "next/image"
 import { useEffect, useState } from "react"
-import Modal from "../Modal"
+// import Modal from "../Modal"
 import { placesAuthReturn } from "@/edgedb/crud/queries"
 
 interface Props {
@@ -311,14 +311,14 @@ export default observer(function PlacesAuth(props: Props) {
 					))}
 				</div>
 			</main>
-			{modalOpen && (
+			{/* {modalOpen && (
 				<Modal
 					imageUrl={selectedImage}
 					postsState={postsState}
 					closeModal={closeModal}
 					likesCount={postsState[modalIndex]?.likesCount || 0}
 				/>
-			)}
+			)} */}
 			<div className="sticky top-0 col-span-2 flex flex-col h-[calc(100vh-10px)] overflow-auto ml-5 mb-2 flex-grow scrollbarHide">
 				<h2 className="text-neutral-700 text-left ml-2 mb-4">255 comments</h2>
 				<div className="flex flex-col flex-grow overflow-auto">
