@@ -10,7 +10,7 @@ interface Props {
 
 type Image = {
 	id     : string
-	alt	   : string
+	alt    : string
 	width  : number
 	height : number
 	src    : string
@@ -131,18 +131,59 @@ function LazyImage(props: {image: Image}) {
 			}}
 			alt={props.image.alt}
 		></img>
-	</div>	
+	</div>
+}
+
+const COLUMNS = 3
+
+type ImageColumns = {
+	images: Image[][]
+	heights: number[]
+}
+
+function makeColumns(): ImageColumns {
+	let cols: ImageColumns = {
+		images:  Array.from({length: COLUMNS}, () => []),
+		heights: Array.from({length: COLUMNS}, () => 0),
+	}
+	addImages(images, cols)
+	return cols
+
+}
+
+function getShortestColumn(cols: ImageColumns): number {
+	let shortest = 0
+	for (let i = 1; i < cols.heights.length; i += 1) {
+		if (cols.heights[i] < cols.heights[shortest]) {
+			shortest = i
+		}
+	}
+	return shortest
+}
+
+function addImages(images: Image[], cols: ImageColumns) {
+	for (const image of images) {
+		const shortest = getShortestColumn(cols)
+		cols.images[shortest].push(image)
+		cols.heights[shortest] += image.height/image.width
+	}
 }
 
 export default observer(function ProfileAuth(props: Props) {
 	const server$ = useObservable(props.data)
 	const [showSettingsModal, setShowSettingsModal] = useState(false)
 
+	const [columns, setColumns] = useState(makeColumns)
+
 	return (
 		<div className="min-h-screen h-full text-black/60">
 			<Sidebar />
-			<div className="ml-[380px] h-full pl-[6px] grid grid-cols-2 gap-[6px]">
-				{images.map(img => <LazyImage image={img} key={img.id} />)}
+			<div className="ml-[380px] min-h-full flex">
+				{columns.images.map((col, i) => <div key={i} className="pl-2 w-full">
+					{col.map(img => <div key={img.id} className="pb-2">
+						<LazyImage image={img} />
+					</div>)}
+				</div>)}
 			</div>
 		</div>
 	)
