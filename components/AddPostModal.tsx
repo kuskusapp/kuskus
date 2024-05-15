@@ -6,10 +6,10 @@ interface Props {
   open: boolean
   onClose: () => void
   postsState: any
-  closeModal: () => void
+  // closeModal: () => void
 }
 
-const AddPostModal: React.FC<Props> = ({ open, closeModal }) => {
+const AddPostModal: React.FC<Props> = ({ open, onClose }) => {
   const [isOpen, setIsOpen] = useState(open)
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
@@ -27,7 +27,7 @@ const AddPostModal: React.FC<Props> = ({ open, closeModal }) => {
 
   const handleCloseModal = () => {
     setIsOpen(false)
-    closeModal()
+    onClose()
   }
 
   const handleSubmit = () => {
