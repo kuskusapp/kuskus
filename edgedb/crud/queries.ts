@@ -55,8 +55,10 @@ export const profileAuthLoadMoreImages = e.params(
       createdPosts: {
         offset: e.op(pageNumber, "*", 6),
         limit: 6,
-        photoUrl: true,
-        // photoFileName: true,
+        imageUrl: true,
+        imageWidth: true,
+        imageHeight: true,
+        imagePreviewBase64Hash: true,
       },
     }))
   },

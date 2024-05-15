@@ -1,8 +1,9 @@
 "use client"
 import { profileAuthReturn } from "@/edgedb/crud/queries"
-import { observer, useObservable } from "@legendapp/state/react"
+import * as legend from "@legendapp/state/react"
 import { motion } from "framer-motion"
-import { useState } from "react"
+import * as react from "react"
+import * as actions from "@/app/actions"
 
 interface Props {
   data: profileAuthReturn
@@ -17,119 +18,8 @@ type Image = {
   preview: string
 }
 
-const images: Image[] = [
-  {
-    id: "1",
-    alt: "A beautiful image",
-    height: 1080,
-    width: 1920,
-    src: "https://spatie.be/docs/image/v3/images/example.jpg",
-    preview:
-      "data:image/png;base64, UklGRmwAAABXRUJQVlA4IGAAAAAwBACdASoYABgAP3GuzV+0rSilqAgCkC4JQBmDgsiSpIv92vkkXrAtc0AA/t/8oKpLNnWeC8WeIKaXY//9K5wyClBUuBipO4IHUxFJDApoaH64tJuHJDT40v3ojwAAAAA=",
-  },
-  {
-    id: "2",
-    alt: "A beautiful image",
-    height: 1920,
-    width: 1080,
-    src: "https://c4.wallpaperflare.com/wallpaper/351/154/439/4k-kittens-catzilla-cats-city-hd-wallpaper-preview.jpg",
-    preview:
-      "data:image/png;base64, UklGRmwAAABXRUJQVlA4IGAAAAAwBACdASoYABgAP3GuzV+0rSilqAgCkC4JQBmDgsiSpIv92vkkXrAtc0AA/t/8oKpLNnWeC8WeIKaXY//9K5wyClBUuBipO4IHUxFJDApoaH64tJuHJDT40v3ojwAAAAA=",
-  },
-  {
-    id: "3",
-    alt: "A beautiful image",
-    height: 1080,
-    width: 1920,
-    src: "https://spatie.be/docs/image/v3/images/example.jpg",
-    preview:
-      "data:image/png;base64, UklGRmwAAABXRUJQVlA4IGAAAAAwBACdASoYABgAP3GuzV+0rSilqAgCkC4JQBmDgsiSpIv92vkkXrAtc0AA/t/8oKpLNnWeC8WeIKaXY//9K5wyClBUuBipO4IHUxFJDApoaH64tJuHJDT40v3ojwAAAAA=",
-  },
-  {
-    id: "4",
-    alt: "A beautiful image",
-    height: 1920,
-    width: 1080,
-    src: "https://c4.wallpaperflare.com/wallpaper/351/154/439/4k-kittens-catzilla-cats-city-hd-wallpaper-preview.jpg",
-    preview:
-      "data:image/png;base64, UklGRmwAAABXRUJQVlA4IGAAAAAwBACdASoYABgAP3GuzV+0rSilqAgCkC4JQBmDgsiSpIv92vkkXrAtc0AA/t/8oKpLNnWeC8WeIKaXY//9K5wyClBUuBipO4IHUxFJDApoaH64tJuHJDT40v3ojwAAAAA=",
-  },
-  {
-    id: "5",
-    alt: "A beautiful image",
-    height: 1080,
-    width: 1920,
-    src: "https://spatie.be/docs/image/v3/images/example.jpg",
-    preview:
-      "data:image/png;base64, UklGRmwAAABXRUJQVlA4IGAAAAAwBACdASoYABgAP3GuzV+0rSilqAgCkC4JQBmDgsiSpIv92vkkXrAtc0AA/t/8oKpLNnWeC8WeIKaXY//9K5wyClBUuBipO4IHUxFJDApoaH64tJuHJDT40v3ojwAAAAA=",
-  },
-  {
-    id: "6",
-    alt: "A beautiful image",
-    height: 1920,
-    width: 1080,
-    src: "https://c4.wallpaperflare.com/wallpaper/351/154/439/4k-kittens-catzilla-cats-city-hd-wallpaper-preview.jpg",
-    preview:
-      "data:image/png;base64, UklGRmwAAABXRUJQVlA4IGAAAAAwBACdASoYABgAP3GuzV+0rSilqAgCkC4JQBmDgsiSpIv92vkkXrAtc0AA/t/8oKpLNnWeC8WeIKaXY//9K5wyClBUuBipO4IHUxFJDApoaH64tJuHJDT40v3ojwAAAAA=",
-  },
-  {
-    id: "7",
-    alt: "A beautiful image",
-    height: 1080,
-    width: 1920,
-    src: "https://spatie.be/docs/image/v3/images/example.jpg",
-    preview:
-      "data:image/png;base64, UklGRmwAAABXRUJQVlA4IGAAAAAwBACdASoYABgAP3GuzV+0rSilqAgCkC4JQBmDgsiSpIv92vkkXrAtc0AA/t/8oKpLNnWeC8WeIKaXY//9K5wyClBUuBipO4IHUxFJDApoaH64tJuHJDT40v3ojwAAAAA=",
-  },
-  {
-    id: "8",
-    alt: "A beautiful image",
-    height: 1920,
-    width: 1080,
-    src: "https://c4.wallpaperflare.com/wallpaper/351/154/439/4k-kittens-catzilla-cats-city-hd-wallpaper-preview.jpg",
-    preview:
-      "data:image/png;base64, UklGRmwAAABXRUJQVlA4IGAAAAAwBACdASoYABgAP3GuzV+0rSilqAgCkC4JQBmDgsiSpIv92vkkXrAtc0AA/t/8oKpLNnWeC8WeIKaXY//9K5wyClBUuBipO4IHUxFJDApoaH64tJuHJDT40v3ojwAAAAA=",
-  },
-  {
-    id: "9",
-    alt: "A beautiful image",
-    height: 1080,
-    width: 1920,
-    src: "https://spatie.be/docs/image/v3/images/example.jpg",
-    preview:
-      "data:image/png;base64, UklGRmwAAABXRUJQVlA4IGAAAAAwBACdASoYABgAP3GuzV+0rSilqAgCkC4JQBmDgsiSpIv92vkkXrAtc0AA/t/8oKpLNnWeC8WeIKaXY//9K5wyClBUuBipO4IHUxFJDApoaH64tJuHJDT40v3ojwAAAAA=",
-  },
-  {
-    id: "10",
-    alt: "A beautiful image",
-    height: 1920,
-    width: 1080,
-    src: "https://c4.wallpaperflare.com/wallpaper/351/154/439/4k-kittens-catzilla-cats-city-hd-wallpaper-preview.jpg",
-    preview:
-      "data:image/png;base64, UklGRmwAAABXRUJQVlA4IGAAAAAwBACdASoYABgAP3GuzV+0rSilqAgCkC4JQBmDgsiSpIv92vkkXrAtc0AA/t/8oKpLNnWeC8WeIKaXY//9K5wyClBUuBipO4IHUxFJDApoaH64tJuHJDT40v3ojwAAAAA=",
-  },
-  {
-    id: "11",
-    alt: "A beautiful image",
-    height: 1080,
-    width: 1920,
-    src: "https://spatie.be/docs/image/v3/images/example.jpg",
-    preview:
-      "data:image/png;base64, UklGRmwAAABXRUJQVlA4IGAAAAAwBACdASoYABgAP3GuzV+0rSilqAgCkC4JQBmDgsiSpIv92vkkXrAtc0AA/t/8oKpLNnWeC8WeIKaXY//9K5wyClBUuBipO4IHUxFJDApoaH64tJuHJDT40v3ojwAAAAA=",
-  },
-  {
-    id: "12",
-    alt: "A beautiful image",
-    height: 1920,
-    width: 1080,
-    src: "https://c4.wallpaperflare.com/wallpaper/351/154/439/4k-kittens-catzilla-cats-city-hd-wallpaper-preview.jpg",
-    preview:
-      "data:image/png;base64, UklGRmwAAABXRUJQVlA4IGAAAAAwBACdASoYABgAP3GuzV+0rSilqAgCkC4JQBmDgsiSpIv92vkkXrAtc0AA/t/8oKpLNnWeC8WeIKaXY//9K5wyClBUuBipO4IHUxFJDApoaH64tJuHJDT40v3ojwAAAAA=",
-  },
-]
-
 function LazyImage(props: { image: Image }) {
-  const [loaded, setLoaded] = useState(false)
+  const [loaded, setLoaded] = react.useState(false)
 
   return (
     <div
@@ -172,7 +62,6 @@ function makeColumns(): ImageColumns {
     images: Array.from({ length: COLUMNS }, () => []),
     heights: Array.from({ length: COLUMNS }, () => 0),
   }
-  addImages(images, cols)
   return cols
 }
 
@@ -194,17 +83,63 @@ function addImages(images: Image[], cols: ImageColumns) {
   }
 }
 
-export default observer(function ProfileAuth(props: Props) {
-  const server$ = useObservable(props.data)
-  const [showSettingsModal, setShowSettingsModal] = useState(false)
+let last_id = 0
 
-  const [columns, setColumns] = useState(makeColumns)
+export default legend.observer(function ProfileAuth(props: Props) {
+  const server$ = legend.useObservable(props.data)
+  const [showSettingsModal, setShowSettingsModal] = react.useState(false)
+
+  const local = legend.useComputed(() => {
+    const posts = server$.createdPosts.get() ?? []
+    const images: Image[] = posts.map(post => {
+      return {
+        id: (last_id++).toString(),
+        alt: "",
+        width: post.imageWidth   ?? 1,
+        height: post.imageHeight ?? 1,
+        src: post.imageUrl,
+        preview: post.imagePreviewBase64Hash ?? "",
+      }
+    })
+  
+    const cols = makeColumns()
+    addImages(images, cols)
+
+    return {
+      cols: cols,
+      page: 0,
+    }
+  })
 
   return (
     <div className="min-h-screen h-full text-black/60">
       <Sidebar />
       <div className="ml-[380px] min-h-full flex">
-        {columns.images.map((col, i) => (
+		<button onClick={async () => {
+      local.page.set(p => p + 1)
+			const res = await actions.profileAuthGetMoreImagesAction({
+        pageNumber: local.page.get()
+      })
+
+      if (res.data && !('failure' in res.data)) {
+        const images: Image[] = res.data.createdPosts.map(post => {
+          return {
+            id: (last_id++).toString(),
+            alt: "",
+            width: post.imageWidth   ?? 1,
+            height: post.imageHeight ?? 1,
+            src: post.imageUrl,
+            preview: post.imagePreviewBase64Hash ?? "",
+          }
+        })
+
+        const cols = local.cols.get()
+        addImages(images, cols)
+        local.cols.set(cols)
+      }
+      
+		}}>FETCH</button>
+        {local.cols.get().images.map((col, i) => (
           <div key={i} className="pl-2 w-full">
             {col.map((img) => (
               <div key={img.id} className="pb-2">
@@ -219,7 +154,7 @@ export default observer(function ProfileAuth(props: Props) {
 })
 
 function Sidebar() {
-  const [hoveredSidebarTab, setHoveredSidebarTab] = useState("Following")
+  const [hoveredSidebarTab, setHoveredSidebarTab] = react.useState("Following")
   return (
     <div className="fixed left-0 w-[380px] top-0 h-screen bg-gray-200">
       <div className="w-full h-3/5 bg-gray-300">Profile</div>
