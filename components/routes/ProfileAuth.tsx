@@ -5,8 +5,8 @@ import { observer, useObservable } from "@legendapp/state/react"
 import Image from "next/image"
 import { useState } from "react"
 import { Input, Label, TextField } from "react-aria-components"
-import NewModal from "../NewModal"
 import { SettingsIcon } from "../../public/svg/modal-icons"
+import NewModal from "../NewModal"
 
 interface Props {
   data: profileAuthReturn
@@ -14,12 +14,12 @@ interface Props {
 
 export default observer(function ProfileAuth(props: Props) {
   const server$ = useObservable(props.data)
-  const [showSettingsModal, setShowSettingsModal] = useState(true)
   const local$ = useObservable({
     following: false,
     tabs: ["Photos", "Places", "Lists", "Following", "Followers"],
     selectedTab: "Photos",
     postsState: { liked: true, fillColor: "", likesCount: 0 },
+    showSettingsModal: false,
   })
 
   return (
@@ -28,14 +28,13 @@ export default observer(function ProfileAuth(props: Props) {
         <div>
           <button
             onClick={() => {
-              setShowSettingsModal(true)
+              local$.showSettingsModal.set(true)
             }}
             className="hover:opacity-60 transition-opacity duration-300"
           >
             <SettingsIcon className="color-neutral-700 w-6 h-6 settings-icon" />
           </button>
         </div>
-
         <header className="col-span-1 pl-8">
           <div className="flex items-start">
             <TextField>
@@ -180,8 +179,12 @@ export default observer(function ProfileAuth(props: Props) {
             </div>
           )}
         </main>
-        {showSettingsModal && (
-          <NewModal setShowSettingsModal={setShowSettingsModal} />
+        {local$.showSettingsModal.get() && (
+          <NewModal
+            setShowSettingsModal={() => {
+              local$.showSettingsModal.set(false)
+            }}
+          />
         )}
       </div>
     </>
