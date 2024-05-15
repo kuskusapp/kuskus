@@ -37,14 +37,17 @@ const AddPostModal: React.FC<Props> = ({ open, closeModal }) => {
 
   return (
     <Transition appear show={isOpen} as={Fragment}>
-      <button className="fixed mt-10 mr-40 top-50 right-40 bg-neutral-200 hover:bg-neutral-400 px-4 py-2 rounded-full z-50">
-        x
-      </button>
       <Dialog
         as="div"
         className="fixed inset-0 z-10 overflow-y-auto"
         onClose={() => {}}
       >
+        <button
+          className="fixed mt-10 mr-40 top-50 right-40 bg-neutral-200 hover:bg-neutral-400 px-4 py-2 rounded-full z-50"
+          onClick={handleCloseModal}
+        >
+          x
+        </button>
         <div className="min-h-screen px-4 text-center">
           <Transition.Child
             as={Fragment}
