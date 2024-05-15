@@ -80,7 +80,6 @@ export default function Header() {
       </div>
       <AddPostModal
         open={isModalOpen}
-        closeModal={closeModal}
         onClose={closeModal}
         postsState={undefined}
       />
