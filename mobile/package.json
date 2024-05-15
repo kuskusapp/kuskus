@@ -24,6 +24,7 @@
     "@react-navigation/native": "^6.1.7",
     "@roninoss/icons": "^0.0.4",
     "@shopify/flash-list": "1.6.4",
+    "ajv": "^8.13.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
     "expo": "^51.0.2",
