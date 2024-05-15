@@ -1,14 +1,8 @@
 "use client"
-import { updateUserAction } from "@/app/actions"
 import { profileAuthReturn } from "@/edgedb/crud/queries"
 import { observer, useObservable } from "@legendapp/state/react"
-import Image from "next/image"
-import { useEffect, useState } from "react"
-import { Input, Label, TextField } from "react-aria-components"
-import NewModal from "../NewModal"
-import { SettingsIcon } from "../../public/svg/modal-icons"
-import Icons from "../Icons"
-import { AnimatePresence, motion } from "framer-motion"
+import { motion } from "framer-motion"
+import { useState } from "react"
 
 interface Props {
   data: profileAuthReturn

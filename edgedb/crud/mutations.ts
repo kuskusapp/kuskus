@@ -4,11 +4,19 @@ export const createPost = e.params(
   {
     photoUrl: e.str,
     roninId: e.str,
+    photoFileName: e.optional(e.str),
     description: e.optional(e.str),
     aiDescription: e.optional(e.str),
     userId: e.optional(e.uuid),
   },
-  ({ photoUrl, description, userId, aiDescription, roninId }) => {
+  ({
+    photoUrl,
+    description,
+    userId,
+    aiDescription,
+    roninId,
+    photoFileName,
+  }) => {
     const user = e.op(
       e.cast(e.User, userId),
       "if",
@@ -19,6 +27,7 @@ export const createPost = e.params(
     return e.insert(e.Post, {
       photoUrl,
       roninId,
+      photoFileName,
       description,
       aiDescription,
       created_by: user,

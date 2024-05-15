@@ -6,7 +6,7 @@ import { createGlobalState, createPost } from "@/edgedb/crud/mutations"
 import * as fs from "fs"
 import * as path from "path"
 import e from "../dbschema/edgeql-js"
-import { create, drop } from "ronin"
+import { create, drop, get } from "ronin"
 
 const userId = process.env.USER_ID!
 
@@ -100,20 +100,34 @@ async function place() {
 // adds some image posts to user
 async function posts() {
   const images = readJPGFilesFromFolder("seed/foods")
-  let testImage = images[2]
   const promises = images.map(async (image) => {
+    const roninPost = await get.post.with.fileName(image.fileName)
     let imageDescription = await describeImage(image.buffer)
-    const res = await create.post.with({
-      photo: testImage.buffer,
-      aiDescription: imageDescription,
-    })
-    console.log(res, "ronin res")
-    // await createPost.run(client, {
-    //   photoUrl: res.photo.src,
-    //   roninId: res.id,
-    //   aiDescription: imageDescription,
-    //   userId: userId,
-    // })
+
+    if (roninPost) {
+      await e
+        .insert(e.Post, {
+          photoUrl: roninPost.photo.src,
+          roninId: roninPost.id,
+          photoFileName: image.fileName,
+          aiDescription: imageDescription,
+          created_by: e.cast(e.User, e.uuid(userId)),
+        })
+        .run(client)
+    } else {
+      const res = await create.post.with({
+        photo: image.buffer,
+        fileName: image.fileName,
+        aiDescription: imageDescription,
+      })
+      await createPost.run(client, {
+        photoUrl: res.photo.src,
+        roninId: res.id,
+        photoFileName: image.fileName,
+        aiDescription: imageDescription,
+        userId: userId,
+      })
+    }
   })
   await Promise.all(promises)
 }
@@ -161,13 +175,8 @@ async function web() {
 }
 
 async function clearPosts() {
-  const posts = await e
-    .select(e.Post, () => ({
-      photoUrl: true,
-      photoId: true,
-    }))
-    .run(client)
-  console.log(posts, "posts")
+  const posts = await getPostsByUser(userId)
+  console.log(posts)
   // posts.map(async (post) => {
   //   await drop.post.with.id(post.photoId)
   // })
@@ -180,6 +189,17 @@ function checkThatNotRunningInProduction() {
       "Connected to production DB, don't run these seed commands on it",
     )
   }
+}
+
+async function getPostsByUser(userId: string) {
+  const posts = await e
+    .select(e.Post, (post) => ({
+      photoUrl: true,
+      roninId: true,
+      filter: e.op(post.created_by.id, "=", e.uuid(userId)),
+    }))
+    .run(client)
+  return posts
 }
 
 // TODO: move functions to ts-utils & import them
