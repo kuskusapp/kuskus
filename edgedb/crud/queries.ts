@@ -29,7 +29,10 @@ export const profileAuth = e.params(
       createdPosts: {
         offset: 0,
         limit: 6,
-        photoUrl: true,
+        imageUrl: true,
+        imageWidth: true,
+        imageHeight: true,
+        imagePreviewBase64Hash: true,
         // description: true,
         // photoFileName: true,
       },
