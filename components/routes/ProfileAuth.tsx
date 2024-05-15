@@ -22,59 +22,6 @@ export default observer(function ProfileAuth(props: Props) {
     postsState: { liked: true, fillColor: "", likesCount: 0 },
   })
 
-  // type PageProps = {
-  //   params: any
-  // }
-
-  // export default function ProfileAuth(props: Props) {
-  //   const [selectedImage, setSelectedImage] = useState("")
-  //   const [modalOpen, setModalOpen] = useState(false)
-  //   const [modalIndex, setModalIndex] = useState<number>(0)
-  //   const server$ = useObservable(props.data)
-  //   const local$ = useObservable({
-  //     following: false,
-  //     tabs: ["Photos", "Places", "Lists", "Following", "Followers"],
-  //     selectedTab: "Photos",
-  //     postsState: { liked: true, fillColor: "", likesCount: 0 },
-  //   })
-
-  //   const openModal = (imageSrc: string, index: number) => {
-  //     setSelectedImage(imageSrc)
-  //     setModalOpen(true)
-  //     setModalIndex(index)
-  //   }
-
-  //   const imageClick = (imageSrc: string, index: number) => {
-  //     openModal(imageSrc, index)
-  //   }
-
-  // const [selectedTab, setSelectedTab] = useState<string>("Photos")
-  // const [postsState, setPostsState] = useState<{
-  //   [key: number]: { liked: boolean; fillColor: string; likesCount: number }
-  // }>({})
-
-  // TODO: action
-  // const followUser = () => {
-  //   // TODO: fix
-  //   // SetFollowing(!following)
-  // }
-  // TODO: action
-  // const likePost = (index: number) => {
-  //   // const newState = { ...postsState }
-  //   // if (newState[index]) {
-  //   //   newState[index] = {
-  //   //     liked: !newState[index].liked,
-  //   //     fillColor: newState[index].liked ? "none" : "white",
-  //   //     likesCount: newState[index].liked
-  //   //       ? newState[index].likesCount - 1
-  //   //       : newState[index].likesCount + 1,
-  //   //   }
-  //   // } else {
-  //   //   newState[index] = { liked: true, fillColor: "white", likesCount: 1 }
-  //   // }
-  //   // setPostsState(newState)
-  // }
-
   return (
     <>
       <div className="bg-white grid grid-cols-3 p-7">
@@ -87,14 +34,6 @@ export default observer(function ProfileAuth(props: Props) {
           >
             <SettingsIcon className="color-neutral-700 w-6 h-6 settings-icon" />
           </button>
-          {/* <button
-            onClick={() => {
-              setShowSettingsModal(true)
-            }}
-            className="hover:opacity-60 transition-opacity duration-300"
-          >
-            <SettingsIcon className="color-neutral-700 w-6 h-6 transform" />
-          </button> */}
         </div>
 
         <header className="col-span-1 pl-8">
@@ -110,13 +49,6 @@ export default observer(function ProfileAuth(props: Props) {
                 }}
               />
             </TextField>
-            {/* <Image
-              src={server$.profilePhotoUrl.get()!}
-              alt="avatar"
-              width={100}
-              height={100}
-              className="rounded-full w-55 h-55 mb-5"
-            /> */}
             <div className="flex flex-col ml-4 space-y-2">
               <h3 className="text-base">{server$.displayName.get()}</h3>
               <h3 className="text-neutral-500 text-xs">
@@ -126,9 +58,7 @@ export default observer(function ProfileAuth(props: Props) {
             </div>
           </div>
           <button
-            onClick={() => {
-              // TODO: follow user action
-            }}
+            onClick={() => {}}
             className="text-black flex flex-row items-center justify-center px-2 py-1 rounded-lg"
             style={{
               position: "absolute",
@@ -198,16 +128,12 @@ export default observer(function ProfileAuth(props: Props) {
             <ul className="flex flex-row mt-5 space-x-4">
               {local$.tabs.map((tab) => (
                 <li
-                  // TODO: use proper key, ask legend state
                   key={Math.random()}
                   className={`cursor-pointer ${local$.selectedTab === tab ? "font-normal" : "font-extralight"}`}
                   onClick={() => {
                     local$.selectedTab.set(tab)
                   }}
-                >
-                  {/* TODO: fix */}
-                  {/* {tab} */}
-                </li>
+                ></li>
               ))}
             </ul>
             <p
@@ -219,16 +145,10 @@ export default observer(function ProfileAuth(props: Props) {
           </div>
         </header>
         <main className="col-span-2">
-          {/* {local$.selectedTab === "Photos" && ( */}
           {true && (
             <div className="grid grid-cols-4 gap-1">
               {server$.createdPosts.get()!.map((post, index) => (
-                <div
-                  key={index}
-                  className="relative aspect-square group"
-                  // onClick={() => imageClick(post.photoUrl, index)}
-                >
-                  {/* TODO: make bigger */}
+                <div key={index} className="relative aspect-square group">
                   <Image
                     src={post.photoUrl}
                     alt={`Photo ${index + 1}`}
@@ -240,17 +160,9 @@ export default observer(function ProfileAuth(props: Props) {
                     <h3 className="text-base">place</h3>
                     <div
                       className="flex flex-row items-center"
-                      onClick={() => {
-                        // likePost(index)
-                      }}
+                      onClick={() => {}}
                     >
-                      <svg
-                        width="24"
-                        height="24"
-                        // TODO: fix
-                        // fill={local$.postsState[index]?.fillColor || "none"}
-                        viewBox="0 0 24 24"
-                      >
+                      <svg width="24" height="24" viewBox="0 0 24 24">
                         <path
                           fillRule="evenodd"
                           stroke="currentColor"
@@ -261,37 +173,14 @@ export default observer(function ProfileAuth(props: Props) {
                           clipRule="evenodd"
                         />
                       </svg>
-                      {/* TODO:  */}
-                      {/* <h3>{local$.postsState[index]?.likesCount || 0}</h3> */}
                     </div>
                   </div>
                 </div>
               ))}
             </div>
           )}
-          {/* TODO: map over places */}
-          {/* TODO:  */}
-          {/* {local$.selectedTab === "Places" && (
-            <div className="flex flex-col">
-              <div className="flex flex-row items-center">
-                <Image
-                  // TODO: change
-                  src={server$.profilePhotoUrl.get()!}
-                  alt="avatar"
-                  width={300}
-                  height={400}
-                  className="rounded-full w-50 h-50 mr-5 mb-5 z-10"
-                ></Image>
-                <h4>place</h4>
-              </div>
-            </div>
-          )} */}
-          {/* {selectedTab === "Lists" && <div>Lists</div>}
-          {selectedTab === "Following" && <div></div>}
-          {selectedTab === "Followers" && <div></div>} */}
         </main>
         {showSettingsModal && (
-          // @ts-ignore
           <NewModal setShowSettingsModal={setShowSettingsModal} />
         )}
       </div>
