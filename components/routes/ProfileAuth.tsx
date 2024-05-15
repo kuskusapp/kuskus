@@ -5,10 +5,6 @@ import { motion } from "framer-motion"
 import * as react from "react"
 import * as actions from "@/app/actions"
 
-interface Props {
-	data: profileAuthReturn
-}
-
 type Image = {
 	id: string
 	alt: string
@@ -16,6 +12,44 @@ type Image = {
 	height: number
 	src: string
 	preview: string
+}
+
+const COLUMNS = 3
+
+function getShortestColumn(heights: number[]): number {
+	let shortest = 0
+	for (let i = 1; i < heights.length; i += 1) {
+		if (heights[i] < heights[shortest]) {
+			shortest = i
+		}
+	}
+	return shortest
+}
+
+function ImageGrid(props: { images: Image[] }) {
+	const columns: Image[][] = new Array(COLUMNS)
+	const heights: number[]  = new Array(COLUMNS)
+
+	for (let i = 0; i < COLUMNS; i += 1) {
+		columns[i] = []
+		heights[i] = 0
+	}
+
+	for (const image of props.images) {
+		const i = getShortestColumn(heights)
+		columns[i].push(image)
+		heights[i] += image.height / image.width
+	}
+
+	return columns.map((col, i) => (
+		<div key={i} className="pl-2 w-full">
+			{col.map((img) => (
+				<div key={img.id} className="pb-2">
+					<LazyImage image={img} />
+				</div>
+			))}
+		</div>
+	))
 }
 
 function LazyImage(props: { image: Image }) {
@@ -50,48 +84,19 @@ function LazyImage(props: { image: Image }) {
 	)
 }
 
-const COLUMNS = 3
-
-type ImageColumns = {
-	images: Image[][]
-	heights: number[]
-}
-
-function makeColumns(): ImageColumns {
-	let cols: ImageColumns = {
-		images: Array.from({ length: COLUMNS }, () => []),
-		heights: Array.from({ length: COLUMNS }, () => 0),
-	}
-	return cols
-}
-
-function getShortestColumn(cols: ImageColumns): number {
-	let shortest = 0
-	for (let i = 1; i < cols.heights.length; i += 1) {
-		if (cols.heights[i] < cols.heights[shortest]) {
-			shortest = i
-		}
-	}
-	return shortest
-}
-
-function addImages(images: Image[], cols: ImageColumns) {
-	for (const image of images) {
-		const shortest = getShortestColumn(cols)
-		cols.images[shortest].push(image)
-		cols.heights[shortest] += image.height / image.width
-	}
-}
-
 let last_id = 0
 
-export default legend.observer(function ProfileAuth(props: Props) {
+export interface ProfileAuthProps {
+	data: profileAuthReturn
+}
+
+export default legend.observer(function ProfileAuth(props: ProfileAuthProps) {
 	const server$ = legend.useObservable(props.data)
 	const [showSettingsModal, setShowSettingsModal] = react.useState(false)
 
-	const local = legend.useComputed(() => {
-		const posts = server$.createdPosts.get() ?? []
-		const images: Image[] = posts.map((post) => {
+	const posts = server$.createdPosts.get() ?? []
+	const images = react.useMemo(() => {
+		return posts.map((post) => {
 			return {
 				id: (last_id++).toString(),
 				alt: "",
@@ -101,15 +106,7 @@ export default legend.observer(function ProfileAuth(props: Props) {
 				preview: post.imagePreviewBase64Hash ?? "",
 			}
 		})
-
-		const cols = makeColumns()
-		addImages(images, cols)
-
-		return {
-			cols: cols,
-			page: 0,
-		}
-	})
+	}, [posts])
 
 	return (
 		<div className="min-h-screen h-full text-black/60">
@@ -117,40 +114,12 @@ export default legend.observer(function ProfileAuth(props: Props) {
 			<div className="ml-[380px] min-h-full flex">
 				<button
 					onClick={async () => {
-						local.page.set((p) => p + 1)
-						const res = await actions.profileAuthGetMoreImagesAction({
-							pageNumber: local.page.get(),
-						})
-
-						if (res.data && !("failure" in res.data)) {
-							const images: Image[] = res.data.createdPosts.map((post) => {
-								return {
-									id: (last_id++).toString(),
-									alt: "",
-									width: post.imageWidth ?? 1,
-									height: post.imageHeight ?? 1,
-									src: post.imageUrl,
-									preview: post.imagePreviewBase64Hash ?? "",
-								}
-							})
-
-							const cols = local.cols.get()
-							addImages(images, cols)
-							local.cols.set(cols)
-						}
+						// TODO: fetch more images and append to props.data
 					}}
 				>
 					FETCH
 				</button>
-				{local.cols.get().images.map((col, i) => (
-					<div key={i} className="pl-2 w-full">
-						{col.map((img) => (
-							<div key={img.id} className="pb-2">
-								<LazyImage image={img} />
-							</div>
-						))}
-					</div>
-				))}
+				<ImageGrid images={images} />
 			</div>
 		</div>
 	)
