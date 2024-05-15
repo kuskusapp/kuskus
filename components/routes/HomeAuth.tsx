@@ -6,5 +6,5 @@ interface Props {
 }
 
 export default observer(function HomeAuth(props: Props) {
-  return <></>
+  return <>authorised</>
 })

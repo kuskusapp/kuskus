@@ -1,5 +1,7 @@
 "use client"
+import { useState } from "react"
 import Link from "next/link"
+import AddPostModal from "@/components/AddPostModal"
 import {
   GridIcon,
   SearchIcon,
@@ -10,6 +12,11 @@ import {
 import { useObservable } from "@legendapp/state/react"
 
 export default function Header() {
+  const [isModalOpen, setModalOpen] = useState(false)
+
+  const openModal = () => setModalOpen(true)
+  const closeModal = () => setModalOpen(false)
+
   const local$ = useObservable({
     activeLink: "",
     links: [
@@ -22,7 +29,7 @@ export default function Header() {
   return (
     <>
       <div className="flex flex-row items-center justify-between space-x-15 pt-[20px] px-4">
-        <div className="text-[34px] font-bold">
+        <div className="text-[22px] font-bold">
           <div className="flex flex-row gap-3">
             {...local$.links.map((link) => {
               return (
@@ -58,6 +65,7 @@ export default function Header() {
             <NotificationIcon className="text-white w-7 h-7" />
           </div>
           <button
+            onClick={openModal}
             style={{
               backgroundColor: "rgb(47 47 48)",
               width: "50px",
@@ -70,6 +78,12 @@ export default function Header() {
           </button>
         </div>
       </div>
+      <AddPostModal
+        open={isModalOpen}
+        closeModal={closeModal}
+        onClose={closeModal}
+        postsState={undefined}
+      />
     </>
   )
 }

@@ -8,6 +8,7 @@ import { Swiper, SwiperSlide } from "swiper/react"
 import "swiper/css"
 import "swiper/css/navigation"
 import "swiper/css/pagination"
+import AddPostModal from "@/components/AddPostModal"
 
 const recommendedPlaces = [
   {
@@ -50,6 +51,7 @@ const recommendedPlaces = [
 
 export default function Search() {
   const [inputFocused, setInputFocused] = useState(false)
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
   return (
     <>

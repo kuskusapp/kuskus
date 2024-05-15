@@ -5,7 +5,6 @@ import { Icon } from '@roninoss/icons';
 
 import { ActionSheetProvider } from '@expo/react-native-action-sheet';
 
-
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 
 import { Link, Stack } from 'expo-router';
@@ -13,7 +12,6 @@ import { StatusBar } from 'expo-status-bar';
 import { Pressable, View } from 'react-native';
 
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-
 
 import { ThemeToggle } from '~/components/nativewindui/ThemeToggle';
 import { cn } from '~/lib/cn';
@@ -35,26 +33,19 @@ export default function RootLayout() {
         key={`root-status-bar-${isDarkColorScheme ? 'light' : 'dark'}`}
         style={isDarkColorScheme ? 'light' : 'dark'}
       />
-       
+
       <GestureHandlerRootView style={{ flex: 1 }}>
         <BottomSheetModalProvider>
-        
-        
-        <ActionSheetProvider>
-        
-        <NavThemeProvider value={NAV_THEME[colorScheme]}>
-          <Stack screenOptions={SCREEN_OPTIONS}>
-            <Stack.Screen name="index" options={INDEX_OPTIONS} />
-            <Stack.Screen name="modal" options={MODAL_OPTIONS} />
-          </Stack>
-        </NavThemeProvider>
-        
-        </ActionSheetProvider>
-        
-        
+          <ActionSheetProvider>
+            <NavThemeProvider value={NAV_THEME[colorScheme]}>
+              <Stack screenOptions={SCREEN_OPTIONS}>
+                <Stack.Screen name="index" options={INDEX_OPTIONS} />
+                <Stack.Screen name="modal" options={MODAL_OPTIONS} />
+              </Stack>
+            </NavThemeProvider>
+          </ActionSheetProvider>
         </BottomSheetModalProvider>
       </GestureHandlerRootView>
-      
     </>
   );
 }

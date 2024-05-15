@@ -108,12 +108,12 @@ async function posts() {
       aiDescription: imageDescription,
     })
     console.log(res, "ronin res")
-    await createPost.run(client, {
-      photoUrl: res.photo.src,
-      roninId: res.id,
-      aiDescription: imageDescription,
-      userId: userId,
-    })
+    // await createPost.run(client, {
+    //   photoUrl: res.photo.src,
+    //   roninId: res.id,
+    //   aiDescription: imageDescription,
+    //   userId: userId,
+    // })
   })
   await Promise.all(promises)
 }
@@ -168,9 +168,9 @@ async function clearPosts() {
     }))
     .run(client)
   console.log(posts, "posts")
-  posts.map(async (post) => {
-    await drop.post.with.id(post.photoId)
-  })
+  // posts.map(async (post) => {
+  //   await drop.post.with.id(post.photoId)
+  // })
   // await e.delete(e.Post).run(client)
 }
 

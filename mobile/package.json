@@ -76,7 +76,9 @@
   },
   "expo": {
     "install": {
-      "exclude": ["react-native-safe-area-context"]
+      "exclude": [
+        "react-native-safe-area-context"
+      ]
     }
   },
   "private": true
