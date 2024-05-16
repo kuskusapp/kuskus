@@ -28,7 +28,7 @@ function getShortestColumn(heights: number[]): number {
 
 function ImageGrid(props: { images: Image[] }) {
 	const columns: Image[][] = new Array(COLUMNS)
-	const heights: number[]  = new Array(COLUMNS)
+	const heights: number[] = new Array(COLUMNS)
 
 	for (let i = 0; i < COLUMNS; i += 1) {
 		columns[i] = []
@@ -111,10 +111,16 @@ export default legend.observer(function ProfileAuth(props: ProfileAuthProps) {
 	react.useEffect(() => {
 		function checkBottom() {
 			const FETCH_THRESHOLD = 600 // adjust
-			if (window.innerHeight + window.scrollY + FETCH_THRESHOLD >= document.body.offsetHeight) {
+			if (
+				window.innerHeight + window.scrollY + FETCH_THRESHOLD >=
+				document.body.offsetHeight
+			) {
 				// TODO: fetch more posts
-	
-				server$.createdPosts.set([...server$.createdPosts.get()?? [], ...server$.createdPosts.get() ?? []])
+
+				server$.createdPosts.set([
+					...(server$.createdPosts.get() ?? []),
+					...(server$.createdPosts.get() ?? []),
+				])
 			}
 		}
 

@@ -109,13 +109,12 @@ async function posts() {
 				.insert(e.Post, {
 					imageUrl: roninPost.photo.src,
 					roninId: roninPost.id,
-					imageWidth:
-						"width" in roninPost.photo.meta ? roninPost.photo.meta.width : 0,
-					imageHeight:
-						"height" in roninPost.photo.meta ? roninPost.photo.meta.height : 0,
-					imagePreviewBase64Hash: roninPost.photo.placeholder
-						? roninPost.photo.placeholder.base64
-						: null,
+					// @ts-ignore
+					imageWidth: roninPost.photo.meta.width,
+					// @ts-ignore
+					imageHeight: roninPost.photo.meta.height,
+					// @ts-ignore
+					imagePreviewBase64Hash: roninPost.photo.placeholder.base64,
 					aiDescription: imageDescription,
 					imageFileNameFromImport: image.fileName,
 					created_by: e.cast(e.User, e.uuid(userId)),
@@ -132,13 +131,12 @@ async function posts() {
 			const dbPost = await createPost.run(client, {
 				imageUrl: res.photo.src,
 				roninId: res.id,
-				imageWidth:
-					"width" in roninPost.photo.meta ? roninPost.photo.meta.width : 0,
-				imageHeight:
-					"height" in roninPost.photo.meta ? roninPost.photo.meta.height : 0,
-				imagePreviewBase64Hash: roninPost.photo.placeholder
-					? roninPost.photo.placeholder.base64
-					: null,
+				// @ts-ignore
+				imageWidth: res.photo.meta.width,
+				// @ts-ignore
+				imageHeight: res.photo.meta.height,
+				// @ts-ignore
+				imagePreviewBase64Hash: res.photo.placeholder.base64,
 				aiDescription: imageDescription,
 				imageFileNameFromImport: image.fileName,
 				userId: userId,
