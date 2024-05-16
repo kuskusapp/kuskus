@@ -5,8 +5,8 @@ import { client } from "@/edgedb"
 import { createGlobalState, createPost } from "@/edgedb/crud/mutations"
 import * as fs from "fs"
 import * as path from "path"
+import { create, get } from "ronin"
 import e from "../dbschema/edgeql-js"
-import { create, drop, get } from "ronin"
 
 const userId = process.env.USER_ID!
 
@@ -109,11 +109,8 @@ async function posts() {
 				.insert(e.Post, {
 					imageUrl: roninPost.photo.src,
 					roninId: roninPost.id,
-					// @ts-ignore
 					imageWidth: roninPost.photo.meta.width,
-					// @ts-ignore
 					imageHeight: roninPost.photo.meta.height,
-					// @ts-ignore
 					imagePreviewBase64Hash: roninPost.photo.placeholder.base64,
 					aiDescription: imageDescription,
 					imageFileNameFromImport: image.fileName,
@@ -131,11 +128,8 @@ async function posts() {
 			const dbPost = await createPost.run(client, {
 				imageUrl: res.photo.src,
 				roninId: res.id,
-				// @ts-ignore
 				imageWidth: res.photo.meta.width,
-				// @ts-ignore
 				imageHeight: res.photo.meta.height,
-				// @ts-ignore
 				imagePreviewBase64Hash: res.photo.placeholder.base64,
 				aiDescription: imageDescription,
 				imageFileNameFromImport: image.fileName,
