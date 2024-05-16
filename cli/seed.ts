@@ -180,6 +180,7 @@ async function describeImage(imageBlob: any) {
 }
 
 async function places() {
+	// https://www.google.com/maps/place/Bułka+z+Masłem+Włodkowica/@51.1081905,17.0194183,17z/data=!4m14!1m7!3m6!1s0x470fc20b5c4619f3:0xdbffaddd63351490!2zQnXFgmthIHogTWFzxYJlbSBXxYJvZGtvd2ljYQ!8m2!3d51.1081872!4d17.0242892!16s%2Fg%2F12lrkbwpx!3m5!1s0x470fc20b5c4619f3:0xdbffaddd63351490!8m2!3d51.1081872!4d17.0242892!16s%2Fg%2F12lrkbwpx?entry=ttu
 	await createPlace.run(client, {
 		name: "bulka-s-maslem-wlodkowica",
 		displayName: "Bułka z Masłem Włodkowica",
