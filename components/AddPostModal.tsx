@@ -84,12 +84,12 @@ const AddPostModal: React.FC<Props> = ({ open, onClose }) => {
 								style={{ minHeight: "500px" }}
 							>
 								<div
-									className="w-2/3 justify-center items-center m-auto"
-									style={{ borderRight: "1px solid gray", height: "90%" }}
+									className="w-2/3 flex justify-center items-center m-auto"
+									style={{ borderRight: "1px solid #c5c5c5", height: "500px" }}
 								>
 									<button
-										className="mt-1 w-full px-3 py-2 bg-white focus:outline-none sm:text-sm flex justify-center items-center"
-										onClick={() => document.getElementById("image").click()}
+										className="mt-1 w-full h-full flex justify-center items-center bg-white focus:outline-none"
+										// onClick={() => document.getElementById("image").click()}
 									>
 										<PhotoIcon className="h-6 w-6 text-gray-700" />
 										<input
