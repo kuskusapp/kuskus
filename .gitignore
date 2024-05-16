@@ -42,3 +42,4 @@ pnpm-lock.yaml
 cli/run.ts
 .next-types
 cli/seed
+go/doc/openapi.json
