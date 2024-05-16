@@ -9,7 +9,7 @@ const g = graph.Standalone()
 const goApi = connector.OpenAPI("Go", {
 	schema:
 		"https://gist.githubusercontent.com/nikitavoloboev/39f667045e503fb170b245a14dc2209c/raw/89fc98765327c158ca76f53934f13e3662a9cc93/kuskus-go-openapi.json",
-	url: "https://gist.githubusercontent.com/nikitavoloboev/39f667045e503fb170b245a14dc2209c/raw/89fc98765327c158ca76f53934f13e3662a9cc93/kuskus-go-openapi.json",
+	url: "http://localhost:9999",
 })
 
 g.datasource(goApi)
