@@ -68,7 +68,8 @@
 		"postcss": "^8",
 		"prettier": "3.x",
 		"tailwindcss": "^3.4.3",
-		"typescript": "^5"
+		"typescript": "^5",
+		"@grafbase/sdk": "~0.18.0"
 	},
 	"prettier": {
 		"semi": false,
