@@ -1,15 +1,13 @@
-import { SafeAreaView, StyleSheet, TextInput } from "react-native"
-import { Container } from "~/components/Container"
 import { observer, useObservable } from "@legendapp/state/react"
-import { useState } from "react"
+import { SafeAreaView, StyleSheet, TextInput } from "react-native"
 
-export default function Home() {
+import { Container } from "~/components/Container"
+
+export default observer(function Home() {
 	const local = useObservable({
-		email: "wow",
+		email: "",
 		password: "",
 	})
-
-	const [email, setEmail] = useState("")
 
 	return (
 		<>
@@ -18,17 +16,16 @@ export default function Home() {
 					<TextInput
 						style={styles.input}
 						onChangeText={(e) => {
-							console.log(e, "e")
-							console.log(e, "e")
-							// local.email.set()
+							local.email.set(e)
 						}}
-						// value={local.email.get()}
-						value={email}
+						value={local.email.get()}
 						placeholder="email"
 					/>
 					<TextInput
 						style={styles.input}
-						onChangeText={() => {}}
+						onChangeText={(e) => {
+							local.password.set(e)
+						}}
 						value={local.password.get()}
 						placeholder="password"
 					/>
@@ -36,7 +33,7 @@ export default function Home() {
 			</Container>
 		</>
 	)
-}
+})
 
 const styles = StyleSheet.create({
 	input: {
@@ -46,21 +43,3 @@ const styles = StyleSheet.create({
 		padding: 10,
 	},
 })
-
-// TODO: what was in original template, remove it
-// export default function Home() {
-// 	return (
-// 		<>
-// 			<Stack.Screen options={{ title: "Home" }} />
-// 			<Container>
-// 				<ScreenContent path="app/index.tsx" title="Home" />
-// 				<Link
-// 					href={{ pathname: "/details", params: { name: "Some name" } }}
-// 					asChild
-// 				>
-// 					<Button title="Show Details" />
-// 				</Link>
-// 			</Container>
-// 		</>
-// 	)
-// }

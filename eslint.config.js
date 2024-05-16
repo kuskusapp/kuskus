@@ -7,9 +7,9 @@ export default [
 	{
 		...compat
 			.extends(
-				"eslint:recommended",
-				"plugin:@typescript-eslint/recommended-type-checked",
-				"plugin:@typescript-eslint/stylistic-type-checked",
+				// "eslint:recommended",
+				// "plugin:@typescript-eslint/recommended-type-checked",
+				// "plugin:@typescript-eslint/stylistic-type-checked",
 			)
 			.map((c) => ({
 				...c,
