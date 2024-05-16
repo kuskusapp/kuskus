@@ -11,6 +11,7 @@
 		"web": "expo start --web"
 	},
 	"dependencies": {
+		"@legendapp/state": "^2.2.0-next.75",
 		"@expo/vector-icons": "^14.0.0",
 		"@react-navigation/native": "^6.1.7",
 		"expo": "~51.0.8",

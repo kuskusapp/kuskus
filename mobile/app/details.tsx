@@ -12,7 +12,7 @@ export default function Details() {
 			<Container>
 				<ScreenContent
 					path="screens/details.tsx"
-					title={`Showing details for user ${name}`}
+					title={`Showing details for this name: ${name}`}
 				/>
 			</Container>
 		</>
