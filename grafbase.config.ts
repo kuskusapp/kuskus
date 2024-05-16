@@ -4,8 +4,6 @@ import { graph, config, connector } from "@grafbase/sdk"
 
 const g = graph.Standalone()
 
-// https://gist.github.com/nikitavoloboev/39f667045e503fb170b245a14dc2209c
-// TODO: failing
 const goApi = connector.OpenAPI("Go", {
 	schema:
 		"https://gist.githubusercontent.com/nikitavoloboev/39f667045e503fb170b245a14dc2209c/raw/a869f885a6ad8a00b7be41d87ffedc92c6334f6a/kuskus-go-openapi.json",

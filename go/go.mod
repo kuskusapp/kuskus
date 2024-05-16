@@ -1,4 +1,4 @@
-module github.com/kuskusapp/kuskus
+module github.com/kuskusapp/kuskus/go
 
 go 1.22.3
 

@@ -3,7 +3,6 @@ import { profileAuthReturn } from "@/edgedb/crud/queries"
 import * as legend from "@legendapp/state/react"
 import { motion } from "framer-motion"
 import * as react from "react"
-import * as actions from "@/app/actions"
 
 type Image = {
 	id: string

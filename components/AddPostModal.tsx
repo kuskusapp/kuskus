@@ -1,40 +1,44 @@
 import React, { useState, useEffect, Fragment } from "react"
 import { Dialog, Transition } from "@headlessui/react"
 import { PhotoIcon } from "../public/svg/modal-icons"
+import { observer, useObservable } from "@legendapp/state/react"
+
 interface Props {
 	open: boolean
 	onClose: () => void
 	postsState: any
 }
 
-const AddPostModal: React.FC<Props> = ({ open, onClose }) => {
-	const [isOpen, setIsOpen] = useState(open)
-	const [title, setTitle] = useState("")
-	const [description, setDescription] = useState("")
-	const [image, setImage] = useState<File | null>(null)
+export default observer(function AddPostModal(props: Props) {
+	const local = useObservable({
+		isOpen: props.open,
+		title: "",
+		description: "",
+		image: null as File | null,
+	})
 
 	const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		if (event.target.files && event.target.files[0]) {
-			setImage(event.target.files[0])
+			// @ts-ignore
+			local.image.set(event.target.files[0])
 		}
 	}
 
 	useEffect(() => {
-		setIsOpen(open)
-	}, [open])
+		local.isOpen.set(props.open)
+	}, [props.open])
 
 	const handleCloseModal = () => {
-		setIsOpen(false)
-		onClose()
+		local.isOpen.set(false)
+		props.onClose()
 	}
 
 	const handleSubmit = () => {
-		console.log({ title, description, image })
 		handleCloseModal()
 	}
 
 	return (
-		<Transition appear show={isOpen} as={Fragment}>
+		<Transition appear show={local.isOpen.get()} as={Fragment}>
 			<Dialog
 				as="div"
 				className="fixed inset-0 z-10 overflow-y-auto"
@@ -112,8 +116,10 @@ const AddPostModal: React.FC<Props> = ({ open, onClose }) => {
 											<input
 												type="text"
 												id="title"
-												value={title}
-												onChange={(e) => setTitle(e.target.value)}
+												value={local.title.get()}
+												onChange={(e) => {
+													local.title.set(e.target.value)
+												}}
 												className="mt-1 block w-full px-3 py-2 rounded-md border-none shadow-sm focus:outline-none sm:text-sm"
 											/>
 										</div>
@@ -126,8 +132,10 @@ const AddPostModal: React.FC<Props> = ({ open, onClose }) => {
 											</label>
 											<input
 												id="description"
-												value={description}
-												onChange={(e) => setDescription(e.target.value)}
+												value={local.description.get()}
+												onChange={(e) => {
+													// setDescription(e.target.value)
+												}}
 												className="mt-1 block w-full px-3 py-2 bg-white border-none rounded-md shadow-sm focus:outline-none sm:text-sm"
 											/>
 										</div>
@@ -140,6 +148,4 @@ const AddPostModal: React.FC<Props> = ({ open, onClose }) => {
 			</Dialog>
 		</Transition>
 	)
-}
-
-export default AddPostModal
+})
