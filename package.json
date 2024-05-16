@@ -5,6 +5,7 @@
 		"build": "next build",
 		"start": "next start",
 		"lint": "next lint",
+		"ios": "cd mobile & pnpm run ios",
 		"prebuild": "npx @edgedb/generate edgeql-js",
 		"auth:setup": "pnpm esr password-auth-setup.ts",
 		"generate:edgeql": "npx @edgedb/generate edgeql-js",
