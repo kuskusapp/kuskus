@@ -1,6 +1,5 @@
 "use client"
 import { observer } from "@legendapp/state/react"
-import { DivisionByZeroError } from "edgedb"
 import { useEffect, useState } from "react"
 
 interface Props {

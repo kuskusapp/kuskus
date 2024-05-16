@@ -8,11 +8,15 @@ export default async function HomeRoute() {
 	const authenticated = await session.isSignedIn()
 	const data = await homePublic.run(client)
 
-	// if (!authenticated) {
-	//   const data = await homePublic.run(client)
-	//   return <HomePublic data={data} />
-	// }
-	// return <HomeAuth data={""} />
+	const authBuiltinUiUrl = auth.getBuiltinUIUrl()
+	const autBuiltinSignupUrl = auth.getBuiltinUISignUpUrl()
 
-	return <Home data={data} authenticated={authenticated} />
+	return (
+		<Home
+			data={data}
+			authenticated={authenticated}
+			authBuiltinUiUrl={authBuiltinUiUrl}
+			autBuiltinSignupUrl={autBuiltinSignupUrl}
+		/>
+	)
 }

@@ -1,5 +1,6 @@
 "use client"
 import Icons from "@/components/Icons"
+import { auth } from "@/edgedb-next-client"
 import { homePublicResturn } from "@/edgedb/crud/queries"
 import { observer, useObservable } from "@legendapp/state/react"
 import Link from "next/link"
@@ -10,6 +11,8 @@ import { PiSignInThin } from "react-icons/pi"
 interface Props {
 	data: homePublicResturn
 	authenticated: boolean
+	authBuiltinUiUrl: string
+	autBuiltinSignupUrl: string
 }
 
 export default observer(function Home(props: Props) {
@@ -61,8 +64,7 @@ export default observer(function Home(props: Props) {
 							{!local$.authenticated.get() && (
 								<>
 									<Link
-										// href={auth.getBuiltinUIUrl()}
-										href={".."}
+										href={props.authBuiltinUiUrl}
 										className="text-sm font-semibold leading-6 text-gray-800"
 									>
 										<button className="before:ease relative overflow-hidden bg-white px-4 py-2 rounded-full text-black flex flex-row justify-center items-center font-light transition-all before:absolute before:right-0 before:top-0 before:h-12 before:w-6 before:translate-x-12 before:rotate-6 before:bg-gray-500 before:opacity-10 before:duration-700 hover:shadow-gray-800 hover:before:-translate-x-40 border border-black">
@@ -71,8 +73,7 @@ export default observer(function Home(props: Props) {
 										</button>
 									</Link>
 									<Link
-										// href={auth.getBuiltinUISignUpUrl()}
-										href=".."
+										href={props.authBuiltinUiUrl}
 										className="text-sm font-semibold leading-6 text-gray-900"
 									>
 										<button className="before:ease relative overflow-hidden bg-black px-4 py-2 rounded-full text-white flex flex-row justify-center items-center font-light transition-all before:absolute before:right-0 before:top-0 before:h-12 before:w-6 before:translate-x-12 before:rotate-6 before:bg-white before:opacity-20 before:duration-700 hover:shadow-gray-800 hover:before:-translate-x-40 border border-white border-opacity-20">
