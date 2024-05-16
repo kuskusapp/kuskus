@@ -10,7 +10,6 @@ export default [
 				"eslint:recommended",
 				"plugin:@typescript-eslint/recommended-type-checked",
 				"plugin:@typescript-eslint/stylistic-type-checked",
-				"prettier",
 			)
 			.map((c) => ({
 				...c,

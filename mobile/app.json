@@ -1,9 +1,10 @@
 {
 	"expo": {
-		"name": "mobile",
-		"slug": "mobile",
+		"name": "kuskus",
+		"slug": "kuskus",
 		"version": "1.0.0",
-		"scheme": "mobile",
+
+		"scheme": "kuskus",
 		"web": {
 			"bundler": "metro",
 			"output": "static",
@@ -15,9 +16,12 @@
 
 			"tsconfigPaths": true
 		},
+
 		"orientation": "portrait",
 		"icon": "./assets/icon.png",
-		"userInterfaceStyle": "automatic",
+
+		"userInterfaceStyle": "light",
+
 		"splash": {
 			"image": "./assets/splash.png",
 			"resizeMode": "contain",
@@ -25,8 +29,7 @@
 		},
 		"assetBundlePatterns": ["**/*"],
 		"ios": {
-			"supportsTablet": true,
-			"bundleIdentifier": "app.kuskus"
+			"supportsTablet": true
 		},
 		"android": {
 			"adaptiveIcon": {
