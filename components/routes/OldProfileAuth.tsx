@@ -2,7 +2,7 @@
 import { updateUserAction } from "@/app/actions"
 import { profileAuthReturn } from "@/edgedb/crud/queries"
 import { observer, useObservable } from "@legendapp/state/react"
-import Image from "next/image"
+// import Image from "next/image"
 import { Input, Label, TextField } from "react-aria-components"
 import { SettingsIcon } from "../../public/svg/modal-icons"
 import NewModal from "../NewModal"
@@ -147,13 +147,13 @@ export default observer(function ProfileAuth(props: Props) {
 						<div className="grid grid-cols-4 gap-1">
 							{server$.createdPosts.get()!.map((post, index) => (
 								<div key={index} className="relative aspect-square group">
-									<Image
+									{/* <Image
 										src={post.photoUrl}
 										alt={`Photo ${index + 1}`}
 										width={300}
 										height={400}
 										className="w-full h-full object-cover hover:brightness-75"
-									/>
+									/> */}
 									<div className="hidden group-hover:flex group-hover:opacity-100 opacity-0 transition-opacity duration-300 absolute flex-col bottom-20 left-0 text-white p-1 w-full justify-center items-center">
 										<h3 className="text-base">place</h3>
 										<div
