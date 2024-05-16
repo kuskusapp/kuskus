@@ -37,6 +37,21 @@ body {
 	transform: rotate(360deg);
 }
 
-.thin-icon {
-	stroke-width: 5;
+.textarea-placeholder::placeholder {
+  color: #888;
+	font-weight: 200;
+  font-size: 14px;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.spin {
+  animation: spin 1.5s linear infinite;
 }
