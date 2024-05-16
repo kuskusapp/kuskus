@@ -41,6 +41,50 @@ export const createPost = e.params(
 	},
 )
 
+export const createPlace = e.params(
+	{
+		name: e.str,
+		displayName: e.str,
+		location: e.str,
+		profileImageUrl: e.optional(e.str),
+		profileImageRoninId: e.optional(e.str),
+		bio: e.optional(e.str),
+		category: e.optional(e.str),
+		foodsAndDrinksServed: e.optional(e.array(e.str)),
+		veganFriendly: e.optional(e.bool),
+		quiet: e.optional(e.bool),
+		googlePlaceId: e.optional(e.str),
+		userId: e.optional(e.uuid),
+	},
+	({
+		name,
+		displayName,
+		location,
+		profileImageUrl,
+		profileImageRoninId,
+		bio,
+		category,
+		foodsAndDrinksServed,
+		veganFriendly,
+		quiet,
+		googlePlaceId,
+	}) => {
+		return e.insert(e.Place, {
+			name,
+			displayName,
+			location,
+			profileImageUrl,
+			profileImageRoninId,
+			bio,
+			category,
+			foodsAndDrinksServed: e.array_unpack(foodsAndDrinksServed),
+			veganFriendly,
+			quiet,
+			googlePlaceId,
+		})
+	},
+)
+
 export const createGlobalState = e.params(
 	{
 		popularDishes: e.optional(e.array(e.str)),

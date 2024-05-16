@@ -2,7 +2,11 @@
 // TODO: create it from seed.ts too
 
 import { client } from "@/edgedb"
-import { createGlobalState, createPost } from "@/edgedb/crud/mutations"
+import {
+	createGlobalState,
+	createPlace,
+	createPost,
+} from "@/edgedb/crud/mutations"
 import * as fs from "fs"
 import * as path from "path"
 import { create, get } from "ronin"
@@ -34,6 +38,9 @@ async function seed() {
 				break
 			case "posts":
 				await posts()
+				break
+			case "places":
+				await places()
 				break
 			case "clearPosts":
 				await clearPosts()
@@ -170,6 +177,21 @@ async function describeImage(imageBlob: any) {
 		console.error("Error in describeImage:", error)
 		return "Error processing image description"
 	}
+}
+
+async function places() {
+	await createPlace.run(client, {
+		name: "bulka-s-maslem-wlodkowica",
+		displayName: "Bułka z Masłem Włodkowica",
+		location: "Wroclaw, Poland",
+		profileImageUrl:
+			"https://lh5.googleusercontent.com/p/AF1QipNc_A88yvJ1uJGvtC8X7MEczd32xFjeVIkWfB3R=w408-h408-k-no",
+		bio: "Easygoing, plant-filled hangout with garden seating serving breakfast, burgers & homemade lemonades.",
+		category: "restaurant",
+		foodsAndDrinksServed: ["burger", "pasta", "coffee"],
+		veganFriendly: true,
+		quiet: false,
+	})
 }
 
 async function web() {

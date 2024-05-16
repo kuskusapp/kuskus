@@ -48,14 +48,22 @@ module default {
       constraint exclusive;
     };
     # pretty name of place
-    displayName: str;
-    bio: str;
+    required displayName: str;
     # TODO: should be geo location (coordinates)
-    # location: str;
+    required location: str; # i.e. Krakow, Poland
+    # ronin url with image
+    profileImageUrl: str;
+    # ronin id for image
+    profileImageRoninId: str;
+    bio: str;
     # coffee shop, bar, restaurant, etc.
     category: str;
-    # cloudflare r2 url with image
-    profilePhotoUrl: str;
+    # i.e. `coffee, pasta, sushi`
+    multi foodsAndDrinksServed: str;
+    veganFriendly: bool;
+    quiet: bool;
+    # Place IDs uniquely identify a place in the Google Places database and on Google Maps (https://developers.google.com/maps/documentation/places/web-service/place-id)
+    googlePlaceId: str; # i.e. for Krakow, Poland it is ChIJ0RhONcBEFkcRv4pHdrW2a7Q
   }
   # kuskus.app/posts/{edgedb-post-uuid}
   type Post {
