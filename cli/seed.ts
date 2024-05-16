@@ -109,9 +109,13 @@ async function posts() {
 				.insert(e.Post, {
 					imageUrl: roninPost.photo.src,
 					roninId: roninPost.id,
-					imageWidth: roninPost.photo.meta.width,
-					imageHeight: roninPost.photo.meta.height,
-					imagePreviewBase64Hash: roninPost.photo.placeholder.base64,
+					imageWidth:
+						"width" in roninPost.photo.meta ? roninPost.photo.meta.width : 0,
+					imageHeight:
+						"height" in roninPost.photo.meta ? roninPost.photo.meta.height : 0,
+					imagePreviewBase64Hash: roninPost.photo.placeholder
+						? roninPost.photo.placeholder.base64
+						: null,
 					aiDescription: imageDescription,
 					imageFileNameFromImport: image.fileName,
 					created_by: e.cast(e.User, e.uuid(userId)),
@@ -128,9 +132,13 @@ async function posts() {
 			const dbPost = await createPost.run(client, {
 				imageUrl: res.photo.src,
 				roninId: res.id,
-				imageWidth: res.photo.meta.width,
-				imageHeight: res.photo.meta.height,
-				imagePreviewBase64Hash: res.photo.placeholder.base64,
+				imageWidth:
+					"width" in roninPost.photo.meta ? roninPost.photo.meta.width : 0,
+				imageHeight:
+					"height" in roninPost.photo.meta ? roninPost.photo.meta.height : 0,
+				imagePreviewBase64Hash: roninPost.photo.placeholder
+					? roninPost.photo.placeholder.base64
+					: null,
 				aiDescription: imageDescription,
 				imageFileNameFromImport: image.fileName,
 				userId: userId,

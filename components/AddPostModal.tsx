@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, Fragment } from "react"
 import { Dialog, Transition } from "@headlessui/react"
-import { Fragment } from "react"
+import { PhotoIcon } from "../public/svg/modal-icons"
 interface Props {
 	open: boolean
 	onClose: () => void
@@ -56,7 +56,7 @@ const AddPostModal: React.FC<Props> = ({ open, onClose }) => {
 						leaveFrom="opacity-100"
 						leaveTo="opacity-0"
 					>
-						<Dialog.Panel className="fixed inset-0 bg-black opacity-50" />
+						<Dialog.Panel className="fixed inset-0 bg-black opacity-70" />
 					</Transition.Child>
 
 					<span
@@ -74,67 +74,63 @@ const AddPostModal: React.FC<Props> = ({ open, onClose }) => {
 						leaveFrom="opacity-100 scale-100"
 						leaveTo="opacity-0 scale-95"
 					>
-						<div className="inline-block w-full max-w-2xl p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
+						<div className="inline-block w-full max-w-4xl p-8 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
 							<form
 								onSubmit={(e) => {
 									e.preventDefault()
 									handleSubmit()
 								}}
-								className="flex gap-4"
+								className="flex gap-5"
+								style={{ minHeight: "500px" }}
 							>
-								<div className="flex-1">
-									<div className="mt-4">
-										<label
-											htmlFor="image"
-											className="block text-sm font-medium text-gray-700"
-										>
-											pick an image
-										</label>
+								<div
+									className="w-2/3 justify-center items-center m-auto"
+									style={{ borderRight: "1px solid gray", height: "90%" }}
+								>
+									<button
+										className="mt-1 w-full px-3 py-2 bg-white focus:outline-none sm:text-sm flex justify-center items-center"
+										onClick={() => document.getElementById("image").click()}
+									>
+										<PhotoIcon className="h-6 w-6 text-gray-700" />
 										<input
 											type="file"
 											id="image"
 											onChange={handleImageChange}
-											className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none sm:text-sm"
+											className="hidden"
 										/>
-									</div>
+									</button>
 								</div>
-								<div className="flex-1">
-									<div className="mt-4">
-										<label
-											htmlFor="title"
-											className="block text-sm font-medium text-gray-700"
-										>
-											add title
-										</label>
-										<input
-											type="text"
-											id="title"
-											value={title}
-											onChange={(e) => setTitle(e.target.value)}
-											className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none  sm:text-sm"
-										/>
-									</div>
-									<div className="mt-4">
-										<label
-											htmlFor="description"
-											className="block text-sm font-medium text-gray-700"
-										>
-											add description
-										</label>
-										<textarea
-											id="description"
-											value={description}
-											onChange={(e) => setDescription(e.target.value)}
-											className="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none sm:text-sm"
-										/>
-									</div>
-									<div className="mt-4">
-										<button
-											type="submit"
-											className="inline-flex justify-center px-4 py-2 text-sm font-medium text-black bg-blue-100 border border-transparent rounded-md  focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
-										>
-											create post
-										</button>
+								<div className="flex-1 flex flex-col">
+									<div className="flex-1">
+										<div className="mt-4">
+											<label
+												htmlFor="title"
+												className="block text-sm font-thin text-gray-700"
+											>
+												Title
+											</label>
+											<input
+												type="text"
+												id="title"
+												value={title}
+												onChange={(e) => setTitle(e.target.value)}
+												className="mt-1 block w-full px-3 py-2 rounded-md border-none shadow-sm focus:outline-none sm:text-sm"
+											/>
+										</div>
+										<div className="mt-4">
+											<label
+												htmlFor="description"
+												className="block text-sm font-thin text-gray-700"
+											>
+												Description
+											</label>
+											<input
+												id="description"
+												value={description}
+												onChange={(e) => setDescription(e.target.value)}
+												className="mt-1 block w-full px-3 py-2 bg-white border-none rounded-md shadow-sm focus:outline-none sm:text-sm"
+											/>
+										</div>
 									</div>
 								</div>
 							</form>
