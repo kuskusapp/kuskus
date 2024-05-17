@@ -8,6 +8,8 @@ export default async function HomeRoute() {
 	const authenticated = await session.isSignedIn()
 	const data = await homePublicOld.run(client)
 
+	console.log(process.env.NODE_ENV, "NODE_ENV")
+
 	const authBuiltinUiUrl = auth.getBuiltinUIUrl()
 	const autBuiltinSignupUrl = auth.getBuiltinUISignUpUrl()
 	// const { signout } = auth.createServerActions()
