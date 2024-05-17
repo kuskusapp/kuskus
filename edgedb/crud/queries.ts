@@ -21,7 +21,7 @@ export const homePublicOld = e.select(
 // 	}))
 // 	// return e.select()
 // })
-export type homePublicReturn = $infer<typeof homePublic>
+export type homePublicReturn = $infer<typeof homePublicOld>
 
 // context: https://discord.com/channels/841451783728529451/1235266238977150976 & https://discord.com/channels/841451783728529451/1235593775447937054 & https://discord.com/channels/841451783728529451/1238547782537580754
 export const profileAuth = e.params(
