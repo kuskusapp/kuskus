@@ -6,7 +6,7 @@ export default async function HomeRoute() {
 	const session = auth.getSession()
 	const client = session.client
 	const authenticated = await session.isSignedIn()
-	const data = await homePublicOld.run(client, {})
+	const data = await homePublicOld.run(client)
 
 	const authBuiltinUiUrl = auth.getBuiltinUIUrl()
 	const autBuiltinSignupUrl = auth.getBuiltinUISignUpUrl()
