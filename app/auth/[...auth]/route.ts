@@ -19,15 +19,24 @@ export const { GET, POST } = auth.createAuthRouteHandlers({
 			})
 			const client = auth.getSession().client
 
-			await client.query(`
+			await client.query(
+				`
         INSERT User {
-          name := '',
+          name := <optional str>$name,
+          email := <optional str>$email,
+          githubUsername := <optional str>$githubUsername,
+          githubAvatarUrl := <optional str>$avatarUrl,
           userRole := 'user',
-					githubUsername := <optional str>$githubUsername,
-					githubAvatarUrl := <optional str>$avatarUrl,
           identity := (global ext::auth::ClientTokenIdentity)
         }
-      `)
+      `,
+				{
+					name: result?.data?.name,
+					email: result?.data?.name,
+					githubUsername: result?.data?.login,
+					githubAvatarUrl: result?.data?.avatar_url,
+				},
+			)
 		}
 		redirect("/")
 	},
