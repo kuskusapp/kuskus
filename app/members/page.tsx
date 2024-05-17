@@ -13,21 +13,64 @@ const recommendedUsers = [
 	{
 		id: "user1",
 		name: "user 1",
+		location: "City, Country",
+		followers: 100,
+		following: 50,
+		lists: 5,
 		imageUrl: "https://images.omrshn.dev/logisticcars.jpeg",
 	},
 	{
 		id: "user2",
 		name: "user 2",
+		location: "City, Country",
+		followers: 100,
+		following: 50,
+		lists: 5,
 		imageUrl: "https://images.omrshn.dev/logisticcars.jpeg",
 	},
 	{
 		id: "user3",
 		name: "user 3",
+		location: "City, Country",
+		followers: 70,
+		following: 10,
+		lists: 0,
 		imageUrl: "https://images.omrshn.dev/logisticcars.jpeg",
 	},
 	{
 		id: "user4",
 		name: "user 4",
+		location: "City, Country",
+		followers: 100,
+		following: 50,
+		lists: 5,
+		imageUrl: "https://images.omrshn.dev/logisticcars.jpeg",
+	},
+	{
+		id: "user5",
+		name: "user 5",
+		location: "City, Country",
+		followers: 100,
+		following: 50,
+		lists: 5,
+		imageUrl: "https://images.omrshn.dev/logisticcars.jpeg",
+	},
+	{
+		id: "user6",
+		name: "user 6",
+		location: "City, Country",
+		followers: 100,
+		following: 50,
+		lists: 0,
+		imageUrl: "https://images.omrshn.dev/logisticcars.jpeg",
+	},
+	{
+		id: "user7",
+		name: "user 7",
+		location: "City, Country",
+		followers: 100,
+		following: 50,
+		lists: 5,
 		imageUrl: "https://images.omrshn.dev/logisticcars.jpeg",
 	},
 ]
@@ -74,21 +117,30 @@ export default function SearchUsers() {
 							spaceBetween={20}
 							slidesPerView={4}
 							onSlideChange={() => console.log("slide change")}
-							onSwiper={(swiper) => console.log(swiper)}
 						>
 							{recommendedUsers.map((user) => (
 								<SwiperSlide key={user.id}>
-									<div className="w-80 h-40 relative">
-										<Image
-											className="rounded-lg"
-											src={user.imageUrl}
-											alt={user.name}
-											layout="fill"
-											objectFit="cover"
-										/>
-									</div>
-									<div className="flex flex-col text-left pt-2 pl-2 space-y-1">
-										<p className="text-base">{user.name}</p>
+									<div className="flex flex-row p-6 space-x-6 border border-gray-200 rounded-xl">
+										<div className="w-16 h-16 relative mb-4">
+											<Image
+												className="rounded-full"
+												src={user.imageUrl}
+												alt={user.name}
+												layout="fill"
+												objectFit="cover"
+											/>
+										</div>
+										<div className="flex flex-col">
+											<h1 className="text-xl font-semibold">{user.name}</h1>
+											<p>location: {user.location}</p>
+											<p>{user.followers} followers</p>
+											<p>{user.following} following</p>
+											<p>
+												{user.lists !== 0
+													? `${user.lists} lists`
+													: "no lists yet"}
+											</p>
+										</div>
 									</div>
 								</SwiperSlide>
 							))}
