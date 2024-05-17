@@ -56,7 +56,6 @@ export default observer(function AddPostModal(props: Props) {
 
 	const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		if (event.target.files && event.target.files[0]) {
-			// @ts-ignore
 			local.image.set(event.target.files[0])
 		}
 	}

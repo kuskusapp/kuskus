@@ -1,21 +1,20 @@
 import Home from "@/components/Home"
 import { auth } from "@/edgedb-next-client"
-import { homePublicOld } from "@/edgedb/crud/queries"
+import { homePublic } from "@/edgedb/crud/queries"
 
 export default async function HomeRoute() {
 	const session = auth.getSession()
 	const client = session.client
 	const authenticated = await session.isSignedIn()
-	const data = await homePublicOld.run(client)
-
-	console.log(process.env.NODE_ENV, "NODE_ENV")
+	const publicData = await homePublic.run(client)
+	console.log(publicData, "public data")
 
 	const authBuiltinUiUrl = auth.getBuiltinUIUrl()
 	const autBuiltinSignupUrl = auth.getBuiltinUISignUpUrl()
 
 	return (
 		<Home
-			data={data}
+			data={publicData}
 			authenticated={authenticated}
 			authBuiltinUiUrl={authBuiltinUiUrl}
 			autBuiltinSignupUrl={autBuiltinSignupUrl}
