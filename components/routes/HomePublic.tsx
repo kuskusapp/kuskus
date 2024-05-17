@@ -34,9 +34,9 @@ export default observer(function HomePublic(props: Props) {
 					<div className="flex flex-1 justify-end space-x-2">
 						<>
 							<div className="absolute left-10 flex flex-row space-x-5">
-								{local$.menuItems.map((item) => (
+								{local$.menuItems.map((item, index) => (
 									<div
-										// key={item.key}
+										key={index}
 										className="flex items-center space-x-2"
 										onClick={() => {
 											// setActiveItem(item.key === activeItem ? null : item.key)
@@ -77,12 +77,12 @@ export default observer(function HomePublic(props: Props) {
 					</div>
 				</nav>
 			</header>
-			<main className="flex flex-col items-center mt-20 h-screen">
+			<main className="flex flex-col  items-center mt-20 h-screen">
 				<div
 					className="justify-center flex flex-col mt-5 mb-10"
 					style={{ maxWidth: "40em" }}
 				>
-					<h1 className="text-6xl font-m  mb-3 text-center">
+					<h1 className="text-6xl font-m !text-white mb-3 text-center">
 						Share and rate food
 					</h1>
 					<p className="text-xl font-light  text-opacity-50 mt-5 text-center">
