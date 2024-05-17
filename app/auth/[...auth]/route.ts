@@ -3,7 +3,8 @@ import { redirect } from "next/navigation"
 import { Octokit } from "@octokit/core"
 
 export const { GET, POST } = auth.createAuthRouteHandlers({
-	async onBuiltinUICallback({ error, tokenData, isSignUp }) {
+	async onBuiltinUICallback({ error, tokenData, isSignUp }, req) {
+		console.log(req.headers, "req.headers")
 		console.log(error, "error")
 		console.log(tokenData, "tokenData")
 		console.log(isSignUp, "isSignUp")
