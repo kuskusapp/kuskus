@@ -6,6 +6,7 @@ import { observer, useObservable } from "@legendapp/state/react"
 import Link from "next/link"
 import { IoIosSearch } from "react-icons/io"
 import { PiSignInThin } from "react-icons/pi"
+import { useRouter } from "next/navigation"
 
 interface Props {
 	data: homePublicReturn
@@ -28,6 +29,7 @@ export default observer(function Home(props: Props) {
 			{ name: "About", key: "about" },
 		],
 	})
+	const router = useRouter()
 
 	return (
 		<div>
@@ -86,6 +88,8 @@ export default observer(function Home(props: Props) {
 									<button
 										onClick={async () => {
 											await logoutAction({})
+											// router.push("/")
+											router.refresh()
 										}}
 										className="before:ease relative overflow-hidden bg-black px-4 py-2 rounded-full text-white flex flex-row justify-center items-center font-light transition-all before:absolute before:right-0 before:top-0 before:h-12 before:w-6 before:translate-x-12 before:rotate-6 before:bg-white before:opacity-20 before:duration-700 hover:shadow-gray-800 hover:before:-translate-x-40 border border-white border-opacity-20"
 									>

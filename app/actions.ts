@@ -6,13 +6,10 @@ import { updateUser } from "@/edgedb/crud/mutations"
 import { auth } from "@/edgedb-next-client"
 import { profileAuthLoadMoreImages } from "@/edgedb/crud/queries"
 
-const logoutSchema = z.object({})
-export const logoutAction = actionClient
-	.schema(logoutSchema)
-	.action(async ({ parsedInput: {} }) => {
-		const { signout } = auth.createServerActions()
-		signout()
-	})
+export const logoutAction = actionClient.action(async () => {
+	const { signout } = auth.createServerActions()
+	signout()
+})
 
 const updateUserSchema = z.object({
 	bio: z.string().optional(),
