@@ -197,7 +197,7 @@ export default observer(function AddPostModal(props: Props) {
 												}}
 											>
 												<AIcon className="spin text-purple-600 h-4 w-4" />
-												<p className="font-thin text-right text-xs pr-4">
+												<p className="font-thin text-right text-xs text-black pr-4">
 													AI is thinking
 												</p>
 											</div>
