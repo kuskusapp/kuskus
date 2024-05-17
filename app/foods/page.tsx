@@ -93,7 +93,7 @@ export default function SearchUsers() {
 						>
 							{recommendedDishes.map((dish) => (
 								<SwiperSlide key={dish.id}>
-									<div className="w-80 h-40 relative">
+									<div className="w-150 h-80 relative">
 										<Image
 											className="rounded-lg"
 											src={dish.imageUrl}
@@ -103,8 +103,8 @@ export default function SearchUsers() {
 										/>
 									</div>
 									<div className="flex flex-col text-left pt-2 pl-2 space-y-1">
-										<p className="text-base">{dish.name}</p>
-										<p className="text-xs">{dish.category}</p>
+										<p className="text-xl">{dish.name}</p>
+										<p className="text-base">{dish.category}</p>
 									</div>
 								</SwiperSlide>
 							))}
