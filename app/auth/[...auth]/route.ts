@@ -1,6 +1,6 @@
 import { auth } from "@/edgedb-next-client"
 import { redirect } from "next/navigation"
-import { Octokit } from "octokit"
+import { Octokit } from "@octokit/core"
 
 export const { GET, POST } = auth.createAuthRouteHandlers({
 	async onBuiltinUICallback({ error, tokenData, isSignUp }) {
