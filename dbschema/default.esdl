@@ -14,6 +14,8 @@ module default {
     email: str {
       constraint exclusive;
     };
+    githubUsername: str;
+    githubAvatarUrl: str;
     # kuskus.app/{name}
     name: str {
       constraint exclusive;

@@ -35,6 +35,7 @@
 		"next": "14.2.3",
 		"next-safe-action": "^7.0.0-next.32",
 		"nextjs-route-types": "^1.1.0",
+		"octokit": "^4.0.2",
 		"openai": "^4.47.1",
 		"react": "^18",
 		"react-aria-components": "^1.2.0",

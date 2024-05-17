@@ -84,9 +84,10 @@ export default observer(function Home(props: Props) {
 									className="text-sm font-semibold leading-6 text-gray-800"
 								>
 									<button
-										onClick={async () => {
-											await props.signout()
-										}}
+										// onClick={async () => {
+										// 	"use server"
+										// 	await props.signout()
+										// }}
 										className="before:ease relative overflow-hidden bg-black px-4 py-2 rounded-full text-white flex flex-row justify-center items-center font-light transition-all before:absolute before:right-0 before:top-0 before:h-12 before:w-6 before:translate-x-12 before:rotate-6 before:bg-white before:opacity-20 before:duration-700 hover:shadow-gray-800 hover:before:-translate-x-40 border border-white border-opacity-20"
 									>
 										<PiSignInThin size={20} className="mr-1" />
