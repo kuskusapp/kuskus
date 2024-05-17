@@ -143,26 +143,32 @@ export default function SearchUsers() {
 							{recommendedUsers.map((user) => (
 								<SwiperSlide key={user.id}>
 									<div
-										className="flex flex-row p-6 space-x-6 border border-gray-200 rounded-xl"
+										className="flex flex-col p-6 space-x-6 border border-gray-200 rounded-xl"
 										onClick={() => (window.location.href = `/${user.name}`)}
 										style={{
 											cursor: "pointer",
-											height: "400px",
+											height: "300px",
 											alignItems: "start",
+											display: "flex",
+											flexDirection: "column",
 										}}
 									>
-										<div className="w-20 h-20 relative">
-											<Image
-												className="rounded-full"
-												src={user.imageUrl}
-												alt={user.name}
-												layout="fill"
-												objectFit="cover"
-											/>
+										<div className="flex flex-row">
+											<div className="w-20 h-20 mr-6 relative">
+												<Image
+													className="rounded-full"
+													src={user.imageUrl}
+													alt={user.name}
+													layout="fill"
+													objectFit="cover"
+												/>
+											</div>
+											<div className="flex flex-col">
+												<h1 className="text-xl font-semibold">{user.name}</h1>
+												<p>location: {user.location}</p>
+											</div>
 										</div>
-										<div className="flex flex-col">
-											<h1 className="text-xl font-semibold">{user.name}</h1>
-											<p>location: {user.location}</p>
+										<div className="flex flex-col mt-4 flex-grow">
 											<p>{user.followers} followers</p>
 											<UserBadge
 												key={user.id}
