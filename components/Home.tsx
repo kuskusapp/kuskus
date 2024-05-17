@@ -1,16 +1,17 @@
 "use client"
 import Icons from "@/components/Icons"
-import { homePublicResturn } from "@/edgedb/crud/queries"
+import { homePublicReturn } from "@/edgedb/crud/queries"
 import { observer, useObservable } from "@legendapp/state/react"
 import Link from "next/link"
 import { IoIosSearch } from "react-icons/io"
 import { PiSignInThin } from "react-icons/pi"
 
 interface Props {
-	data: homePublicResturn
+	data: homePublicReturn
 	authenticated: boolean
 	authBuiltinUiUrl: string
 	autBuiltinSignupUrl: string
+	signout: () => void
 }
 
 export default observer(function Home(props: Props) {
@@ -79,11 +80,15 @@ export default observer(function Home(props: Props) {
 							)}
 							{local.authenticated.get() && (
 								<Link
-									// href={auth.getBuiltinUIUrl()}
-									href={".."}
+									href={"/"}
 									className="text-sm font-semibold leading-6 text-gray-800"
 								>
-									<button className="before:ease relative overflow-hidden bg-black px-4 py-2 rounded-full text-white flex flex-row justify-center items-center font-light transition-all before:absolute before:right-0 before:top-0 before:h-12 before:w-6 before:translate-x-12 before:rotate-6 before:bg-white before:opacity-20 before:duration-700 hover:shadow-gray-800 hover:before:-translate-x-40 border border-white border-opacity-20">
+									<button
+										onClick={async () => {
+											await props.signout()
+										}}
+										className="before:ease relative overflow-hidden bg-black px-4 py-2 rounded-full text-white flex flex-row justify-center items-center font-light transition-all before:absolute before:right-0 before:top-0 before:h-12 before:w-6 before:translate-x-12 before:rotate-6 before:bg-white before:opacity-20 before:duration-700 hover:shadow-gray-800 hover:before:-translate-x-40 border border-white border-opacity-20"
+									>
 										<PiSignInThin size={20} className="mr-1" />
 										Sign Out
 									</button>

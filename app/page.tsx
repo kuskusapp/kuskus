@@ -10,6 +10,7 @@ export default async function HomeRoute() {
 
 	const authBuiltinUiUrl = auth.getBuiltinUIUrl()
 	const autBuiltinSignupUrl = auth.getBuiltinUISignUpUrl()
+	const { signout } = auth.createServerActions()
 
 	return (
 		<Home
@@ -17,6 +18,7 @@ export default async function HomeRoute() {
 			authenticated={authenticated}
 			authBuiltinUiUrl={authBuiltinUiUrl}
 			autBuiltinSignupUrl={autBuiltinSignupUrl}
+			signout={signout}
 		/>
 	)
 }
