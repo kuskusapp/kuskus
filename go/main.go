@@ -13,17 +13,23 @@ type MyOutput struct {
 func main() {
 	s := fuego.NewServer()
 
-	// Automatically generates OpenAPI documentation for this route
-	fuego.Post(s, "/post", func(c *fuego.ContextWithBody[MyInput]) (MyOutput, error) {
-		body, err := c.Body()
-		if err != nil {
-			return MyOutput{}, err
-		}
-
-		return MyOutput{
-			Message: "Hello, " + body.Name,
-		}, nil
-	})
+	fuego.Post(s, "/post", sayHello)
+	fuego.Get(s, "/get", getName)
 
 	s.Run()
+}
+
+func getName(c fuego.ContextNoBody) (string, error) {
+	return "Nikita", nil
+}
+
+func sayHello(c *fuego.ContextWithBody[MyInput]) (MyOutput, error) {
+	body, err := c.Body()
+	if err != nil {
+		return MyOutput{}, err
+	}
+
+	return MyOutput{
+		Message: "Hello, " + body.Name,
+	}, nil
 }

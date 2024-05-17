@@ -1,10 +1,8 @@
 "use client"
 import Icons from "@/components/Icons"
-import { auth } from "@/edgedb-next-client"
 import { homePublicResturn } from "@/edgedb/crud/queries"
 import { observer, useObservable } from "@legendapp/state/react"
 import Link from "next/link"
-import { useEffect } from "react"
 import { IoIosSearch } from "react-icons/io"
 import { PiSignInThin } from "react-icons/pi"
 
@@ -16,8 +14,8 @@ interface Props {
 }
 
 export default observer(function Home(props: Props) {
-	const server$ = useObservable(props.data)
-	const local$ = useObservable({
+	const server = useObservable(props.data)
+	const local = useObservable({
 		authenticated: props.authenticated,
 		inputFocused: false,
 		activeItem: null as string | null,
@@ -30,10 +28,6 @@ export default observer(function Home(props: Props) {
 		],
 	})
 
-	useEffect(() => {
-		console.log(server$.popularDishes.get(), "dishes")
-	}, [])
-
 	return (
 		<div>
 			<header className="absolute inset-x-0 top-0 z-50 mx-10 py-5">
@@ -44,7 +38,7 @@ export default observer(function Home(props: Props) {
 					<div className="flex flex-1 justify-end space-x-2">
 						<>
 							<div className="absolute left-10 flex flex-row space-x-5">
-								{local$.menuItems.map((item) => (
+								{local.menuItems.map((item) => (
 									<div
 										// key={item.key}
 										className="flex items-center space-x-2"
@@ -61,7 +55,7 @@ export default observer(function Home(props: Props) {
 									</div>
 								))}
 							</div>
-							{!local$.authenticated.get() && (
+							{!local.authenticated.get() && (
 								<>
 									<Link
 										href={props.authBuiltinUiUrl}
@@ -83,7 +77,7 @@ export default observer(function Home(props: Props) {
 									</Link>
 								</>
 							)}
-							{local$.authenticated.get() && (
+							{local.authenticated.get() && (
 								<Link
 									// href={auth.getBuiltinUIUrl()}
 									href={".."}
@@ -117,7 +111,7 @@ export default observer(function Home(props: Props) {
 				<div className="relative flex items-center justify-center h-10">
 					<IoIosSearch
 						className="absolute left-0 ml-3 text-black"
-						size={local$.inputFocused.get() ? 22 : 18}
+						size={local.inputFocused.get() ? 22 : 18}
 						style={{ top: "50%", transform: "translateY(-50%)" }}
 					/>
 					<input
@@ -140,7 +134,7 @@ export default observer(function Home(props: Props) {
 					</button>
 				</div>
 				<div className="flex flex-row mt-10">
-					{local$.dishes.map((dish, index) => (
+					{local.dishes.map((dish, index) => (
 						<button
 							key={index}
 							className="bg-transparent border border-black rounded-full px-4 py-2 m-1 hover:bg-gray-200 hover:-rotate-3 transition-transform duration-600 ease-in-out relative overflow-hidden flex items-center"
@@ -153,7 +147,7 @@ export default observer(function Home(props: Props) {
 						>
 							{/* {dish} */}
 							<span
-								className={`absolute mr-2 right-0 transition-opacity duration-700 ease-in-out hover:rotate-180 ${local$.hoveredDish.get() === index ? "opacity-100" : "opacity-0"}`}
+								className={`absolute mr-2 right-0 transition-opacity duration-700 ease-in-out hover:rotate-180 ${local.hoveredDish.get() === index ? "opacity-100" : "opacity-0"}`}
 							>
 								?
 							</span>
