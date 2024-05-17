@@ -111,18 +111,18 @@ export default observer(function AddPostModal(props: Props) {
 						leaveFrom="opacity-100 scale-100"
 						leaveTo="opacity-0 scale-95"
 					>
-						<div className="inline-block w-full max-w-4xl p-4 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
+						<div className="inline-block w-full max-w-4xl my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
 							<form
 								onSubmit={(e) => {
 									e.preventDefault()
 									handleSubmit()
 								}}
-								className="flex gap-5"
+								className="flex "
 								style={{ minHeight: "600px" }}
 							>
 								<div
 									className="w-2/3 flex justify-center items-center m-auto"
-									style={{ borderRight: "1px solid #c5c5c5", height: "590px" }}
+									style={{ borderRight: "1px solid #c5c5c5", height: "610px" }}
 								>
 									<button
 										className="mt-1 w-full h-full flex justify-center items-center bg-white focus:outline-none"
@@ -141,13 +141,13 @@ export default observer(function AddPostModal(props: Props) {
 									<div>
 										<label
 											htmlFor="description"
-											className="block text-sm font-thin text-gray-700 pb-2 mb-2"
+											className="block text-xs font-thin text-gray-700 py-2 pl-4 mb-2"
 											style={{
 												borderBottom: "1px solid #c5c5c5",
 												width: "320px",
 											}}
 										>
-											Description
+											DESCRIPTION
 										</label>
 										<textarea
 											id="description"
@@ -165,13 +165,13 @@ export default observer(function AddPostModal(props: Props) {
 									</div>
 									<div style={{ height: "150px" }}>
 										<label
-											className="block text-sm font-thin text-gray-700 pb-2 mb-2"
+											className="block text-xs font-thin text-gray-700 pb-2 pl-4 mb-2"
 											style={{
 												borderBottom: "1px solid #c5c5c5",
 												width: "320px",
 											}}
 										>
-											AI Description
+											AI DESCRIPTION
 										</label>
 										<p className="font-thin text-sm pl-4">textext</p>
 										<div
@@ -193,7 +193,7 @@ export default observer(function AddPostModal(props: Props) {
 												}}
 											>
 												<AIcon className="spin text-purple-600 h-4 w-4" />
-												<p className="font-thin text-right text-xs">
+												<p className="font-thin text-right text-xs pr-4">
 													AI is thinking
 												</p>
 											</div>
@@ -207,24 +207,24 @@ export default observer(function AddPostModal(props: Props) {
 										}}
 									>
 										<label
-											className="block text-sm font-thin text-gray-700 pb-2 mb-2"
+											className="block text-sm font-thin text-gray-700 pb-2 pl-4 mb-2"
 											style={{
 												borderBottom: "1px solid #c5c5c5",
 												width: "320px",
 											}}
 										>
-											Categories
+											CATEGORIES
 										</label>
 										<input
-											placeholder="search categories..."
+											placeholder="Search categories..."
 											className="mt-1 block w-full px-3 bg-white border-none sm:text-sm textarea-placeholder"
 										></input>
 
-										<div className="flex flex-wrap gap-2 mt-2">
+										<div className="flex flex-wrap gap-2 pl-2 mt-2">
 											{sortedCategories.map((category) => (
 												<button
 													key={category}
-													className={`px-3 py-1 text-gray-500 font-normal border rounded-full ${categories.includes(category) ? "bg-yellow-500 text-white" : "hover:border-yellow-500"}`}
+													className={`px-2 py-1 text-gray-500 font-normal border rounded-full ${categories.includes(category) ? "bg-yellow-500 text-white" : "hover:border-yellow-500"}`}
 													onClick={() => addCathegory(category)}
 												>
 													{category}
@@ -233,7 +233,7 @@ export default observer(function AddPostModal(props: Props) {
 										</div>
 										{initialCount < foodCategories.length && (
 											<button
-												className="mt-2 text-gray-500 font-thin cursor-pointer"
+												className="mt-2 ml-4 text-gray-500 text-xs font-thin cursor-pointer"
 												onClick={viewMore}
 											>
 												view more
