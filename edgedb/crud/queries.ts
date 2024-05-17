@@ -1,3 +1,4 @@
+import HomePublic from "@/components/routes/HomePublic"
 import e, { type $infer } from "../../dbschema/edgeql-js"
 
 // context: https://discord.com/channels/841451783728529451/1238547782537580754
@@ -7,21 +8,23 @@ export const homePublicOld = e.select(
 		popularDishes: true,
 	}),
 )
-// export const homePublic = e.params({}, () => {
-// 	e.assert_exists(e.assert_single(e.GlobalState))
-// 	const popularDishes = e.select(e.GlobalState, (gs) => ({
-// 		popularDishes: true,
-// 	}))
-// 	const posts = e.select(e.Post, () => ({
-// 		imageUrl: true,
-// 		roninId: true,
-// 		imageWidth: true,
-// 		imageHeight: true,
-// 		imagePreviewBase64Hash: true,
-// 	}))
-// 	// return e.select()
-// })
-export type homePublicReturn = $infer<typeof homePublicOld>
+export const homePublic = e.params({}, () => {
+	const popularDishes = e.select(
+		e.assert_exists(e.assert_single(e.GlobalState)),
+		(gs) => ({
+			popularDishes: true,
+		}),
+	)
+	const posts = e.select(e.Post, () => ({
+		imageUrl: true,
+		roninId: true,
+		imageWidth: true,
+		imageHeight: true,
+		imagePreviewBase64Hash: true,
+	}))
+	return e.select({ posts, popularDishes })
+})
+export type homePublicReturn = $infer<typeof HomePublic>
 
 // context: https://discord.com/channels/841451783728529451/1235266238977150976 & https://discord.com/channels/841451783728529451/1235593775447937054 & https://discord.com/channels/841451783728529451/1238547782537580754
 export const profileAuth = e.params(
