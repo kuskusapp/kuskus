@@ -10,16 +10,20 @@ interface Props {
 }
 
 const foodCategories = [
-	"Pizza",
 	"Sushi",
-	"Burger",
+	"Breakfast",
+	"Smoothie",
+	"Vegan",
 	"Pasta",
 	"Salad",
-	"Dessert",
+	"Healthy",
 	"Steak",
-	"Tacos",
+	"Cocktail",
+	"Burger",
+	"Indian",
 	"Curry",
-	"Noodles",
+	"Soup",
+	"Coffee",
 ]
 
 export default observer(function AddPostModal(props: Props) {
@@ -31,7 +35,7 @@ export default observer(function AddPostModal(props: Props) {
 	})
 
 	const [categories, setCategories] = useState<string[]>([])
-	const [initialCount, setInitialCount] = useState(6)
+	const [initialCount, setInitialCount] = useState(8)
 
 	const addCathegory = (category: string) => {
 		setCategories((prevSelected) =>
@@ -42,7 +46,7 @@ export default observer(function AddPostModal(props: Props) {
 	}
 
 	const viewMore = () => {
-		setInitialCount((prevCount) => prevCount + 4)
+		setInitialCount((prevCount) => prevCount + 3)
 	}
 
 	const sortedCategories = [
@@ -207,7 +211,7 @@ export default observer(function AddPostModal(props: Props) {
 										}}
 									>
 										<label
-											className="block text-sm font-thin text-gray-700 pb-2 pl-4 mb-2"
+											className="block text-xs font-thin text-gray-700 pb-2 pl-4 mb-2"
 											style={{
 												borderBottom: "1px solid #e7e7e7",
 												width: "320px",
