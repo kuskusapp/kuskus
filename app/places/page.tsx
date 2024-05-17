@@ -8,6 +8,7 @@ import { Swiper, SwiperSlide } from "swiper/react"
 import "swiper/css"
 import "swiper/css/navigation"
 import "swiper/css/pagination"
+import { AnimatePresence, motion } from "framer-motion"
 
 const recommendedPlaces = [
 	{
@@ -58,6 +59,8 @@ export default function Search() {
 	const [inputFocused, setInputFocused] = useState(false)
 	const [isModalOpen, setIsModalOpen] = useState(false)
 
+	const [hovered, setHovered] = useState("")
+
 	return (
 		<>
 			<Header />
@@ -88,20 +91,42 @@ export default function Search() {
 				</div>
 				<div className="pb-20 space-y-10">
 					<div className="pt-10">
-						<h2 className="text-2xl font-normal">
-							Places we recommend for you in{" "}
-							<span className="">[City, Country]</span>
-						</h2>
+						<div className="relative z-10 w-full flex">
+							<div className="absolute z-20 top-[50%] left-0 translate-y-[50%] border-b h-0 border-white/30 w-full"></div>
+							<h2 className="text-[28px] z-30 bg-primary pr-5 w-fit font-bold ">
+								Places we recommend for you in{" "}
+								<span className="">[City, Country]</span>
+							</h2>
+						</div>
 						<Swiper
-							className="mt-5"
-							spaceBetween={20}
-							slidesPerView={4}
+							className="mt-5 w-full"
+							spaceBetween={4}
+							slidesPerView={5}
 							onSlideChange={() => {}}
 							onSwiper={(swiper) => {}}
 						>
 							{recommendedPlaces.map((place) => (
 								<SwiperSlide key={place.id}>
-									<div className="w-80 h-40 relative">
+									<div
+										onMouseEnter={() => setHovered(place.id)}
+										onMouseLeave={() => setHovered(place.id)}
+										className=" w-full min-h-[500px] relative"
+									>
+										<AnimatePresence>
+											{hovered === place.id ? (
+												<motion.div
+													initial={{ opacity: 0 }}
+													animate={{ opacity: 1 }}
+													exit={{ opacity: 0 }}
+													className="absolute bottom-0 left-0 p-2 text-white z-20"
+												>
+													<div className="font-bold">{place.name}</div>
+													<div className="opacity-50 text-[14px]">
+														{place.category}
+													</div>
+												</motion.div>
+											) : null}
+										</AnimatePresence>
 										<Image
 											className="rounded-lg"
 											src={place.imageUrl}
@@ -111,10 +136,6 @@ export default function Search() {
 											sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
 											priority
 										/>
-									</div>
-									<div className="flex flex-col text-left pt-2 pl-2 space-y-1">
-										<p className="text-base">{place.name}</p>
-										<p className="text-xs">{place.category}</p>
 									</div>
 								</SwiperSlide>
 							))}
@@ -122,17 +143,42 @@ export default function Search() {
 					</div>
 
 					<div>
-						<h2 className="text-2xl font-normal">Just Opened! Check it Out</h2>
+						<div className="relative z-10 w-full flex justify-end">
+							<div className="absolute z-20 top-[50%] left-0 translate-y-[50%] border-b h-0 border-white/30 w-full"></div>
+							<h2 className="text-[28px] z-30 bg-primary pl-5 w-fit font-bold ">
+								Just Opened! Check it Out
+							</h2>
+						</div>
 						<Swiper
-							className="mt-5"
-							spaceBetween={20}
-							slidesPerView={4}
+							className="mt-5 w-full"
+							spaceBetween={4}
+							slidesPerView={5}
 							onSlideChange={() => {}}
 							onSwiper={(swiper) => {}}
 						>
 							{recommendedPlaces.map((place) => (
 								<SwiperSlide key={place.id}>
-									<div className="w-80 h-40 relative">
+									<div
+										onMouseEnter={() => setHovered(place.id)}
+										onMouseLeave={() => setHovered(place.id)}
+										className=" w-full min-h-[500px] relative"
+									>
+										<AnimatePresence>
+											{hovered === place.id ? (
+												<motion.div
+													initial={{ opacity: 0 }}
+													animate={{ opacity: 1 }}
+													exit={{ opacity: 0 }}
+													className="absolute bottom-0 left-0 p-2 text-white z-20"
+												>
+													<div className="font-bold">{place.name}</div>
+													<div className="opacity-50 text-[14px]">
+														{place.category}
+													</div>
+												</motion.div>
+											) : null}
+										</AnimatePresence>
+
 										<Image
 											className="rounded-lg"
 											src={place.imageUrl}
@@ -142,10 +188,6 @@ export default function Search() {
 											sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
 											priority
 										/>
-									</div>
-									<div className="flex flex-col text-left pt-2 pl-2 space-y-1">
-										<p className="text-base">{place.name}</p>
-										<p className="text-xs">{place.category}</p>
 									</div>
 								</SwiperSlide>
 							))}
@@ -153,17 +195,42 @@ export default function Search() {
 					</div>
 
 					<div>
-						<h2 className="text-2xl font-normal">Just Opened! Check it Out</h2>
+						<div className="relative z-10 w-full flex">
+							<div className="absolute z-20 top-[50%] left-0 translate-y-[50%] border-b h-0 border-white/30 w-full"></div>
+							<h2 className="text-[28px] z-30 bg-primary pr-5 w-fit font-bold ">
+								Just Opened! Check it Out
+							</h2>
+						</div>
 						<Swiper
-							className="mt-5"
-							spaceBetween={20}
-							slidesPerView={4}
+							className="mt-5 w-full"
+							spaceBetween={4}
+							slidesPerView={5}
 							onSlideChange={() => {}}
 							onSwiper={(swiper) => {}}
 						>
 							{recommendedPlaces.map((place) => (
 								<SwiperSlide key={place.id}>
-									<div className="w-80 h-40 relative">
+									<div
+										onMouseEnter={() => setHovered(place.id)}
+										onMouseLeave={() => setHovered(place.id)}
+										className=" w-full min-h-[500px] relative"
+									>
+										<AnimatePresence>
+											{hovered === place.id ? (
+												<motion.div
+													initial={{ opacity: 0 }}
+													animate={{ opacity: 1 }}
+													exit={{ opacity: 0 }}
+													className="absolute bottom-0 left-0 p-2 text-white z-20"
+												>
+													<div className="font-bold">{place.name}</div>
+													<div className="opacity-50 text-[14px]">
+														{place.category}
+													</div>
+												</motion.div>
+											) : null}
+										</AnimatePresence>
+
 										<Image
 											className="rounded-lg"
 											src={place.imageUrl}
@@ -173,10 +240,6 @@ export default function Search() {
 											sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
 											priority
 										/>
-									</div>
-									<div className="flex flex-col text-left pt-2 pl-2 space-y-1">
-										<p className="text-base">{place.name}</p>
-										<p className="text-xs">{place.category}</p>
 									</div>
 								</SwiperSlide>
 							))}

@@ -54,7 +54,7 @@ export default observer(function HomePublic(props: Props) {
 							<Link
 								// href={auth.getBuiltinUIUrl()}
 								href={".."}
-								className="text-sm font-semibold leading-6 text-gray-800"
+								className="text-sm font-semibold leading-6 "
 							>
 								<button className="before:ease relative overflow-hidden bg-white px-4 py-2 rounded-full text-black flex flex-row justify-center items-center font-light transition-all before:absolute before:right-0 before:top-0 before:h-12 before:w-6 before:translate-x-12 before:rotate-6 before:bg-gray-500 before:opacity-10 before:duration-700 hover:shadow-gray-800 hover:before:-translate-x-40 border border-black">
 									<PiSignInThin size={20} className="mr-1" />
@@ -82,10 +82,10 @@ export default observer(function HomePublic(props: Props) {
 					className="justify-center flex flex-col mt-5 mb-10"
 					style={{ maxWidth: "40em" }}
 				>
-					<h1 className="text-6xl font-m text-black mb-3 text-center">
+					<h1 className="text-6xl font-m  mb-3 text-center">
 						Share and rate food
 					</h1>
-					<p className="text-xl font-light text-black text-opacity-50 mt-5 text-center">
+					<p className="text-xl font-light  text-opacity-50 mt-5 text-center">
 						KusKus is community for food lovers,
 						<span className="display: block">
 							who love to see new places and share them

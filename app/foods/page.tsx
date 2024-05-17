@@ -60,7 +60,7 @@ export default function SearchUsers() {
 	return (
 		<>
 			<Header />
-			<div className=" justify-center px-5 pt-5 mt-5">
+			<div className="justify-center px-5 pt-5 mt-5">
 				<div
 					className="relative flex items-center justify-center h-10 m-auto"
 					style={{ width: "100%" }}
