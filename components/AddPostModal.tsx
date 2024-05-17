@@ -128,10 +128,7 @@ export default observer(function AddPostModal(props: Props) {
 									className="w-2/3 flex justify-center items-center m-auto"
 									style={{ borderRight: "1px solid #e7e7e7", height: "610px" }}
 								>
-									<button
-										className="mt-1 w-full h-full flex justify-center items-center bg-white focus:outline-none"
-										// onClick={() => document.getElementById("image").click()}
-									>
+									<label className="mt-1 w-full h-full flex justify-center items-center bg-white focus:outline-none cursor-pointer">
 										<PhotoIcon className="h-6 w-6 text-gray-700" />
 										<input
 											type="file"
@@ -139,7 +136,7 @@ export default observer(function AddPostModal(props: Props) {
 											onChange={handleImageChange}
 											className="hidden"
 										/>
-									</button>
+									</label>
 								</div>
 								<div className=" flex flex-col">
 									<div>
