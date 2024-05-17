@@ -107,6 +107,7 @@ export default function SearchUsers() {
 											layout="fill"
 											objectFit="cover"
 											sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+											priority
 										/>
 									</div>
 									<div className="flex flex-col text-left pt-2 pl-2 space-y-1">
