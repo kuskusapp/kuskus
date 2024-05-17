@@ -122,7 +122,7 @@ export default observer(function AddPostModal(props: Props) {
 							>
 								<div
 									className="w-2/3 flex justify-center items-center m-auto"
-									style={{ borderRight: "1px solid #c5c5c5", height: "610px" }}
+									style={{ borderRight: "1px solid #e7e7e7", height: "610px" }}
 								>
 									<button
 										className="mt-1 w-full h-full flex justify-center items-center bg-white focus:outline-none"
@@ -143,7 +143,7 @@ export default observer(function AddPostModal(props: Props) {
 											htmlFor="description"
 											className="block text-xs font-thin text-gray-700 py-2 pl-4 mb-2"
 											style={{
-												borderBottom: "1px solid #c5c5c5",
+												borderBottom: "1px solid #e7e7e7",
 												width: "320px",
 											}}
 										>
@@ -167,7 +167,7 @@ export default observer(function AddPostModal(props: Props) {
 										<label
 											className="block text-xs font-thin text-gray-700 pb-2 pl-4 mb-2"
 											style={{
-												borderBottom: "1px solid #c5c5c5",
+												borderBottom: "1px solid #e7e7e7",
 												width: "320px",
 											}}
 										>
@@ -209,7 +209,7 @@ export default observer(function AddPostModal(props: Props) {
 										<label
 											className="block text-sm font-thin text-gray-700 pb-2 pl-4 mb-2"
 											style={{
-												borderBottom: "1px solid #c5c5c5",
+												borderBottom: "1px solid #e7e7e7",
 												width: "320px",
 											}}
 										>
@@ -224,7 +224,7 @@ export default observer(function AddPostModal(props: Props) {
 											{sortedCategories.map((category) => (
 												<button
 													key={category}
-													className={`px-2 py-1 text-gray-500 font-normal border rounded-full ${categories.includes(category) ? "bg-yellow-500 text-white" : "hover:border-yellow-500"}`}
+													className={`px-2 py-1 text-gray-900 font-light text-xs border rounded-full ${categories.includes(category) ? "bg-yellow-500 border-yellow-500 text-white" : "hover:border-yellow-500"}`}
 													onClick={() => addCathegory(category)}
 												>
 													{category}
@@ -240,6 +240,11 @@ export default observer(function AddPostModal(props: Props) {
 											</button>
 										)}
 									</div>
+								</div>
+								<div className="absolute right-4 bottom-4">
+									<button className="bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded">
+										Share
+									</button>
 								</div>
 							</form>
 						</div>
