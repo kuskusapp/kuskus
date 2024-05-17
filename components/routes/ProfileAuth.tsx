@@ -132,7 +132,7 @@ export default legend.observer(function ProfileAuth(props: ProfileAuthProps) {
 	}, [])
 
 	return (
-		<div className="min-h-screen h-full text-black/60">
+		<div className="min-h-screen h-full ">
 			<Sidebar />
 			<div className="ml-[380px] min-h-full flex">
 				<ImageGrid images={images} />
@@ -144,8 +144,8 @@ export default legend.observer(function ProfileAuth(props: ProfileAuthProps) {
 function Sidebar() {
 	const [hoveredSidebarTab, setHoveredSidebarTab] = react.useState("Following")
 	return (
-		<div className="fixed left-0 w-[380px] top-0 h-screen bg-gray-200">
-			<div className="w-full h-3/5 bg-gray-300">Profile</div>
+		<div className="fixed left-0 w-[380px] top-0 h-screen bg-secondary">
+			<div className="w-full h-3/5 bg-substitute">Profile</div>
 			<div className="p-[24px] pt-[34px] flex flex-col justify-between h-2/5">
 				<div className="flex flex-col gap-[2px]">
 					<div className="text-[30px] font-bold">Molly</div>

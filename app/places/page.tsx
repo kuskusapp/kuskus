@@ -61,7 +61,7 @@ export default function Search() {
 	return (
 		<>
 			<Header />
-			<div className="bg-white justify-center px-5 pt-5 mt-5 relative">
+			<div className=" justify-center px-5 pt-5 mt-5 relative">
 				<div
 					className="relative flex items-center justify-center h-10 m-auto"
 					style={{ width: "100%" }}

@@ -71,7 +71,7 @@ interface PlaceCardProps {
 }
 const PlaceCard: React.FC<PlaceCardProps> = ({ name, imageUrl }) => {
 	return (
-		<div className="bg-white shadow-md rounded-lg overflow-hidden">
+		<div className=" shadow-md rounded-lg overflow-hidden">
 			<img src={imageUrl} alt={name} className="w-full h-40 object-cover" />
 			<div className="p-4">
 				<h3 className="text-lg font-bold">{name}</h3>

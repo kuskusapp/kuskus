@@ -30,9 +30,8 @@ export default observer(function ChatAuth(props: Props) {
 	}
 
 	return (
-		<div className="h-screen w-screen flex">
-			<Sidebar />
-			<div className=" h-full bg-gray-200 w-full flex flex-col px-[100px] p-2 pt-[50px]">
+		<div className="h-screen w-screen flex ">
+			<div className=" h-full bg-primary w-full flex flex-col px-[100px] p-2 pt-[50px]">
 				<div className="h-[90%]  w-full">
 					{question ? (
 						<div className="flex flex-col gap-[20px]">
@@ -59,17 +58,3 @@ export default observer(function ChatAuth(props: Props) {
 		</div>
 	)
 })
-
-function Sidebar() {
-	return (
-		<div className="w-1/4 min-w-[300px] h-full">
-			<div className="flex justify-between items-center w-full p-3">
-				<div className="text-[22px] font-bold">KusKus</div>
-				<div className="bg-blue-400 text-[14px] text-white rounded-lg px-3 p-2">
-					New Chat
-				</div>
-			</div>
-			<div></div>
-		</div>
-	)
-}

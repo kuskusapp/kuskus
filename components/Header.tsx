@@ -51,30 +51,29 @@ export default function Header() {
 					className="flex flex-row gap-5 justify-center"
 				>
 					<div
-						className=" h-[50px] flex justify-center items-center space-x-3 rounded-full py-2 px-3"
+						className="bg-secondary h-[50px] flex justify-center items-center space-x-3 rounded-full py-2 px-3"
 						style={{
 							marginLeft: "auto",
 							justifyContent: "center",
-							backgroundColor: "rgb(47 47 48)",
+
 							boxShadow: "5px 5px 15px rgba(0, 0, 0, 0.3)",
 						}}
 					>
-						<GridIcon className="text-white w-7 h-7" />
-						<SearchIcon className="text-white w-7 h-7" />
-						<UserIcon className="text-white w-7 h-7" />
-						<NotificationIcon className="text-white w-7 h-7" />
+						<GridIcon className="text-primaryText w-7 h-7" />
+						<SearchIcon className="text-primaryText w-7 h-7" />
+						<UserIcon className="text-primaryText w-7 h-7" />
+						<NotificationIcon className="text-primaryText w-7 h-7" />
 					</div>
 					<button
 						onClick={openModal}
 						style={{
-							backgroundColor: "rgb(47 47 48)",
 							width: "50px",
 							height: "50px",
 							boxShadow: "5px 5px 15px rgba(0, 0, 0, 0.3)",
 						}}
-						className="rounded-full items-center justify-center flex text-white focus:outline-none focus:ring"
+						className="rounded-full bg-secondary items-center justify-center flex text-white focus:outline-none focus:ring"
 					>
-						<PlusIcon className="text-white w-7 h-7" />
+						<PlusIcon className="text-primaryText w-7 h-7" />
 					</button>
 				</div>
 			</div>
