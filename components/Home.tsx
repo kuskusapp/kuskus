@@ -11,7 +11,7 @@ interface Props {
 	authenticated: boolean
 	authBuiltinUiUrl: string
 	autBuiltinSignupUrl: string
-	signout: () => void
+	// signout: () => void
 }
 
 export default observer(function Home(props: Props) {
