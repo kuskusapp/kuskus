@@ -14,37 +14,43 @@ const recommendedDishes = [
 		id: "dish1",
 		name: "dish 1",
 		category: "change to place name",
-		imageUrl: "https://images.omrshn.dev/logisticcars.jpeg",
+		imageUrl:
+			"https://storage.ronin.co/spa_m8okrzy9ivjnlsr8/dc57049b-41f6-47ce-8254-436a971291e7",
 	},
 	{
 		id: "dish2",
 		name: "dish 2",
 		category: "change to place name",
-		imageUrl: "https://images.omrshn.dev/logisticcars.jpeg",
+		imageUrl:
+			"https://storage.ronin.co/spa_m8okrzy9ivjnlsr8/dc57049b-41f6-47ce-8254-436a971291e7",
 	},
 	{
 		id: "dish3",
 		name: "dish 3",
 		category: "change to place name",
-		imageUrl: "https://images.omrshn.dev/logisticcars.jpeg",
+		imageUrl:
+			"https://storage.ronin.co/spa_m8okrzy9ivjnlsr8/dc57049b-41f6-47ce-8254-436a971291e7",
 	},
 	{
 		id: "dish4",
 		name: "dish 4",
 		category: "change to place name",
-		imageUrl: "https://images.omrshn.dev/logisticcars.jpeg",
+		imageUrl:
+			"https://storage.ronin.co/spa_m8okrzy9ivjnlsr8/dc57049b-41f6-47ce-8254-436a971291e7",
 	},
 	{
 		id: "dish5",
 		name: "dish 5",
 		category: "change to place name",
-		imageUrl: "https://images.omrshn.dev/logisticcars.jpeg",
+		imageUrl:
+			"https://storage.ronin.co/spa_m8okrzy9ivjnlsr8/dc57049b-41f6-47ce-8254-436a971291e7",
 	},
 	{
 		id: "dish6",
 		name: "dish 6",
 		category: "change to place name",
-		imageUrl: "https://images.omrshn.dev/logisticcars.jpeg",
+		imageUrl:
+			"https://storage.ronin.co/spa_m8okrzy9ivjnlsr8/dc57049b-41f6-47ce-8254-436a971291e7",
 	},
 ]
 
@@ -100,6 +106,7 @@ export default function SearchUsers() {
 											alt={dish.name}
 											layout="fill"
 											objectFit="cover"
+											sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
 										/>
 									</div>
 									<div className="flex flex-col text-left pt-2 pl-2 space-y-1">

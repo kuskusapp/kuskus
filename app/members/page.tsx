@@ -18,7 +18,8 @@ const recommendedUsers = [
 		followers: 100,
 		following: 50,
 		lists: 5,
-		imageUrl: "https://images.omrshn.dev/logisticcars.jpeg",
+		imageUrl:
+			"https://storage.ronin.co/spa_m8okrzy9ivjnlsr8/dc57049b-41f6-47ce-8254-436a971291e7",
 	},
 	{
 		id: "user2",
@@ -27,7 +28,8 @@ const recommendedUsers = [
 		followers: 100,
 		following: 50,
 		lists: 5,
-		imageUrl: "https://images.omrshn.dev/logisticcars.jpeg",
+		imageUrl:
+			"https://storage.ronin.co/spa_m8okrzy9ivjnlsr8/dc57049b-41f6-47ce-8254-436a971291e7",
 	},
 	{
 		id: "user3",
@@ -36,7 +38,8 @@ const recommendedUsers = [
 		followers: 70,
 		following: 10,
 		lists: 0,
-		imageUrl: "https://images.omrshn.dev/logisticcars.jpeg",
+		imageUrl:
+			"https://storage.ronin.co/spa_m8okrzy9ivjnlsr8/dc57049b-41f6-47ce-8254-436a971291e7",
 	},
 	{
 		id: "user4",
@@ -45,7 +48,8 @@ const recommendedUsers = [
 		followers: 100,
 		following: 50,
 		lists: 5,
-		imageUrl: "https://images.omrshn.dev/logisticcars.jpeg",
+		imageUrl:
+			"https://storage.ronin.co/spa_m8okrzy9ivjnlsr8/dc57049b-41f6-47ce-8254-436a971291e7",
 	},
 	{
 		id: "user5",
@@ -54,7 +58,8 @@ const recommendedUsers = [
 		followers: 100,
 		following: 50,
 		lists: 5,
-		imageUrl: "https://images.omrshn.dev/logisticcars.jpeg",
+		imageUrl:
+			"https://storage.ronin.co/spa_m8okrzy9ivjnlsr8/dc57049b-41f6-47ce-8254-436a971291e7",
 	},
 	{
 		id: "user6",
@@ -63,7 +68,8 @@ const recommendedUsers = [
 		followers: 100,
 		following: 50,
 		lists: 0,
-		imageUrl: "https://images.omrshn.dev/logisticcars.jpeg",
+		imageUrl:
+			"https://storage.ronin.co/spa_m8okrzy9ivjnlsr8/dc57049b-41f6-47ce-8254-436a971291e7",
 	},
 	{
 		id: "user7",
@@ -72,7 +78,8 @@ const recommendedUsers = [
 		followers: 100,
 		following: 50,
 		lists: 5,
-		imageUrl: "https://images.omrshn.dev/logisticcars.jpeg",
+		imageUrl:
+			"https://storage.ronin.co/spa_m8okrzy9ivjnlsr8/dc57049b-41f6-47ce-8254-436a971291e7",
 	},
 ]
 

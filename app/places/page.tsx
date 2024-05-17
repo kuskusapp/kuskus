@@ -15,37 +15,43 @@ const recommendedPlaces = [
 		id: "place1",
 		name: "Place 1",
 		category: "coffeeshop",
-		imageUrl: "https://images.omrshn.dev/logisticcars.jpeg",
+		imageUrl:
+			"https://storage.ronin.co/spa_m8okrzy9ivjnlsr8/dc57049b-41f6-47ce-8254-436a971291e7",
 	},
 	{
 		id: "place2",
 		name: "Place 2",
 		category: "coffeeshop",
-		imageUrl: "https://images.omrshn.dev/logisticcars.jpeg",
+		imageUrl:
+			"https://storage.ronin.co/spa_m8okrzy9ivjnlsr8/dc57049b-41f6-47ce-8254-436a971291e7",
 	},
 	{
 		id: "place3",
 		name: "Place 3",
 		category: "coffeeshop",
-		imageUrl: "https://images.omrshn.dev/logisticcars.jpeg",
+		imageUrl:
+			"https://storage.ronin.co/spa_m8okrzy9ivjnlsr8/dc57049b-41f6-47ce-8254-436a971291e7",
 	},
 	{
 		id: "place4",
 		name: "Place 4",
 		category: "coffeeshop",
-		imageUrl: "https://images.omrshn.dev/logisticcars.jpeg",
+		imageUrl:
+			"https://storage.ronin.co/spa_m8okrzy9ivjnlsr8/dc57049b-41f6-47ce-8254-436a971291e7",
 	},
 	{
 		id: "place5",
 		name: "Place 5",
 		category: "coffeeshop",
-		imageUrl: "https://images.omrshn.dev/logisticcars.jpeg",
+		imageUrl:
+			"https://storage.ronin.co/spa_m8okrzy9ivjnlsr8/dc57049b-41f6-47ce-8254-436a971291e7",
 	},
 	{
 		id: "place6",
 		name: "Place 6",
 		category: "coffeeshop",
-		imageUrl: "https://images.omrshn.dev/logisticcars.jpeg",
+		imageUrl:
+			"https://storage.ronin.co/spa_m8okrzy9ivjnlsr8/dc57049b-41f6-47ce-8254-436a971291e7",
 	},
 ]
 
@@ -103,6 +109,8 @@ export default function Search() {
 											alt={place.name}
 											layout="fill"
 											objectFit="cover"
+											sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+											priority
 										/>
 									</div>
 									<div className="flex flex-col text-left pt-2 pl-2 space-y-1">
@@ -132,6 +140,8 @@ export default function Search() {
 											alt={place.name}
 											layout="fill"
 											objectFit="cover"
+											sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+											priority
 										/>
 									</div>
 									<div className="flex flex-col text-left pt-2 pl-2 space-y-1">
@@ -161,6 +171,8 @@ export default function Search() {
 											alt={place.name}
 											layout="fill"
 											objectFit="cover"
+											sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+											priority
 										/>
 									</div>
 									<div className="flex flex-col text-left pt-2 pl-2 space-y-1">
