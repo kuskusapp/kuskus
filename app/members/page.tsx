@@ -1,6 +1,7 @@
 "use client"
 import { useState } from "react"
 import Image from "next/image"
+import Link from "next/link"
 import { IoIosSearch } from "react-icons/io"
 import Header from "@/components/Header"
 import { GlobeIcon } from "../../public/svg/search-icons"
@@ -75,6 +76,28 @@ const recommendedUsers = [
 	},
 ]
 
+interface UserBadgeProps {
+	imageUrl: string
+	username: string
+}
+
+const UserBadge: React.FC<UserBadgeProps> = ({ imageUrl, username }) => {
+	return (
+		<div className="flex space-x-2">
+			<div className="w-8 h-8 relative">
+				<Image
+					src={imageUrl}
+					alt={username}
+					className="rounded-full"
+					layout="fill"
+					objectFit="cover"
+				/>
+			</div>
+			<span>{username}</span>
+		</div>
+	)
+}
+
 export default function SearchUsers() {
 	const [inputFocused, setInputFocused] = useState(false)
 
@@ -109,8 +132,7 @@ export default function SearchUsers() {
 				<div className="pb-20 space-y-10">
 					<div className="pt-10">
 						<h2 className="text-2xl font-normal">
-							Places we recommend for you in{" "}
-							<span className="">[City, Country]</span>
+							You might like content of these KusKus users{" "}
 						</h2>
 						<Swiper
 							className="mt-5"
@@ -120,8 +142,16 @@ export default function SearchUsers() {
 						>
 							{recommendedUsers.map((user) => (
 								<SwiperSlide key={user.id}>
-									<div className="flex flex-row p-6 space-x-6 border border-gray-200 rounded-xl">
-										<div className="w-16 h-16 relative mb-4">
+									<div
+										className="flex flex-row p-6 space-x-6 border border-gray-200 rounded-xl"
+										onClick={() => (window.location.href = `/${user.name}`)}
+										style={{
+											cursor: "pointer",
+											height: "400px",
+											alignItems: "start",
+										}}
+									>
+										<div className="w-20 h-20 relative">
 											<Image
 												className="rounded-full"
 												src={user.imageUrl}
@@ -134,6 +164,11 @@ export default function SearchUsers() {
 											<h1 className="text-xl font-semibold">{user.name}</h1>
 											<p>location: {user.location}</p>
 											<p>{user.followers} followers</p>
+											<UserBadge
+												key={user.id}
+												imageUrl={user.imageUrl}
+												username={user.name}
+											/>
 											<p>{user.following} following</p>
 											<p>
 												{user.lists !== 0
