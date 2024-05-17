@@ -48,8 +48,6 @@ export const profileAuthGetMoreImagesAction = actionClient
 // export const globalSearchAction = actionClient
 //   .schema(globalSearchSchema)
 //   .action(async ({ parsedInput: { query } }) => {
-//     console.log(query)
-
 //     // TODO: turn query into vector..
 //     // pass vector to edgedb for search, return results
 //     return

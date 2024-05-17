@@ -9,8 +9,6 @@ export default async function Place({ params }: PageProps) {
 	const authenticated = await session.isSignedIn()
 
 	if (!authenticated) {
-		// TODO: change for public
-		console.log("run?")
 		return <></>
 	}
 

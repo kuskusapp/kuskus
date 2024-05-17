@@ -138,7 +138,7 @@ export default function SearchUsers() {
 							className="mt-5"
 							spaceBetween={20}
 							slidesPerView={4}
-							onSlideChange={() => console.log("slide change")}
+							onSlideChange={() => {}}
 						>
 							{recommendedUsers.map((user) => (
 								<SwiperSlide key={user.id}>

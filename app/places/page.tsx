@@ -91,8 +91,8 @@ export default function Search() {
 							className="mt-5"
 							spaceBetween={20}
 							slidesPerView={4}
-							onSlideChange={() => console.log("slide change")}
-							onSwiper={(swiper) => console.log(swiper)}
+							onSlideChange={() => {}}
+							onSwiper={(swiper) => {}}
 						>
 							{recommendedPlaces.map((place) => (
 								<SwiperSlide key={place.id}>
@@ -120,8 +120,8 @@ export default function Search() {
 							className="mt-5"
 							spaceBetween={20}
 							slidesPerView={4}
-							onSlideChange={() => console.log("slide change")}
-							onSwiper={(swiper) => console.log(swiper)}
+							onSlideChange={() => {}}
+							onSwiper={(swiper) => {}}
 						>
 							{recommendedPlaces.map((place) => (
 								<SwiperSlide key={place.id}>
@@ -149,8 +149,8 @@ export default function Search() {
 							className="mt-5"
 							spaceBetween={20}
 							slidesPerView={4}
-							onSlideChange={() => console.log("slide change")}
-							onSwiper={(swiper) => console.log(swiper)}
+							onSlideChange={() => {}}
+							onSwiper={(swiper) => {}}
 						>
 							{recommendedPlaces.map((place) => (
 								<SwiperSlide key={place.id}>

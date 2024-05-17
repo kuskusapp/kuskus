@@ -88,8 +88,8 @@ export default function SearchUsers() {
 							className="mt-5"
 							spaceBetween={20}
 							slidesPerView={4}
-							onSlideChange={() => console.log("slide change")}
-							onSwiper={(swiper) => console.log(swiper)}
+							onSlideChange={() => {}}
+							onSwiper={(swiper) => {}}
 						>
 							{recommendedDishes.map((dish) => (
 								<SwiperSlide key={dish.id}>
