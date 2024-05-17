@@ -1,7 +1,7 @@
 "use client"
 import { profileAuthReturn } from "@/edgedb/crud/queries"
 import * as legend from "@legendapp/state/react"
-import { motion } from "framer-motion"
+import { AnimatePresence, motion } from "framer-motion"
 import * as react from "react"
 
 type Image = {
@@ -53,12 +53,36 @@ function ImageGrid(props: { images: Image[] }) {
 
 function LazyImage(props: { image: Image }) {
 	const [loaded, setLoaded] = react.useState(false)
+	const [hovered, setHovered] = react.useState(false)
+	const [info, setInfo] = react.useState({
+		description: "great restaurant there were bugs tho very lively 6/10",
+		date: "3 months ago",
+	})
 
 	return (
 		<div
+			onMouseEnter={() => {
+				setHovered(true)
+			}}
+			onMouseLeave={() => {
+				setHovered(false)
+			}}
 			className="relative overflow-hidden flex justify-center items-center bg-black"
 			style={{ aspectRatio: `${props.image.width}/${props.image.height}` }}
 		>
+			<AnimatePresence>
+				{hovered ? (
+					<motion.div
+						initial={{ opacity: 0 }}
+						animate={{ opacity: 1 }}
+						exit={{ opacity: 0 }}
+						className="absolute bottom-0 left-0 p-2 text-white z-20"
+					>
+						<div>{info.description}</div>
+						<div className="opacity-50 text-[14px]">{info.date}</div>
+					</motion.div>
+				) : null}
+			</AnimatePresence>
 			<img
 				className="absolute h-full w-full object-cover"
 				width={props.image.width}
