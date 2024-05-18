@@ -4,7 +4,7 @@ import { z } from "zod"
 import { actionClient } from "@/lib/safe-action"
 import { updateUser } from "@/edgedb/crud/mutations"
 import { auth } from "@/edgedb-next-client"
-import { profileAuthLoadMoreImages } from "@/edgedb/crud/queries"
+import { profileLoadMorePosts } from "@/edgedb/crud/queries"
 
 export const logoutAction = actionClient.action(async () => {
 	const { signout } = auth.createServerActions()
@@ -24,24 +24,26 @@ export const updateUserAction = actionClient
 		try {
 			await updateUser.run(client, { bio, place, displayName })
 		} catch {
-			// TODO: consider better errors
 			return { failure: "Error with EdgeDB" }
 		}
 	})
 
-const profileAuthGetMoreImagesSchema = z.object({
+const profileLoadMostPostsSchema = z.object({
+	username: z.string(),
 	pageNumber: z.number(),
 })
-export const profileAuthGetMoreImagesAction = actionClient
-	.schema(profileAuthGetMoreImagesSchema)
-	.action(async ({ parsedInput: { pageNumber } }) => {
+export const profileLoadMostPostsAction = actionClient
+	.schema(profileLoadMostPostsSchema)
+	.action(async ({ parsedInput: { username, pageNumber } }) => {
 		const session = auth.getSession()
 		const client = session.client
 		try {
-			const res = await profileAuthLoadMoreImages.run(client, { pageNumber })
+			const res = await profileLoadMorePosts.run(client, {
+				username,
+				pageNumber,
+			})
 			return res
 		} catch {
-			// TODO: consider better errors
 			return { failure: "Error with EdgeDB" }
 		}
 	})

@@ -1,8 +1,9 @@
 "use client"
+import { profileLoadMostPostsAction } from "@/app/actions"
 import { profileAuthReturn } from "@/edgedb/crud/queries"
-import * as legend from "@legendapp/state/react"
+import { observer, useObservable } from "@legendapp/state/react"
 import { AnimatePresence, motion } from "framer-motion"
-import * as react from "react"
+import { useEffect, useMemo } from "react"
 
 type Image = {
 	id: string
@@ -51,35 +52,39 @@ function ImageGrid(props: { images: Image[] }) {
 	))
 }
 
-function LazyImage(props: { image: Image }) {
-	const [loaded, setLoaded] = react.useState(false)
-	const [hovered, setHovered] = react.useState(false)
-	const [info, setInfo] = react.useState({
-		description: "great restaurant there were bugs tho very lively 6/10",
-		date: "3 months ago",
+const LazyImage = observer(function LazyImage(props: { image: Image }) {
+	const local = useObservable({
+		loaded: false,
+		hovered: false,
+		info: {
+			description: "great restaurant there were bugs tho very lively 6/10",
+			date: "3 months ago",
+		},
 	})
 
 	return (
 		<div
 			onMouseEnter={() => {
-				setHovered(true)
+				local.hovered.set(true)
 			}}
 			onMouseLeave={() => {
-				setHovered(false)
+				local.hovered.set(false)
 			}}
 			className="relative overflow-hidden flex justify-center items-center bg-black"
 			style={{ aspectRatio: `${props.image.width}/${props.image.height}` }}
 		>
 			<AnimatePresence>
-				{hovered ? (
+				{local.hovered.get() ? (
 					<motion.div
 						initial={{ opacity: 0 }}
 						animate={{ opacity: 1 }}
 						exit={{ opacity: 0 }}
 						className="absolute bottom-0 left-0 p-2 text-white z-20"
 					>
-						<div>{info.description}</div>
-						<div className="opacity-50 text-[14px]">{info.date}</div>
+						<div>{local.info.get().description}</div>
+						<div className="opacity-50 text-[14px]">
+							{local.info.get().date}
+						</div>
 					</motion.div>
 				) : null}
 			</AnimatePresence>
@@ -94,31 +99,35 @@ function LazyImage(props: { image: Image }) {
 				width={props.image.width}
 				height={props.image.height}
 				src={props.image.src}
-				style={{ opacity: loaded ? 1 : 0 }}
+				style={{ opacity: local.loaded.get() ? 1 : 0 }}
 				onLoad={() => {
-					setLoaded(true)
+					local.loaded.set(true)
 				}}
 				ref={(el) => {
-					if (el && el.complete) setLoaded(true)
+					if (el && el.complete) {
+						local.loaded.set(true)
+					}
 				}}
 				alt={props.image.alt}
 			></img>
 		</div>
 	)
-}
+})
 
 let last_id = 0
-
-export interface ProfileAuthProps {
-	data: profileAuthReturn
+interface Props {
+	authData: profileAuthReturn
 }
 
-export default legend.observer(function ProfileAuth(props: ProfileAuthProps) {
-	const server$ = legend.useObservable(props.data)
-	const [showSettingsModal, setShowSettingsModal] = react.useState(false)
+export default observer(function Profile(props: Props) {
+	const authData = useObservable(props.authData)
+	const local = useObservable({
+		showSettingsModal: false,
+		pageNumber: 0,
+	})
 
-	const posts = server$.createdPosts.get() ?? []
-	const images = react.useMemo(() => {
+	const posts = authData.createdPosts.get() ?? []
+	const images = useMemo(() => {
 		return posts.map((post) => {
 			return {
 				id: (last_id++).toString(),
@@ -131,18 +140,24 @@ export default legend.observer(function ProfileAuth(props: ProfileAuthProps) {
 		})
 	}, [posts])
 
-	react.useEffect(() => {
-		function checkBottom() {
+	useEffect(() => {
+		async function checkBottom() {
 			const FETCH_THRESHOLD = 600 // adjust
 			if (
 				window.innerHeight + window.scrollY + FETCH_THRESHOLD >=
 				document.body.offsetHeight
 			) {
 				// TODO: fetch more posts
+				local.pageNumber.set(local.pageNumber.get() + 1)
 
-				server$.createdPosts.set([
-					...(server$.createdPosts.get() ?? []),
-					...(server$.createdPosts.get() ?? []),
+				const posts = await profileLoadMostPostsAction({
+					username: "nikiv",
+					pageNumber: local.pageNumber.get(),
+				})
+
+				authData.createdPosts.set([
+					...(authData.createdPosts.get() ?? []),
+					...posts.data[0].createdPosts,
 				])
 			}
 		}
@@ -166,7 +181,9 @@ export default legend.observer(function ProfileAuth(props: ProfileAuthProps) {
 })
 
 function Sidebar() {
-	const [hoveredSidebarTab, setHoveredSidebarTab] = react.useState("Following")
+	// const local = useObservable({
+	// 	hoveredSidebarTab: "Following",
+	// })
 	return (
 		<div className="fixed left-0 w-[380px] top-0 h-screen bg-secondary">
 			<div className="w-full h-3/5 bg-substitute">Profile</div>

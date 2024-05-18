@@ -76,16 +76,12 @@ export const profileAuth = e.params(
 )
 export type profileAuthReturn = $infer<typeof profileAuth>
 
-export const profileAuthLoadMoreImages = e.params(
-	{ userId: e.optional(e.uuid), pageNumber: e.int64 },
-	({ userId, pageNumber }) => {
-		const user = e.op(
-			e.cast(e.User, userId),
-			"if",
-			e.op("exists", userId),
-			"else",
-			e.global.current_user,
-		)
+export const profileLoadMorePosts = e.params(
+	{ username: e.str, pageNumber: e.int64 },
+	({ username, pageNumber }) => {
+		const user = e.select(e.User, (u) => ({
+			filter: e.op(u.name, "=", username),
+		}))
 		return e.select(user, () => ({
 			createdPosts: {
 				offset: e.op(pageNumber, "*", 6),
@@ -98,7 +94,7 @@ export const profileAuthLoadMoreImages = e.params(
 		}))
 	},
 )
-export type profileAuthLoadMoreImages = $infer<typeof profileAuthLoadMoreImages>
+export type profileAuthLoadMoreImages = $infer<typeof profileLoadMorePosts>
 
 export const profilePublic = e.params({ username: e.str }, ({ username }) => {
 	return e.select(e.User, (u) => ({
@@ -108,7 +104,7 @@ export const profilePublic = e.params({ username: e.str }, ({ username }) => {
 		place: true,
 		profilePhotoUrl: true,
 		createdPosts: {
-			photoUrl: true,
+			imageUrl: true,
 			description: true,
 		},
 	}))
