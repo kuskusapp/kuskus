@@ -11,14 +11,14 @@ import { PiSignInThin } from "react-icons/pi"
 import Search from "./Search"
 
 interface Props {
-	data: homePublicReturn
+	publicData: homePublicReturn
 	authenticated: boolean
 	authBuiltinUiUrl: string
 	autBuiltinSignupUrl: string
 }
 
 export default observer(function Home(props: Props) {
-	const server = useObservable(props.data)
+	const pub = useObservable(props.publicData)
 	const local = useObservable({
 		authenticated: props.authenticated,
 		inputFocused: false,

@@ -2,7 +2,9 @@
 
 import { useChat } from "ai/react"
 
-export default function TestChat() {
+// testing Vercel AI SDK
+// https://sdk.vercel.ai/docs/ai-sdk-rsc/generative-ui
+export default function AI() {
 	const { messages, input, handleInputChange, handleSubmit } = useChat()
 	return (
 		<div className="flex flex-col w-full max-w-md py-24 mx-auto stretch">
