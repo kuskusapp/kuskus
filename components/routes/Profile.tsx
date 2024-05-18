@@ -136,7 +136,7 @@ export default observer(function Profile(props: Props) {
 	const local = useObservable({
 		showSettingsModal: false,
 		pageNumber: 0,
-		postViewData: {} as Image,
+		postViewData: null,
 		showPostViewModal: false,
 	})
 
@@ -185,6 +185,20 @@ export default observer(function Profile(props: Props) {
 
 	return (
 		<div className="min-h-screen h-full ">
+			{local.postViewData.get() !== null && (
+				<ViewPost
+					post={{
+						id: "1",
+						name: "test",
+						category: "sushi",
+						imageUrl:
+							"https://storage.ronin.co/spa_m8okrzy9ivjnlsr8/dc57049b-41f6-47ce-8254-436a971291e7",
+					}}
+					closeModal={() => {
+						local.postViewData.set(null)
+					}}
+				/>
+			)}
 			<Sidebar />
 			<div className="ml-[380px] min-h-full flex">
 				<ImageGrid
@@ -195,21 +209,6 @@ export default observer(function Profile(props: Props) {
 					}}
 				/>
 			</div>
-			{local.showPostViewModal.get() && (
-				<ViewPost
-					post={{
-						id: "1",
-						name: "test",
-						category: "sushi",
-						imageUrl:
-							"https://storage.ronin.co/spa_m8okrzy9ivjnlsr8/dc57049b-41f6-47ce-8254-436a971291e7",
-					}}
-					closeModal={() => {
-						local.showPostViewModal.set(false)
-						local.postViewData.set(null)
-					}}
-				/>
-			)}
 		</div>
 	)
 })
