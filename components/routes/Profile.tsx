@@ -184,24 +184,27 @@ export default observer(function Profile(props: Props) {
 		}
 	}, [])
 
+	useEffect(() => {
+		console.log(local.postViewData.get(), "post view data")
+	}, [local.postViewData.get()])
+
 	return (
 		<div className="min-h-screen h-full ">
-			{local.postViewData.get() !== null &&
-				local.postViewData.get().imageUrl && (
-					<ViewPost
-						post={{
-							id: "1",
-							name: "test",
-							category: "sushi",
-							imageUrl: local.postViewData.get().imageUrl,
-							// imageUrl:
-							// 	"https://storage.ronin.co/spa_m8okrzy9ivjnlsr8/dc57049b-41f6-47ce-8254-436a971291e7",
-						}}
-						closeModal={() => {
-							local.postViewData.set(null)
-						}}
-					/>
-				)}
+			{local.postViewData.get() !== null && local.postViewData.get().src && (
+				<ViewPost
+					post={{
+						id: "1",
+						name: "test",
+						category: "sushi",
+						imageUrl: local.postViewData.get().src,
+						// imageUrl:
+						// 	"https://storage.ronin.co/spa_m8okrzy9ivjnlsr8/dc57049b-41f6-47ce-8254-436a971291e7",
+					}}
+					closeModal={() => {
+						local.postViewData.set(null)
+					}}
+				/>
+			)}
 			<Sidebar />
 			<div className="ml-[380px] min-h-full flex">
 				<ImageGrid

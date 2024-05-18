@@ -23,7 +23,6 @@ export default function ViewPost(props: Props) {
 				}}
 			></div>
 			<div className="w-2/3 bg-black h-full z-[120] flex">
-				<div className="w-3/5 h-full">Image</div>
 				<Image alt="image" src={props.post.imageUrl} width={300} height={300} />
 				<div className="w-2/5 h-full bg-neutral-800 flex flex-col justify-between">
 					<div className="flex flex-col gap-[4px] p-[20px] py-[30px]">
