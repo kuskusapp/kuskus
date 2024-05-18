@@ -9,6 +9,8 @@ import "swiper/css"
 import "swiper/css/navigation"
 import "swiper/css/pagination"
 import { AnimatePresence, motion } from "framer-motion"
+import ViewPost from "@/components/ViewPost"
+import Search from "@/components/Search"
 
 const recommendedPlaces = [
 	{
@@ -55,39 +57,25 @@ const recommendedPlaces = [
 	},
 ]
 
-export default function Search() {
+export default function Places() {
 	const [inputFocused, setInputFocused] = useState(false)
-	const [isModalOpen, setIsModalOpen] = useState(false)
+	const [isModalOpen, setIsModalOpen] = useState<number | null>(null)
 
 	const [hovered, setHovered] = useState("")
 
 	return (
 		<>
+			{isModalOpen !== null ? (
+				<ViewPost
+					post={recommendedPlaces[isModalOpen]}
+					setIsModalOpen={setIsModalOpen}
+				/>
+			) : null}
 			<Header />
+
 			<div className=" justify-center px-5 pt-5 mt-5 relative">
-				<div
-					className="relative flex items-center justify-center h-10 m-auto"
-					style={{ width: "100%" }}
-				>
-					<IoIosSearch
-						className="absolute left-0 ml-3 text-black"
-						size={inputFocused ? 24 : 18}
-						style={{ top: "50%", transform: "translateY(-50%)" }}
-					/>
-					<input
-						className="border border-neutral-500 rounded-full pl-10 pr-36 py-3"
-						placeholder="Lets find something tasty! Type place"
-						style={{ width: "100%" }}
-						onFocus={() => setInputFocused(true)}
-						onBlur={() => setInputFocused(false)}
-					/>
-					<button
-						className="absolute flex flex-row right-0 mr-1 px-4 py-2 rounded-full text-white bg-blue-400 hover:bg-blue-600 focus:outline-none focus:ring"
-						style={{ top: "50%", transform: "translateY(-50%)" }}
-					>
-						<GlobeIcon className="w-7 h-7 color-white" />
-						or discover nearby dining
-					</button>
+				<div className="w-full flex-center">
+					<Search />
 				</div>
 				<div className="pb-20 space-y-10">
 					<div className="pt-10">
@@ -105,12 +93,13 @@ export default function Search() {
 							onSlideChange={() => {}}
 							onSwiper={(swiper) => {}}
 						>
-							{recommendedPlaces.map((place) => (
+							{recommendedPlaces.map((place, index) => (
 								<SwiperSlide key={place.id}>
 									<div
 										onMouseEnter={() => setHovered(place.id)}
 										onMouseLeave={() => setHovered(place.id)}
 										className=" w-full min-h-[500px] relative"
+										onClick={() => setIsModalOpen(index)}
 									>
 										<AnimatePresence>
 											{hovered === place.id ? (

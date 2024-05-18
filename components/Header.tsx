@@ -46,7 +46,7 @@ export default function Header() {
 						top: 20,
 						right: 20,
 						width: "fit-content",
-						zIndex: 100,
+						zIndex: 50,
 					}}
 					className="flex flex-row gap-5 justify-center"
 				>
