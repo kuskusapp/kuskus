@@ -1,4 +1,7 @@
 "use client"
+
+import Image from "next/image"
+
 interface Props {
 	post: {
 		id: string
@@ -10,7 +13,7 @@ interface Props {
 }
 
 export default function ViewPost(props: Props) {
-	console.log("did i render")
+	console.log(props.post.imageUrl, "image url")
 	return (
 		<div className="fixed w-screen h-screen flex-center z-[100] [&::-webkit-scrollbar]:hidden backdrop-blur-sm">
 			<div
@@ -21,6 +24,7 @@ export default function ViewPost(props: Props) {
 			></div>
 			<div className="w-2/3 bg-black h-full z-[120] flex">
 				<div className="w-3/5 h-full">Image</div>
+				<Image alt="image" src={props.post.imageUrl} width={300} height={300} />
 				<div className="w-2/5 h-full bg-neutral-800 flex flex-col justify-between">
 					<div className="flex flex-col gap-[4px] p-[20px] py-[30px]">
 						<div className="flex pb-[10px] gap-[10px] font-bold items-center">

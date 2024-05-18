@@ -6,12 +6,12 @@ import { observer, useObservable } from "@legendapp/state/react"
 import { motion } from "framer-motion"
 import Link from "next/link"
 import { useRouter } from "next/navigation"
-import { useState } from "react"
 import { PiSignInThin } from "react-icons/pi"
 import Search from "./Search"
 
 interface Props {
 	publicData: homePublicReturn
+	authData: {}
 	authenticated: boolean
 	authBuiltinUiUrl: string
 	autBuiltinSignupUrl: string
@@ -19,8 +19,8 @@ interface Props {
 
 export default observer(function Home(props: Props) {
 	const publicData = useObservable(props.publicData)
+	const authData = useObservable(props.authData)
 	const local = useObservable({
-		authenticated: props.authenticated,
 		inputFocused: false,
 		activeItem: null as string | null,
 		hoveredDish: null as number | null,
@@ -30,20 +30,19 @@ export default observer(function Home(props: Props) {
 			{ name: "Explore", key: "explore" },
 			{ name: "About", key: "about" },
 		],
+		tags: [
+			"Italian",
+			"Mexican",
+			"Indian",
+			"Chinese",
+			"Japanese",
+			"Italian",
+			"Mexican",
+			"Indian",
+			"Chinese",
+			"Japanese",
+		],
 	})
-
-	const [tags, setTags] = useState([
-		"Italian",
-		"Mexican",
-		"Indian",
-		"Chinese",
-		"Japanese",
-		"Italian",
-		"Mexican",
-		"Indian",
-		"Chinese",
-		"Japanese",
-	])
 
 	return (
 		<div className="[&::-webkit-scrollbar]:hidden overflow-hidden">
@@ -64,7 +63,7 @@ export default observer(function Home(props: Props) {
 				</div>
 				<div className="gap-[20px] flex flex-col w-full p-2">
 					<div className="flex-center gap-[10px] w-full">
-						{tags.map((tag) => {
+						{local.tags.get().map((tag) => {
 							return (
 								<motion.div
 									className="h-[36px] flex-center px-5 rounded-full bg-white text-black text-[14px]"
@@ -76,7 +75,7 @@ export default observer(function Home(props: Props) {
 						})}
 					</div>
 					<div className="grid grid-cols-3 gap-[6px] w-full">
-						{tags.map((tag) => {
+						{local.tags.get().map((tag) => {
 							return (
 								<div
 									key={tag}
