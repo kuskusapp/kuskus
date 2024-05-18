@@ -88,7 +88,6 @@ export default observer(function Profile(props: Props) {
 				<ImageGrid
 					images={images}
 					onClick={(img) => {
-						console.log(img, "img setting..")
 						local.postViewData.set(img)
 						local.showPostViewModal.set(true)
 					}}

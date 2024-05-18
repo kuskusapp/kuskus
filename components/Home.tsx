@@ -8,7 +8,10 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { PiSignInThin } from "react-icons/pi"
 import Search from "./Search"
+import { ImageGrid } from "./PostGrid"
+import { useEffect, useMemo } from "react"
 
+let last_id = 0
 interface Props {
 	publicData: homePublicReturn
 	authData: {}
@@ -16,7 +19,6 @@ interface Props {
 	authBuiltinUiUrl: string
 	autBuiltinSignupUrl: string
 }
-
 export default observer(function Home(props: Props) {
 	const publicData = useObservable(props.publicData)
 	const authData = useObservable(props.authData)
@@ -44,6 +46,26 @@ export default observer(function Home(props: Props) {
 		],
 	})
 
+	// const posts = publicData.createdPosts.get() ?? []
+	const posts = publicData.posts.get() ?? []
+	const images = useMemo(() => {
+		return posts.map((post) => {
+			return {
+				id: (last_id++).toString(),
+				alt: "",
+				width: post.imageWidth ?? 1,
+				height: post.imageHeight ?? 1,
+				src: post.imageUrl,
+				preview: post.imagePreviewBase64Hash ?? "",
+			}
+		})
+	}, [posts])
+
+	useEffect(() => {
+		console.log(posts, "posts")
+		console.log(images, "images")
+	}, [posts])
+
 	return (
 		<div className="[&::-webkit-scrollbar]:hidden overflow-hidden">
 			<Nav {...props} />
@@ -61,31 +83,16 @@ export default observer(function Home(props: Props) {
 					</div>
 					<Search />
 				</div>
-				<div className="gap-[20px] flex flex-col w-full p-2">
-					<div className="flex-center gap-[10px] w-full">
-						{local.tags.get().map((tag) => {
-							return (
-								<motion.div
-									className="h-[36px] flex-center px-5 rounded-full bg-white text-black text-[14px]"
-									key={tag}
-								>
-									{tag}
-								</motion.div>
-							)
-						})}
-					</div>
-					<div className="grid grid-cols-3 gap-[6px] w-full">
-						{local.tags.get().map((tag) => {
-							return (
-								<div
-									key={tag}
-									className="bg-white aspect-w-1 aspect-h-1 pb-[100%] "
-								></div>
-							)
-						})}
-					</div>
-				</div>
 			</main>
+			<div className="bg-red-200">
+				<ImageGrid
+					images={images}
+					onClick={(img) => {
+						// local.postViewData.set(img)
+						// local.showPostViewModal.set(true)
+					}}
+				/>
+			</div>
 		</div>
 	)
 })
