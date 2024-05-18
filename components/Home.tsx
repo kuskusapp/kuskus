@@ -18,7 +18,7 @@ interface Props {
 }
 
 export default observer(function Home(props: Props) {
-	const pub = useObservable(props.publicData)
+	const publicData = useObservable(props.publicData)
 	const local = useObservable({
 		authenticated: props.authenticated,
 		inputFocused: false,

@@ -6,16 +6,17 @@ interface Props {
 		category: string
 		imageUrl: string
 	}
-	setIsModalOpen: (value: number) => void
+	closeModal: () => void
 }
 
 export default function ViewPost(props: Props) {
+	console.log("did i render")
 	return (
 		<div className="fixed w-screen h-screen flex-center z-[100] [&::-webkit-scrollbar]:hidden backdrop-blur-sm">
 			<div
 				className="absolute z-[110] top-0 left-0 w-full h-full bg-transparent"
 				onClick={() => {
-					props.setIsModalOpen(null)
+					props.closeModal()
 				}}
 			></div>
 			<div className="w-2/3 bg-black h-full z-[120] flex">

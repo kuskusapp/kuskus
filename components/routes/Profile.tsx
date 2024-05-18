@@ -4,6 +4,7 @@ import { profileAuthReturn } from "@/edgedb/crud/queries"
 import { observer, useObservable } from "@legendapp/state/react"
 import { AnimatePresence, motion } from "framer-motion"
 import { useEffect, useMemo } from "react"
+import ViewPost from "../ViewPost"
 
 type Image = {
 	id: string
@@ -26,7 +27,7 @@ function getShortestColumn(heights: number[]): number {
 	return shortest
 }
 
-function ImageGrid(props: { images: Image[] }) {
+function ImageGrid(props: { images: Image[]; onClick: (img: Image) => void }) {
 	const columns: Image[][] = new Array(COLUMNS)
 	const heights: number[] = new Array(COLUMNS)
 
@@ -45,14 +46,22 @@ function ImageGrid(props: { images: Image[] }) {
 		<div key={i} className="pl-2 w-full">
 			{col.map((img) => (
 				<div key={img.id} className="pb-2">
-					<LazyImage image={img} />
+					<LazyImage
+						image={img}
+						onClick={() => {
+							props.onClick(img)
+						}}
+					/>
 				</div>
 			))}
 		</div>
 	))
 }
 
-const LazyImage = observer(function LazyImage(props: { image: Image }) {
+const LazyImage = observer(function LazyImage(props: {
+	image: Image
+	onClick: () => void
+}) {
 	const local = useObservable({
 		loaded: false,
 		hovered: false,
@@ -64,6 +73,9 @@ const LazyImage = observer(function LazyImage(props: { image: Image }) {
 
 	return (
 		<div
+			onClick={() => {
+				props.onClick()
+			}}
 			onMouseEnter={() => {
 				local.hovered.set(true)
 			}}
@@ -124,6 +136,8 @@ export default observer(function Profile(props: Props) {
 	const local = useObservable({
 		showSettingsModal: false,
 		pageNumber: 0,
+		postViewData: {} as Image,
+		showPostViewModal: false,
 	})
 
 	const posts = authData.createdPosts.get() ?? []
@@ -147,7 +161,6 @@ export default observer(function Profile(props: Props) {
 				window.innerHeight + window.scrollY + FETCH_THRESHOLD >=
 				document.body.offsetHeight
 			) {
-				// TODO: fetch more posts
 				local.pageNumber.set(local.pageNumber.get() + 1)
 
 				const posts = await profileLoadMostPostsAction({
@@ -174,8 +187,29 @@ export default observer(function Profile(props: Props) {
 		<div className="min-h-screen h-full ">
 			<Sidebar />
 			<div className="ml-[380px] min-h-full flex">
-				<ImageGrid images={images} />
+				<ImageGrid
+					images={images}
+					onClick={(img) => {
+						local.postViewData.set(img)
+						local.showPostViewModal.set(true)
+					}}
+				/>
 			</div>
+			{local.showPostViewModal.get() && (
+				<ViewPost
+					post={{
+						id: "1",
+						name: "test",
+						category: "sushi",
+						imageUrl:
+							"https://storage.ronin.co/spa_m8okrzy9ivjnlsr8/dc57049b-41f6-47ce-8254-436a971291e7",
+					}}
+					closeModal={() => {
+						local.showPostViewModal.set(false)
+						local.postViewData.set(null)
+					}}
+				/>
+			)}
 		</div>
 	)
 })
