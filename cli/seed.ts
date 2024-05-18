@@ -99,7 +99,7 @@ async function place() {
 			displayName: "Pulp",
 			bio: "Cafe in Tbilisi, Georgia",
 			category: "cafe",
-			profilePhotoUrl: "https://images.kuskus.app/nikiv-profile-image",
+			profileImageUrl: "https://images.kuskus.app/nikiv-profile-image",
 		})
 		.run(client)
 }

@@ -84,7 +84,7 @@ export default observer(function Home(props: Props) {
 					<Search />
 				</div>
 			</main>
-			<div className="bg-red-200">
+			<div className="">
 				<ImageGrid
 					images={images}
 					onClick={(img) => {
