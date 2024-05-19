@@ -9,15 +9,10 @@ import {
 	NotificationIcon,
 	PlusIcon,
 } from "../public/svg/search-icons"
-import { useObservable } from "@legendapp/state/react"
+import { observer, useObservable } from "@legendapp/state/react"
 
-export default function Header() {
-	const [isModalOpen, setModalOpen] = useState(false)
-
-	const openModal = () => setModalOpen(true)
-	const closeModal = () => setModalOpen(false)
-
-	const local$ = useObservable({
+export default observer(function Header() {
+	const local = useObservable({
 		activeLink: "",
 		links: [
 			{ href: "/places", label: "Places" },
@@ -31,7 +26,7 @@ export default function Header() {
 			<div className="flex flex-row items-center justify-between space-x-15 pt-[20px] px-4">
 				<div className="text-[22px] font-bold">
 					<div className="flex flex-row gap-3">
-						{...local$.links.map((link) => {
+						{...local.links.map((link) => {
 							return (
 								<Link key={link.href.get()} href={link.href.get()}>
 									{link.label.get()}
@@ -65,7 +60,9 @@ export default function Header() {
 						<NotificationIcon className="text-primaryText w-7 h-7" />
 					</div>
 					<button
-						onClick={openModal}
+						onClick={() => {
+							// open new post
+						}}
 						style={{
 							width: "50px",
 							height: "50px",
@@ -77,11 +74,6 @@ export default function Header() {
 					</button>
 				</div>
 			</div>
-			<AddPostModal
-				open={isModalOpen}
-				onClose={closeModal}
-				postsState={undefined}
-			/>
 		</>
 	)
-}
+})
