@@ -79,7 +79,7 @@ export default observer(function Home(props: Props) {
 					<Search />
 				</div>
 			</main>
-			<div className="">
+			<div className="flex">
 				<ImageGrid images={images} onClick={(img) => {}} />
 			</div>
 			{/* TODO: maybe not right place, move */}
