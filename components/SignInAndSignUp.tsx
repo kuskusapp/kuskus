@@ -10,7 +10,7 @@ interface Props {
 }
 export default observer(function SignInAndSignUp(props: Props) {
 	return (
-		<>
+		<div className="justify-end flex flex-row mt-5 pr-3 gap-3">
 			<Link
 				href={props.authBuiltinUiUrl}
 				className="text-sm font-semibold leading-6 text-gray-800"
@@ -29,6 +29,6 @@ export default observer(function SignInAndSignUp(props: Props) {
 					Sign up
 				</button>
 			</Link>
-		</>
+		</div>
 	)
 })

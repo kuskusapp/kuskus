@@ -50,7 +50,7 @@ export default observer(function Nav(props: Props) {
 				))}
 
 				{!local.authenticated.get() && (
-					<>
+					<div className="flex flex-row">
 						<Link
 							href={props.authBuiltinUiUrl}
 							className="text-sm font-semibold leading-6 text-gray-800"
@@ -69,7 +69,7 @@ export default observer(function Nav(props: Props) {
 								Sign up
 							</button>
 						</Link>
-					</>
+					</div>
 				)}
 				{/* TODO: move this to settings */}
 				{/* {local.authenticated.get() && (
