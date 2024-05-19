@@ -15,10 +15,10 @@ export default function Search() {
 	return (
 		<div className="flex flex-row gap-3 mb-20">
 			<div className="rounded-2xl flex-between border-neutral-700 border border-opacity-50 bg-neutral-800 bg-opacity-60 w-[450px] p-1">
-				<div className="flex items-center flex-grow">
+				<label className="flex items-center flex-grow cursor-text">
 					<IoIosSearch className="ml-3 text-neutral-500" size={20} />
 					<input
-						className="focus:outline-none border flex-grow bg-transparent border-none text-neutral-200 px-4 p-3 input-placeholder"
+						className="focus:outline-none border flex-grow bg-transparent border-none text-neutral-200 px-4 p-3 input-placeholder w-full"
 						placeholder="Search for place or dish..."
 						onFocus={() => {
 							// setInputFocused(true)
@@ -27,7 +27,7 @@ export default function Search() {
 							// setInputFocused(false)
 						}}
 					/>
-				</div>
+				</label>
 			</div>
 			<button
 				onMouseDown={nearbyClicked}
