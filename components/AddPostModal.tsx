@@ -120,7 +120,7 @@ export default observer(function AddPostModal(props: Props) {
 									type="file"
 									id="image"
 									onChange={handleImageChange}
-									className=""
+									className="hidden"
 								/>
 								<form
 									onSubmit={(e) => {
