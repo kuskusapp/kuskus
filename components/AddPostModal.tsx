@@ -1,8 +1,8 @@
 "use client"
-import React, { useState, useEffect, Fragment } from "react"
 import { Dialog, Transition } from "@headlessui/react"
-import { PhotoIcon, AIcon } from "../public/svg/modal-icons"
 import { observer, useObservable } from "@legendapp/state/react"
+import React, { Fragment, useEffect } from "react"
+import { AIcon, PhotoIcon } from "../public/svg/modal-icons"
 
 interface Props {
 	open: boolean
@@ -10,36 +10,34 @@ interface Props {
 	postsState: any
 }
 
-const foodCategories = [
-	"Sushi",
-	"Breakfast",
-	"Smoothie",
-	"Vegan",
-	"Pasta",
-	"Salad",
-	"Healthy",
-	"Steak",
-	"Cocktail",
-	"Burger",
-	"Indian",
-	"Curry",
-	"Soup",
-	"Coffee",
-]
-
 export default observer(function AddPostModal(props: Props) {
 	const local = useObservable({
 		isOpen: props.open,
 		title: "",
 		description: "",
 		image: null as File | null,
+		foodCategories: [
+			"Sushi",
+			"Breakfast",
+			"Smoothie",
+			"Vegan",
+			"Pasta",
+			"Salad",
+			"Healthy",
+			"Steak",
+			"Cocktail",
+			"Burger",
+			"Indian",
+			"Curry",
+			"Soup",
+			"Coffee",
+		],
+		categories: [] as string[],
+		initialCount: 8,
 	})
 
-	const [categories, setCategories] = useState<string[]>([])
-	const [initialCount, setInitialCount] = useState(8)
-
-	const addCathegory = (category: string) => {
-		setCategories((prevSelected) =>
+	const addCategory = (category: string) => {
+		local.categories.set((prevSelected) =>
 			prevSelected.includes(category)
 				? prevSelected.filter((cat) => cat !== category)
 				: [...prevSelected, category],
@@ -47,13 +45,15 @@ export default observer(function AddPostModal(props: Props) {
 	}
 
 	const viewMore = () => {
-		setInitialCount((prevCount) => prevCount + 3)
+		local.initialCount.set((prevCount) => prevCount + 3)
 	}
 
 	const sortedCategories = [
-		...categories,
-		...foodCategories.filter((cat) => !categories.includes(cat)),
-	].slice(0, initialCount)
+		...local.categories.get(),
+		...local.foodCategories
+			.get()
+			.filter((cat) => !local.categories.get().includes(cat)),
+	].slice(0, local.initialCount.get())
 
 	const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		if (event.target.files && event.target.files[0]) {
@@ -117,6 +117,12 @@ export default observer(function AddPostModal(props: Props) {
 							leaveTo="opacity-0 scale-95"
 						>
 							<div className="inline-block w-full max-w-4xl my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
+								<input
+									type="file"
+									id="image"
+									onChange={handleImageChange}
+									className=""
+								/>
 								<form
 									onSubmit={(e) => {
 										e.preventDefault()
@@ -134,12 +140,12 @@ export default observer(function AddPostModal(props: Props) {
 									>
 										<label className="mt-1 w-full h-full flex justify-center items-center bg-white focus:outline-none cursor-pointer">
 											<PhotoIcon className="h-6 w-6 text-gray-700" />
-											<input
+											{/* <input
 												type="file"
 												id="image"
 												onChange={handleImageChange}
 												className="hidden"
-											/>
+											/> */}
 										</label>
 									</div>
 									<div className=" flex flex-col">
@@ -229,14 +235,15 @@ export default observer(function AddPostModal(props: Props) {
 												{sortedCategories.map((category) => (
 													<button
 														key={category}
-														className={`px-2 py-1 text-gray-900 font-light text-xs border rounded-full ${categories.includes(category) ? "bg-yellow-500 border-yellow-500 text-white" : "hover:border-yellow-500"}`}
-														onClick={() => addCathegory(category)}
+														className={`px-2 py-1 text-gray-900 font-light text-xs border rounded-full ${local.categories.get().includes(category) ? "bg-yellow-500 border-yellow-500 text-white" : "hover:border-yellow-500"}`}
+														onClick={() => addCategory(category)}
 													>
 														{category}
 													</button>
 												))}
 											</div>
-											{initialCount < foodCategories.length && (
+											{local.initialCount.get() <
+												local.foodCategories.get().length && (
 												<button
 													className="mt-2 ml-4 text-gray-500 text-xs font-thin cursor-pointer"
 													onClick={viewMore}
