@@ -2,10 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
-
-
-
 :root {
     --primary: rgb(23,23,23);
 		--primaryText: rgb(255,255,255, 0.8);

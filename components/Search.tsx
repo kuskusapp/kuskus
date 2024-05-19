@@ -1,15 +1,29 @@
 import { useState } from "react"
 import { IoIosSearch } from "react-icons/io"
 import { FaMapPin } from "react-icons/fa6"
+import PermissionModal from "./PermissonModal"
 
 export default function Search() {
 	const [isPressed, setIsPressed] = useState(false)
+	const [showModal, setShowModal] = useState(false)
 
 	const nearbyClicked = () => {
 		setIsPressed(true)
 		setTimeout(() => {
 			setIsPressed(false)
+			setShowModal(true)
 		}, 300)
+	}
+
+	const locationPermission = (allow) => {
+		if (allow) {
+			//add logic to get nearby places
+			navigator.geolocation.getCurrentPosition(() => {
+				setShowModal(false)
+			})
+		} else {
+			setShowModal(false)
+		}
 	}
 
 	return (
@@ -42,6 +56,30 @@ export default function Search() {
 				<FaMapPin className="w-5 h-5" />
 				Places nearby
 			</button>
+			{showModal && (
+				<PermissionModal onClose={() => setShowModal(false)}>
+					<p className="text-black text-center">
+						"KusKus" would like to use your current location.
+					</p>
+					<div
+						className="flex flex-row gap-5 justify-center"
+						style={{ margin: "auto" }}
+					>
+						<button
+							onClick={() => locationPermission(false)}
+							className="text-black text-base bg-gray-300 hover:bg-gray-400 rounded-full py-2 px-4"
+						>
+							Don't Allow
+						</button>
+						<button
+							onClick={() => locationPermission(true)}
+							className="text-black text-base bg-gray-300 hover:bg-gray-400 rounded-full py-2 px-4"
+						>
+							Allow
+						</button>
+					</div>
+				</PermissionModal>
+			)}
 		</div>
 	)
 }
