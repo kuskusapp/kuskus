@@ -43,7 +43,9 @@ body {
 	}
 }
 
-
+.input-placeholder::placeholder {
+  color: #606060
+}
 
 .flex-grow::-webkit-scrollbar {
 	display: none;
@@ -61,10 +63,6 @@ body {
   color: #888;
 	font-weight: 200;
   font-size: 14px;
-}
-
-.input-placeholder::placeholder {
-  color: "#d2cfce";
 }
 
 @keyframes spin {

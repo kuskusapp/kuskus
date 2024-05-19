@@ -18,7 +18,7 @@ export default function Search() {
 				<div className="flex items-center flex-grow">
 					<IoIosSearch className="ml-3 text-neutral-500" size={20} />
 					<input
-						className="focus:outline-none border flex-grow bg-transparent border-none text-neutral-300 px-4 p-3 input-placeholder"
+						className="focus:outline-none border flex-grow bg-transparent border-none text-neutral-200 px-4 p-3 input-placeholder"
 						placeholder="Search for place or dish..."
 						onFocus={() => {
 							// setInputFocused(true)
