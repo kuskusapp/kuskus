@@ -73,7 +73,7 @@ export default observer(function Home(props: Props) {
 							<span className="text-purple-400">Share</span> and{" "}
 							<span className="text-fuchsia-400">Rate</span> food
 						</h1>
-						<p className=" text-[18px] w-[440px] font-light text-white/60 text-center">
+						<p className=" text-[20px] w-[500px] font-light text-white/80 text-center">
 							KusKus is community for food lovers, who love to see new places
 							and share them
 						</p>
