@@ -1,15 +1,13 @@
 "use client"
-import { useState } from "react"
+import { observer, useObservable } from "@legendapp/state/react"
 import Link from "next/link"
-import AddPostModal from "@/components/AddPostModal"
 import {
 	GridIcon,
-	SearchIcon,
-	UserIcon,
 	NotificationIcon,
 	PlusIcon,
+	SearchIcon,
+	UserIcon,
 } from "../public/svg/search-icons"
-import { observer, useObservable } from "@legendapp/state/react"
 
 export default observer(function Header() {
 	const local = useObservable({
