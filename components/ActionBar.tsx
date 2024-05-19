@@ -2,6 +2,7 @@
 
 import { GridIcon, PlusIcon, UserIcon } from "@/public/svg/search-icons"
 import { observer, useObservable } from "@legendapp/state/react"
+import { motion } from "framer-motion"
 
 interface Props {}
 export default observer(function ActionBar(props: Props) {
@@ -10,7 +11,7 @@ export default observer(function ActionBar(props: Props) {
 	})
 	return (
 		<>
-			<div
+			<motion.div
 				style={{
 					position: "fixed",
 					top: 20,
@@ -20,8 +21,15 @@ export default observer(function ActionBar(props: Props) {
 				}}
 				className="flex flex-row gap-5 justify-center"
 			>
-				<div
-					className="bg-secondary h-[50px] flex justify-center items-center space-x-3 rounded-full py-2 px-3"
+				<motion.div
+					whileHover={{ scale: 1.1 }}
+					onHoverStart={(e) => {}}
+					onHoverEnd={(e) => {}}
+					transition={{
+						easings: "ease-out",
+						duration: 0.2,
+					}}
+					className="bg-secondary h-[50px] flex justify-center items-center space-x-3 rounded-full py-2 px-5"
 					style={{
 						marginLeft: "auto",
 						justifyContent: "center",
@@ -29,10 +37,17 @@ export default observer(function ActionBar(props: Props) {
 						boxShadow: "5px 5px 15px rgba(0, 0, 0, 0.3)",
 					}}
 				>
-					<GridIcon className="text-primaryText w-7 h-7" />
-					<UserIcon className="text-primaryText w-7 h-7" />
-				</div>
-				<button
+					<GridIcon className="text-primaryText w-7 h-7 hover:scale-[1.1] transition-all " />
+					<UserIcon className="text-primaryText w-7 h-7 hover:scale-[1.1] transition-all" />
+				</motion.div>
+				<motion.button
+					whileHover={{ scale: 1.1 }}
+					onHoverStart={(e) => {}}
+					onHoverEnd={(e) => {}}
+					transition={{
+						easings: "ease-out",
+						duration: 0.2,
+					}}
 					onClick={() => {
 						// open new post
 					}}
@@ -44,8 +59,8 @@ export default observer(function ActionBar(props: Props) {
 					className="rounded-full bg-secondary items-center justify-center flex text-white focus:outline-none focus:ring"
 				>
 					<PlusIcon className="text-primaryText w-7 h-7" />
-				</button>
-			</div>
+				</motion.button>
+			</motion.div>
 		</>
 	)
 })
