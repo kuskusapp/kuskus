@@ -1,15 +1,25 @@
+import { useState } from "react"
 import { IoIosSearch } from "react-icons/io"
-import Icons from "./Icons"
+import { FaMapPin } from "react-icons/fa6"
 
 export default function Search() {
+	const [isPressed, setIsPressed] = useState(false)
+
+	const nearbyClicked = () => {
+		setIsPressed(true)
+		setTimeout(() => {
+			setIsPressed(false)
+		}, 500)
+	}
+
 	return (
-		<div className="flex gap-[10px] w-full">
-			<div className="flex-between border-white/10 border bg-secondary rounded-[11px] w-full p-1">
+		<div className="flex flex-row gap-3 mb-20">
+			<div className="rounded-2xl flex-between border-neutral-700 border border-opacity-50 bg-neutral-800 bg-opacity-60 w-[450px] p-1">
 				<div className="flex items-center flex-grow">
-					<IoIosSearch className="ml-3 " size={20} />
+					<IoIosSearch className="ml-3 text-neutral-500" size={20} />
 					<input
-						className="border flex-grow  bg-transparent border-none outline-none px-4 p-2"
-						placeholder="Search for a place or dish..."
+						className="focus:outline-none border flex-grow bg-transparent border-none text-neutral-300 px-4 p-3 input-placeholder"
+						placeholder="Search for place or dish..."
 						onFocus={() => {
 							// setInputFocused(true)
 						}}
@@ -19,9 +29,16 @@ export default function Search() {
 					/>
 				</div>
 			</div>
-			<button className="flex w-[180px] gap-[4px] right-0 px-4 py-2 rounded-[11px] text-black flex-center bg-orange-200 border-b-2 border-yellow-600 focus:outline-none focus:ring">
-				<Icons name="World" />
-				Find nearby
+			<button
+				onMouseDown={nearbyClicked}
+				style={{
+					backgroundColor: "#eec093",
+					boxShadow: isPressed ? "none" : "inset 0 -3px 0px 0px #a97e2a",
+				}}
+				className="flex gap-[4px] text-black right-0 px-5 py-2 text-[15px] rounded-2xl flex-center bg-secondary focus:outline-none focus:ring"
+			>
+				<FaMapPin className="w-5 h-5" />
+				Places nearby
 			</button>
 		</div>
 	)

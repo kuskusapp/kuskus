@@ -63,6 +63,10 @@ body {
   font-size: 14px;
 }
 
+.input-placeholder::placeholder {
+  color: "#d2cfce";
+}
+
 @keyframes spin {
   0% {
     transform: rotate(0deg);

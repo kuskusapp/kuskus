@@ -1,13 +1,13 @@
 "use client"
 import Icons from "@/components/Icons"
-import { homePublicResturn } from "@/edgedb/crud/queries"
+import { homePublicReturn } from "@/edgedb/crud/queries"
 import { observer, useObservable } from "@legendapp/state/react"
 import Link from "next/link"
 import { IoIosSearch } from "react-icons/io"
 import { PiSignInThin } from "react-icons/pi"
 
 interface Props {
-	data: homePublicResturn
+	data: homePublicReturn
 }
 
 export default observer(function HomePublic(props: Props) {
@@ -109,13 +109,13 @@ export default observer(function HomePublic(props: Props) {
 							// setInputFocused(false)
 						}}
 					/>
-					<button
+					{/* <button
 						className="absolute flex flex-row right-0 mr-1 px-4 py-2 rounded-full text-white bg-blue-400 hover:bg-blue-600 focus:outline-none focus:ring"
 						style={{ top: "50%", transform: "translateY(-50%)" }}
 					>
 						<Icons name="World" />
 						or find places near you
-					</button>
+					</button> */}
 				</div>
 				<div className="flex flex-row mt-10">
 					{local$.dishes.map((dish, index) => (
