@@ -64,7 +64,7 @@ export default observer(function Home(props: Props) {
 	}, [posts])
 
 	return (
-		<div className="[&::-webkit-scrollbar]:hidden overflow-hidden">
+		<div className="">
 			<ActionBar />
 			<main className="flex flex-col pt-[120px] gap-[240px] items-center [&::-webkit-scrollbar]:hidden">
 				<div className="flex flex-col gap-[36px] items-center px-[40px] p-[20px]">

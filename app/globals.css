@@ -20,17 +20,22 @@ body {
 	color: var(--primaryText);
 	background-color: var(--primary);
 	::-webkit-scrollbar {
-		width: 10px;
+		width: 8px;
+
+
 	}
+
 
 
 	::-webkit-scrollbar-track {
-		background: #f1f1f1;
+		background: transparent;
 	}
 
 	::-webkit-scrollbar-thumb {
-		background: #a9a8a8;
+		background: #545454;
 		border-radius: 10px;
+
+
 	}
 
 	::-webkit-scrollbar-thumb:hover {

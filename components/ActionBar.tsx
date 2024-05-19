@@ -9,6 +9,7 @@ export default observer(function ActionBar(props: Props) {
 	const local = useObservable({
 		activeTab: "" as "Home" | "Profile",
 	})
+
 	return (
 		<>
 			<motion.div
@@ -37,8 +38,32 @@ export default observer(function ActionBar(props: Props) {
 						boxShadow: "5px 5px 15px rgba(0, 0, 0, 0.3)",
 					}}
 				>
-					<GridIcon className="text-primaryText w-7 h-7 hover:scale-[1.1] transition-all " />
-					<UserIcon className="text-primaryText w-7 h-7 hover:scale-[1.1] transition-all" />
+					<div
+						onClick={() => {
+							local.activeTab.set("Home")
+						}}
+					>
+						<GridIcon
+							className={
+								local.activeTab.get() === "Home"
+									? "text-primaryText w-7 h-7 hover:scale-[1.1] font-bold fill-white transition-all "
+									: "text-primaryText w-7 h-7 hover:scale-[1.1] transition-all "
+							}
+						/>
+					</div>
+					<div
+						onClick={() => {
+							local.activeTab.set("Profile")
+						}}
+					>
+						<UserIcon
+							className={
+								local.activeTab.get() === "Profile"
+									? "text-primaryText w-7 h-7 hover:scale-[1.1] font-bold fill-white transition-all"
+									: "text-primaryText w-7 h-7 hover:scale-[1.1] transition-all"
+							}
+						/>
+					</div>
 				</motion.div>
 				<motion.button
 					whileHover={{ scale: 1.1 }}
