@@ -5,6 +5,7 @@ import { useEffect, useMemo } from "react"
 import AddPostModal from "./AddPostModal"
 import { ImageGrid } from "./PostGrid"
 import Search from "./Search"
+import ActionBar from "./ActionBar"
 
 let lastId = 0
 interface Props {
@@ -64,6 +65,7 @@ export default observer(function Home(props: Props) {
 
 	return (
 		<div className="[&::-webkit-scrollbar]:hidden overflow-hidden">
+			<ActionBar />
 			<main className="flex flex-col pt-[120px] gap-[240px] items-center [&::-webkit-scrollbar]:hidden">
 				<div className="flex flex-col gap-[36px] items-center px-[40px] p-[20px]">
 					<div className="justify-center items-center gap-[8px] flex flex-col">
