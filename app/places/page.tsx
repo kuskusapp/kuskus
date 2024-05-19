@@ -1,16 +1,14 @@
 "use client"
-import { useState } from "react"
-import Image from "next/image"
-import { IoIosSearch } from "react-icons/io"
 import Header from "@/components/Header"
-import { GlobeIcon } from "../../public/svg/search-icons"
-import { Swiper, SwiperSlide } from "swiper/react"
+import Search from "@/components/Search"
+import ViewPost from "@/components/ViewPost"
+import { AnimatePresence, motion } from "framer-motion"
+import Image from "next/image"
+import { useState } from "react"
 import "swiper/css"
 import "swiper/css/navigation"
 import "swiper/css/pagination"
-import { AnimatePresence, motion } from "framer-motion"
-import ViewPost from "@/components/ViewPost"
-import Search from "@/components/Search"
+import { Swiper, SwiperSlide } from "swiper/react"
 
 const recommendedPlaces = [
 	{
@@ -219,7 +217,6 @@ export default function Places() {
 												</motion.div>
 											) : null}
 										</AnimatePresence>
-
 										<Image
 											className="rounded-lg"
 											src={place.imageUrl}
