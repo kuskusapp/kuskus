@@ -59,14 +59,14 @@ export default observer(function Home(props: Props) {
 		})
 	}, [posts])
 
-	useEffect(() => {
-		console.log(posts, "posts")
-		console.log(images, "images")
-	}, [posts])
+	// useEffect(() => {
+	// 	console.log(posts, "posts")
+	// 	console.log(images, "images")
+	// }, [posts])
 
 	return (
 		<>
-			{!isEmpty(authData.get()) && (
+			{authData.get() !== null && (
 				<ActionBar
 					activeTab="Home"
 					activateAddPost={() => {
@@ -75,7 +75,7 @@ export default observer(function Home(props: Props) {
 					username={authData.name.get()}
 				/>
 			)}
-			{isEmpty(authData.get()) && (
+			{authData.get() === null && (
 				<SignInAndSignUp
 					authBuiltinUiUrl={props.authBuiltinUiUrl}
 					authBuiltinSignupUrl={props.authBuiltinSignupUrl}

@@ -66,9 +66,9 @@ export default observer(function Profile(props: Props) {
 		}
 	}, [])
 
-	useEffect(() => {
-		console.log(local.postViewData.get(), "post view data")
-	}, [local.postViewData.get()])
+	// useEffect(() => {
+	// 	console.log(local.postViewData.get(), "post view data")
+	// }, [local.postViewData.get()])
 
 	return (
 		<>
