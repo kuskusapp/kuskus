@@ -55,6 +55,7 @@ export default observer(function AddPostModal(props: Props) {
 	].slice(0, local.initialCount.get())
 
 	const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		event.stopPropagation()
 		if (event.target.files && event.target.files[0]) {
 			local.image.set(event.target.files[0])
 		}
@@ -74,14 +75,13 @@ export default observer(function AddPostModal(props: Props) {
 	}
 
 	return (
-		<>
+		<div className="">
 			<Transition appear show={local.isOpen.get()} as={Fragment}>
 				<Dialog
 					as="div"
 					className="fixed inset-0 z-10 overflow-y-auto"
 					onClose={() => {}}
 				>
-					{/* TODO: move to left */}
 					<button
 						className="fixed mt-10 mr-40 top-50 left-40 bg-neutral-200 hover:bg-neutral-400 px-4 py-2 rounded-full z-50"
 						onClick={handleCloseModal}
@@ -116,12 +116,6 @@ export default observer(function AddPostModal(props: Props) {
 							leaveTo="opacity-0 scale-95"
 						>
 							<div className="inline-block w-full max-w-4xl my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
-								<input
-									type="file"
-									id="image"
-									onChange={handleImageChange}
-									className="hidden"
-								/>
 								<form
 									onSubmit={(e) => {
 										e.preventDefault()
@@ -130,6 +124,12 @@ export default observer(function AddPostModal(props: Props) {
 									className="flex"
 									style={{ minHeight: "600px" }}
 								>
+									<input
+										type="file"
+										id="image"
+										onChange={handleImageChange}
+										className="bg-red-200 hidden"
+									/>
 									<div
 										className="w-2/3 flex justify-center items-center m-auto"
 										style={{
@@ -268,6 +268,6 @@ export default observer(function AddPostModal(props: Props) {
 					</div>
 				</Dialog>
 			</Transition>
-		</>
+		</div>
 	)
 })
