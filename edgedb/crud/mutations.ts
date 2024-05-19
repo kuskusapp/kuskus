@@ -104,8 +104,9 @@ export const updateUser = e.params(
 		bio: e.optional(e.str),
 		place: e.optional(e.str),
 		displayName: e.optional(e.str),
+		githubAvatarUrl: e.optional(e.str),
 	},
-	({ userId, bio, place, displayName }) => {
+	({ userId, bio, place, displayName, githubAvatarUrl }) => {
 		const user = e.op(
 			e.cast(e.User, userId),
 			"if",
@@ -118,6 +119,7 @@ export const updateUser = e.params(
 				bio: e.op(bio, "??", u.bio),
 				place: e.op(place, "??", u.place),
 				displayName: e.op(displayName, "??", u.displayName),
+				githubAvatarUrl: e.op(githubAvatarUrl, "??", u.githubAvatarUrl),
 			},
 		}))
 	},

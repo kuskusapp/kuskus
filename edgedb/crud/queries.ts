@@ -1,29 +1,6 @@
 import e, { type $infer } from "../../dbschema/edgeql-js"
 
-// context: https://discord.com/channels/841451783728529451/1238547782537580754
-export const homePublicOld = e.select(
-	e.assert_exists(e.assert_single(e.GlobalState)),
-	() => ({
-		popularDishes: true,
-	}),
-)
-// export const homePublic = e.params({}, () => {
-// 	return e.select({
-// 		popularDishes: e.select(
-// 			e.assert_exists(e.assert_single(e.GlobalState)),
-// 			() => ({
-// 				popularDishes: true,
-// 			}),
-// 		),
-// 		posts: e.select(e.Post, () => ({
-// 			imageUrl: true,
-// 			roninId: true,
-// 			imageWidth: true,
-// 			imageHeight: true,
-// 			imagePreviewBase64Hash: true,
-// 		})),
-// 	})
-// })
+// -- home /
 export const homePublic = e.select({
 	popularDishes: e.assert_exists(
 		e.assert_single(
@@ -42,7 +19,6 @@ export const homePublic = e.select({
 	})),
 })
 export type homePublicReturn = $infer<typeof homePublic>
-
 export const homeAuth = e.params(
 	{ userId: e.optional(e.uuid) },
 	({ userId }) => {
@@ -59,6 +35,22 @@ export const homeAuth = e.params(
 	},
 )
 export type homeAuthReturn = $infer<typeof homeAuth>
+
+// -- profile /[username]
+export const profilePublic = e.params({ username: e.str }, ({ username }) => {
+	return e.select(e.User, (u) => ({
+		filter: e.op(u.name, "=", username),
+		name: true,
+		bio: true,
+		place: true,
+		profilePhotoUrl: true,
+		createdPosts: {
+			imageUrl: true,
+			description: true,
+		},
+	}))
+})
+export type profilePublicReturn = $infer<typeof profilePublic>
 
 // context: https://discord.com/channels/841451783728529451/1235266238977150976 & https://discord.com/channels/841451783728529451/1235593775447937054 & https://discord.com/channels/841451783728529451/1238547782537580754
 export const profileAuth = e.params(
@@ -89,7 +81,6 @@ export const profileAuth = e.params(
 	},
 )
 export type profileAuthReturn = $infer<typeof profileAuth>
-
 export const profileLoadMorePosts = e.params(
 	{ username: e.str, pageNumber: e.int64 },
 	({ username, pageNumber }) => {
@@ -110,21 +101,7 @@ export const profileLoadMorePosts = e.params(
 )
 export type profileAuthLoadMoreImages = $infer<typeof profileLoadMorePosts>
 
-export const profilePublic = e.params({ username: e.str }, ({ username }) => {
-	return e.select(e.User, (u) => ({
-		filter: e.op(u.name, "=", username),
-		name: true,
-		bio: true,
-		place: true,
-		profilePhotoUrl: true,
-		createdPosts: {
-			imageUrl: true,
-			description: true,
-		},
-	}))
-})
-export type profilePublicReturn = $infer<typeof profilePublic>
-
+// -- places /places/[place-name]
 export const placesAuth = e.params(
 	{ placeName: e.str, userId: e.optional(e.uuid) },
 	({ userId, placeName }) => {

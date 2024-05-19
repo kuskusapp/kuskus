@@ -14,6 +14,6 @@ export default async function ProfileRoute({ params }: PageProps) {
 	// 	return <ProfilePublic data={data} />
 	// }
 
-	const data = await profileAuth.run(client, {})
-	return <Profile authData={data} />
+	const authData = await profileAuth.run(client, {})
+	return <Profile authData={authData} />
 }

@@ -69,6 +69,7 @@ async function profile() {
 				place: "Tbilisi, Georgia",
 				bio: "Make kuskus.app",
 				profilePhotoUrl: "https://images.kuskus.app/nikiv-profile-image",
+				githubAvatarUrl: "https://avatars.githubusercontent.com/u/6391776",
 			},
 		}))
 		.run(client)

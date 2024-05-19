@@ -1,12 +1,11 @@
 "use client"
 import { homeAuthReturn, homePublicReturn } from "@/edgedb/crud/queries"
 import { observer, useObservable } from "@legendapp/state/react"
-import { useEffect, useMemo } from "react"
+import { useMemo } from "react"
+import ActionBar from "./ActionBar"
 import AddPostModal from "./AddPostModal"
 import { ImageGrid } from "./PostGrid"
 import Search from "./Search"
-import ActionBar from "./ActionBar"
-import { isEmpty } from "@legendapp/state"
 import SignInAndSignUp from "./SignInAndSignUp"
 
 let lastId = 0
