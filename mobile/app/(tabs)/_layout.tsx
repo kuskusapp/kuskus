@@ -95,6 +95,29 @@ export default function TabLayout() {
 					),
 				}}
 			/>
+			<Tabs.Screen
+				name="auth"
+				options={{
+					headerStyle: {
+						backgroundColor: tabBarBackgroundColor,
+					},
+					headerTitle: () => (
+						<ThemedText fontSize={20} fontWeight="bold">
+							Auth
+						</ThemedText>
+					),
+					tabBarButton: (props) => (
+						<TabBarButton
+							{...props}
+							activeTintColor={tabBarActiveTintColor}
+							inactiveTintColor={tabBarInactiveTintColor}
+							icon={({ color }) => (
+								<Feather size={24} name="heart" color={color} />
+							)}
+						/>
+					),
+				}}
+			/>
 		</Tabs>
 	)
 }
