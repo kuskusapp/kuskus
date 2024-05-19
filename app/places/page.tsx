@@ -71,7 +71,7 @@ export default function Places() {
 			) : null}
 			<Header />
 
-			<div className=" justify-center px-5 pt-5 mt-5 relative">
+			<div className=" justify-center px-5 pt-5 relative">
 				<div className="w-full flex-center">
 					<Search />
 				</div>
