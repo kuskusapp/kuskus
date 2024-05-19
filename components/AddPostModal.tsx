@@ -84,7 +84,7 @@ export default observer(function AddPostModal(props: Props) {
 				>
 					{/* TODO: move to left */}
 					<button
-						className="fixed mt-10 mr-40 top-50 right-40 bg-neutral-200 hover:bg-neutral-400 px-4 py-2 rounded-full z-50"
+						className="fixed mt-10 mr-40 top-50 left-40 bg-neutral-200 hover:bg-neutral-400 px-4 py-2 rounded-full z-50"
 						onClick={handleCloseModal}
 					>
 						x
