@@ -137,14 +137,17 @@ export default observer(function AddPostModal(props: Props) {
 											height: "610px",
 										}}
 									>
-										<label className="mt-1 w-full h-full flex justify-center items-center bg-white focus:outline-none cursor-pointer">
+										<label
+											className="mt-1 w-full h-full flex justify-center items-center bg-white focus:outline-none cursor-pointer"
+											htmlFor="image"
+										>
 											<PhotoIcon className="h-6 w-6 text-gray-700" />
-											{/* <input
+											<input
 												type="file"
 												id="image"
 												onChange={handleImageChange}
 												className="hidden"
-											/> */}
+											/>
 										</label>
 									</div>
 									<div className=" flex flex-col">
@@ -159,10 +162,12 @@ export default observer(function AddPostModal(props: Props) {
 											>
 												DESCRIPTION
 											</label>
+											{/* TODO: make tiptap */}
 											<textarea
 												id="description"
 												value={local.description.get()}
 												placeholder="Write a description..."
+												onChange={(e) => local.description.set(e.target.value)}
 												style={{
 													height: "150px",
 													outline: "none",
