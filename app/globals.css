@@ -3,21 +3,16 @@
 @tailwind utilities;
 
 
-:root {
-  --primary: rgb(231 231 238);
-	--primaryText: rgb(0,0,0 , 0.5);
-	--secondary: rgb(255,255,255);
-	--substitute: rgb(220, 220, 224);
-}
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --primary: rgb(23 23 23);
+
+
+:root {
+    --primary: rgb(23,23,23);
 		--primaryText: rgb(255,255,255, 0.8);
 		--secondary: rgb(28, 32, 36);
 		--substitute: rgb(38, 42, 46);
-  }
 }
+
 
 html,
 body {

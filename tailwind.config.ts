@@ -18,7 +18,7 @@ const config: Config = {
 			colors: {
 				primary: "var(--primary)",
 				primaryText: "var(--primaryText)",
-				//rgb(14 128 95)
+
 				primaryhover: "rgb(35 157 122)",
 				secondary: "var(--secondary)",
 				substitute: "var(--substitute)",
