@@ -1,9 +1,9 @@
 import { auth } from "@/edgedb-next-client"
 import { placesAuth } from "@/edgedb/crud/queries"
 import type { PageProps } from "./$types"
-import PlacesAuth from "@/components/routes/PlacesAuth"
+import Place from "@/components/routes/Place"
 
-export default async function Place({ params }: PageProps) {
+export default async function PlaceRoute({ params }: PageProps) {
 	const session = auth.getSession()
 	const client = session.client
 	const authenticated = await session.isSignedIn()
@@ -13,5 +13,5 @@ export default async function Place({ params }: PageProps) {
 	}
 
 	const data = await placesAuth.run(client, { placeName: params.name })
-	return <PlacesAuth data={data} />
+	return <Place data={data} />
 }

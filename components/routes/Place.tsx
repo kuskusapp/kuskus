@@ -9,7 +9,7 @@ interface Props {
 	data: placesAuthReturn
 }
 
-export default observer(function PlacesAuth(props: Props) {
+export default observer(function Place(props: Props) {
 	const server$ = useObservable(props.data)
 	// TODO: move all local state here
 	const local$ = useObservable({ following: false, modalOpen: false })
