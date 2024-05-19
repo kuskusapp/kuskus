@@ -9,7 +9,6 @@ interface Props {
 	onClose: () => void
 	postsState: any
 }
-
 export default observer(function AddPostModal(props: Props) {
 	const local = useObservable({
 		isOpen: props.open,

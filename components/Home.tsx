@@ -66,13 +66,22 @@ export default observer(function Home(props: Props) {
 	return (
 		<>
 			{authData.get() !== null && (
-				<ActionBar
-					activeTab="Home"
-					activateAddPost={() => {
-						local.addPostModalOpen.set(true)
-					}}
-					username={authData.name.get()}
-				/>
+				<>
+					<ActionBar
+						activeTab="Home"
+						activateAddPost={() => {
+							local.addPostModalOpen.set(true)
+						}}
+						username={authData.name.get()}
+					/>
+					<AddPostModal
+						open={local.addPostModalOpen.get()}
+						onClose={() => {
+							local.addPostModalOpen.set(false)
+						}}
+						postsState={undefined}
+					/>
+				</>
 			)}
 			{authData.get() === null && (
 				<SignInAndSignUp
@@ -80,13 +89,6 @@ export default observer(function Home(props: Props) {
 					authBuiltinSignupUrl={props.authBuiltinSignupUrl}
 				/>
 			)}
-			<AddPostModal
-				open={local.addPostModalOpen.get()}
-				onClose={() => {
-					local.addPostModalOpen.set(false)
-				}}
-				postsState={undefined}
-			/>
 			<main className="flex flex-col pt-[120px] gap-[240px] items-center [&::-webkit-scrollbar]:hidden">
 				<div className="flex flex-col gap-[36px] items-center px-[40px] p-[20px]">
 					<div className="justify-center items-center gap-[8px] flex flex-col">
