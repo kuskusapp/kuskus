@@ -21,7 +21,7 @@ export default observer(function Home(props: Props) {
 	const authData = useObservable(props.authData)
 	const local = useObservable({
 		inputFocused: false,
-		addPostModalOpen: false,
+		addPostModalOpen: true,
 		activeItem: null as string | null,
 		hoveredDish: null as number | null,
 		dishes: [],
