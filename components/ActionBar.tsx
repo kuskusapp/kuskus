@@ -3,12 +3,18 @@
 import { GridIcon, PlusIcon, UserIcon } from "@/public/svg/search-icons"
 import { observer, useObservable } from "@legendapp/state/react"
 import { motion } from "framer-motion"
+import { useRouter } from "next/navigation"
 
-interface Props {}
+interface Props {
+	activeTab: "Home" | "Profile" | "None"
+	activateAddPost: () => void
+	username: string
+}
 export default observer(function ActionBar(props: Props) {
 	const local = useObservable({
-		activeTab: "" as "Home" | "Profile",
+		...props,
 	})
+	const router = useRouter()
 
 	return (
 		<>
@@ -20,7 +26,7 @@ export default observer(function ActionBar(props: Props) {
 					width: "fit-content",
 					zIndex: 50,
 				}}
-				className="flex flex-row gap-5 justify-center"
+				className="flex flex-row gap-5 justify-center cursor-pointer"
 			>
 				<motion.div
 					whileHover={{ scale: 1.1 }}
@@ -40,7 +46,7 @@ export default observer(function ActionBar(props: Props) {
 				>
 					<div
 						onClick={() => {
-							local.activeTab.set("Home")
+							router.push("/")
 						}}
 					>
 						<GridIcon
@@ -53,7 +59,7 @@ export default observer(function ActionBar(props: Props) {
 					</div>
 					<div
 						onClick={() => {
-							local.activeTab.set("Profile")
+							router.push(`/${local.username.get()}`)
 						}}
 					>
 						<UserIcon
@@ -74,7 +80,7 @@ export default observer(function ActionBar(props: Props) {
 						duration: 0.2,
 					}}
 					onClick={() => {
-						// open new post
+						local.activateAddPost()
 					}}
 					style={{
 						width: "50px",

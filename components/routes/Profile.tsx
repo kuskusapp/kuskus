@@ -6,26 +6,28 @@ import { motion } from "framer-motion"
 import { useEffect, useMemo } from "react"
 import { ImageGrid } from "../PostGrid"
 import ViewPost from "../ViewPost"
+import { isEmpty } from "@legendapp/state"
+import ActionBar from "../ActionBar"
+import AddPostModal from "../AddPostModal"
 
-let last_id = 0
+let lastId = 0
 interface Props {
 	authData: profileAuthReturn
 }
-
 export default observer(function Profile(props: Props) {
 	const authData = useObservable(props.authData)
 	const local = useObservable({
+		addPostModalOpen: false,
 		showSettingsModal: false,
 		pageNumber: 0,
 		postViewData: null,
 		showPostViewModal: false,
 	})
-
 	const posts = authData.createdPosts.get() ?? []
 	const images = useMemo(() => {
 		return posts.map((post) => {
 			return {
-				id: (last_id++).toString(),
+				id: (lastId++).toString(),
 				alt: "",
 				width: post.imageWidth ?? 1,
 				height: post.imageHeight ?? 1,
@@ -69,31 +71,49 @@ export default observer(function Profile(props: Props) {
 	}, [local.postViewData.get()])
 
 	return (
-		<div className="min-h-screen h-full ">
-			{local.postViewData.get() !== null && local.postViewData.get().src && (
-				<ViewPost
-					post={{
-						id: "1",
-						name: "test",
-						category: "sushi",
-						imageUrl: local.postViewData.get().src,
+		<>
+			{!isEmpty(authData.get()) && (
+				<ActionBar
+					activeTab="Profile"
+					activateAddPost={() => {
+						local.addPostModalOpen.set(true)
 					}}
-					closeModal={() => {
-						local.postViewData.set(null)
-					}}
+					username={authData.name.get()}
 				/>
 			)}
-			<Sidebar />
-			<div className="ml-[380px] min-h-full flex">
-				<ImageGrid
-					images={images}
-					onClick={(img) => {
-						local.postViewData.set(img)
-						local.showPostViewModal.set(true)
-					}}
-				/>
+			<AddPostModal
+				open={local.addPostModalOpen.get()}
+				onClose={() => {
+					local.addPostModalOpen.set(false)
+				}}
+				postsState={undefined}
+			/>
+			<div className="min-h-screen h-full ">
+				{local.postViewData.get() !== null && local.postViewData.get().src && (
+					<ViewPost
+						post={{
+							id: "1",
+							name: "test",
+							category: "sushi",
+							imageUrl: local.postViewData.get().src,
+						}}
+						closeModal={() => {
+							local.postViewData.set(null)
+						}}
+					/>
+				)}
+				<Sidebar />
+				<div className="ml-[380px] min-h-full flex">
+					<ImageGrid
+						images={images}
+						onClick={(img) => {
+							local.postViewData.set(img)
+							local.showPostViewModal.set(true)
+						}}
+					/>
+				</div>
 			</div>
-		</div>
+		</>
 	)
 })
 

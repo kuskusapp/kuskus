@@ -41,8 +41,24 @@ export const homePublic = e.select({
 		imagePreviewBase64Hash: true,
 	})),
 })
-
 export type homePublicReturn = $infer<typeof homePublic>
+
+export const homeAuth = e.params(
+	{ userId: e.optional(e.uuid) },
+	({ userId }) => {
+		const user = e.op(
+			e.cast(e.User, userId),
+			"if",
+			e.op("exists", userId),
+			"else",
+			e.global.current_user,
+		)
+		return e.select(user, () => ({
+			name: true,
+		}))
+	},
+)
+export type homeAuthReturn = $infer<typeof homeAuth>
 
 // context: https://discord.com/channels/841451783728529451/1235266238977150976 & https://discord.com/channels/841451783728529451/1235593775447937054 & https://discord.com/channels/841451783728529451/1238547782537580754
 export const profileAuth = e.params(
@@ -68,8 +84,6 @@ export const profileAuth = e.params(
 				imageWidth: true,
 				imageHeight: true,
 				imagePreviewBase64Hash: true,
-				// description: true,
-				// photoFileName: true,
 			},
 		}))
 	},

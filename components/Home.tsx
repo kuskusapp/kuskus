@@ -1,19 +1,21 @@
 "use client"
-import { homePublicReturn } from "@/edgedb/crud/queries"
+import { homeAuthReturn, homePublicReturn } from "@/edgedb/crud/queries"
 import { observer, useObservable } from "@legendapp/state/react"
 import { useEffect, useMemo } from "react"
 import AddPostModal from "./AddPostModal"
 import { ImageGrid } from "./PostGrid"
 import Search from "./Search"
 import ActionBar from "./ActionBar"
+import { isEmpty } from "@legendapp/state"
+import SignInAndSignUp from "./SignInAndSignUp"
 
 let lastId = 0
 interface Props {
 	publicData: homePublicReturn
-	authData: {}
+	authData?: homeAuthReturn
 	authenticated: boolean
 	authBuiltinUiUrl: string
-	autBuiltinSignupUrl: string
+	authBuiltinSignupUrl: string
 }
 export default observer(function Home(props: Props) {
 	const publicData = useObservable(props.publicData)
@@ -43,7 +45,6 @@ export default observer(function Home(props: Props) {
 		],
 	})
 
-	// const posts = publicData.createdPosts.get() ?? []
 	const posts = publicData.posts.get() ?? []
 	const images = useMemo(() => {
 		return posts.map((post) => {
@@ -64,8 +65,29 @@ export default observer(function Home(props: Props) {
 	}, [posts])
 
 	return (
-		<div className="">
-			<ActionBar />
+		<>
+			{!isEmpty(authData.get()) && (
+				<ActionBar
+					activeTab="Home"
+					activateAddPost={() => {
+						local.addPostModalOpen.set(true)
+					}}
+					username={authData.name.get()}
+				/>
+			)}
+			{isEmpty(authData.get()) && (
+				<SignInAndSignUp
+					authBuiltinUiUrl={props.authBuiltinUiUrl}
+					authBuiltinSignupUrl={props.authBuiltinSignupUrl}
+				/>
+			)}
+			<AddPostModal
+				open={local.addPostModalOpen.get()}
+				onClose={() => {
+					local.addPostModalOpen.set(false)
+				}}
+				postsState={undefined}
+			/>
 			<main className="flex flex-col pt-[120px] gap-[240px] items-center [&::-webkit-scrollbar]:hidden">
 				<div className="flex flex-col gap-[36px] items-center px-[40px] p-[20px]">
 					<div className="justify-center items-center gap-[8px] flex flex-col">
@@ -84,15 +106,7 @@ export default observer(function Home(props: Props) {
 			<div className="flex">
 				<ImageGrid images={images} onClick={(img) => {}} />
 			</div>
-			{/* TODO: maybe not right place, move */}
-			<AddPostModal
-				open={local.addPostModalOpen.get()}
-				onClose={() => {
-					local.addPostModalOpen.set(false)
-				}}
-				postsState={undefined}
-			/>
-		</div>
+		</>
 	)
 })
 
