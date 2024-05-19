@@ -9,7 +9,7 @@ export default function Search() {
 		setIsPressed(true)
 		setTimeout(() => {
 			setIsPressed(false)
-		}, 500)
+		}, 300)
 	}
 
 	return (
@@ -32,8 +32,10 @@ export default function Search() {
 			<button
 				onMouseDown={nearbyClicked}
 				style={{
-					backgroundColor: "#eec093",
+					backgroundColor: isPressed ? "#dbb289" : "#eec093",
 					boxShadow: isPressed ? "none" : "inset 0 -3px 0px 0px #a97e2a",
+					transform: isPressed ? "translateY(2px)" : "none",
+					scale: isPressed ? 0.98 : 1,
 				}}
 				className="flex gap-[4px] text-black right-0 px-5 py-2 text-[15px] rounded-2xl flex-center bg-secondary focus:outline-none focus:ring"
 			>
