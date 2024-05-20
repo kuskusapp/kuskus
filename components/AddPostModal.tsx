@@ -110,7 +110,7 @@ export default observer(function AddPostModal(props: Props) {
 							style={{
 								borderRight: "1px solid #8e8e8e",
 								height: "700px",
-								background: "rgba(255, 255, 255, 0.4)",
+								background: "rgba(255, 255, 255, 0.2)",
 								backdropFilter: "blur(10px)",
 							}}
 						>
@@ -223,7 +223,7 @@ export default observer(function AddPostModal(props: Props) {
 											className={`px-2 py-1 text-gray-900 font-light text-xs border rounded-full ${
 												local.categories.get().includes(category)
 													? "bg-white border-white"
-													: "bg-neutral-400 borer-neutral-900 hover:border-white"
+													: "bg-neutral-400 borer-neutral-9w00 hover:border-white"
 											}`}
 											onClick={(e) => addCategory(category, e)}
 										>
