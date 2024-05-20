@@ -92,7 +92,7 @@ export default observer(function AddPostModal(props: Props) {
 				x
 			</button>
 			<div className="min-h-screen px-2 text-center">
-				<div className="fixed inset-0 bg-black opacity-90" />
+				<div className="fixed inset-0 bg-black opacity-95" />
 				<span className="inline-block h-screen align-middle" aria-hidden="true">
 					&#8203;
 				</span>
@@ -110,8 +110,8 @@ export default observer(function AddPostModal(props: Props) {
 							style={{
 								borderRight: "1px solid #8e8e8e",
 								height: "700px",
-								background: "rgba(255, 255, 255, 0.2)",
-								backdropFilter: "blur(10px)",
+								background: "rgba(255, 255, 255, 0.4)",
+								backdropFilter: "blur(200px)",
 							}}
 						>
 							<label
