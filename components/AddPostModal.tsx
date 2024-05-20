@@ -1,12 +1,8 @@
 "use client"
-import z from "zod"
+import { describeImageAction } from "@/app/actions"
 import { observer, useObservable } from "@legendapp/state/react"
 import React, { useEffect } from "react"
 import { AIcon, PhotoIcon } from "../public/svg/modal-icons"
-import { describeImageAction } from "@/app/actions"
-import { useForm } from "react-hook-form"
-import { describeImageSchema } from "@/app/schemas"
-import { zodResolver } from "@hookform/resolvers/zod"
 
 interface Props {
 	open: boolean
@@ -19,6 +15,10 @@ export default observer(function AddPostModal(props: Props) {
 		isOpen: props.open,
 		title: "",
 		description: "",
+		aiDescription: "",
+		aiDescriptionLoading: false,
+		aiGuessesCategories: [] as string[],
+		aiCategoriesGuessLoading: false,
 		uploadedImage: null as Blob | null,
 		foodCategories: [
 			"Sushi",
@@ -38,11 +38,6 @@ export default observer(function AddPostModal(props: Props) {
 		],
 		categories: [] as string[],
 		initialCount: 8,
-	})
-	const { register, handleSubmit } = useForm<
-		z.infer<typeof describeImageSchema>
-	>({
-		resolver: zodResolver(describeImageSchema),
 	})
 
 	const addCategory = (
@@ -97,18 +92,17 @@ export default observer(function AddPostModal(props: Props) {
 				</span>
 				<div className="inline-block w-full max-w-6xl my-8 overflow-hidden text-left align-middle transition-all transform shadow-xl rounded-2xl">
 					<form
-						onSubmit={handleSubmit(async (data) => {
-							console.log(data, "data")
-							// const res = await buyProduct(data);
-							// Do something useful with the result.
-						})}
+						// onSubmit={handleSubmit(async (data) => {
+						// 	console.log(data, "data")
+						// 	// const res = await buyProduct(data);
+						// 	// Do something useful with the result.
+						// })}
 						className="flex"
 						style={{ minHeight: "700px" }}
-						// TODO: remove, old
-						// onSubmit={(e) => {
-						// 	e.preventDefault()
-						// 	handleCloseModal()
-						// }}
+						onSubmit={(e) => {
+							e.preventDefault()
+							handleCloseModal()
+						}}
 					>
 						<div
 							className="w-2/3 flex justify-center items-center m-auto"
@@ -133,13 +127,21 @@ export default observer(function AddPostModal(props: Props) {
 										e.stopPropagation()
 										if (e.target.files && e.target.files[0]) {
 											try {
+												local.aiDescriptionLoading.set(true)
 												const uploadedFile = e.target.files[0]
 												local.uploadedImage.set(uploadedFile)
 												const base64Image = await fileToBase64(uploadedFile)
-												await describeImageAction({
+												const resp = await describeImageAction({
 													imageAsBase64: base64Image,
 												})
+												if (resp.data) {
+													// @ts-ignore
+													local.aiDescription.set(resp.data)
+												}
+												console.log(resp.data, "resp")
+												local.aiDescriptionLoading.set(false)
 											} catch (err) {
+												local.aiDescriptionLoading.set(false)
 												console.log(err)
 											}
 										}
@@ -165,12 +167,12 @@ export default observer(function AddPostModal(props: Props) {
 										width: "400px",
 									}}
 								>
-									DESCRIPTION
+									Note
 								</label>
 								<textarea
-									id="description"
+									id="note"
 									value={local.description.get()}
-									placeholder="Write a description..."
+									placeholder="Write note..."
 									onChange={(e) => local.description.set(e.target.value)}
 									style={{
 										height: "150px",
@@ -190,13 +192,21 @@ export default observer(function AddPostModal(props: Props) {
 										width: "400px",
 									}}
 								>
-									AI description
+									Image Description
 								</label>
+								{local.aiDescriptionLoading.get() && (
+									<>
+										<AIcon className="spin text-purple-600 h-4 w-4" />
+										<p className="font-thin text-right text-xs text-black pr-4">
+											AI is thinking
+										</p>
+									</>
+								)}
 								<p
 									className="font-thin text-sm pl-4"
 									style={{ color: "#555555" }}
 								>
-									textext
+									{local.aiDescription.get()}
 								</p>
 								<div
 									style={{
@@ -216,10 +226,14 @@ export default observer(function AddPostModal(props: Props) {
 											bottom: "0",
 										}}
 									>
-										<AIcon className="spin text-purple-600 h-4 w-4" />
-										<p className="font-thin text-right text-xs text-black pr-4">
-											AI is thinking
-										</p>
+										{local.aiCategoriesGuessLoading.get() && (
+											<>
+												<AIcon className="spin text-purple-600 h-4 w-4" />
+												<p className="font-thin text-right text-xs text-black pr-4">
+													AI is thinking
+												</p>
+											</>
+										)}
 									</div>
 								</div>
 							</div>

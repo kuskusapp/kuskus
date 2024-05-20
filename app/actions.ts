@@ -1,12 +1,11 @@
 "use server"
 
-import { z } from "zod"
-import { actionClient } from "@/lib/safe-action"
-import { updateUser } from "@/edgedb/crud/mutations"
 import { auth } from "@/edgedb-next-client"
+import { updateUser } from "@/edgedb/crud/mutations"
 import { profileLoadMorePosts } from "@/edgedb/crud/queries"
-import { describeImageSchema } from "./schemas"
+import { actionClient } from "@/lib/safe-action"
 import OpenAI from "openai"
+import { z } from "zod"
 
 const openai = new OpenAI({
 	apiKey: process.env.OPENAI_API_KEY,
@@ -54,14 +53,13 @@ export const profileLoadMostPostsAction = actionClient
 		}
 	})
 
+const describeImageSchema = z.object({
+	imageAsBase64: z.string(),
+})
 export const describeImageAction = actionClient
 	.schema(describeImageSchema)
 	.action(async ({ parsedInput: { imageAsBase64 } }) => {
 		try {
-			// assumes image is a JPEG
-			// TODO: support more types by: adjust the MIME type if it's different
-			const dataUrl = `data:image/jpeg;base64,${imageAsBase64}`
-			console.log(dataUrl, "data url")
 			// const response = await openai.chat.completions.create({
 			// 	model: "gpt-4o",
 			// 	messages: [
@@ -72,22 +70,16 @@ export const describeImageAction = actionClient
 			// 				{
 			// 					type: "image_url",
 			// 					image_url: {
-			// 						url: dataUrl,
+			// 						url: imageAsBase64,
 			// 					},
 			// 				},
 			// 			],
 			// 		},
 			// 	],
 			// })
-			// console.log(response, "response")
-			// console.log(response.choices[0], "ai description of image")
-			// console.log("finished")
-			return true
-			// const buffer = Buffer.from(imageAsBase64, "base64")
-			// console.log(buffer, "buffer")
-			// TODO: describe image
-			// TODO: load image into ronin
-			// return buffer
+			// return response.choices[0]
+			await new Promise((resolve) => setTimeout(resolve, 3000))
+			return "The image shows a serving of French toast topped with banana slices, blueberries, and a drizzle of syrup, likely maple syrup. The dish appears to be garnished with a light dusting of powdered sugar and is presented on a dark plate. The layers of the toast and the toppings look visually appealing and appetizing."
 		} catch (err) {
 			return { failure: "Describe image error:", errorDetails: err.message }
 		}
