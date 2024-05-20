@@ -86,17 +86,17 @@ export default observer(function AddPostModal(props: Props) {
 	return (
 		<div className="fixed inset-0 z-10 overflow-y-auto">
 			<button
-				className="fixed mt-10 mr-40 top-50 left-40 bg-neutral-200 hover:bg-neutral-400 px-4 py-2 rounded-full z-50"
+				className="fixed mt-10 mr-40 top-50 left-40 glass-background hover:opacity-50 px-4 py-2 rounded-full z-50"
 				onClick={handleCloseModal}
 			>
 				x
 			</button>
 			<div className="min-h-screen px-2 text-center">
-				<div className="fixed inset-0 bg-black opacity-70" />
+				<div className="fixed inset-0 bg-black opacity-90" />
 				<span className="inline-block h-screen align-middle" aria-hidden="true">
 					&#8203;
 				</span>
-				<div className="inline-block w-full max-w-6xl my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
+				<div className="inline-block w-full max-w-6xl my-8 overflow-hidden text-left align-middle transition-all transform shadow-xl rounded-2xl">
 					<form
 						onSubmit={(e) => {
 							e.preventDefault()
@@ -105,24 +105,20 @@ export default observer(function AddPostModal(props: Props) {
 						className="flex"
 						style={{ minHeight: "700px" }}
 					>
-						<input
-							type="file"
-							id="image"
-							onChange={handleImageChange}
-							className="bg-red-200 hidden"
-						/>
 						<div
 							className="w-2/3 flex justify-center items-center m-auto"
 							style={{
-								borderRight: "1px solid #e7e7e7",
+								borderRight: "1px solid #8e8e8e",
 								height: "700px",
+								background: "rgba(255, 255, 255, 0.4)",
+								backdropFilter: "blur(10px)",
 							}}
 						>
 							<label
-								className="mt-1 w-full h-full flex justify-center items-center bg-white focus:outline-none cursor-pointer"
+								className="mt-1 w-full h-full flex justify-center items-center focus:outline-none cursor-pointer"
 								htmlFor="image"
 							>
-								<PhotoIcon className="h-10 w-10 text-gray-700" />
+								<PhotoIcon className="h-10 w-10 text-white hover:text-neutral-800" />
 								<input
 									type="file"
 									id="image"
@@ -131,13 +127,13 @@ export default observer(function AddPostModal(props: Props) {
 								/>
 							</label>
 						</div>
-						<div className="flex flex-col">
+						<div className="flex flex-col glass-background">
 							<div>
 								<label
 									htmlFor="description"
-									className="block text-xs font-thin text-gray-700 py-2 pl-4 mb-2"
+									className="block text-xs font-normal text-gray-700 py-2 pl-4 mb-2"
 									style={{
-										borderBottom: "1px solid #e7e7e7",
+										borderBottom: "1px solid #8e8e8e",
 										width: "400px",
 									}}
 								>
@@ -155,20 +151,25 @@ export default observer(function AddPostModal(props: Props) {
 										resize: "none",
 										overflow: "auto",
 									}}
-									className="mt-1 block w-full px-3 bg-white text-neutral-800 border-none sm:text-sm textarea-placeholder"
+									className="bg-inherit mt-1 block w-full px-3 text-neutral-700 border-none sm:text-sm textarea-placeholder"
 								/>
 							</div>
 							<div style={{ height: "150px" }}>
 								<label
-									className="block text-xs font-thin text-gray-700 pb-2 pl-4 mb-2"
+									className="block text-xs font-normal text-gray-700 pb-2 pl-4 mb-2"
 									style={{
-										borderBottom: "1px solid #e7e7e7",
+										borderBottom: "1px solid #8e8e8e",
 										width: "400px",
 									}}
 								>
 									AI DESCRIPTION
 								</label>
-								<p className="font-thin text-sm pl-4">textext</p>
+								<p
+									className="font-thin text-sm pl-4"
+									style={{ color: "#555555" }}
+								>
+									textext
+								</p>
 								<div
 									style={{
 										position: "relative",
@@ -202,9 +203,9 @@ export default observer(function AddPostModal(props: Props) {
 								}}
 							>
 								<label
-									className="block text-xs font-thin text-gray-700 pb-2 pl-4 mb-2"
+									className="block text-xs font-normal text-gray-700 pb-2 pl-4 mb-2"
 									style={{
-										borderBottom: "1px solid #e7e7e7",
+										borderBottom: "1px solid #8e8e8e",
 										width: "400px",
 									}}
 								>
@@ -212,7 +213,7 @@ export default observer(function AddPostModal(props: Props) {
 								</label>
 								<input
 									placeholder="Search categories..."
-									className="mt-1 block w-full px-3 bg-white text-neutral-800 border-none sm:text-sm textarea-placeholder"
+									className="mt-1 block w-full px-3 bg-inherit font-normal text-gray-700 border-none sm:text-sm textarea-placeholder"
 								></input>
 
 								<div className="flex flex-wrap gap-2 pl-2 mt-2">
@@ -221,8 +222,8 @@ export default observer(function AddPostModal(props: Props) {
 											key={category}
 											className={`px-2 py-1 text-gray-900 font-light text-xs border rounded-full ${
 												local.categories.get().includes(category)
-													? "bg-yellow-500 border-yellow-500 text-white"
-													: "hover:border-yellow-500"
+													? "bg-white border-white"
+													: "bg-neutral-400 borer-neutral-900 hover:border-white"
 											}`}
 											onClick={(e) => addCategory(category, e)}
 										>
@@ -233,7 +234,7 @@ export default observer(function AddPostModal(props: Props) {
 								{local.initialCount.get() <
 									local.foodCategories.get().length && (
 									<button
-										className="mt-2 ml-4 text-gray-500 text-xs font-thin cursor-pointer"
+										className="mt-2 ml-4 text-gray-700 text-xs font-thin cursor-pointer"
 										onClick={viewMore}
 									>
 										view more

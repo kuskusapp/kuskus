@@ -55,8 +55,13 @@ body {
 	transform: rotate(360deg);
 }
 
+.glass-background {
+	background: rgba(255, 255, 255, 0.6);
+	backdrop-filter: blur(10px);
+}
+
 .textarea-placeholder::placeholder {
-  color: #888;
+  color: #555555;
 	font-weight: 200;
   font-size: 14px;
 }
