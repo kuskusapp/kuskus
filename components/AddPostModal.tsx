@@ -35,7 +35,12 @@ export default observer(function AddPostModal(props: Props) {
 		initialCount: 8,
 	})
 
-	const addCategory = (category: string) => {
+	const addCategory = (
+		category: string,
+		event: React.MouseEvent<HTMLButtonElement>,
+	) => {
+		event.preventDefault()
+		event.stopPropagation()
 		local.categories.set((prevSelected) =>
 			prevSelected.includes(category)
 				? prevSelected.filter((cat) => cat !== category)
@@ -43,7 +48,9 @@ export default observer(function AddPostModal(props: Props) {
 		)
 	}
 
-	const viewMore = () => {
+	const viewMore = (event: React.MouseEvent<HTMLButtonElement>) => {
+		event.preventDefault()
+		event.stopPropagation()
 		local.initialCount.set((prevCount) => prevCount + 3)
 	}
 
@@ -217,7 +224,7 @@ export default observer(function AddPostModal(props: Props) {
 													? "bg-yellow-500 border-yellow-500 text-white"
 													: "hover:border-yellow-500"
 											}`}
-											onClick={() => addCategory(category)}
+											onClick={(e) => addCategory(category, e)}
 										>
 											{category}
 										</button>
