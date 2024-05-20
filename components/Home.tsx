@@ -7,6 +7,16 @@ import AddPostModal from "./AddPostModal"
 import { ImageGrid } from "./PostGrid"
 import Search from "./Search"
 import SignInAndSignUp from "./SignInAndSignUp"
+import ViewPost from "./ViewPost"
+
+type Image = {
+	id: string
+	alt: string
+	width: number
+	height: number
+	src: string
+	preview: string
+}
 
 let lastId = 0
 interface Props {
@@ -42,6 +52,7 @@ export default observer(function Home(props: Props) {
 			"Chinese",
 			"Japanese",
 		],
+		showViewPost: null as Image | null,
 	})
 
 	const posts = publicData.posts.get() ?? []
@@ -65,6 +76,12 @@ export default observer(function Home(props: Props) {
 
 	return (
 		<>
+			{local.showViewPost.get() !== null ? (
+				<ViewPost
+					post={local.showViewPost.get()}
+					closeModal={local.showViewPost.set}
+				/>
+			) : null}
 			{authData.get() !== null && (
 				<>
 					<ActionBar
@@ -104,8 +121,13 @@ export default observer(function Home(props: Props) {
 					<Search />
 				</div>
 			</main>
-			<div className="flex">
-				<ImageGrid images={images} onClick={(img) => {}} />
+			<div className="flex pt-[160px]">
+				<ImageGrid
+					images={images}
+					onClick={(img) => {
+						local.showViewPost.set(img)
+					}}
+				/>
 			</div>
 		</>
 	)

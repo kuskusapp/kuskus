@@ -92,10 +92,12 @@ export default observer(function Profile(props: Props) {
 				{local.postViewData.get() !== null && local.postViewData.get().src && (
 					<ViewPost
 						post={{
-							id: "1",
-							name: "test",
-							category: "sushi",
-							imageUrl: local.postViewData.get().src,
+							width: 1,
+							height: 1,
+							alt: "",
+							id: "",
+							preview: "",
+							src: local.postViewData.get().src,
 						}}
 						closeModal={() => {
 							local.postViewData.set(null)

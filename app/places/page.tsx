@@ -57,18 +57,12 @@ const recommendedPlaces = [
 
 export default function Places() {
 	const [inputFocused, setInputFocused] = useState(false)
-	const [isModalOpen, setIsModalOpen] = useState<number | null>(null)
+	const [isModalOpen, setIsModalOpen] = useState<{} | null>(null)
 
 	const [hovered, setHovered] = useState("")
 
 	return (
 		<>
-			{isModalOpen !== null ? (
-				<ViewPost
-					post={recommendedPlaces[isModalOpen]}
-					setIsModalOpen={setIsModalOpen}
-				/>
-			) : null}
 			<Header />
 
 			<div className=" justify-center px-5 pt-5 relative">

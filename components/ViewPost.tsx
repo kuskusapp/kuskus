@@ -7,11 +7,13 @@ import { useState } from "react"
 interface Props {
 	post: {
 		id: string
-		name: string
-		category: string
-		imageUrl: string
+		alt: string
+		width: number
+		height: number
+		src: string
+		preview: string
 	}
-	closeModal: () => void
+	closeModal: (value: {} | null) => void
 }
 
 export default function ViewPost(props: Props) {
@@ -21,7 +23,7 @@ export default function ViewPost(props: Props) {
 				<div
 					className="h-[50px] w-[50px] bg-neutral-800 cursor-pointer flex-center rounded-full  rotate-45 text-[28px]"
 					onClick={() => {
-						props.closeModal
+						props.closeModal(null)
 					}}
 				>
 					+
@@ -31,14 +33,14 @@ export default function ViewPost(props: Props) {
 				<div className="w-3/5 z-20 overflow-hidden relative flex-center h-full">
 					<div
 						style={{
-							background: `url(${props.post.imageUrl})`,
+							background: `url(${props.post.src})`,
 							filter: "blur(600px)",
 						}}
 						className="absolute z-20  top-0 left-0 w-full h-full"
 					></div>
 					<img
 						alt="image"
-						src={props.post.imageUrl}
+						src={props.post.src}
 						className="z-30"
 						style={{
 							width: "auto",
@@ -59,11 +61,14 @@ export default function ViewPost(props: Props) {
 						<div className="flex flex-col text-[14px] text-white/70">
 							<div className="text-primaryText flex">
 								<div className="w-[38px]"></div>
-								{props.post.name}
+								Lorem ipsum dolor sit amet consectetur adipisicing elit.
+								Numquam, repudiandae impedit. Quisquam ipsa sunt, ducimus maxime
+								dolores consequuntur. Ad, quaerat? Esse aut facere blanditiis
+								quod veritatis corporis accusamus eos unde.
 							</div>
 							<div className="text-primaryText flex">
 								<div className="w-[38px]"></div>
-								{props.post.category}
+								japanese
 							</div>
 							<div className="flex items-center">
 								<div className="w-[38px]">

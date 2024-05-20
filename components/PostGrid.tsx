@@ -1,5 +1,6 @@
 import { observer, useObservable } from "@legendapp/state/react"
 import { AnimatePresence, motion } from "framer-motion"
+import ViewPost from "./ViewPost"
 
 type Image = {
 	id: string
