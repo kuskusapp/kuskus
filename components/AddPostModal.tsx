@@ -96,14 +96,14 @@ export default observer(function AddPostModal(props: Props) {
 				<span className="inline-block h-screen align-middle" aria-hidden="true">
 					&#8203;
 				</span>
-				<div className="inline-block w-full max-w-4xl my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
+				<div className="inline-block w-full max-w-6xl my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
 					<form
 						onSubmit={(e) => {
 							e.preventDefault()
 							handleSubmit()
 						}}
 						className="flex"
-						style={{ minHeight: "600px" }}
+						style={{ minHeight: "700px" }}
 					>
 						<input
 							type="file"
@@ -115,14 +115,14 @@ export default observer(function AddPostModal(props: Props) {
 							className="w-2/3 flex justify-center items-center m-auto"
 							style={{
 								borderRight: "1px solid #e7e7e7",
-								height: "610px",
+								height: "700px",
 							}}
 						>
 							<label
 								className="mt-1 w-full h-full flex justify-center items-center bg-white focus:outline-none cursor-pointer"
 								htmlFor="image"
 							>
-								<PhotoIcon className="h-6 w-6 text-gray-700" />
+								<PhotoIcon className="h-10 w-10 text-gray-700" />
 								<input
 									type="file"
 									id="image"
@@ -138,7 +138,7 @@ export default observer(function AddPostModal(props: Props) {
 									className="block text-xs font-thin text-gray-700 py-2 pl-4 mb-2"
 									style={{
 										borderBottom: "1px solid #e7e7e7",
-										width: "320px",
+										width: "400px",
 									}}
 								>
 									DESCRIPTION
@@ -163,7 +163,7 @@ export default observer(function AddPostModal(props: Props) {
 									className="block text-xs font-thin text-gray-700 pb-2 pl-4 mb-2"
 									style={{
 										borderBottom: "1px solid #e7e7e7",
-										width: "320px",
+										width: "400px",
 									}}
 								>
 									AI DESCRIPTION
@@ -172,7 +172,7 @@ export default observer(function AddPostModal(props: Props) {
 								<div
 									style={{
 										position: "relative",
-										width: "320px",
+										width: "400px",
 										height: "100px",
 									}}
 								>
@@ -205,7 +205,7 @@ export default observer(function AddPostModal(props: Props) {
 									className="block text-xs font-thin text-gray-700 pb-2 pl-4 mb-2"
 									style={{
 										borderBottom: "1px solid #e7e7e7",
-										width: "320px",
+										width: "400px",
 									}}
 								>
 									CATEGORIES
