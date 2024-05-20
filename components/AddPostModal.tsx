@@ -2,6 +2,7 @@
 import { observer, useObservable } from "@legendapp/state/react"
 import React, { useEffect } from "react"
 import { AIcon, PhotoIcon } from "../public/svg/modal-icons"
+import { describeImageAction } from "@/app/actions"
 
 interface Props {
 	open: boolean
@@ -34,6 +35,10 @@ export default observer(function AddPostModal(props: Props) {
 		categories: [] as string[],
 		initialCount: 8,
 	})
+
+	// useEffect(() => {
+	// 	console.log(process.env, "env")
+	// }, [])
 
 	const addCategory = (
 		category: string,
@@ -117,10 +122,15 @@ export default observer(function AddPostModal(props: Props) {
 								<input
 									type="file"
 									id="image"
-									onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+									onChange={async (e: React.ChangeEvent<HTMLInputElement>) => {
 										e.stopPropagation()
 										if (e.target.files && e.target.files[0]) {
-											local.uploadedImage.set(e.target.files[0])
+											const uploadedFile = e.target.files[0]
+											local.uploadedImage.set(uploadedFile)
+											await describeImageAction({
+												imageBlob: e.target.files[0],
+												huggingFaceToken: process.env.HUGGINGFACE_TOKEN,
+											})
 										}
 									}}
 									className="hidden"
@@ -169,7 +179,7 @@ export default observer(function AddPostModal(props: Props) {
 										width: "400px",
 									}}
 								>
-									AI DESCRIPTION
+									AI description
 								</label>
 								<p
 									className="font-thin text-sm pl-4"

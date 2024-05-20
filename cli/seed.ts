@@ -110,7 +110,10 @@ async function posts() {
 	const images = readJPGFilesFromFolder("seed/foods")
 	for (const image of images) {
 		const roninPost = await get.post.with.fileNameFromImport(image.fileName)
-		let imageDescription = await describeImage(image.buffer)
+		let imageDescription = await describeImage(
+			image.buffer,
+			process.env.HUGGINGFACE_TOKEN,
+		)
 
 		if (roninPost) {
 			const dbPost = await e
@@ -148,14 +151,15 @@ async function posts() {
 	}
 }
 
-async function describeImage(imageBlob: any) {
+export async function describeImage(imageBlob: any, huggingFaceToken: string) {
 	try {
 		const response = await fetch(
 			// "https://api-inference.huggingface.co/models/unum-cloud/uform-gen",
 			"https://api-inference.huggingface.co/models/nlpconnect/vit-gpt2-image-captioning",
 			{
 				headers: {
-					Authorization: `Bearer ${process.env.HUGGINGFACE_TOKEN}`,
+					// Authorization: `Bearer ${process.env.HUGGINGFACE_TOKEN}`,
+					Authorization: `Bearer ${huggingFaceToken}`,
 				},
 				method: "POST",
 				body: imageBlob,

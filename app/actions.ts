@@ -5,6 +5,7 @@ import { actionClient } from "@/lib/safe-action"
 import { updateUser } from "@/edgedb/crud/mutations"
 import { auth } from "@/edgedb-next-client"
 import { profileLoadMorePosts } from "@/edgedb/crud/queries"
+import { describeImage } from "@/cli/seed"
 
 export const logoutAction = actionClient.action(async () => {
 	const { signout } = auth.createServerActions()
@@ -23,8 +24,8 @@ export const updateUserAction = actionClient
 		const client = session.client
 		try {
 			await updateUser.run(client, { bio, place, displayName })
-		} catch {
-			return { failure: "Error with EdgeDB" }
+		} catch (err) {
+			return { failure: "EdgeDB error:", errorDetails: err.message }
 		}
 	})
 
@@ -43,8 +44,29 @@ export const profileLoadMostPostsAction = actionClient
 				pageNumber,
 			})
 			return res
-		} catch {
-			return { failure: "Error with EdgeDB" }
+		} catch (err) {
+			return { failure: "EdgeDB error:", errorDetails: err.message }
+		}
+	})
+
+const describeImageSchema = z.object({
+	imageBlob: z.any(),
+	huggingFaceToken: z.string(),
+})
+export const describeImageAction = actionClient
+	.schema(describeImageSchema)
+	.action(async ({ parsedInput: { imageBlob, huggingFaceToken } }) => {
+		console.log("wtf try run it")
+		const session = auth.getSession()
+		console.log(session, "sesh")
+		if (session) {
+			try {
+				let imageDescription = await describeImage(imageBlob, huggingFaceToken)
+				console.log(imageDescription)
+				return imageDescription
+			} catch (err) {
+				return { failure: "Error describing image:", errorDetails: err.message }
+			}
 		}
 	})
 
