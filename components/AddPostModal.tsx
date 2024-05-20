@@ -155,7 +155,7 @@ export default observer(function AddPostModal(props: Props) {
 										resize: "none",
 										overflow: "auto",
 									}}
-									className="mt-1 block w-full px-3 bg-white border-none sm:text-sm textarea-placeholder"
+									className="mt-1 block w-full px-3 bg-white text-neutral-800 border-none sm:text-sm textarea-placeholder"
 								/>
 							</div>
 							<div style={{ height: "150px" }}>
@@ -212,7 +212,7 @@ export default observer(function AddPostModal(props: Props) {
 								</label>
 								<input
 									placeholder="Search categories..."
-									className="mt-1 block w-full px-3 bg-white border-none sm:text-sm textarea-placeholder"
+									className="mt-1 block w-full px-3 bg-white text-neutral-800 border-none sm:text-sm textarea-placeholder"
 								></input>
 
 								<div className="flex flex-wrap gap-2 pl-2 mt-2">
