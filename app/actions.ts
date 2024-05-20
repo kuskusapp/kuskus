@@ -9,7 +9,7 @@ import { describeImageSchema } from "./schemas"
 import OpenAI from "openai"
 
 const openai = new OpenAI({
-	apiKey: "sk-proj-",
+	apiKey: process.env.OPENAI_API_KEY,
 })
 
 export const logoutAction = actionClient.action(async () => {
@@ -62,26 +62,26 @@ export const describeImageAction = actionClient
 			// TODO: support more types by: adjust the MIME type if it's different
 			const dataUrl = `data:image/jpeg;base64,${imageAsBase64}`
 			console.log(dataUrl, "data url")
-			const response = await openai.chat.completions.create({
-				model: "gpt-4o",
-				messages: [
-					{
-						role: "user",
-						content: [
-							{ type: "text", text: "What’s in this image?" },
-							{
-								type: "image_url",
-								image_url: {
-									url: dataUrl,
-								},
-							},
-						],
-					},
-				],
-			})
-			console.log(response.choices[0], "ai description of image")
-			console.log(response, "response")
-			console.log("finished")
+			// const response = await openai.chat.completions.create({
+			// 	model: "gpt-4o",
+			// 	messages: [
+			// 		{
+			// 			role: "user",
+			// 			content: [
+			// 				{ type: "text", text: "What’s in this image?" },
+			// 				{
+			// 					type: "image_url",
+			// 					image_url: {
+			// 						url: dataUrl,
+			// 					},
+			// 				},
+			// 			],
+			// 		},
+			// 	],
+			// })
+			// console.log(response, "response")
+			// console.log(response.choices[0], "ai description of image")
+			// console.log("finished")
 			return true
 			// const buffer = Buffer.from(imageAsBase64, "base64")
 			// console.log(buffer, "buffer")
