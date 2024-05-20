@@ -29,7 +29,7 @@ export default function Icons(props: Props) {
 					></path>
 				</svg>
 			)
-			break
+
 		case "World":
 			return (
 				<svg width={width} height={height} fill="none" viewBox="0 0 24 24">
@@ -58,7 +58,7 @@ export default function Icons(props: Props) {
 					/>
 				</svg>
 			)
-			break
+
 		case "Checkmark":
 			return (
 				<svg width={width} height={height} fill="none" viewBox="0 0 24 24">
@@ -71,7 +71,7 @@ export default function Icons(props: Props) {
 					/>
 				</svg>
 			)
-			break
+
 		case "Plus":
 			return (
 				<svg width={width} height={height} fill="none" viewBox="0 0 24 24">
@@ -105,6 +105,36 @@ export default function Icons(props: Props) {
 						strokeWidth="1.5"
 						d="M19.25 17L14.75 17"
 					/>
+				</svg>
+			)
+		case "Tag":
+			return (
+				<svg width={width} height={height} fill="none" viewBox="0 0 24 24">
+					<circle cx="15" cy="9" r="1" fill="currentColor"></circle>
+					<path
+						stroke="currentColor"
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						stroke-width="1.5"
+						d="M12 4.75H19.25V12L12.5535 18.6708C11.7544 19.4668 10.4556 19.445 9.68369 18.6226L5.28993 13.941C4.54041 13.1424 4.57265 11.8895 5.36226 11.1305L12 4.75Z"
+					></path>
+				</svg>
+			)
+		case "Camera":
+			return (
+				<svg width={width} height={height} fill="none" viewBox="0 0 24 24">
+					<path
+						stroke="currentColor"
+						stroke-linecap="round"
+						stroke-width="1.5"
+						d="M19.25 17.25V9.75C19.25 8.64543 18.3546 7.75 17.25 7.75H16.9167C16.513 7.75 16.1489 7.50726 15.9936 7.13462L15.2564 5.36538C15.1011 4.99274 14.737 4.75 14.3333 4.75H9.66667C9.26297 4.75 8.89886 4.99274 8.74359 5.36538L8.00641 7.13462C7.85114 7.50726 7.48703 7.75 7.08333 7.75H6.75C5.64543 7.75 4.75 8.64543 4.75 9.75V17.25C4.75 18.3546 5.64543 19.25 6.75 19.25H17.25C18.3546 19.25 19.25 18.3546 19.25 17.25Z"
+					></path>
+					<path
+						stroke="currentColor"
+						stroke-linecap="round"
+						stroke-width="1.5"
+						d="M15.25 13C15.25 14.7949 13.7949 16.25 12 16.25C10.2051 16.25 8.75 14.7949 8.75 13C8.75 11.2051 10.2051 9.75 12 9.75C13.7949 9.75 15.25 11.2051 15.25 13Z"
+					></path>
 				</svg>
 			)
 	}
