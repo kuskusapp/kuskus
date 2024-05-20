@@ -45,6 +45,9 @@ async function seed() {
 			case "clearPosts":
 				await clearPosts()
 				break
+			case "test":
+				await test()
+				break
 			case undefined:
 				console.log("No command provided")
 				break
@@ -259,6 +262,20 @@ function readJPGFilesFromFolder(
 			),
 		}))
 	return jpgFiles
+}
+
+async function test() {
+	const images = readJPGFilesFromFolder("seed/foods")
+	const rightImage = images[4]
+	console.log(rightImage.fileName)
+	console.log(rightImage.buffer)
+	// for (const image of images) {
+	// 	let imageDescription = await describeImage(
+	// 		image.buffer,
+	// 		process.env.HUGGINGFACE_TOKEN,
+	// 	)
+	// 	console.log(imageDescription)
+	// }
 }
 
 await seed()

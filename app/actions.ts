@@ -5,7 +5,7 @@ import { actionClient } from "@/lib/safe-action"
 import { updateUser } from "@/edgedb/crud/mutations"
 import { auth } from "@/edgedb-next-client"
 import { profileLoadMorePosts } from "@/edgedb/crud/queries"
-import { describeImage } from "@/cli/seed"
+import { describeImageSchema } from "./schemas"
 
 export const logoutAction = actionClient.action(async () => {
 	const { signout } = auth.createServerActions()
@@ -49,24 +49,19 @@ export const profileLoadMostPostsAction = actionClient
 		}
 	})
 
-const describeImageSchema = z.object({
-	imageBlob: z.any(),
-	huggingFaceToken: z.string(),
-})
 export const describeImageAction = actionClient
 	.schema(describeImageSchema)
-	.action(async ({ parsedInput: { imageBlob, huggingFaceToken } }) => {
-		console.log("wtf try run it")
+	.action(async ({ parsedInput: { imageAsBase64, huggingFaceToken } }) => {
 		const session = auth.getSession()
-		console.log(session, "sesh")
-		if (session) {
-			try {
-				let imageDescription = await describeImage(imageBlob, huggingFaceToken)
-				console.log(imageDescription)
-				return imageDescription
-			} catch (err) {
-				return { failure: "Error describing image:", errorDetails: err.message }
-			}
+		const client = session.client
+		try {
+			const buffer = Buffer.from(imageAsBase64, "base64")
+			console.log(buffer, "buffer")
+			// TODO: describe image
+			// TODO: load image into ronin
+			return buffer
+		} catch (err) {
+			return { failure: "Describe image error:", errorDetails: err.message }
 		}
 	})
 

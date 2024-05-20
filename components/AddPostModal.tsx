@@ -36,10 +36,6 @@ export default observer(function AddPostModal(props: Props) {
 		initialCount: 8,
 	})
 
-	// useEffect(() => {
-	// 	console.log(process.env, "env")
-	// }, [])
-
 	const addCategory = (
 		category: string,
 		event: React.MouseEvent<HTMLButtonElement>,
@@ -125,12 +121,18 @@ export default observer(function AddPostModal(props: Props) {
 									onChange={async (e: React.ChangeEvent<HTMLInputElement>) => {
 										e.stopPropagation()
 										if (e.target.files && e.target.files[0]) {
-											const uploadedFile = e.target.files[0]
-											local.uploadedImage.set(uploadedFile)
-											await describeImageAction({
-												imageBlob: e.target.files[0],
-												huggingFaceToken: process.env.HUGGINGFACE_TOKEN,
-											})
+											try {
+												const uploadedFile = e.target.files[0]
+												local.uploadedImage.set(uploadedFile)
+												const base64Image = await fileToBase64(uploadedFile)
+												await describeImageAction({
+													imageAsBase64: base64Image,
+													huggingFaceToken:
+														process.env.NEXT_PUBLIC_HUGGINGFACE_TOKEN,
+												})
+											} catch (err) {
+												console.log(err)
+											}
 										}
 									}}
 									className="hidden"
@@ -270,3 +272,16 @@ export default observer(function AddPostModal(props: Props) {
 		</div>
 	)
 })
+
+function fileToBase64(file: Blob): Promise<string> {
+	return new Promise((resolve, reject) => {
+		const reader = new FileReader()
+		reader.onload = () => {
+			resolve(reader.result as string)
+		}
+		reader.onerror = (error) => {
+			reject(error)
+		}
+		reader.readAsDataURL(file)
+	})
+}
