@@ -14,7 +14,7 @@ export default observer(function AddPostModal(props: Props) {
 		isOpen: props.open,
 		title: "",
 		description: "",
-		image: null as File | null,
+		uploadedImage: null as File | null,
 		foodCategories: [
 			"Sushi",
 			"Breakfast",
@@ -60,13 +60,6 @@ export default observer(function AddPostModal(props: Props) {
 			.get()
 			.filter((cat) => !local.categories.get().includes(cat)),
 	].slice(0, local.initialCount.get())
-
-	const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-		event.stopPropagation()
-		if (event.target.files && event.target.files[0]) {
-			local.image.set(event.target.files[0])
-		}
-	}
 
 	useEffect(() => {
 		local.isOpen.set(props.open)
@@ -122,7 +115,12 @@ export default observer(function AddPostModal(props: Props) {
 								<input
 									type="file"
 									id="image"
-									onChange={handleImageChange}
+									onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+										e.stopPropagation()
+										if (e.target.files && e.target.files[0]) {
+											local.uploadedImage.set(e.target.files[0])
+										}
+									}}
 									className="hidden"
 								/>
 							</label>
