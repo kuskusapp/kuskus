@@ -1,8 +1,12 @@
 "use client"
+import z from "zod"
 import { observer, useObservable } from "@legendapp/state/react"
 import React, { useEffect } from "react"
 import { AIcon, PhotoIcon } from "../public/svg/modal-icons"
 import { describeImageAction } from "@/app/actions"
+import { useForm } from "react-hook-form"
+import { describeImageSchema } from "@/app/schemas"
+import { zodResolver } from "@hookform/resolvers/zod"
 
 interface Props {
 	open: boolean
@@ -34,6 +38,11 @@ export default observer(function AddPostModal(props: Props) {
 		],
 		categories: [] as string[],
 		initialCount: 8,
+	})
+	const { register, handleSubmit } = useForm<
+		z.infer<typeof describeImageSchema>
+	>({
+		resolver: zodResolver(describeImageSchema),
 	})
 
 	const addCategory = (
@@ -71,10 +80,6 @@ export default observer(function AddPostModal(props: Props) {
 		props.onClose()
 	}
 
-	const handleSubmit = () => {
-		handleCloseModal()
-	}
-
 	if (!local.isOpen.get()) return null
 
 	return (
@@ -92,12 +97,18 @@ export default observer(function AddPostModal(props: Props) {
 				</span>
 				<div className="inline-block w-full max-w-6xl my-8 overflow-hidden text-left align-middle transition-all transform shadow-xl rounded-2xl">
 					<form
-						onSubmit={(e) => {
-							e.preventDefault()
-							handleSubmit()
-						}}
+						onSubmit={handleSubmit(async (data) => {
+							console.log(data, "data")
+							// const res = await buyProduct(data);
+							// Do something useful with the result.
+						})}
 						className="flex"
 						style={{ minHeight: "700px" }}
+						// TODO: remove, old
+						// onSubmit={(e) => {
+						// 	e.preventDefault()
+						// 	handleCloseModal()
+						// }}
 					>
 						<div
 							className="w-2/3 flex justify-center items-center m-auto"
@@ -127,8 +138,6 @@ export default observer(function AddPostModal(props: Props) {
 												const base64Image = await fileToBase64(uploadedFile)
 												await describeImageAction({
 													imageAsBase64: base64Image,
-													huggingFaceToken:
-														process.env.NEXT_PUBLIC_HUGGINGFACE_TOKEN,
 												})
 											} catch (err) {
 												console.log(err)

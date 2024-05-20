@@ -6,6 +6,11 @@ import { updateUser } from "@/edgedb/crud/mutations"
 import { auth } from "@/edgedb-next-client"
 import { profileLoadMorePosts } from "@/edgedb/crud/queries"
 import { describeImageSchema } from "./schemas"
+import OpenAI from "openai"
+
+const openai = new OpenAI({
+	apiKey: "sk-proj-",
+})
 
 export const logoutAction = actionClient.action(async () => {
 	const { signout } = auth.createServerActions()
@@ -51,15 +56,38 @@ export const profileLoadMostPostsAction = actionClient
 
 export const describeImageAction = actionClient
 	.schema(describeImageSchema)
-	.action(async ({ parsedInput: { imageAsBase64, huggingFaceToken } }) => {
-		const session = auth.getSession()
-		const client = session.client
+	.action(async ({ parsedInput: { imageAsBase64 } }) => {
 		try {
-			const buffer = Buffer.from(imageAsBase64, "base64")
-			console.log(buffer, "buffer")
+			// assumes image is a JPEG
+			// TODO: support more types by: adjust the MIME type if it's different
+			const dataUrl = `data:image/jpeg;base64,${imageAsBase64}`
+			console.log(dataUrl, "data url")
+			const response = await openai.chat.completions.create({
+				model: "gpt-4o",
+				messages: [
+					{
+						role: "user",
+						content: [
+							{ type: "text", text: "What’s in this image?" },
+							{
+								type: "image_url",
+								image_url: {
+									url: dataUrl,
+								},
+							},
+						],
+					},
+				],
+			})
+			console.log(response.choices[0], "ai description of image")
+			console.log(response, "response")
+			console.log("finished")
+			return true
+			// const buffer = Buffer.from(imageAsBase64, "base64")
+			// console.log(buffer, "buffer")
 			// TODO: describe image
 			// TODO: load image into ronin
-			return buffer
+			// return buffer
 		} catch (err) {
 			return { failure: "Describe image error:", errorDetails: err.message }
 		}
