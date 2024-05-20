@@ -14,7 +14,7 @@ export default observer(function AddPostModal(props: Props) {
 		isOpen: props.open,
 		title: "",
 		description: "",
-		uploadedImage: null as File | null,
+		uploadedImage: null as Blob | null,
 		foodCategories: [
 			"Sushi",
 			"Breakfast",
@@ -111,7 +111,9 @@ export default observer(function AddPostModal(props: Props) {
 								className="mt-1 w-full h-full flex justify-center items-center focus:outline-none cursor-pointer"
 								htmlFor="image"
 							>
-								<PhotoIcon className="h-10 w-10 text-white hover:text-neutral-800" />
+								{!local.uploadedImage.get() && (
+									<PhotoIcon className="h-10 w-10 text-white hover:text-neutral-800" />
+								)}
 								<input
 									type="file"
 									id="image"
@@ -124,6 +126,13 @@ export default observer(function AddPostModal(props: Props) {
 									className="hidden"
 								/>
 							</label>
+							{local.uploadedImage.get() && (
+								<img
+									// @ts-ignore
+									src={URL.createObjectURL(local.uploadedImage.get())}
+									className="max-w-full max-h-full"
+								/>
+							)}
 						</div>
 						<div className="flex flex-col glass-background">
 							<div>
