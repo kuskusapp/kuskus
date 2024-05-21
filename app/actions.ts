@@ -64,6 +64,7 @@ export const describeImageAction = actionClient
 	.schema(describeImageSchema)
 	.action(async ({ parsedInput: { image } }) => {
 		try {
+			console.log("running....")
 			// TODO: uncomment when there is input box with code to guard AI use
 			// const response = await openai.chat.completions.create({
 			// 	model: "gpt-4o",

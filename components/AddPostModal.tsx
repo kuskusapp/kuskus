@@ -35,14 +35,11 @@ export default observer(function AddPostModal(props: Props) {
 			"Healthy",
 			"Steak",
 			"Cocktail",
-			"Burger",
-			"Indian",
-			"Curry",
 			"Soup",
 			"Coffee",
 		],
 		categories: [] as string[],
-		initialCount: 8,
+		initialCount: 6,
 	})
 	const router = useRouter()
 
@@ -89,10 +86,13 @@ export default observer(function AddPostModal(props: Props) {
 				<span className="inline-block h-screen align-middle" aria-hidden="true">
 					&#8203;
 				</span>
-				<div className="inline-block w-full max-w-7xl my-8 overflow-hidden text-left align-middle transition-all transform shadow-xl rounded-2xl">
+				<div
+					className="inline-block w-full max-w-7xl my-8 overflow-hidden text-left align-middle transition-all transform shadow-xl rounded-2xl"
+					style={{ minHeight: "100%" }}
+				>
 					<form
 						className="flex"
-						style={{ minHeight: "650px" }}
+						style={{ minHeight: "100%" }}
 						onSubmit={(e) => {
 							e.preventDefault()
 						}}
@@ -157,10 +157,11 @@ export default observer(function AddPostModal(props: Props) {
 							<div>
 								<label
 									htmlFor="description"
-									className="block text-xs font-normal text-white text-opacity-60 py-2 pl-4 mb-2"
+									className="block text-xs font-normal text-white text-opacity-60 py-2 mb-2"
 									style={{
 										borderBottom: "1px solid #2c2c2c",
-										width: "400px",
+										width: "100%",
+										paddingLeft: "1rem",
 									}}
 								>
 									Description
@@ -181,12 +182,21 @@ export default observer(function AddPostModal(props: Props) {
 									className="bg-inherit mt-1 block w-full px-3 text-white border-none sm:text-sm textarea-placeholder"
 								/>
 							</div>
-							<div style={{ height: "150px" }}>
+
+							{/* HEEEEEEEEEEEREEEEEEEEEEEEEEEEEEEEE */}
+
+							<div
+								style={{
+									minHeight: "220px",
+									height: local.aiDescriptionLoading.get() ? "auto" : "220px",
+								}}
+							>
 								<label
-									className="block text-xs font-normal text-white text-opacity-60 pb-2 pl-4 mb-2"
+									className="block text-xs font-normal text-white text-opacity-60 pb-2"
 									style={{
 										borderBottom: "1px solid #2c2c2c",
-										width: "400px",
+										width: "100%",
+										paddingLeft: "1rem",
 									}}
 								>
 									Image Description
@@ -194,31 +204,22 @@ export default observer(function AddPostModal(props: Props) {
 								<p className="font-thin text-white text-sm pl-4"></p>
 								<div
 									style={{
-										position: "relative",
-										width: "400px",
-										height: "100px",
+										display: "flex",
+										flexDirection: "row",
+										width: "100%",
+										marginTop: "10px",
 									}}
 								>
-									<div
-										style={{
-											position: "absolute",
-											display: "flex",
-											flexDirection: "row",
-											gap: "2px",
-											right: "0",
-											bottom: "0",
-										}}
-									>
-										{local.aiDescriptionLoading.get() && <AiThinking />}
-									</div>
-									<div
-										className="p-4 text-xs"
-										style={{ width: "400px", overflowWrap: "break-word" }}
-									>
-										{local.aiDescription.get()}
-									</div>
+									{local.aiDescriptionLoading.get() && <AiThinking />}
+								</div>
+								<div
+									className="p-0 text-xs bg-inherit text-white"
+									style={{ width: "400px", overflowWrap: "break-word" }}
+								>
+									{local.aiDescription.get()}
 								</div>
 							</div>
+
 							<div
 								style={{
 									width: "320px",
@@ -227,10 +228,12 @@ export default observer(function AddPostModal(props: Props) {
 								}}
 							>
 								<label
-									className="block text-xs font-normal text-white text-opacity-60 pb-2 pl-4 mb-2"
+									className="block text-xs font-normal text-white text-opacity-60 pb-2 mb-2"
 									style={{
 										borderBottom: "1px solid #2c2c2c",
 										width: "400px",
+										marginBottom: "10px",
+										paddingLeft: "1rem",
 									}}
 								>
 									Categories
