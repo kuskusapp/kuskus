@@ -88,7 +88,7 @@ export default observer(function Profile(props: Props) {
 				}}
 				postsState={undefined}
 			/>
-			<div className="min-h-screen h-full ">
+			<div className="h-full md:flex-col flex-row flex">
 				{local.postViewData.get() !== null && local.postViewData.get().src && (
 					<ViewPost
 						post={{
@@ -105,7 +105,7 @@ export default observer(function Profile(props: Props) {
 					/>
 				)}
 				<Sidebar />
-				<div className="ml-[380px] min-h-full flex">
+				<div className="md:ml-[380px] m-0 min-h-full flex">
 					<ImageGrid
 						images={images}
 						onClick={(img) => {
@@ -124,7 +124,7 @@ function Sidebar() {
 	// 	hoveredSidebarTab: "Following",
 	// })
 	return (
-		<div className="fixed left-0 w-[380px] top-0 h-screen bg-secondary">
+		<div className="fixed left-0 md:w-[380px] w-full top-0 h-screen bg-secondary">
 			<div className="w-full h-3/5 bg-substitute">Profile</div>
 			<div className="p-[24px] pt-[34px] flex flex-col justify-between h-2/5">
 				<div className="flex flex-col gap-[2px]">

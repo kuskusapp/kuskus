@@ -109,11 +109,20 @@ export default observer(function Home(props: Props) {
 			<main className="flex flex-col pt-[120px] gap-[240px] items-center [&::-webkit-scrollbar]:hidden">
 				<div className="flex flex-col gap-[36px] items-center px-[40px] p-[20px]">
 					<div className="justify-center items-center gap-[8px] flex flex-col">
-						<h1 className="text-6xl tracking-wider text-center font-bold">
+						<h1
+							style={{ fontSize: "clamp(20px, 7vw, 60px)" }}
+							className=" tracking-wider text-center font-bold"
+						>
 							<span className="text-purple-400">Share</span> and{" "}
 							<span className="text-fuchsia-400">Rate</span> food
 						</h1>
-						<p className=" text-[20px] w-[500px] font-light text-white/80 text-center">
+						<p
+							style={{
+								fontSize: "clamp(10px, 3vw, 20px)",
+								width: "clamp(250px, 50vw, 500px)",
+							}}
+							className=" font-light text-white/80 text-center"
+						>
 							KusKus is community for food lovers, who love to see new places
 							and share them
 						</p>
