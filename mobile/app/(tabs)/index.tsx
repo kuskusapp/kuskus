@@ -1,11 +1,26 @@
-import React from "react"
-import { ScrollView, StyleSheet, TouchableOpacity, Text } from "react-native"
+import { useState, useContext, createContext } from "react"
+import { ScrollView, StyleSheet, TouchableOpacity } from "react-native"
 import { ThemedView } from "../../components/Themed"
 import { Post } from "../../components/Post"
 import Feather from "@expo/vector-icons/Feather"
+import Bookmarks from "./bookmarks"
+
+type PostType = {
+	id: number
+	imageSrc: string
+	aiDescription?: string
+}
+
+type BookmarksContextType = {
+	bookmarks: number[]
+	toggleBookmark: (id: number) => void
+	posts: PostType[]
+}
+
+export const BookmarksContext = createContext<BookmarksContextType | null>(null)
 
 export default function Schedule() {
-	const [posts, setPosts] = React.useState([
+	const [posts, setPosts] = useState<PostType[]>([
 		{
 			id: 1,
 			imageSrc:
@@ -26,23 +41,37 @@ export default function Schedule() {
 		},
 	])
 
+	const [bookmarks, setBookmarks] = useState<number[]>([])
+
+	const toggleBookmark = (id: number) => {
+		setBookmarks((prevBookmarks) =>
+			prevBookmarks.includes(id)
+				? prevBookmarks.filter((bookmarkId) => bookmarkId !== id)
+				: [...prevBookmarks, id],
+		)
+	}
+
 	return (
-		<ThemedView style={styles.container}>
-			<TouchableOpacity style={styles.addPostButton}>
-				<Feather name="camera" size={24} color="black" />
-			</TouchableOpacity>
-			<ScrollView>
-				{posts.map((post) => {
-					return (
+		<BookmarksContext.Provider value={{ bookmarks, toggleBookmark, posts }}>
+			<ThemedView style={styles.container}>
+				<TouchableOpacity style={styles.addPostButton}>
+					<Feather name="camera" size={24} color="black" />
+				</TouchableOpacity>
+				<ScrollView>
+					{posts.map((post) => (
 						<Post
+							key={post.id}
 							imageSrc={post.imageSrc}
-							aiDescription={post.aiDescription}
+							aiDescription={post.aiDescription || ""}
 							id={post.id}
+							isBookmarked={bookmarks.includes(post.id)}
+							onBookmarkToggle={toggleBookmark}
 						/>
-					)
-				})}
-			</ScrollView>
-		</ThemedView>
+					))}
+				</ScrollView>
+				<Bookmarks />
+			</ThemedView>
+		</BookmarksContext.Provider>
 	)
 }
 

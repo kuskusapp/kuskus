@@ -1,39 +1,45 @@
-import { useScrollToTop } from "@react-navigation/native"
-import React, { useState } from "react"
-import { StyleSheet } from "react-native"
-import { FlatList } from "react-native-gesture-handler"
-import { Button } from "react-native"
-import * as WebBrowser from "expo-web-browser"
+import React, { useContext } from "react"
+import { StyleSheet, FlatList } from "react-native"
 import { ThemedView } from "../../components/Themed"
+import { Post } from "../../components/Post"
 import { theme } from "../../theme"
-import { WebBrowserResult } from "expo-web-browser"
+import { BookmarksContext } from "./index"
 
 export default function Bookmarks() {
-	const scrollRef = React.useRef<FlatList>(null)
-	useScrollToTop(scrollRef)
+	const context = useContext(BookmarksContext)
+	if (!context) {
+		return <ThemedView style={styles.container} />
+	}
+	const { bookmarks, toggleBookmark, posts } = context
 
-	// const [result, setResult] = useState<WebBrowserResult | null>(null)
+	if (!Array.isArray(posts) || !Array.isArray(bookmarks)) {
+		return <ThemedView style={styles.container} />
+	}
 
-	// const _handlePressButtonAsync = async () => {
-	// 	const result = await WebBrowser.openBrowserAsync(
-	// 		"http://localhost:10702/db/edgedb/ext/auth/ui/signin?challenge=Yd2x9LYCEIx59ZBOV0Gwfnz47g9X6BLA4W5jke93VB0",
-	// 	)
-	// 	setResult(result)
-	// }
+	const bookmarkedPosts = posts.filter((post) => bookmarks.includes(post.id))
 
 	return (
 		<ThemedView
 			style={styles.container}
-			darkColor={theme.colorDarkBlue}
+			darkColor={theme.colorBlack}
 			lightColor={theme.colorWhite}
 		>
-			{/* <Button
-				title="Login"
-				onPress={async () => {
-					await _handlePressButtonAsync()
-					console.log(result, "result")
+			<FlatList
+				data={bookmarkedPosts}
+				keyExtractor={(item) => item.id.toString()}
+				renderItem={({ item }) => {
+					console.log("pls work:", item)
+					return (
+						<Post
+							imageSrc={item.imageSrc}
+							aiDescription={item.aiDescription || ""}
+							id={item.id}
+							isBookmarked={bookmarks.includes(item.id)}
+							onBookmarkToggle={toggleBookmark}
+						/>
+					)
 				}}
-			/> */}
+			/>
 		</ThemedView>
 	)
 }
@@ -41,9 +47,6 @@ export default function Bookmarks() {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-	},
-	flatListContainer: {
-		paddingTop: theme.space16,
 	},
 	bookmarks: {
 		flex: 1,

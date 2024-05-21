@@ -10,21 +10,28 @@ type Props = {
 	imageSrc: string
 	aiDescription: string
 	id: number
+	onBookmarkToggle: (id: number) => void
+	bookmarked: boolean
 }
-// TODO: where to put id
-export function Post(props: Props) {
+
+export function Post({
+	imageSrc,
+	aiDescription,
+	id,
+	onBookmarkToggle,
+	bookmarked,
+}: Props) {
 	const shadow = useThemeColor({ light: theme.dropShadow, dark: undefined })
 	const [activeLike, setActiveLike] = useState(false)
 	const [likeCount, setLikeCount] = useState(0)
-	const [bookmarked, setBookmarked] = useState(false)
 
 	const addLike = () => {
 		setActiveLike(!activeLike)
 		setLikeCount(activeLike ? likeCount - 1 : likeCount + 1)
 	}
 
-	const addBookmark = () => {
-		setBookmarked(!bookmarked)
+	const handleBookmark = () => {
+		onBookmarkToggle(id)
 	}
 
 	return (
@@ -35,16 +42,19 @@ export function Post(props: Props) {
 				style={[styles.container, shadow]}
 			>
 				<ThemedView darkColor="rgba(155,223,177, 0.5)" style={styles.post}>
-					<TouchableOpacity style={styles.bookmarkButton} onPress={addBookmark}>
+					<TouchableOpacity
+						style={styles.bookmarkButton}
+						onPress={handleBookmark}
+					>
 						<Ionicons
-							name={bookmarked ? "bookmark-outline" : "bookmark"}
+							name={bookmarked ? "bookmark" : "bookmark-outline"}
 							size={20}
 							color="black"
 						/>
 					</TouchableOpacity>
 					<View style={styles.profile}>
 						<Image
-							source={{ uri: props.imageSrc }}
+							source={{ uri: imageSrc }}
 							style={{ width: 40, height: 40, borderRadius: 50 }}
 						/>
 						<View>
@@ -57,7 +67,7 @@ export function Post(props: Props) {
 						</View>
 					</View>
 					<Image
-						source={{ uri: props.imageSrc }}
+						source={{ uri: imageSrc }}
 						style={{ width: "100%", height: 300 }}
 						resizeMode="contain"
 					/>
