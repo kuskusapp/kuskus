@@ -182,9 +182,6 @@ export default observer(function AddPostModal(props: Props) {
 									className="bg-inherit mt-1 block w-full px-3 text-white border-none sm:text-sm textarea-placeholder"
 								/>
 							</div>
-
-							{/* HEEEEEEEEEEEREEEEEEEEEEEEEEEEEEEEE */}
-
 							<div
 								style={{
 									minHeight: "220px",
@@ -277,8 +274,14 @@ export default observer(function AddPostModal(props: Props) {
 							{local.uploadingPost.get() && <Loader />}
 							{!local.uploadingPost.get() && (
 								<button
-									className="bg-yellow-500 hover:bg-yellow-700 text-black font-semibold py-2 px-4 rounded-xl"
+									className={`py-2 px-4 rounded-xl font-semibold ${
+										local.uploadedImageAsFile.get()
+											? "bg-yellow-500 hover:bg-yellow-700 text-black"
+											: "bg-neutral-700 text-neutral-500 opacity-50"
+									}`}
+									disabled={!local.uploadedImageAsFile.get()}
 									onClick={async () => {
+										if (!local.uploadedImageAsFile.get()) return
 										local.uploadingPost.set(true)
 										const data = new FormData()
 										// TODO: issue with legend state https://discord.com/channels/1241991273322119250/1241992660776914948/1242475348134858853
