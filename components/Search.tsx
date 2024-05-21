@@ -3,7 +3,11 @@ import { IoIosSearch } from "react-icons/io"
 import { FaMapPin } from "react-icons/fa6"
 import PermissionModal from "./PermissonModal"
 
-export default function Search() {
+export type SearchProps = {
+	onInput: (input: string) => void
+}
+
+export default function Search(props: SearchProps) {
 	const [isPressed, setIsPressed] = useState(false)
 	const [showModal, setShowModal] = useState(false)
 
@@ -39,6 +43,9 @@ export default function Search() {
 						}}
 						onBlur={() => {
 							// setInputFocused(false)
+						}}
+						onChange={(e) => {
+							props.onInput(e.target.value)
 						}}
 					/>
 				</label>

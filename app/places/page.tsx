@@ -4,7 +4,7 @@ import Search from "@/components/Search"
 import ViewPost from "@/components/ViewPost"
 import { AnimatePresence, motion } from "framer-motion"
 import Image from "next/image"
-import { useState } from "react"
+import * as react from "react"
 import "swiper/css"
 import "swiper/css/navigation"
 import "swiper/css/pagination"
@@ -56,10 +56,16 @@ const recommendedPlaces = [
 ]
 
 export default function Places() {
-	const [inputFocused, setInputFocused] = useState(false)
-	const [isModalOpen, setIsModalOpen] = useState<{} | null>(null)
+	const [inputFocused, setInputFocused] = react.useState(false)
+	const [isModalOpen, setIsModalOpen] = react.useState<{} | null>(null)
 
-	const [hovered, setHovered] = useState("")
+	const [hovered, setHovered] = react.useState("")
+
+	const [search_input, setSearchInput] = react.useState("")
+
+	react.useEffect(() => {
+		console.log(search_input, "search_input")
+	}, [search_input])
 
 	return (
 		<>
@@ -67,7 +73,7 @@ export default function Places() {
 
 			<div className=" justify-center px-5 pt-5 relative">
 				<div className="w-full flex-center">
-					<Search />
+					<Search onInput={setSearchInput} />
 				</div>
 				<div className="pb-20 space-y-10">
 					<div className="pt-10">

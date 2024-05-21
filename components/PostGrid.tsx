@@ -1,8 +1,7 @@
 import { observer, useObservable } from "@legendapp/state/react"
 import { AnimatePresence, motion } from "framer-motion"
-import ViewPost from "./ViewPost"
 
-type Image = {
+export type PostGridImage = {
 	id: string
 	alt: string
 	width: number
@@ -24,10 +23,10 @@ function getShortestColumn(heights: number[]): number {
 }
 
 export function ImageGrid(props: {
-	images: Image[]
-	onClick: (img: Image) => void
+	images: PostGridImage[]
+	onClick: (img: PostGridImage) => void
 }) {
-	const columns: Image[][] = new Array(COLUMNS)
+	const columns: PostGridImage[][] = new Array(COLUMNS)
 	const heights: number[] = new Array(COLUMNS)
 
 	for (let i = 0; i < COLUMNS; i += 1) {
@@ -59,7 +58,7 @@ export function ImageGrid(props: {
 }
 
 const LazyImage = observer(function LazyImage(props: {
-	image: Image
+	image: PostGridImage
 	onClick: () => void
 }) {
 	const local = useObservable({

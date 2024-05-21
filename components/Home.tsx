@@ -1,24 +1,16 @@
 "use client"
 import { homeAuthReturn, homePublicReturn } from "@/edgedb/crud/queries"
 import { observer, useObservable } from "@legendapp/state/react"
-import { useMemo } from "react"
+import * as react from "react"
 import ActionBar from "./ActionBar"
 import AddPostModal from "./AddPostModal"
-import { ImageGrid } from "./PostGrid"
+import { ImageGrid, PostGridImage } from "./PostGrid"
 import Search from "./Search"
 import SignInAndSignUp from "./SignInAndSignUp"
 import ViewPost from "./ViewPost"
 
-type Image = {
-	id: string
-	alt: string
-	width: number
-	height: number
-	src: string
-	preview: string
-}
-
 let lastId = 0
+
 interface Props {
 	publicData: homePublicReturn
 	authData?: homeAuthReturn
@@ -31,7 +23,7 @@ export default observer(function Home(props: Props) {
 	const authData = useObservable(props.authData)
 	const local = useObservable({
 		inputFocused: false,
-		addPostModalOpen: true,
+		addPostModalOpen: false,
 		activeItem: null as string | null,
 		hoveredDish: null as number | null,
 		dishes: [],
@@ -52,12 +44,12 @@ export default observer(function Home(props: Props) {
 			"Chinese",
 			"Japanese",
 		],
-		showViewPost: null as Image | null,
+		showViewPost: null as PostGridImage | null,
 	})
 
 	const posts = publicData.posts.get() ?? []
-	const images = useMemo(() => {
-		return posts.map((post) => {
+	const images = react.useMemo(() => {
+		return posts.map((post): PostGridImage => {
 			return {
 				id: (lastId++).toString(),
 				alt: "",
@@ -69,20 +61,21 @@ export default observer(function Home(props: Props) {
 		})
 	}, [posts])
 
-	// useEffect(() => {
-	// 	console.log(posts, "posts")
-	// 	console.log(images, "images")
-	// }, [posts])
+	const [search_input, setSearchInput] = react.useState("")
+
+	react.useEffect(() => {
+		console.log(search_input, "search_input")
+	}, [search_input])
 
 	return (
 		<>
-			{local.showViewPost.get() !== null ? (
+			{local.showViewPost.get() && (
 				<ViewPost
 					post={local.showViewPost.get()}
 					closeModal={local.showViewPost.set}
 				/>
-			) : null}
-			{authData.get() !== null && (
+			)}
+			{authData.get() && (
 				<>
 					<ActionBar
 						activeTab="Home"
@@ -127,7 +120,7 @@ export default observer(function Home(props: Props) {
 							and share them
 						</p>
 					</div>
-					<Search />
+					<Search onInput={setSearchInput} />
 				</div>
 			</main>
 			<div className="flex pt-[160px]">
