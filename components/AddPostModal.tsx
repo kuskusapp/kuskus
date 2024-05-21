@@ -1,7 +1,7 @@
 "use client"
 import { describeImageAction, uploadPostAction } from "@/app/actions"
 import { observer, useObservable } from "@legendapp/state/react"
-import React from "react"
+import React, { useRef } from "react"
 import { FaImage } from "react-icons/fa6"
 import { IoCloseOutline } from "react-icons/io5"
 import AiThinking from "./AiThinking"
@@ -42,6 +42,7 @@ export default observer(function AddPostModal(props: Props) {
 		categories: [] as string[],
 		initialCount: 8,
 	})
+	const imageUploadFormRef = useRef<HTMLFormElement>(null)
 
 	const addCategory = (
 		category: string,
@@ -102,16 +103,17 @@ export default observer(function AddPostModal(props: Props) {
 				</span>
 				<div className="inline-block w-full max-w-7xl my-8 overflow-hidden text-left align-middle transition-all transform shadow-xl rounded-2xl">
 					<form
-						// onSubmit={(e) => {
-						// 	e.preventDefault()
-						// 	handleSubmit()
-						// }}
+						ref={imageUploadFormRef}
 						className="flex"
 						style={{ minHeight: "650px" }}
 						action={async (formData) => {
 							// await getAiDescription()
 							console.log(formData, "form data")
 						}}
+						// onSubmit={(e) => {
+						// 	e.preventDefault()
+						// 	handleSubmit()
+						// }}
 					>
 						<div
 							className="w-4/5 flex h-[650px] justify-center items-center m-auto"
@@ -139,27 +141,30 @@ export default observer(function AddPostModal(props: Props) {
 									type="file"
 									id="image"
 									onChange={async (e: React.ChangeEvent<HTMLInputElement>) => {
-										e.stopPropagation()
-										if (e.target.files && e.target.files[0]) {
-											try {
-												local.aiDescriptionLoading.set(true)
-												const uploadedFile = e.target.files[0]
-												local.uploadedImage.set(uploadedFile)
-												const base64Image = await fileToBase64(uploadedFile)
-												local.uploadedImageAsBase64.set(base64Image)
-												const resp = await describeImageAction({
-													imageAsBase64: base64Image,
-												})
-												if (resp.data) {
-													// @ts-ignore
-													local.aiDescription.set(resp.data)
-												}
-												local.aiDescriptionLoading.set(false)
-											} catch (err) {
-												local.aiDescriptionLoading.set(false)
-												console.log(err)
-											}
+										if (imageUploadFormRef.current) {
+											imageUploadFormRef.current.submit()
 										}
+										// e.stopPropagation()
+										// if (e.target.files && e.target.files[0]) {
+										// 	try {
+										// 		local.aiDescriptionLoading.set(true)
+										// 		const uploadedFile = e.target.files[0]
+										// 		local.uploadedImage.set(uploadedFile)
+										// 		const base64Image = await fileToBase64(uploadedFile)
+										// 		local.uploadedImageAsBase64.set(base64Image)
+										// 		const resp = await describeImageAction({
+										// 			imageAsBase64: base64Image,
+										// 		})
+										// 		if (resp.data) {
+										// 			// @ts-ignore
+										// 			local.aiDescription.set(resp.data)
+										// 		}
+										// 		local.aiDescriptionLoading.set(false)
+										// 	} catch (err) {
+										// 		local.aiDescriptionLoading.set(false)
+										// 		console.log(err)
+										// 	}
+										// }
 									}}
 									className="hidden"
 								/>
