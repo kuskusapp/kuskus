@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
 		paddingVertical: theme.space8,
 		paddingHorizontal: theme.space24,
 		borderRadius: theme.borderRadius6,
-		backgroundColor: theme.colorReactDarkBlue,
+		backgroundColor: theme.colorBlack,
 		minWidth: 150,
 		minHeight: 40,
 		alignItems: "center",
