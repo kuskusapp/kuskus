@@ -1,7 +1,8 @@
 import React from "react"
-import { ScrollView, StyleSheet } from "react-native"
+import { ScrollView, StyleSheet, TouchableOpacity, Text } from "react-native"
 import { ThemedView } from "../../components/Themed"
 import { Post } from "../../components/Post"
+import Feather from "@expo/vector-icons/Feather"
 
 export default function Schedule() {
 	const [posts, setPosts] = React.useState([
@@ -27,6 +28,9 @@ export default function Schedule() {
 
 	return (
 		<ThemedView style={styles.container}>
+			<TouchableOpacity style={styles.addPostButton}>
+				<Feather name="camera" size={24} color="black" />
+			</TouchableOpacity>
 			<ScrollView>
 				{posts.map((post) => {
 					return (
@@ -45,6 +49,16 @@ export default function Schedule() {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		marginTop: 100,
+		paddingTop: 90,
+	},
+	addPostButton: {
+		position: "absolute",
+		zIndex: 1,
+		top: 40,
+		right: 20,
+		width: 50,
+		height: 50,
+		justifyContent: "center",
+		alignItems: "center",
 	},
 })
