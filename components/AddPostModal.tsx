@@ -109,7 +109,7 @@ export default observer(function AddPostModal(props: Props) {
 						className="flex"
 						style={{ minHeight: "650px" }}
 						action={async (formData) => {
-							"use server"
+							// await getAiDescription()
 							console.log(formData, "form data")
 						}}
 					>
