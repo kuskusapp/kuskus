@@ -213,8 +213,11 @@ export default observer(function AddPostModal(props: Props) {
 									{local.aiDescriptionLoading.get() && <AiThinking />}
 								</div>
 								<div
-									className="p-0 text-xs bg-inherit text-white"
-									style={{ width: "400px", overflowWrap: "break-word" }}
+									className="p-0 text-xs bg-inherit text-white px-2"
+									style={{
+										width: "400px",
+										overflowWrap: "break-word",
+									}}
 								>
 									{local.aiDescription.get()}
 								</div>
