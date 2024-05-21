@@ -4,6 +4,17 @@ import type { PageProps } from "./$types"
 
 // const openai = new OpenAI()
 
+export default async function Chat({ params }: PageProps) {
+	// return (
+	// 	<PlaceCard
+	// 		name="Bułka z Masłem Włodkowica"
+	// 		imageUrl="https://lh5.googleusercontent.com/p/AF1QipNc_A88yvJ1uJGvtC8X7MEczd32xFjeVIkWfB3R=w408-h408-k-no"
+	// 	/>
+	// )
+
+	return <ChatAuth data={""} />
+}
+
 // const sendMessage = (prompt: string) => generateText({
 //   model: 'gpt-4o'
 //   system: "you are a friendly weather assistant!",
@@ -65,40 +76,25 @@ import type { PageProps } from "./$types"
 // 	})
 // }
 
-interface PlaceCardProps {
-	name: string
-	imageUrl: string
-}
-const PlaceCard: React.FC<PlaceCardProps> = ({ name, imageUrl }) => {
-	return (
-		<div className=" shadow-md rounded-lg overflow-hidden">
-			<img src={imageUrl} alt={name} className="w-full h-40 object-cover" />
-			<div className="p-4">
-				<h3 className="text-lg font-bold">{name}</h3>
-				<div className="flex items-center mt-2">
-					<svg
-						className="w-4 h-4 fill-current text-yellow-500 ml-1"
-						viewBox="0 0 20 20"
-					>
-						<path d="M10 15l-5.5 3 1-5.5L0 7h6L10 2l4 5h6l-5.5 5.5 1 5.5z" />
-					</svg>
-				</div>
-			</div>
-		</div>
-	)
-}
-
-export default async function Chat({ params }: PageProps) {
-	const session = auth.getSession()
-	const client = session.client
-	const authenticated = await session.isSignedIn()
-
-	// return (
-	// 	<PlaceCard
-	// 		name="Bułka z Masłem Włodkowica"
-	// 		imageUrl="https://lh5.googleusercontent.com/p/AF1QipNc_A88yvJ1uJGvtC8X7MEczd32xFjeVIkWfB3R=w408-h408-k-no"
-	// 	/>
-	// )
-
-	return <ChatAuth data={""} />
-}
+// interface PlaceCardProps {
+// 	name: string
+// 	imageUrl: string
+// }
+// const PlaceCard: React.FC<PlaceCardProps> = ({ name, imageUrl }) => {
+// 	return (
+// 		<div className=" shadow-md rounded-lg overflow-hidden">
+// 			<img src={imageUrl} alt={name} className="w-full h-40 object-cover" />
+// 			<div className="p-4">
+// 				<h3 className="text-lg font-bold">{name}</h3>
+// 				<div className="flex items-center mt-2">
+// 					<svg
+// 						className="w-4 h-4 fill-current text-yellow-500 ml-1"
+// 						viewBox="0 0 20 20"
+// 					>
+// 						<path d="M10 15l-5.5 3 1-5.5L0 7h6L10 2l4 5h6l-5.5 5.5 1 5.5z" />
+// 					</svg>
+// 				</div>
+// 			</div>
+// 		</div>
+// 	)
+// }

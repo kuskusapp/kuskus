@@ -1,9 +1,11 @@
 "use client"
+import { describeImageAction } from "@/app/actions"
 import { observer, useObservable } from "@legendapp/state/react"
-import React, { useEffect } from "react"
-import { AIcon } from "../public/svg/modal-icons"
+import React from "react"
 import { FaImage } from "react-icons/fa6"
 import { IoCloseOutline } from "react-icons/io5"
+import { AIcon } from "../public/svg/modal-icons"
+import AiThinking from "./AiThinking"
 
 interface Props {
 	open: boolean
@@ -16,7 +18,11 @@ export default observer(function AddPostModal(props: Props) {
 		isOpen: props.open,
 		title: "",
 		description: "",
-		image: null as File | null,
+		aiDescription: "",
+		aiDescriptionLoading: false,
+		aiGuessesCategories: [] as string[],
+		aiCategoriesGuessLoading: false,
+		uploadedImage: null as Blob | null,
 		foodCategories: [
 			"Sushi",
 			"Breakfast",
@@ -62,17 +68,6 @@ export default observer(function AddPostModal(props: Props) {
 			.get()
 			.filter((cat) => !local.categories.get().includes(cat)),
 	].slice(0, local.initialCount.get())
-
-	const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-		event.stopPropagation()
-		if (event.target.files && event.target.files[0]) {
-			local.image.set(event.target.files[0])
-		}
-	}
-
-	useEffect(() => {
-		local.isOpen.set(props.open)
-	}, [props.open])
 
 	const handleCloseModal = () => {
 		local.isOpen.set(false)
@@ -122,11 +117,42 @@ export default observer(function AddPostModal(props: Props) {
 								className="mt-1 w-full h-full flex justify-center items-center focus:outline-none cursor-pointer"
 								htmlFor="image"
 							>
-								<FaImage className="h-20 w-20 text-white hover:text-white" />
+								{!local.uploadedImage.get() && (
+									<FaImage className="h-20 w-20 text-white hover:text-white" />
+								)}
+								{local.uploadedImage.get() && (
+									<img
+										// @ts-ignore
+										src={URL.createObjectURL(local.uploadedImage.get())}
+										className="max-w-full max-h-full"
+									/>
+								)}
 								<input
 									type="file"
 									id="image"
-									onChange={handleImageChange}
+									onChange={async (e: React.ChangeEvent<HTMLInputElement>) => {
+										e.stopPropagation()
+										if (e.target.files && e.target.files[0]) {
+											try {
+												local.aiDescriptionLoading.set(true)
+												const uploadedFile = e.target.files[0]
+												local.uploadedImage.set(uploadedFile)
+												const base64Image = await fileToBase64(uploadedFile)
+												const resp = await describeImageAction({
+													imageAsBase64: base64Image,
+												})
+												if (resp.data) {
+													// @ts-ignore
+													local.aiDescription.set(resp.data)
+												}
+												console.log(resp.data, "resp")
+												local.aiDescriptionLoading.set(false)
+											} catch (err) {
+												local.aiDescriptionLoading.set(false)
+												console.log(err)
+											}
+										}
+									}}
 									className="hidden"
 								/>
 							</label>
@@ -167,7 +193,7 @@ export default observer(function AddPostModal(props: Props) {
 										width: "400px",
 									}}
 								>
-									AI DESCRIPTION
+									Image Description
 								</label>
 								<p className="font-thin text-white text-sm pl-4"></p>
 								<div
@@ -188,10 +214,13 @@ export default observer(function AddPostModal(props: Props) {
 											bottom: "0",
 										}}
 									>
-										<AIcon className="spin text-purple-600 h-4 w-4" />
-										<p className="font-thin text-right text-xs text-white pr-4">
-											AI is thinking
-										</p>
+										{local.aiDescriptionLoading.get() && <AiThinking />}
+									</div>
+									<div
+										className="p-4 text-xs"
+										style={{ width: "400px", overflowWrap: "break-word" }}
+									>
+										{local.aiDescription.get()}
 									</div>
 								</div>
 							</div>
@@ -253,3 +282,16 @@ export default observer(function AddPostModal(props: Props) {
 		</div>
 	)
 })
+
+function fileToBase64(file: Blob): Promise<string> {
+	return new Promise((resolve, reject) => {
+		const reader = new FileReader()
+		reader.onload = () => {
+			resolve(reader.result as string)
+		}
+		reader.onerror = (error) => {
+			reject(error)
+		}
+		reader.readAsDataURL(file)
+	})
+}
