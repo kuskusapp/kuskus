@@ -6,6 +6,7 @@ import { profileLoadMorePosts } from "@/edgedb/crud/queries"
 import { actionClient } from "@/lib/safe-action"
 import OpenAI from "openai"
 import { z } from "zod"
+import { create, get } from "ronin"
 
 const openai = new OpenAI({
 	apiKey: process.env.OPENAI_API_KEY,
@@ -78,12 +79,36 @@ export const describeImageAction = actionClient
 			// 	],
 			// })
 			// return response.choices[0]
-			await new Promise((resolve) => setTimeout(resolve, 3000))
+			await new Promise((resolve) => setTimeout(resolve, 1000))
 			return "The image shows a serving of French toast topped with banana slices, blueberries, and a drizzle of syrup, likely maple syrup. The dish appears to be garnished with a light dusting of powdered sugar and is presented on a dark plate. The layers of the toast and the toppings look visually appealing and appetizing."
 		} catch (err) {
 			return { failure: "Describe image error:", errorDetails: err.message }
 		}
 	})
+
+const uploadPostSchema = z.object({
+	imageAsBase64: z.string(),
+	aiDescription: z.string(),
+	categories: z.optional(z.array(z.string())),
+	description: z.optional(z.string()),
+})
+export const uploadPostAction = actionClient
+	.schema(uploadPostSchema)
+	.action(
+		async ({
+			parsedInput: { imageAsBase64, aiDescription, categories, description },
+		}) => {
+			try {
+				const res = await create.post.with({
+					photo: imageAsBase64,
+					aiDescription: aiDescription,
+				})
+				return "success"
+			} catch (err) {
+				return { failure: "Upload image error:", errorDetails: err.message }
+			}
+		},
+	)
 
 // const globalSearchSchema = z.object({
 //   query: z.string(),

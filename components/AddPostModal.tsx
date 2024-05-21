@@ -1,10 +1,9 @@
 "use client"
-import { describeImageAction } from "@/app/actions"
+import { describeImageAction, uploadPostAction } from "@/app/actions"
 import { observer, useObservable } from "@legendapp/state/react"
 import React from "react"
 import { FaImage } from "react-icons/fa6"
 import { IoCloseOutline } from "react-icons/io5"
-import { AIcon } from "../public/svg/modal-icons"
 import AiThinking from "./AiThinking"
 
 interface Props {
@@ -18,6 +17,7 @@ export default observer(function AddPostModal(props: Props) {
 		isOpen: props.open,
 		title: "",
 		description: "",
+		uploadedImageAsBase64: "",
 		aiDescription: "",
 		aiDescriptionLoading: false,
 		aiGuessesCategories: [] as string[],
@@ -74,8 +74,12 @@ export default observer(function AddPostModal(props: Props) {
 		props.onClose()
 	}
 
-	const handleSubmit = () => {
-		handleCloseModal()
+	const handleSubmit = async () => {
+		await uploadPostAction({
+			imageAsBase64: local.uploadedImageAsBase64.get(),
+			aiDescription: local.aiDescription.get(),
+		})
+		// handleCloseModal()
 	}
 
 	if (!local.isOpen.get()) return null
@@ -98,12 +102,16 @@ export default observer(function AddPostModal(props: Props) {
 				</span>
 				<div className="inline-block w-full max-w-7xl my-8 overflow-hidden text-left align-middle transition-all transform shadow-xl rounded-2xl">
 					<form
-						onSubmit={(e) => {
-							e.preventDefault()
-							handleSubmit()
-						}}
+						// onSubmit={(e) => {
+						// 	e.preventDefault()
+						// 	handleSubmit()
+						// }}
 						className="flex"
 						style={{ minHeight: "650px" }}
+						action={async (formData) => {
+							"use server"
+							console.log(formData, "form data")
+						}}
 					>
 						<div
 							className="w-4/5 flex h-[650px] justify-center items-center m-auto"
@@ -138,6 +146,7 @@ export default observer(function AddPostModal(props: Props) {
 												const uploadedFile = e.target.files[0]
 												local.uploadedImage.set(uploadedFile)
 												const base64Image = await fileToBase64(uploadedFile)
+												local.uploadedImageAsBase64.set(base64Image)
 												const resp = await describeImageAction({
 													imageAsBase64: base64Image,
 												})
@@ -145,7 +154,6 @@ export default observer(function AddPostModal(props: Props) {
 													// @ts-ignore
 													local.aiDescription.set(resp.data)
 												}
-												console.log(resp.data, "resp")
 												local.aiDescriptionLoading.set(false)
 											} catch (err) {
 												local.aiDescriptionLoading.set(false)
