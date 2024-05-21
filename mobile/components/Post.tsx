@@ -3,6 +3,7 @@ import { StyleSheet, View, Image } from "react-native"
 import { ThemedText, ThemedView, useThemeColor } from "./Themed"
 import { theme } from "../theme"
 import AntDesign from "@expo/vector-icons/AntDesign"
+import { Ionicons } from "@expo/vector-icons"
 import { TouchableOpacity } from "react-native-gesture-handler"
 
 type Props = {
@@ -16,10 +17,15 @@ export function Post(props: Props) {
 	const shadow = useThemeColor({ light: theme.dropShadow, dark: undefined })
 	const [activeLike, setActiveLike] = useState(false)
 	const [likeCount, setLikeCount] = useState(0)
+	const [bookmarked, setBookmarked] = useState(false)
 
 	const addLike = () => {
 		setActiveLike(!activeLike)
 		setLikeCount(activeLike ? likeCount - 1 : likeCount + 1)
+	}
+
+	const toggleBookmark = () => {
+		setBookmarked(!bookmarked)
 	}
 
 	return (
@@ -30,6 +36,17 @@ export function Post(props: Props) {
 				style={[styles.container, shadow]}
 			>
 				<ThemedView darkColor="rgba(155,223,177, 0.5)" style={styles.post}>
+					<TouchableOpacity
+						style={styles.bookmarkButton}
+						onPress={toggleBookmark}
+					>
+						{/* not working */}
+						<Ionicons
+							name={bookmarked ? "bookmark" : "bookmark-outline"}
+							size={24}
+							color="black"
+						/>
+					</TouchableOpacity>
 					<View style={styles.profile}>
 						<Image
 							source={{ uri: props.imageSrc }}
@@ -94,5 +111,11 @@ const styles = StyleSheet.create({
 		marginTop: 10,
 		flexDirection: "row",
 		alignItems: "center",
+	},
+	bookmarkButton: {
+		position: "absolute",
+		top: 10,
+		right: 10,
+		zIndex: 1,
 	},
 })
