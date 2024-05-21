@@ -1,7 +1,6 @@
 import * as WebBrowser from "expo-web-browser"
 import { Appearance } from "react-native"
-
-import { theme } from "@/theme"
+import { theme } from "../theme"
 
 export default function openBrowserAsync(url: string) {
 	const colorScheme = Appearance.getColorScheme()

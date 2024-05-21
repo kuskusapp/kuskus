@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native"
 import { ThemedView, useThemeColor } from "./Themed"
 import { TouchableOpacity } from "react-native-gesture-handler"
 
-import { theme } from "@/theme"
+import { theme } from "../theme"
 
 export function IconButton({
 	onPress,

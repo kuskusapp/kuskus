@@ -11,7 +11,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context"
 
 import { ThemedText, ThemedView } from "./Themed"
 
-import { theme } from "@/theme"
+import { theme } from "../theme"
 
 const minHeight = 0
 

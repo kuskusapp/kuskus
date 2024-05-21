@@ -4,8 +4,8 @@ import { StyleSheet } from "react-native"
 import { Button } from "./Button"
 import { ThemedText, ThemedView, useThemeColor } from "./Themed"
 
-import { useKuskusStore } from "@/store/kuskusStore"
-import { theme } from "@/theme"
+import { useKuskusStore } from "../store/kuskusStore"
+import { theme } from "../theme"
 
 export function NotFound({ message }: { message: string }) {
 	const refetch = useKuskusStore((state) => state.refreshData)

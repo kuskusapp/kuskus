@@ -2,8 +2,7 @@ import { StyleSheet, ActivityIndicator } from "react-native"
 import { TouchableOpacity } from "react-native-gesture-handler"
 
 import { ThemedText, useThemeColor } from "./Themed"
-
-import { theme } from "@/theme"
+import { theme } from "../theme"
 
 const buttonTextSize = 22
 

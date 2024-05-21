@@ -2,7 +2,7 @@ import { StyleSheet, View } from "react-native"
 
 import { ThemedText, ThemedView } from "./Themed"
 
-import { theme } from "@/theme"
+import { theme } from "../theme"
 
 export function InfoSection({
 	title,

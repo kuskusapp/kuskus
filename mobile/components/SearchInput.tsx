@@ -4,7 +4,7 @@ import { TextInput, StyleSheet, View } from "react-native"
 
 import { useThemeColor } from "./Themed"
 
-import { theme } from "@/theme"
+import { theme } from "../theme"
 import { PressableArea } from "./PressableArea"
 
 export function SearchInput({
