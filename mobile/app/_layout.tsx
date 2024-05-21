@@ -14,14 +14,12 @@ import { setBackgroundColorAsync } from "expo-system-ui"
 import { useEffect, useState } from "react"
 import { Platform, useColorScheme } from "react-native"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
-
 import { theme } from "../theme"
-
-import { AnimatedBootSplash } from "@/components/AnimatedBootSplash"
-import { OfflineBanner } from "@/components/OfflineBanner"
-import { ThemedText } from "@/components/Themed"
-import { useKuskusStore } from "@/store/kuskusStore"
-import { useQuickActionCallback } from "@/utils/useQuickActionCallback"
+import { useKuskusStore } from "../store/kuskusStore"
+import { useQuickActionCallback } from "../utils/useQuickActionCallback"
+import { AnimatedBootSplash } from "../components/AnimatedBootSplash"
+import { ThemedText } from "../components/Themed"
+import { OfflineBanner } from "../components/OfflineBanner"
 
 Notifications.setNotificationHandler({
 	handleNotification: async () => ({

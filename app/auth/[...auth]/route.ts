@@ -4,10 +4,11 @@ import { Octokit } from "@octokit/core"
 
 export const { GET, POST } = auth.createAuthRouteHandlers({
 	async onBuiltinUICallback({ error, tokenData, isSignUp }, req) {
-		console.log(req.headers, "req.headers")
-		console.log(error, "error")
-		console.log(tokenData, "tokenData")
-		console.log(isSignUp, "isSignUp")
+		// console.log(req.headers, "req.headers")
+		// console.log(error, "error")
+		// console.log(tokenData, "tokenData")
+		// console.log(isSignUp, "isSignUp")
+
 		if (error) {
 			console.error("sign in failed", error)
 		}

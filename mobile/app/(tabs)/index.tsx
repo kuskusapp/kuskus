@@ -1,7 +1,7 @@
-import { Post } from "@/components/Post"
-import { ThemedView } from "@/components/Themed"
 import React from "react"
 import { ScrollView, StyleSheet } from "react-native"
+import { ThemedView } from "../../components/Themed"
+import { Post } from "../../components/Post"
 
 export default function Schedule() {
 	const [posts, setPosts] = React.useState([

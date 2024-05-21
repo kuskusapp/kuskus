@@ -1,9 +1,9 @@
 import { useScrollToTop } from "@react-navigation/native"
 import React from "react"
 import { StyleSheet } from "react-native"
-import { ThemedView, useThemeColor } from "@/components/Themed"
-import { theme } from "@/theme"
 import { ScrollView } from "react-native-gesture-handler"
+import { ThemedView, useThemeColor } from "../../components/Themed"
+import { theme } from "../../theme"
 
 export default function Info() {
 	const backgroundColor = useThemeColor({

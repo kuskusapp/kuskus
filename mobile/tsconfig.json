@@ -1,9 +1,10 @@
 {
 	"extends": "expo/tsconfig.base",
 	"compilerOptions": {
-		"strict": true,
-		"paths": {
-			"@/*": ["./*"]
-		}
+		"strict": true
+		// TODO: breaks https://discord.com/channels/695411232856997968/1242153343628083200/1242203965702012928, not sure how to fix
+		// "paths": {
+		// 	"@/*": ["./*"]
+		// }
 	}
 }
