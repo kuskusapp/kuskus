@@ -12,6 +12,7 @@ export const homePublic = e.select({
 	),
 	posts: e.select(e.Post, () => ({
 		imageUrl: true,
+		aiDescription: true,
 		roninId: true,
 		imageWidth: true,
 		imageHeight: true,
@@ -63,20 +64,24 @@ export const profileAuth = e.params(
 			"else",
 			e.global.current_user,
 		)
-		return e.select(user, () => ({
+		return e.select(user, (u) => ({
 			name: true,
 			bio: true,
 			place: true,
 			displayName: true,
 			profilePhotoUrl: true,
-			createdPosts: {
+			createdPosts: e.select(u.createdPosts, (p) => ({
 				offset: 0,
 				limit: 6,
+				order_by: {
+					expression: p.created,
+					direction: e.DESC,
+				},
 				imageUrl: true,
 				imageWidth: true,
 				imageHeight: true,
 				imagePreviewBase64Hash: true,
-			},
+			})),
 		}))
 	},
 )

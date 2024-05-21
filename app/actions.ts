@@ -1,12 +1,13 @@
 "use server"
 
 import { auth } from "@/edgedb-next-client"
-import { updateUser } from "@/edgedb/crud/mutations"
+import { createPost, updateUser } from "@/edgedb/crud/mutations"
 import { profileLoadMorePosts } from "@/edgedb/crud/queries"
 import { actionClient } from "@/lib/safe-action"
 import OpenAI from "openai"
+import { create } from "ronin"
 import { z } from "zod"
-import { create, get } from "ronin"
+import { zfd } from "zod-form-data"
 
 const openai = new OpenAI({
 	apiKey: process.env.OPENAI_API_KEY,
@@ -55,12 +56,15 @@ export const profileLoadMostPostsAction = actionClient
 	})
 
 const describeImageSchema = z.object({
-	imageAsBase64: z.string(),
+	image: zfd.formData({
+		imageAsBase64: z.string(),
+	}),
 })
 export const describeImageAction = actionClient
 	.schema(describeImageSchema)
-	.action(async ({ parsedInput: { imageAsBase64 } }) => {
+	.action(async ({ parsedInput: { image } }) => {
 		try {
+			// TODO: uncomment when there is input box with code to guard AI use
 			// const response = await openai.chat.completions.create({
 			// 	model: "gpt-4o",
 			// 	messages: [
@@ -71,45 +75,59 @@ export const describeImageAction = actionClient
 			// 				{
 			// 					type: "image_url",
 			// 					image_url: {
-			// 						url: imageAsBase64,
+			// 						url: image.imageAsBase64,
 			// 					},
 			// 				},
 			// 			],
 			// 		},
 			// 	],
 			// })
-			// return response.choices[0]
-			await new Promise((resolve) => setTimeout(resolve, 1000))
-			return "The image shows a serving of French toast topped with banana slices, blueberries, and a drizzle of syrup, likely maple syrup. The dish appears to be garnished with a light dusting of powdered sugar and is presented on a dark plate. The layers of the toast and the toppings look visually appealing and appetizing."
+			await new Promise((resolve) => setTimeout(resolve, 3000))
+			return `This image shows a bamboo steamer basket containing six dumplings. The steamer is placed on a white plate with a mesh liner inside to prevent the dumplings from sticking. The scene suggests that the dumplings are likely being served at a restaurant. The background shows part of a table and seating, indicating a dining environment.`
+			// return `The image shows a web interface with a black background. On the left side, there is a placeholder or icon that typically represents an image, indicating that an image should be here but is currently missing or not loaded. On the right side, there is a section labeled "DESCRIPTION" with a text box that says "Write a description..." and another labeled "Image Description". Below this, there are several categories displayed in oval buttons, including "Sushi", "Breakfast", "Smoothie", "Vegan", "Pasta", "Salad", "Healthy", and "Steak". At the bottom right, there is a yellow button labeled "Share".`
+			// return response.choices[0].message.content
 		} catch (err) {
 			return { failure: "Describe image error:", errorDetails: err.message }
 		}
 	})
 
 const uploadPostSchema = z.object({
-	imageAsBase64: z.string(),
+	imageFile: zfd.formData({
+		image: zfd.file(),
+	}),
 	aiDescription: z.string(),
+	description: z.string(),
 	categories: z.optional(z.array(z.string())),
-	description: z.optional(z.string()),
 })
 export const uploadPostAction = actionClient
 	.schema(uploadPostSchema)
 	.action(
 		async ({
-			parsedInput: { imageAsBase64, aiDescription, categories, description },
+			parsedInput: { imageFile, aiDescription, categories, description },
 		}) => {
+			const session = auth.getSession()
+			const client = session.client
+			await new Promise((resolve) => setTimeout(resolve, 3000))
 			try {
-				const res = await create.post.with({
-					photo: imageAsBase64,
+				const roninPost = await create.post.with({
+					photo: imageFile.image,
+					aiDescription,
+					description,
+				})
+				const dbPost = await createPost.run(client, {
+					imageUrl: roninPost.photo.src,
+					roninId: roninPost.id,
+					imageWidth:
+						"width" in roninPost.photo.meta ? roninPost.photo.meta.width : 0,
+					imageHeight:
+						"height" in roninPost.photo.meta ? roninPost.photo.meta.height : 0,
+					imagePreviewBase64Hash: roninPost.photo.placeholder.base64,
 					aiDescription: aiDescription,
 				})
+				console.log(dbPost, "db post")
 				return "success"
 			} catch (err) {
 				return { failure: "Upload image error:", errorDetails: err.message }
 			}
 		},
 	)
-
-export async function getAiDescription(imageAsBase64: string) {
-	console.log(imageAsBase64)
-}

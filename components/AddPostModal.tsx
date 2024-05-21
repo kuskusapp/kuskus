@@ -1,10 +1,12 @@
 "use client"
 import { describeImageAction, uploadPostAction } from "@/app/actions"
 import { observer, useObservable } from "@legendapp/state/react"
-import React, { useRef } from "react"
+import React from "react"
 import { FaImage } from "react-icons/fa6"
 import { IoCloseOutline } from "react-icons/io5"
 import AiThinking from "./AiThinking"
+import Loader from "./Loader"
+import { useRouter } from "next/navigation"
 
 interface Props {
 	open: boolean
@@ -17,12 +19,12 @@ export default observer(function AddPostModal(props: Props) {
 		isOpen: props.open,
 		title: "",
 		description: "",
-		uploadedImageAsBase64: "",
+		uploadedImageAsFile: null as File | null,
 		aiDescription: "",
 		aiDescriptionLoading: false,
 		aiGuessesCategories: [] as string[],
 		aiCategoriesGuessLoading: false,
-		uploadedImage: null as Blob | null,
+		uploadingPost: false,
 		foodCategories: [
 			"Sushi",
 			"Breakfast",
@@ -42,7 +44,7 @@ export default observer(function AddPostModal(props: Props) {
 		categories: [] as string[],
 		initialCount: 8,
 	})
-	const imageUploadFormRef = useRef<HTMLFormElement>(null)
+	const router = useRouter()
 
 	const addCategory = (
 		category: string,
@@ -57,12 +59,6 @@ export default observer(function AddPostModal(props: Props) {
 		)
 	}
 
-	const viewMore = (event: React.MouseEvent<HTMLButtonElement>) => {
-		event.preventDefault()
-		event.stopPropagation()
-		local.initialCount.set((prevCount) => prevCount + 3)
-	}
-
 	const sortedCategories = [
 		...local.categories.get(),
 		...local.foodCategories
@@ -73,14 +69,6 @@ export default observer(function AddPostModal(props: Props) {
 	const handleCloseModal = () => {
 		local.isOpen.set(false)
 		props.onClose()
-	}
-
-	const handleSubmit = async () => {
-		await uploadPostAction({
-			imageAsBase64: local.uploadedImageAsBase64.get(),
-			aiDescription: local.aiDescription.get(),
-		})
-		// handleCloseModal()
 	}
 
 	if (!local.isOpen.get()) return null
@@ -103,17 +91,11 @@ export default observer(function AddPostModal(props: Props) {
 				</span>
 				<div className="inline-block w-full max-w-7xl my-8 overflow-hidden text-left align-middle transition-all transform shadow-xl rounded-2xl">
 					<form
-						ref={imageUploadFormRef}
 						className="flex"
 						style={{ minHeight: "650px" }}
-						action={async (formData) => {
-							// await getAiDescription()
-							console.log(formData, "form data")
+						onSubmit={(e) => {
+							e.preventDefault()
 						}}
-						// onSubmit={(e) => {
-						// 	e.preventDefault()
-						// 	handleSubmit()
-						// }}
 					>
 						<div
 							className="w-4/5 flex h-[650px] justify-center items-center m-auto"
@@ -127,13 +109,13 @@ export default observer(function AddPostModal(props: Props) {
 								className="mt-1 w-full h-full flex justify-center items-center focus:outline-none cursor-pointer"
 								htmlFor="image"
 							>
-								{!local.uploadedImage.get() && (
+								{!local.uploadedImageAsFile.get() && (
 									<FaImage className="h-20 w-20 text-white hover:text-white" />
 								)}
-								{local.uploadedImage.get() && (
+								{local.uploadedImageAsFile.get() && (
 									<img
 										// @ts-ignore
-										src={URL.createObjectURL(local.uploadedImage.get())}
+										src={URL.createObjectURL(local.uploadedImageAsFile.get())}
 										className="max-w-full max-h-full"
 									/>
 								)}
@@ -141,30 +123,31 @@ export default observer(function AddPostModal(props: Props) {
 									type="file"
 									id="image"
 									onChange={async (e: React.ChangeEvent<HTMLInputElement>) => {
-										if (imageUploadFormRef.current) {
-											imageUploadFormRef.current.submit()
+										if (e.target.files && e.target.files[0]) {
+											try {
+												const uploadedFile = e.target.files[0]
+												local.uploadedImageAsFile.set(uploadedFile)
+												local.aiDescriptionLoading.set(true)
+
+												const data = new FormData()
+												data.append(
+													"imageAsBase64",
+													await fileToBase64(uploadedFile),
+												)
+												const resp = await describeImageAction({
+													image: data,
+												})
+												if (resp.data) {
+													// TODO: type well
+													// @ts-ignore
+													local.aiDescription.set(resp.data)
+												}
+												local.aiDescriptionLoading.set(false)
+											} catch (err) {
+												local.aiDescriptionLoading.set(false)
+												console.log(err)
+											}
 										}
-										// e.stopPropagation()
-										// if (e.target.files && e.target.files[0]) {
-										// 	try {
-										// 		local.aiDescriptionLoading.set(true)
-										// 		const uploadedFile = e.target.files[0]
-										// 		local.uploadedImage.set(uploadedFile)
-										// 		const base64Image = await fileToBase64(uploadedFile)
-										// 		local.uploadedImageAsBase64.set(base64Image)
-										// 		const resp = await describeImageAction({
-										// 			imageAsBase64: base64Image,
-										// 		})
-										// 		if (resp.data) {
-										// 			// @ts-ignore
-										// 			local.aiDescription.set(resp.data)
-										// 		}
-										// 		local.aiDescriptionLoading.set(false)
-										// 	} catch (err) {
-										// 		local.aiDescriptionLoading.set(false)
-										// 		console.log(err)
-										// 	}
-										// }
 									}}
 									className="hidden"
 								/>
@@ -180,7 +163,7 @@ export default observer(function AddPostModal(props: Props) {
 										width: "400px",
 									}}
 								>
-									DESCRIPTION
+									Description
 								</label>
 								<textarea
 									id="description"
@@ -221,7 +204,6 @@ export default observer(function AddPostModal(props: Props) {
 											position: "absolute",
 											display: "flex",
 											flexDirection: "row",
-
 											gap: "2px",
 											right: "0",
 											bottom: "0",
@@ -251,13 +233,13 @@ export default observer(function AddPostModal(props: Props) {
 										width: "400px",
 									}}
 								>
-									CATEGORIES
+									Categories
 								</label>
-								<input
+								{/* TODO: add back when there is more categories */}
+								{/* <input
 									placeholder="Search categories..."
 									className="mt-1 block w-full px-3 bg-inherit font-normal text-white border-none sm:text-sm textarea-placeholder"
-								></input>
-
+								/> */}
 								<div className="flex flex-wrap gap-3 pl-2 mt-2">
 									{sortedCategories.map((category) => (
 										<button
@@ -273,7 +255,8 @@ export default observer(function AddPostModal(props: Props) {
 										</button>
 									))}
 								</div>
-								{local.initialCount.get() <
+								{/* TODO: add back when there is more categories */}
+								{/* {local.initialCount.get() <
 									local.foodCategories.get().length && (
 									<button
 										className="mt-2 ml-4 text-white text-xs font-thin cursor-pointer"
@@ -281,13 +264,38 @@ export default observer(function AddPostModal(props: Props) {
 									>
 										view more
 									</button>
-								)}
+								)} */}
 							</div>
 						</div>
 						<div className="absolute right-4 bottom-4">
-							<button className="bg-yellow-500 hover:bg-yellow-700 text-black font-semibold py-2 px-4 rounded-xl">
-								Share
-							</button>
+							{local.uploadingPost.get() && <Loader />}
+							{!local.uploadingPost.get() && (
+								<button
+									className="bg-yellow-500 hover:bg-yellow-700 text-black font-semibold py-2 px-4 rounded-xl"
+									onClick={async () => {
+										local.uploadingPost.set(true)
+										const data = new FormData()
+										// TODO: issue with legend state https://discord.com/channels/1241991273322119250/1241992660776914948/1242475348134858853
+										// @ts-ignore
+										data.append("image", local.uploadedImageAsFile.get())
+										const resp = await uploadPostAction({
+											imageFile: data,
+											aiDescription: "delete after",
+											description: local.description.get(),
+										})
+										if (resp.data) {
+											// TODO: redirect
+											local.uploadingPost.set(false)
+											router.push("/nikita")
+										} else {
+											// TODO: show toast with error
+											local.uploadingPost.set(false)
+										}
+									}}
+								>
+									Share
+								</button>
+							)}
 						</div>
 					</form>
 				</div>
@@ -296,6 +304,7 @@ export default observer(function AddPostModal(props: Props) {
 	)
 })
 
+// TODO: move to utils, maybe do this logic on server
 function fileToBase64(file: Blob): Promise<string> {
 	return new Promise((resolve, reject) => {
 		const reader = new FileReader()
