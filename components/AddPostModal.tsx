@@ -1,8 +1,9 @@
 "use client"
-import { describeImageAction } from "@/app/actions"
 import { observer, useObservable } from "@legendapp/state/react"
 import React, { useEffect } from "react"
-import { AIcon, PhotoIcon } from "../public/svg/modal-icons"
+import { AIcon } from "../public/svg/modal-icons"
+import { FaImage } from "react-icons/fa6"
+import { IoCloseOutline } from "react-icons/io5"
 
 interface Props {
 	open: boolean
@@ -15,11 +16,7 @@ export default observer(function AddPostModal(props: Props) {
 		isOpen: props.open,
 		title: "",
 		description: "",
-		aiDescription: "",
-		aiDescriptionLoading: false,
-		aiGuessesCategories: [] as string[],
-		aiCategoriesGuessLoading: false,
-		uploadedImage: null as Blob | null,
+		image: null as File | null,
 		foodCategories: [
 			"Sushi",
 			"Breakfast",
@@ -66,6 +63,13 @@ export default observer(function AddPostModal(props: Props) {
 			.filter((cat) => !local.categories.get().includes(cat)),
 	].slice(0, local.initialCount.get())
 
+	const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		event.stopPropagation()
+		if (event.target.files && event.target.files[0]) {
+			local.image.set(event.target.files[0])
+		}
+	}
+
 	useEffect(() => {
 		local.isOpen.set(props.open)
 	}, [props.open])
@@ -75,220 +79,177 @@ export default observer(function AddPostModal(props: Props) {
 		props.onClose()
 	}
 
+	const handleSubmit = () => {
+		handleCloseModal()
+	}
+
 	if (!local.isOpen.get()) return null
 
 	return (
-		<div className="fixed w-screen z-[100] h-screen flex [&::-webkit-scrollbar]:hidden backdrop-blur-sm">
-			<div className="w-[100px] p-[20px] flex justify-center">
-				<div
-					className="h-[50px] w-[50px] bg-neutral-800 cursor-pointer flex-center rounded-full  rotate-45 text-[28px]"
-					onClick={() => {
-						handleCloseModal()
-					}}
-				>
-					+
-				</div>
-			</div>
-
-			{/* <span className="inline-block h-screen align-middle" aria-hidden="true">
-					&#8203;
-				</span> */}
-
-			<form
-				// onSubmit={handleSubmit(async (data) => {
-				// 	console.log(data, "data")
-				// 	// const res = await buyProduct(data);
-				// 	// Do something useful with the result.
-				// })}
-				className="flex w-full h-full relative"
-				onSubmit={(e) => {
-					e.preventDefault()
-					handleCloseModal()
-				}}
+		<div className="fixed inset-0 z-10 overflow-y-auto">
+			<button
+				className="absolute top-10 left-20 glass-background hover:opacity-40 px-3 py-3 rounded-full z-50"
+				onClick={handleCloseModal}
 			>
-				<div className="w-2/3 flex justify-center h-full bg-neutral-800 items-center">
-					<label
-						className="mt-1 w-full h-full flex justify-center hover:text-neutral-900 transition-all items-center focus:outline-none cursor-pointer"
-						htmlFor="image"
+				<IoCloseOutline />
+			</button>
+			<div className="min-h-screen px-2 text-center">
+				<div
+					className="fixed inset-0 bg-neutral-900 opacity-95"
+					style={{ backdropFilter: "blur(30px)" }}
+				/>
+				<span className="inline-block h-screen align-middle" aria-hidden="true">
+					&#8203;
+				</span>
+				<div className="inline-block w-full max-w-7xl my-8 overflow-hidden text-left align-middle transition-all transform shadow-xl rounded-2xl">
+					<form
+						onSubmit={(e) => {
+							e.preventDefault()
+							handleSubmit()
+						}}
+						className="flex"
+						style={{ minHeight: "650px" }}
 					>
-						{!local.uploadedImage.get() && <PhotoIcon className="h-10 w-10" />}
-						<input
-							type="file"
-							id="image"
-							onChange={async (e: React.ChangeEvent<HTMLInputElement>) => {
-								e.stopPropagation()
-								if (e.target.files && e.target.files[0]) {
-									try {
-										local.aiDescriptionLoading.set(true)
-										const uploadedFile = e.target.files[0]
-										local.uploadedImage.set(uploadedFile)
-										const base64Image = await fileToBase64(uploadedFile)
-										const resp = await describeImageAction({
-											imageAsBase64: base64Image,
-										})
-										if (resp.data) {
-											// @ts-ignore
-											local.aiDescription.set(resp.data)
-										}
-										console.log(resp.data, "resp")
-										local.aiDescriptionLoading.set(false)
-									} catch (err) {
-										local.aiDescriptionLoading.set(false)
-										console.log(err)
-									}
-								}
-							}}
-							className="hidden"
-						/>
-					</label>
-					{local.uploadedImage.get() && (
-						<img
-							// @ts-ignore
-							src={URL.createObjectURL(local.uploadedImage.get())}
-							className="max-w-full max-h-full"
-						/>
-					)}
-				</div>
-				<div className="flex flex-col bg-neutral-950 relative">
-					<div>
-						<label
-							htmlFor="description"
-							className="block text-xs font-normal border-b border-white/10 text-gray-700 py-2 pl-4 mb-2"
-							style={{
-								width: "400px",
-							}}
-						>
-							Note
-						</label>
-						<textarea
-							id="note"
-							value={local.description.get()}
-							placeholder="Write note..."
-							onChange={(e) => local.description.set(e.target.value)}
-							style={{
-								height: "150px",
-								outline: "none",
-								textAlign: "left",
-								resize: "none",
-								overflow: "auto",
-							}}
-							className="bg-inherit mt-1 block border-b border-white/10 w-full px-3 text-neutral-700 border-none sm:text-sm textarea-placeholder"
-						/>
-					</div>
-					<div className="relative" style={{ height: "150px" }}>
-						<label
-							className="block text-xs font-normal border-b border-white/10 text-gray-700 pb-2 pl-4 mb-2"
-							style={{
-								width: "400px",
-							}}
-						>
-							Image Description
-						</label>
-						{local.aiDescriptionLoading.get() && (
-							<div className="absolute bottom-1 right-3 flex bg-white items-center w-fit rounded-md gap-[10px] p-1 pl-2">
-								<AIcon className="spin text-purple-600 h-4 w-4" />
-								<p className=" text-right text-[12px] text-black pr-4">
-									AI is thinking
-								</p>
-							</div>
-						)}
-						<p className="font-thin text-sm pl-4" style={{ color: "#555555" }}>
-							{local.aiDescription.get()}
-						</p>
 						<div
+							className="w-4/5 flex h-[650px] justify-center items-center m-auto"
 							style={{
-								position: "relative",
-								width: "400px",
-								height: "100px",
+								borderRight: "1px solid #2c2c2c",
+								background: "rgba(0, 0, 0, 0.95)",
+								backdropFilter: "blur(200px)",
 							}}
 						>
-							<div
-								style={{
-									position: "absolute",
-									display: "flex",
-									flexDirection: "row",
-
-									gap: "2px",
-									right: "0",
-									bottom: "0",
-								}}
+							<label
+								className="mt-1 w-full h-full flex justify-center items-center focus:outline-none cursor-pointer"
+								htmlFor="image"
 							>
-								{local.aiCategoriesGuessLoading.get() && (
-									<>
+								<FaImage className="h-20 w-20 text-white hover:text-white" />
+								<input
+									type="file"
+									id="image"
+									onChange={handleImageChange}
+									className="hidden"
+								/>
+							</label>
+						</div>
+						<div className="flex flex-col glass-background">
+							<div>
+								<label
+									htmlFor="description"
+									className="block text-xs font-normal text-white text-opacity-60 py-2 pl-4 mb-2"
+									style={{
+										borderBottom: "1px solid #2c2c2c",
+										width: "400px",
+									}}
+								>
+									DESCRIPTION
+								</label>
+								<textarea
+									id="description"
+									value={local.description.get()}
+									placeholder="Write a description..."
+									onChange={(e) => local.description.set(e.target.value)}
+									style={{
+										height: "150px",
+										outline: "none",
+										textAlign: "left",
+										color: "white",
+										resize: "none",
+										overflow: "auto",
+									}}
+									className="bg-inherit mt-1 block w-full px-3 text-white border-none sm:text-sm textarea-placeholder"
+								/>
+							</div>
+							<div style={{ height: "150px" }}>
+								<label
+									className="block text-xs font-normal text-white text-opacity-60 pb-2 pl-4 mb-2"
+									style={{
+										borderBottom: "1px solid #2c2c2c",
+										width: "400px",
+									}}
+								>
+									AI DESCRIPTION
+								</label>
+								<p className="font-thin text-white text-sm pl-4"></p>
+								<div
+									style={{
+										position: "relative",
+										width: "400px",
+										height: "100px",
+									}}
+								>
+									<div
+										style={{
+											position: "absolute",
+											display: "flex",
+											flexDirection: "row",
+
+											gap: "2px",
+											right: "0",
+											bottom: "0",
+										}}
+									>
 										<AIcon className="spin text-purple-600 h-4 w-4" />
-										<p className="font-thin text-right text-xs text-black pr-4">
+										<p className="font-thin text-right text-xs text-white pr-4">
 											AI is thinking
 										</p>
-									</>
+									</div>
+								</div>
+							</div>
+							<div
+								style={{
+									width: "320px",
+									height: "100px",
+									position: "relative",
+								}}
+							>
+								<label
+									className="block text-xs font-normal text-white text-opacity-60 pb-2 pl-4 mb-2"
+									style={{
+										borderBottom: "1px solid #2c2c2c",
+										width: "400px",
+									}}
+								>
+									CATEGORIES
+								</label>
+								<input
+									placeholder="Search categories..."
+									className="mt-1 block w-full px-3 bg-inherit font-normal text-white border-none sm:text-sm textarea-placeholder"
+								></input>
+
+								<div className="flex flex-wrap gap-3 pl-2 mt-2">
+									{sortedCategories.map((category) => (
+										<button
+											key={category}
+											className={`px-3 py-2 text-white font-light text-sm border rounded-full ${
+												local.categories.get().includes(category)
+													? "bg-inherit border-yellow-500"
+													: "bg-inherit borer-white hover:border-yellow-200"
+											}`}
+											onClick={(e) => addCategory(category, e)}
+										>
+											{category}
+										</button>
+									))}
+								</div>
+								{local.initialCount.get() <
+									local.foodCategories.get().length && (
+									<button
+										className="mt-2 ml-4 text-white text-xs font-thin cursor-pointer"
+										onClick={viewMore}
+									>
+										view more
+									</button>
 								)}
 							</div>
 						</div>
-					</div>
-					<div
-						style={{
-							width: "320px",
-							height: "100px",
-							position: "relative",
-						}}
-					>
-						<label
-							className="block text-xs font-normal text-gray-700 pb-2 pl-4 mb-2 border-b border-white/10"
-							style={{
-								width: "400px",
-							}}
-						>
-							CATEGORIES
-						</label>
-						<input
-							placeholder="Search categories..."
-							className="mt-1 block w-full px-3 bg-inherit font-normal text-gray-700 border-none sm:text-sm textarea-placeholder"
-						></input>
-
-						<div className="flex flex-wrap gap-2 pl-2 mt-2">
-							{sortedCategories.map((category) => (
-								<button
-									key={category}
-									className={`px-2 py-1 text-white font-light  text-xs border rounded-full ${
-										local.categories.get().includes(category)
-											? "bg-white/50"
-											: "bg-neutral-700 border border-neutral-600 "
-									}`}
-									onClick={(e) => addCategory(category, e)}
-								>
-									{category}
-								</button>
-							))}
-						</div>
-						{local.initialCount.get() < local.foodCategories.get().length && (
-							<button
-								className="mt-2 ml-4 text-gray-700 text-xs font-thin cursor-pointer"
-								onClick={viewMore}
-							>
-								view more
+						<div className="absolute right-4 bottom-4">
+							<button className="bg-yellow-500 hover:bg-yellow-700 text-black font-semibold py-2 px-4 rounded-xl">
+								Share
 							</button>
-						)}
-					</div>
-					<div className="absolute right-4 bottom-4">
-						<button className="bg-blue-500 hover:bg-blue-700 transition-all text-white font-semibold py-2 px-4 rounded">
-							Share
-						</button>
-					</div>
+						</div>
+					</form>
 				</div>
-			</form>
-			<div className="w-[100px] p-[20px] flex justify-center"></div>
+			</div>
 		</div>
 	)
 })
-
-function fileToBase64(file: Blob): Promise<string> {
-	return new Promise((resolve, reject) => {
-		const reader = new FileReader()
-		reader.onload = () => {
-			resolve(reader.result as string)
-		}
-		reader.onerror = (error) => {
-			reject(error)
-		}
-		reader.readAsDataURL(file)
-	})
-}
