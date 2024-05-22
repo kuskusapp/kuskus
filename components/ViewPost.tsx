@@ -3,6 +3,7 @@
 import Image from "next/image"
 import Icons from "./Icons"
 import { useState } from "react"
+import { IoCloseOutline } from "react-icons/io5"
 
 interface Props {
 	post: {
@@ -19,16 +20,16 @@ interface Props {
 export default function ViewPost(props: Props) {
 	return (
 		<div className="fixed bg-neutral-900 bg-opacity-95 w-screen z-[100] h-screen flex [&::-webkit-scrollbar]:hidden backdrop-blur-sm">
-			<div className="w-24 h-20 p-5 flex justify-center">
-				<div
-					className="h-12 w-12 bg-neutral-800 cursor-pointer flex items-center justify-center rounded-full rotate-45 text-3xl"
-					onClick={() => {
-						props.closeModal(null)
-					}}
-				>
-					+
-				</div>
-			</div>
+			{/* <div className="w-24 h-20 p-5 flex justify-center"> */}
+			<button
+				className="absolute top-10 left-20 glass-background hover:opacity-40 px-3 py-3 rounded-full z-50"
+				onClick={() => {
+					props.closeModal(null)
+				}}
+			>
+				<IoCloseOutline size={20} />
+			</button>
+			{/* </div> */}
 			<div className="w-[80%] bg-black h-[80%] flex absolute top-[10%] left-[10%] rounded-lg shadow-xl">
 				<div className="w-3/5 z-20 overflow-hidden relative flex-center h-full">
 					<div
