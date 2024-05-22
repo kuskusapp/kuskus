@@ -9,6 +9,10 @@ import Search, { search_post_grid_images } from "./Search"
 import SignInAndSignUp from "./SignInAndSignUp"
 import ViewPost from "./ViewPost"
 
+export type DeviceSize = "mobile" | "tablet" | "desktop"
+export type DeviceSizeMap = Record<DeviceSize, boolean>
+
+
 interface Props {
 	publicData: homePublicReturn
 	authData?: homeAuthReturn
@@ -43,7 +47,6 @@ export default observer(function Home(props: Props) {
 			"Japanese",
 		],
 		showViewPost: null as PostGridImage | null,
-		windowSize: null as null | number,
 	})
 
 	const posts = publicData.posts.get() ?? []
@@ -62,13 +65,6 @@ export default observer(function Home(props: Props) {
 
 	const [search_input, setSearchInput] = react.useState("")
 
-	react.useEffect(() => {
-		if (window.innerWidth <= 768) {
-			local.windowSize.set(768)
-			console.log("hi", local.windowSize.get())
-		}
-	})
-
 	// TODO: debounce search
 
 	const searched_images = react.useMemo(() => {
@@ -78,6 +74,33 @@ export default observer(function Home(props: Props) {
 		
 		return search_post_grid_images(search_input, images, 16)
 	}, [search_input, images])
+
+	const [device_size, setDeviceSize] = react.useState<DeviceSizeMap>({
+		mobile: false,
+		tablet: false,
+		desktop: true,
+	})
+
+	react.useEffect(() => {
+		const media_query_mobile = window.matchMedia("(max-width: 768px)")
+		const media_query_tablet = window.matchMedia("(max-width: 1024px)")
+
+		function handleMediaChange() {
+			setDeviceSize({
+				...device_size,
+				mobile: media_query_mobile.matches,
+				tablet: media_query_tablet.matches,
+			})
+		}
+		
+		media_query_mobile.addEventListener("change", handleMediaChange)
+		media_query_tablet.addEventListener("change", handleMediaChange)
+
+		return () => {
+			media_query_mobile.removeEventListener("change", handleMediaChange)
+			media_query_tablet.removeEventListener("change", handleMediaChange)
+		}
+	}, [])
 
 	return (
 		<>
@@ -138,7 +161,7 @@ export default observer(function Home(props: Props) {
 			<div className="flex pt-[160px]">
 				<ImageGrid
 					images={searched_images}
-					columns={local.windowSize.get() < 768 ? 3 : 1}
+					columns={device_size.mobile ? 1 : device_size.tablet ? 3 : 4}
 					onClick={(img) => {
 						local.showViewPost.set(img)
 					}}
