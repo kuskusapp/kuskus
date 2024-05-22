@@ -1,9 +1,8 @@
-import { useState, useContext, createContext } from "react"
-import { ScrollView, StyleSheet, TouchableOpacity } from "react-native"
-import { ThemedView } from "../../components/Themed"
-import { Post } from "../../components/Post"
 import Feather from "@expo/vector-icons/Feather"
-import Bookmarks from "./bookmarks"
+import { createContext, useState } from "react"
+import { ScrollView, StyleSheet, TouchableOpacity } from "react-native"
+import { Post } from "../../components/Post"
+import { ThemedView } from "../../components/Themed"
 
 type PostType = {
 	id: number
@@ -20,6 +19,10 @@ type BookmarksContextType = {
 export const BookmarksContext = createContext<BookmarksContextType | null>(null)
 
 export default function Schedule() {
+	// TODO: do tRPC or react-query calls here
+	// TODO: use token I get from /mobile-auth from website
+	// TODO: store it somehow, use that to auth requests
+	// TODO: make requests in server that return typed EdgeDB queries
 	// const session = ..
 	// const [authData] = getData()
 	// const [publicData] = getData()
@@ -68,12 +71,12 @@ export default function Schedule() {
 							imageSrc={post.imageSrc}
 							aiDescription={post.aiDescription || ""}
 							id={post.id}
-							isBookmarked={bookmarks.includes(post.id)}
+							bookmarked={bookmarks.includes(post.id)}
 							onBookmarkToggle={toggleBookmark}
 						/>
 					))}
 				</ScrollView>
-				<Bookmarks />
+				{/* <Bookmarks /> */}
 			</ThemedView>
 		</BookmarksContext.Provider>
 	)

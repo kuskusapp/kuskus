@@ -1,7 +1,7 @@
 import React, { useContext } from "react"
-import { StyleSheet, FlatList } from "react-native"
-import { ThemedView } from "../../components/Themed"
+import { FlatList, StyleSheet } from "react-native"
 import { Post } from "../../components/Post"
+import { ThemedView } from "../../components/Themed"
 import { theme } from "../../theme"
 import { BookmarksContext } from "./index"
 
@@ -33,7 +33,7 @@ export default function Bookmarks() {
 							imageSrc={item.imageSrc}
 							aiDescription={item.aiDescription || ""}
 							id={item.id}
-							isBookmarked={bookmarks.includes(item.id)}
+							bookmarked={bookmarks.includes(item.id)}
 							onBookmarkToggle={toggleBookmark}
 						/>
 					)

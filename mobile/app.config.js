@@ -5,9 +5,9 @@ const APP_ID_PREFIX = "app.kuskus"
 // These values are tied to EAS. If you would like to use EAS Build or Update
 // on this project while playing with it, then remove these values and run
 // `eas init` and `eas update:configure` to get new values for your account.
-const EAS_UPDATE_URL = ""
-const EAS_PROJECT_ID = ""
-const EAS_APP_OWNER = ""
+const EAS_UPDATE_URL = "https://u.expo.dev/37d6f992-dc74-4063-86b7-113c6530141f"
+const EAS_PROJECT_ID = "37d6f992-dc74-4063-86b7-113c6530141f"
+const EAS_APP_OWNER = "nikitavoloboev"
 
 // If you change this value, run `npx expo prebuild --clean` afterwards if you
 // are building the project locally.
