@@ -52,10 +52,10 @@ export default observer(function Profile(props: Props) {
 					pageNumber: local.pageNumber.get(),
 				})
 
-				// authData.createdPosts.set([
-				// 	...(authData.createdPosts.get() ?? []),
-				// 	...posts.data[0].createdPosts,
-				// ])
+				authData.createdPosts.set([
+					...(authData.createdPosts.get() ?? []),
+					...posts.data[0].createdPosts,
+				])
 			}
 		}
 

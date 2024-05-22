@@ -133,7 +133,8 @@ export default observer(function Home(props: Props) {
 			<div className="flex pt-[160px]">
 				<ImageGrid
 					images={images}
-					columns={local.windowSize.get() > 768 ? 3 : 1}
+					// columns={local.windowSize.get() > 768 ? 3 : 1}
+					columns={3}
 					onClick={(img) => {
 						local.showViewPost.set(img)
 					}}
