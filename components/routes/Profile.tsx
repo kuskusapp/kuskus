@@ -22,6 +22,7 @@ export default observer(function Profile(props: Props) {
 		pageNumber: 0,
 		postViewData: null,
 		showPostViewModal: false,
+		windowSize: null as null | number,
 	})
 	const posts = authData.createdPosts.get() ?? []
 	const images = useMemo(() => {
@@ -51,10 +52,10 @@ export default observer(function Profile(props: Props) {
 					pageNumber: local.pageNumber.get(),
 				})
 
-				authData.createdPosts.set([
-					...(authData.createdPosts.get() ?? []),
-					...posts.data[0].createdPosts,
-				])
+				// authData.createdPosts.set([
+				// 	...(authData.createdPosts.get() ?? []),
+				// 	...posts.data[0].createdPosts,
+				// ])
 			}
 		}
 
@@ -65,6 +66,12 @@ export default observer(function Profile(props: Props) {
 			window.removeEventListener("scroll", checkBottom)
 		}
 	}, [])
+
+	useEffect(() => {
+		if (window.innerWidth <= 768) {
+			local.windowSize.set(768)
+		}
+	})
 
 	// useEffect(() => {
 	// 	console.log(local.postViewData.get(), "post view data")
@@ -88,7 +95,7 @@ export default observer(function Profile(props: Props) {
 				}}
 				postsState={undefined}
 			/>
-			<div className="h-full md:flex-col flex-row flex">
+			<div className="h-full md:flex-row flex-col flex">
 				{local.postViewData.get() !== null && local.postViewData.get().src && (
 					<ViewPost
 						post={{
@@ -107,6 +114,7 @@ export default observer(function Profile(props: Props) {
 				<Sidebar />
 				<div className="md:ml-[380px] m-0 min-h-full flex">
 					<ImageGrid
+						columns={local.windowSize.get() > 768 ? 3 : 1}
 						images={images}
 						onClick={(img) => {
 							local.postViewData.set(img)
@@ -124,7 +132,7 @@ function Sidebar() {
 	// 	hoveredSidebarTab: "Following",
 	// })
 	return (
-		<div className="fixed left-0 md:w-[380px] w-full top-0 h-screen bg-secondary">
+		<div className="md:fixed static left-0 md:w-[380px] w-full top-0 h-screen bg-secondary">
 			<div className="w-full h-3/5 bg-substitute">Profile</div>
 			<div className="p-[24px] pt-[34px] flex flex-col justify-between h-2/5">
 				<div className="flex flex-col gap-[2px]">

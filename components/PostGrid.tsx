@@ -10,8 +10,6 @@ export type PostGridImage = {
 	preview: string
 }
 
-const COLUMNS = 3
-
 function getShortestColumn(heights: number[]): number {
 	let shortest = 0
 	for (let i = 1; i < heights.length; i += 1) {
@@ -25,7 +23,9 @@ function getShortestColumn(heights: number[]): number {
 export function ImageGrid(props: {
 	images: PostGridImage[]
 	onClick: (img: PostGridImage) => void
+	columns: number
 }) {
+	const COLUMNS = props.columns
 	const columns: PostGridImage[][] = new Array(COLUMNS)
 	const heights: number[] = new Array(COLUMNS)
 
@@ -41,13 +41,12 @@ export function ImageGrid(props: {
 	}
 
 	return columns.map((col, i) => (
-		<div key={i} className="pl-2 w-full">
+		<div key={i} className="md:pl-2 pl-0 w-full">
 			{col.map((img) => (
 				<div key={img.id} className="pb-2">
 					<LazyImage
 						image={img}
 						onClick={() => {
-							console.log(img, "img.....")
 							props.onClick(img)
 						}}
 					/>
