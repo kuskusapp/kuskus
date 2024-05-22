@@ -1,17 +1,16 @@
 "use client"
 import { describeImageAction, uploadPostAction } from "@/app/actions"
 import { observer, useObservable } from "@legendapp/state/react"
+import { useRouter } from "next/navigation"
 import React from "react"
 import { FaImage } from "react-icons/fa6"
 import { IoCloseOutline } from "react-icons/io5"
 import AiThinking from "./AiThinking"
 import Loader from "./Loader"
-import { useRouter } from "next/navigation"
 
 interface Props {
 	open: boolean
 	onClose: () => void
-	postsState: any
 }
 
 export default observer(function AddPostModal(props: Props) {

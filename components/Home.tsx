@@ -96,7 +96,6 @@ export default observer(function Home(props: Props) {
 						onClose={() => {
 							local.addPostModalOpen.set(false)
 						}}
-						postsState={undefined}
 					/>
 				</>
 			)}
