@@ -18,10 +18,10 @@ interface Props {
 
 export default function ViewPost(props: Props) {
 	return (
-		<div className="fixed w-screen z-[100] h-screen flex [&::-webkit-scrollbar]:hidden backdrop-blur-sm">
-			<div className="w-[100px] p-[20px] flex justify-center">
+		<div className="fixed bg-neutral-900 bg-opacity-95 w-screen z-[100] h-screen flex [&::-webkit-scrollbar]:hidden backdrop-blur-sm">
+			<div className="w-24 h-20 p-5 flex justify-center">
 				<div
-					className="h-[50px] w-[50px] bg-neutral-800 cursor-pointer flex-center rounded-full  rotate-45 text-[28px]"
+					className="h-12 w-12 bg-neutral-800 cursor-pointer flex items-center justify-center rounded-full rotate-45 text-3xl"
 					onClick={() => {
 						props.closeModal(null)
 					}}
@@ -29,7 +29,7 @@ export default function ViewPost(props: Props) {
 					+
 				</div>
 			</div>
-			<div className="w-full bg-black h-full flex">
+			<div className="w-[80%] bg-black h-[80%] flex absolute top-[10%] left-[10%] rounded-lg shadow-xl">
 				<div className="w-3/5 z-20 overflow-hidden relative flex-center h-full">
 					<div
 						style={{
@@ -50,7 +50,7 @@ export default function ViewPost(props: Props) {
 						}}
 					/>
 				</div>
-				<div className="w-2/5 h-full bg-neutral-950 flex flex-col justify-between">
+				<div className="w-2/5 h-full bg-neutral-950 flex flex-col justify-between rounded-lg shadow-xl">
 					<div className="flex flex-col gap-[4px] p-[20px] py-[30px]">
 						<div className="flex pb-[10px] text-[18px]">
 							<div className="w-[38px] flex items-center">
