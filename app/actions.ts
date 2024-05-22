@@ -9,9 +9,9 @@ import { create } from "ronin"
 import { z } from "zod"
 import { zfd } from "zod-form-data"
 
-const openai = new OpenAI({
-	apiKey: process.env.OPENAI_API_KEY,
-})
+// const openai = new OpenAI({
+// 	apiKey: process.env.OPENAI_API_KEY,
+// })
 
 export const logoutAction = actionClient.action(async () => {
 	const { signout } = auth.createServerActions()
