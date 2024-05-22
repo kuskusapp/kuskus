@@ -20,6 +20,10 @@ type BookmarksContextType = {
 export const BookmarksContext = createContext<BookmarksContextType | null>(null)
 
 export default function Schedule() {
+	// const session = ..
+	// const [authData] = getData()
+	// const [publicData] = getData()
+
 	const [posts, setPosts] = useState<PostType[]>([
 		{
 			id: 1,

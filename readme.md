@@ -11,7 +11,7 @@ bun i
 ```
 
 Install [EdgeDB](https://www.edgedb.com/) using:\
-(or update to version in [/edgedb.toml](https://github.com/kuskusapp/kuskus/blob/main/edgedb.toml) using `edgedb cli upgrade`)
+(or update to version in [/edgedb.toml](edgedb.toml) using `edgedb cli upgrade`)
 
 ```
 curl --proto '=https' --tlsv1.2 -sSf https://sh.edgedb.com | sh

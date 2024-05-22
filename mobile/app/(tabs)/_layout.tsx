@@ -94,7 +94,7 @@ export default function TabLayout() {
 					),
 				}}
 			/>
-			<Tabs.Screen
+			{/* <Tabs.Screen
 				name="auth"
 				options={{
 					headerStyle: {
@@ -116,7 +116,7 @@ export default function TabLayout() {
 						/>
 					),
 				}}
-			/>
+			/> */}
 		</Tabs>
 	)
 }
