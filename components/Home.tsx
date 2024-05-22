@@ -5,11 +5,9 @@ import * as react from "react"
 import ActionBar from "./ActionBar"
 import AddPostModal from "./AddPostModal"
 import { ImageGrid, PostGridImage } from "./PostGrid"
-import Search from "./Search"
+import Search, { search_post_grid_images } from "./Search"
 import SignInAndSignUp from "./SignInAndSignUp"
 import ViewPost from "./ViewPost"
-
-let lastId = 0
 
 interface Props {
 	publicData: homePublicReturn
@@ -52,12 +50,12 @@ export default observer(function Home(props: Props) {
 	const images = react.useMemo(() => {
 		return posts.map((post): PostGridImage => {
 			return {
-				id: (lastId++).toString(),
-				alt: "",
-				width: post.imageWidth ?? 1,
-				height: post.imageHeight ?? 1,
+				id: post.roninId,
+				alt: post.aiDescription,
+				width: post.imageWidth,
+				height: post.imageHeight,
 				src: post.imageUrl,
-				preview: post.imagePreviewBase64Hash ?? "",
+				preview: post.imagePreviewBase64Hash,
 			}
 		})
 	}, [posts])
@@ -70,6 +68,16 @@ export default observer(function Home(props: Props) {
 			console.log("hi", local.windowSize.get())
 		}
 	})
+
+	// TODO: debounce search
+
+	const searched_images = react.useMemo(() => {
+		if (search_input.length < 2) {
+			return images
+		}
+		
+		return search_post_grid_images(search_input, images, 16)
+	}, [search_input, images])
 
 	return (
 		<>
@@ -129,7 +137,7 @@ export default observer(function Home(props: Props) {
 			</main>
 			<div className="flex pt-[160px]">
 				<ImageGrid
-					images={images}
+					images={searched_images}
 					columns={local.windowSize.get() < 768 ? 3 : 1}
 					onClick={(img) => {
 						local.showViewPost.set(img)
