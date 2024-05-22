@@ -36,9 +36,8 @@ export function ImageGrid(props: {
 
 	for (const image of props.images) {
 		const i = getShortestColumn(heights)
-		console.log(columns[i], "columns")
-		// columns[i].push(image)
-		// heights[i] += image.height / image.width
+		columns[i].push(image)
+		heights[i] += image.height / image.width
 	}
 
 	return columns.map((col, i) => (

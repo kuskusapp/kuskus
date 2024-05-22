@@ -45,6 +45,13 @@ export default observer(function Home(props: Props) {
 			"Japanese",
 		],
 		showViewPost: null as PostGridImage | null,
+		windowSize: null as null | number,
+	})
+
+	react.useEffect(() => {
+		if (window.innerWidth <= 768) {
+			local.windowSize.set(768)
+		}
 	})
 
 	const posts = publicData.posts.get() ?? []
@@ -126,6 +133,7 @@ export default observer(function Home(props: Props) {
 			<div className="flex pt-[160px]">
 				<ImageGrid
 					images={images}
+					columns={local.windowSize.get() > 768 ? 3 : 1}
 					onClick={(img) => {
 						local.showViewPost.set(img)
 					}}
