@@ -52,10 +52,10 @@ export default observer(function Profile(props: Props) {
 					pageNumber: local.pageNumber.get(),
 				})
 
-				authData.createdPosts.set([
-					...(authData.createdPosts.get() ?? []),
-					...posts.data[0].createdPosts,
-				])
+				// authData.createdPosts.set([
+				// 	...(authData.createdPosts.get() ?? []),
+				// 	...posts.data[0].createdPosts,
+				// ])
 			}
 		}
 
@@ -114,13 +114,14 @@ export default observer(function Profile(props: Props) {
 				<Sidebar />
 				<div className="md:ml-[380px] m-0 min-h-full flex">
 					<ImageGrid
-						columns={local.windowSize.get() > 768 ? 3 : 1}
+						columns={local.windowSize.get() > 768 ? 3 : 3}
 						images={images}
 						onClick={(img) => {
 							local.postViewData.set(img)
 							local.showPostViewModal.set(true)
 						}}
 					/>
+					hi
 				</div>
 			</div>
 		</>

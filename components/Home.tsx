@@ -48,12 +48,6 @@ export default observer(function Home(props: Props) {
 		windowSize: null as null | number,
 	})
 
-	react.useEffect(() => {
-		if (window.innerWidth <= 768) {
-			local.windowSize.set(768)
-		}
-	})
-
 	const posts = publicData.posts.get() ?? []
 	const images = react.useMemo(() => {
 		return posts.map((post): PostGridImage => {
@@ -71,8 +65,11 @@ export default observer(function Home(props: Props) {
 	const [search_input, setSearchInput] = react.useState("")
 
 	react.useEffect(() => {
-		console.log(search_input, "search_input")
-	}, [search_input])
+		if (window.innerWidth <= 768) {
+			local.windowSize.set(768)
+			console.log("hi", local.windowSize.get())
+		}
+	})
 
 	return (
 		<>
@@ -132,8 +129,7 @@ export default observer(function Home(props: Props) {
 			<div className="flex pt-[160px]">
 				<ImageGrid
 					images={images}
-					// columns={local.windowSize.get() > 768 ? 3 : 1}
-					columns={3}
+					columns={local.windowSize.get() < 768 ? 3 : 1}
 					onClick={(img) => {
 						local.showViewPost.set(img)
 					}}
