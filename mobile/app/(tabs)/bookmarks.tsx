@@ -28,7 +28,6 @@ export default function Bookmarks() {
 				data={bookmarkedPosts}
 				keyExtractor={(item) => item.id.toString()}
 				renderItem={({ item }) => {
-					console.log("pls work:", item)
 					return (
 						<Post
 							imageSrc={item.imageSrc}
