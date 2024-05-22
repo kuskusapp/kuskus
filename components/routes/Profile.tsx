@@ -93,9 +93,9 @@ export default observer(function Profile(props: Props) {
 				onClose={() => {
 					local.addPostModalOpen.set(false)
 				}}
-				postsState={undefined}
+				// postsState={undefined}
 			/>
-			<div className="h-full md:flex-row flex-col flex">
+			<div className="h-full flex-col flex">
 				{local.postViewData.get() !== null && local.postViewData.get().src && (
 					<ViewPost
 						post={{
@@ -114,14 +114,13 @@ export default observer(function Profile(props: Props) {
 				<Sidebar />
 				<div className="md:ml-[380px] m-0 min-h-full flex">
 					<ImageGrid
-						columns={local.windowSize.get() > 768 ? 3 : 3}
+						columns={local.windowSize.get() < 768 ? 3 : 1}
 						images={images}
 						onClick={(img) => {
 							local.postViewData.set(img)
 							local.showPostViewModal.set(true)
 						}}
 					/>
-					hi
 				</div>
 			</div>
 		</>
