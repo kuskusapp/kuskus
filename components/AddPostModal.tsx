@@ -9,13 +9,11 @@ import AiThinking from "./AiThinking"
 import Loader from "./Loader"
 
 interface Props {
-	open: boolean
 	onClose: () => void
 }
 
 export default observer(function AddPostModal(props: Props) {
 	const local = useObservable({
-		isOpen: props.open,
 		title: "",
 		description: "",
 		uploadedImageAsFile: null as File | null,
@@ -62,18 +60,11 @@ export default observer(function AddPostModal(props: Props) {
 			.filter((cat) => !local.categories.get().includes(cat)),
 	].slice(0, local.initialCount.get())
 
-	const handleCloseModal = () => {
-		local.isOpen.set(false)
-		props.onClose()
-	}
-
-	if (!local.isOpen.get()) return null
-
 	return (
 		<div className="fixed inset-0 z-10 overflow-y-auto">
 			<button
+				onClick={() => props.onClose()}
 				className="absolute top-10 left-20 glass-background hover:opacity-40 px-3 py-3 rounded-full z-50"
-				onClick={handleCloseModal}
 			>
 				<IoCloseOutline />
 			</button>

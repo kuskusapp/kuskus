@@ -88,12 +88,13 @@ export default observer(function Home(props: Props) {
 						}}
 						username={authData.name.get()}
 					/>
-					<AddPostModal
-						open={local.addPostModalOpen.get()}
-						onClose={() => {
-							local.addPostModalOpen.set(false)
-						}}
-					/>
+					{local.addPostModalOpen.get() ? (
+						<AddPostModal
+							onClose={() => {
+								local.addPostModalOpen.set(false)
+							}}
+						/>
+					) : null}
 				</>
 			)}
 			{authData.get() === null && (

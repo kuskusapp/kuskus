@@ -88,13 +88,13 @@ export default observer(function Profile(props: Props) {
 					username={authData.name.get()}
 				/>
 			)}
-			<AddPostModal
-				open={local.addPostModalOpen.get()}
-				onClose={() => {
-					local.addPostModalOpen.set(false)
-				}}
-				// postsState={undefined}
-			/>
+			{local.addPostModalOpen.get() ? (
+				<AddPostModal
+					onClose={() => {
+						local.addPostModalOpen.set(false)
+					}}
+				/>
+			) : null}
 			<div className="h-full flex-col flex">
 				{local.postViewData.get() !== null && local.postViewData.get().src && (
 					<ViewPost
