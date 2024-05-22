@@ -61,6 +61,9 @@ body {
 	font-weight: 200;
   font-size: 14px;
 }
+.blur-effect {
+	filter: blur(600px);
+}
 
 @keyframes spin {
   0% {
@@ -75,21 +78,4 @@ body {
   animation: spin 1.5s linear infinite;
 }
 
-@media (max-width: 768px) {
-	.w-3/5, .w-2/5 {
-		width: 100%; /* Занимает весь экран на мобильных устройствах */
-	}
-	.w-[100px] {
-		width: 50px; /* Уменьшает ширину боковых панелей */
-	}
-	.p-[20px] {
-		padding: 10px; /* Уменьшает отступы */
-	}
-	.h-[50px], .w-[50px] {
-		height: 25px;
-		width: 25px; /* Уменьшает размер кнопки закрытия */
-	}
-	.text-[28px] {
-		font-size: 14px; /* Уменьшает размер текста */
-	}
-}
+

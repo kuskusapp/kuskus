@@ -33,9 +33,9 @@ export default function ViewPost(props: Props) {
 					<div
 						style={{
 							background: `url(${props.post.src})`,
-							filter: "blur(600px)",
+							// filter: "blur(600px)",
 						}}
-						className="absolute z-20  top-0 left-0 w-full h-full"
+						className="absolute z-20 top-0 left-0 w-full h-full blur-effect"
 					></div>
 					<img
 						alt="image"
@@ -68,7 +68,7 @@ export default function ViewPost(props: Props) {
 								<p>japanese</p>
 								<div className="flex-row">
 									<Icons name="Tag" size={[22, 22]} />
-									<p>tags</p>
+									<p className="pl-1">tags</p>
 								</div>
 							</div>
 						</div>
@@ -76,9 +76,9 @@ export default function ViewPost(props: Props) {
 					<div className="p-[20px] border-y border-white/10 h-full">
 						comments
 					</div>
-					<div className="w-fit m-[20px] h-[60px] self-end flex-center px-5 rounded-lg bg-yellow-600">
+					<button className="w-fit m-[20px] h-[60px] self-end flex-center px-5 py-1 rounded-2xl bg-yellow-600 hover:bg-yellow-700">
 						Signup
-					</div>
+					</button>
 				</div>
 			</div>
 			<div className="w-[100px] p-[20px] flex justify-center"></div>
