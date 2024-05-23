@@ -78,6 +78,7 @@ export const expoConfig = {
 		},
 		owner: EAS_APP_OWNER,
 		plugins: [
+			["expo-secure-store"],
 			[
 				"expo-build-properties",
 				{

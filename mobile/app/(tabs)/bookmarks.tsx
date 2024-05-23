@@ -3,9 +3,14 @@ import { FlatList, StyleSheet } from "react-native"
 import { Post } from "../../components/Post"
 import { ThemedView } from "../../components/Themed"
 import { theme } from "../../theme"
+import { trpc } from "../../utils/trpc-client"
 import { BookmarksContext } from "./index"
 
 export default function Bookmarks() {
+	const greetingQuery = trpc.greeting.useQuery()
+	console.log(greetingQuery, "greet")
+	console.log(greetingQuery.error, "err")
+
 	const context = useContext(BookmarksContext)
 	if (!context) {
 		return <ThemedView style={styles.container} />

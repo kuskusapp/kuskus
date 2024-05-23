@@ -2181,10 +2181,37 @@
   dependencies:
     "@sinonjs/commons" "^3.0.0"
 
+"@tanstack/query-core@5.36.1":
+  version "5.36.1"
+  resolved "https://registry.yarnpkg.com/@tanstack/query-core/-/query-core-5.36.1.tgz#ae46f935c4752812a56c6815305061a3da82e7b8"
+  integrity sha512-BteWYEPUcucEu3NBcDAgKuI4U25R9aPrHSP6YSf2NvaD2pSlIQTdqOfLRsxH9WdRYg7k0Uom35Uacb6nvbIMJg==
+
+"@tanstack/react-query@^5.37.1":
+  version "5.37.1"
+  resolved "https://registry.yarnpkg.com/@tanstack/react-query/-/react-query-5.37.1.tgz#82d79cdf54923b1f0638c080e8f0439a6a8a2ddc"
+  integrity sha512-EhtBNA8GL3XFeSx6VYUjXQ96n44xe3JGKZCzBINrCYlxbZP6UwBafv7ti4eSRWc2Fy+fybQre0w17gR6lMzULA==
+  dependencies:
+    "@tanstack/query-core" "5.36.1"
+
 "@tootallnate/once@2":
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/@tootallnate/once/-/once-2.0.0.tgz#f544a148d3ab35801c1f633a7441fd87c2e484bf"
   integrity sha512-XCuKFP5PS55gnMVu3dty8KPatLqUoy/ZYzDzAGCQ8JNFCkLXzmI7vNHCR+XpbZaMWQK/vQubr7PkYq8g470J/A==
+
+"@trpc/client@^11.0.0-rc.374":
+  version "11.0.0-rc.374"
+  resolved "https://registry.yarnpkg.com/@trpc/client/-/client-11.0.0-rc.374.tgz#f33a5b449b2f7470bbba22036b2827ed0e318748"
+  integrity sha512-Ha1GaTT9FCq9BRPQPa+KKRTXSDRwvjHpsoYVl683vNoXnJRtTycMsPdydr/zdL10vuUHjutpLMZNycSRQ9yN0g==
+
+"@trpc/react-query@^11.0.0-rc.374":
+  version "11.0.0-rc.374"
+  resolved "https://registry.yarnpkg.com/@trpc/react-query/-/react-query-11.0.0-rc.374.tgz#53086f7e8fd205222987ad1b7ac647c922af38e5"
+  integrity sha512-zv/KjlxfeuOS5f0G2wl4L3AKzI/shYLj1sKxbtfGKkLRPMbCBqLlw4b37wRf5BLX4gi8f87FXm11Wwa8okD6aQ==
+
+"@trpc/server@^11.0.0-rc.374":
+  version "11.0.0-rc.374"
+  resolved "https://registry.yarnpkg.com/@trpc/server/-/server-11.0.0-rc.374.tgz#1d2fc943604cf5a1ca7407687bc33038ece8b751"
+  integrity sha512-7r76KJwbSV5mffEYQMGBIAVrrJdPot0JzYQD9ZvcInO8q9sn+uVVZQ8XCAq93zXDSodvzGBJhRu3Kn1qXPw5Xg==
 
 "@types/babel__core@^7.1.14":
   version "7.20.5"
@@ -4652,6 +4679,11 @@ expo-router@~3.5.14:
     expo-splash-screen "0.27.4"
     react-native-helmet-async "2.0.4"
     schema-utils "^4.0.1"
+
+expo-secure-store@~13.0.1:
+  version "13.0.1"
+  resolved "https://registry.yarnpkg.com/expo-secure-store/-/expo-secure-store-13.0.1.tgz#fc886d3e0ed12890c8dd74e7cc44e35b03f2d79b"
+  integrity sha512-5DTKjbv98X7yPbm+1jER/sOEIlt2Ih7qwabTvkWDXry5bPcQGoulxH5zIX9+JvVH7of8GI4t7NSEbpAO3P7FZA==
 
 expo-splash-screen@0.27.4:
   version "0.27.4"
