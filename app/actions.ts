@@ -2,7 +2,10 @@
 
 import { auth } from "@/edgedb-next-client"
 import { createPost, updateUser } from "@/edgedb/crud/mutations"
-import { profileLoadMorePosts } from "@/edgedb/crud/queries"
+import {
+	profileLoadMorePosts,
+	relevantPlacesQuery,
+} from "@/edgedb/crud/queries"
 import { actionClient } from "@/lib/safe-action"
 import OpenAI from "openai"
 import { create } from "ronin"
@@ -64,7 +67,7 @@ export const describeImageAction = actionClient
 	.schema(describeImageSchema)
 	.action(async ({ parsedInput: { image } }) => {
 		try {
-			console.log("running....")
+			// TODO: add back
 			// TODO: uncomment when there is input box with code to guard AI use
 			// const response = await openai.chat.completions.create({
 			// 	model: "gpt-4o",
@@ -136,13 +139,15 @@ export const uploadPostAction = actionClient
 // extend to more categories in future
 const relevantPlacesSchema = z.object({
 	location: z.string(),
-	category: z.array(z.string()),
+	category: z.string(),
 })
 export const relevantPlacesAction = actionClient
 	.schema(relevantPlacesSchema)
 	.action(async ({ parsedInput: { location, category } }) => {
 		const session = auth.getSession()
 		const client = session.client
+		const res = await relevantPlacesQuery.run(client, { location, category })
+		console.log(res, "res")
 		try {
 			return "ok"
 		} catch (err) {

@@ -20,8 +20,8 @@ export default observer(function Chat() {
 						onSubmit={async (e) => {
 							e.preventDefault()
 							const places = await relevantPlacesAction({
-								location: "Poland",
-								category: ["coffee"],
+								location: "Warsaw",
+								category: "coffee",
 							})
 							console.log(places.data, "places")
 							// process.env.OPENAI_API_KEY =

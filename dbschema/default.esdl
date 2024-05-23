@@ -65,7 +65,8 @@ module default {
     veganFriendly: bool;
     quiet: bool;
     # Place IDs uniquely identify a place in the Google Places database and on Google Maps (https://developers.google.com/maps/documentation/places/web-service/place-id)
-    googlePlaceId: str; # i.e. for Krakow, Poland it is ChIJ0RhONcBEFkcRv4pHdrW2a7Q
+    googlePlaceId: str;
+    googleMapsUrl: str;
   }
   # kuskus.app/posts/{edgedb-post-uuid}
   type Post {

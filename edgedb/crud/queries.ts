@@ -129,15 +129,19 @@ export const placesAuth = e.params(
 export type placesAuthReturn = $infer<typeof placesAuth>
 
 // -- /chat (AI chat)
-export const relevantPlacesAction = e.params(
+export const relevantPlacesQuery = e.params(
 	{ location: e.str, category: e.str },
 	({ location, category }) => {
 		return e.select(e.Place, (place) => ({
-			filter: e.op(place.category, "=", category),
+			filter: e.op(
+				e.op(place.category, "ilike", category),
+				"and",
+				e.op(place.location, "ilike", location),
+			),
 			name: true,
 			displayName: true,
 			profilePhoto: true,
 		}))
 	},
 )
-export type relevantPlacesActionReturn = $infer<typeof relevantPlacesAction>
+export type relevantPlacesActionReturn = $infer<typeof relevantPlacesQuery>

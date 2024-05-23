@@ -54,6 +54,7 @@ export const createPlace = e.params(
 		veganFriendly: e.optional(e.bool),
 		quiet: e.optional(e.bool),
 		googlePlaceId: e.optional(e.str),
+		googleMapsUrl: e.optional(e.str),
 		userId: e.optional(e.uuid),
 	},
 	({
@@ -68,6 +69,7 @@ export const createPlace = e.params(
 		veganFriendly,
 		quiet,
 		googlePlaceId,
+		googleMapsUrl,
 	}) => {
 		return e.insert(e.Place, {
 			name,
@@ -81,6 +83,7 @@ export const createPlace = e.params(
 			veganFriendly,
 			quiet,
 			googlePlaceId,
+			googleMapsUrl,
 		})
 	},
 )

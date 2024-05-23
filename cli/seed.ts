@@ -192,18 +192,52 @@ export async function describeImage(imageBlob: any, huggingFaceToken: string) {
 }
 
 async function places() {
-	// https://www.google.com/maps/place/Bułka+z+Masłem+Włodkowica/@51.1081905,17.0194183,17z/data=!4m14!1m7!3m6!1s0x470fc20b5c4619f3:0xdbffaddd63351490!2zQnXFgmthIHogTWFzxYJlbSBXxYJvZGtvd2ljYQ!8m2!3d51.1081872!4d17.0242892!16s%2Fg%2F12lrkbwpx!3m5!1s0x470fc20b5c4619f3:0xdbffaddd63351490!8m2!3d51.1081872!4d17.0242892!16s%2Fg%2F12lrkbwpx?entry=ttu
 	await createPlace.run(client, {
-		name: "bulka-s-maslem-wlodkowica",
-		displayName: "Bułka z Masłem Włodkowica",
-		location: "Wroclaw, Poland",
+		name: "n31-restaurant-bar",
+		displayName: "N31 Restaurant & Bar",
+		location: "Warsaw",
 		profileImageUrl:
-			"https://lh5.googleusercontent.com/p/AF1QipNc_A88yvJ1uJGvtC8X7MEczd32xFjeVIkWfB3R=w408-h408-k-no",
-		bio: "Easygoing, plant-filled hangout with garden seating serving breakfast, burgers & homemade lemonades.",
-		category: "restaurant",
-		foodsAndDrinksServed: ["burger", "pasta", "coffee"],
-		veganFriendly: true,
-		quiet: false,
+			"https://lh3.googleusercontent.com/p/AF1QipNLXMcjYJ6aVYaB45Ma-Om8TCGu2F5AEyIAPVJj=s1360-w1360-h1020",
+		bio: "Airy, contemporary restaurant offering artful & elevated Polish cuisine alongside wine & cocktails",
+		category: "bar",
+		googleMapsUrl: "https://maps.app.goo.gl/PtKt1CmLL7kFrMD9A",
+	})
+	await createPlace.run(client, {
+		name: "pracownia-sushi",
+		displayName: "Pracownia Sushi",
+		location: "Warsaw",
+		profileImageUrl:
+			"https://lh3.googleusercontent.com/p/AF1QipNw6rLevZ_HKlhlSlwKG626wO8bFCfip4dz43w9=s1360-w1360-h1020",
+		bio: "Slick restaurant offering generous sushi dishes & creative rolls in a wood-&-glass dining area.",
+		category: "sushi",
+		googleMapsUrl: "https://maps.app.goo.gl/DcuRTXg2vbzeyk7q8",
+	})
+	await createPlace.run(client, {
+		name: "sklep-z-kawa-i-kawiarnia",
+		displayName: "Sklep z Kawą i Kawiarnia",
+		location: "Warsaw",
+		profileImageUrl:
+			"https://lh5.googleusercontent.com/p/AF1QipPB8FL_x-CQbk9z4ZYLkaqyrHNfkhnFhJ5-T0Qw=w408-h271-k-no",
+		category: "coffee",
+		googleMapsUrl: "https://maps.app.goo.gl/MUgqq1GWmR7oG9m98",
+	})
+	await createPlace.run(client, {
+		name: "wazaap",
+		displayName: "Wazaap",
+		location: "Warsaw",
+		profileImageUrl:
+			"https://lh5.googleusercontent.com/p/AF1QipPBtbz87EZ9HGIia9bkRT2szr99d5Bg9PRvLKvc=w408-h306-k-no",
+		category: "coffee",
+		googleMapsUrl: "https://maps.app.goo.gl/X1ow4cpGAeCAqr5z9",
+	})
+	await createPlace.run(client, {
+		name: "starbucks",
+		displayName: "Starbucks",
+		location: "Warsaw",
+		profileImageUrl:
+			"https://lh5.googleusercontent.com/p/AF1QipMs99XwZW19PZEqHjkFfkkGRIxGfbJcvcHQOLPM=w408-h306-k-no",
+		category: "coffee",
+		googleMapsUrl: "https://maps.app.goo.gl/amiYmz6vLiJ3FAL46",
 	})
 }
 
