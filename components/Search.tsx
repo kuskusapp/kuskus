@@ -131,7 +131,7 @@ export default function Search(props: SearchProps) {
 				<label className="flex items-center flex-grow cursor-text">
 					<IoIosSearch className="ml-3 text-neutral-500" size={20} />
 					<input
-						className="focus:outline-none border flex-grow bg-transparent border-none text-neutral-200 px-4 p-3 input-placeholder w-full"
+						className="focus:ring-transparent border flex-grow bg-transparent border-none text-neutral-200 px-4 p-3 input-placeholder w-full"
 						placeholder="Search for place or dish..."
 						onFocus={() => {
 							// setInputFocused(true)

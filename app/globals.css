@@ -77,5 +77,8 @@ body {
 .spin {
   animation: spin 1.5s linear infinite;
 }
+textarea:focus, input:focus{
+	outline: none;
+}
 
 
