@@ -1,14 +1,13 @@
 "use client"
 import { profileLoadMostPostsAction } from "@/app/actions"
 import { profileAuthReturn } from "@/edgedb/crud/queries"
-import { observer, useObservable } from "@legendapp/state/react"
-import { motion } from "framer-motion"
-import { useEffect, useMemo } from "react"
-import { ImageGrid } from "../PostGrid"
-import ViewPost from "../ViewPost"
 import { isEmpty } from "@legendapp/state"
+import { observer, useObservable } from "@legendapp/state/react"
+import { useEffect, useMemo } from "react"
 import ActionBar from "../ActionBar"
 import AddPostModal from "../AddPostModal"
+import { ImageGrid } from "../PostGrid"
+import ViewPost from "../ViewPost"
 
 let lastId = 0
 interface Props {

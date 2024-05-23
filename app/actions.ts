@@ -132,3 +132,20 @@ export const uploadPostAction = actionClient
 			}
 		},
 	)
+
+// extend to more categories in future
+const relevantPlacesSchema = z.object({
+	location: z.string(),
+	category: z.array(z.string()),
+})
+export const relevantPlacesAction = actionClient
+	.schema(relevantPlacesSchema)
+	.action(async ({ parsedInput: { location, category } }) => {
+		const session = auth.getSession()
+		const client = session.client
+		try {
+			return "ok"
+		} catch (err) {
+			return { failure: "EdgeDB error", errorDetails: err.message }
+		}
+	})

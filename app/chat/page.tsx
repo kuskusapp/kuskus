@@ -1,10 +1,9 @@
-import ChatAuth from "@/components/routes/ChatAuth"
-import { auth } from "@/edgedb-next-client"
+import Chat from "@/components/routes/Chat"
 import type { PageProps } from "./$types"
 
 // const openai = new OpenAI()
 
-export default async function Chat({ params }: PageProps) {
+export default async function ChatRoute({ params }: PageProps) {
 	// return (
 	// 	<PlaceCard
 	// 		name="Bułka z Masłem Włodkowica"
@@ -12,7 +11,7 @@ export default async function Chat({ params }: PageProps) {
 	// 	/>
 	// )
 
-	return <ChatAuth data={""} />
+	return <Chat data={""} />
 }
 
 // const sendMessage = (prompt: string) => generateText({

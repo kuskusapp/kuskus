@@ -1,6 +1,6 @@
 import e, { type $infer } from "../../dbschema/edgeql-js"
 
-// -- home /
+// -- / (home)
 export const homePublic = e.select({
 	popularDishes: e.assert_exists(
 		e.assert_single(
@@ -37,7 +37,7 @@ export const homeAuth = e.params(
 )
 export type homeAuthReturn = $infer<typeof homeAuth>
 
-// -- profile /[username]
+// -- /[username] (user profile)
 export const profilePublic = e.params({ username: e.str }, ({ username }) => {
 	return e.select(e.User, (u) => ({
 		filter: e.op(u.name, "=", username),
@@ -52,7 +52,6 @@ export const profilePublic = e.params({ username: e.str }, ({ username }) => {
 	}))
 })
 export type profilePublicReturn = $infer<typeof profilePublic>
-
 // context: https://discord.com/channels/841451783728529451/1235266238977150976 & https://discord.com/channels/841451783728529451/1235593775447937054 & https://discord.com/channels/841451783728529451/1238547782537580754
 export const profileAuth = e.params(
 	{ userId: e.optional(e.uuid) },
@@ -106,7 +105,7 @@ export const profileLoadMorePosts = e.params(
 )
 export type profileAuthLoadMoreImages = $infer<typeof profileLoadMorePosts>
 
-// -- places /places/[place-name]
+// -- /places/[place-name] (place profile)
 export const placesAuth = e.params(
 	{ placeName: e.str, userId: e.optional(e.uuid) },
 	({ userId, placeName }) => {
@@ -128,3 +127,17 @@ export const placesAuth = e.params(
 	},
 )
 export type placesAuthReturn = $infer<typeof placesAuth>
+
+// -- /chat (AI chat)
+export const relevantPlacesAction = e.params(
+	{ location: e.str, category: e.str },
+	({ location, category }) => {
+		return e.select(e.Place, (place) => ({
+			filter: e.op(place.category, "=", category),
+			name: true,
+			displayName: true,
+			profilePhoto: true,
+		}))
+	},
+)
+export type relevantPlacesActionReturn = $infer<typeof relevantPlacesAction>

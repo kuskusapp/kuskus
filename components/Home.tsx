@@ -12,7 +12,6 @@ import ViewPost from "./ViewPost"
 export type DeviceSize = "mobile" | "tablet" | "desktop"
 export type DeviceSizeMap = Record<DeviceSize, boolean>
 
-
 interface Props {
 	publicData: homePublicReturn
 	authData?: homeAuthReturn
@@ -71,7 +70,7 @@ export default observer(function Home(props: Props) {
 		if (search_input.length < 2) {
 			return images
 		}
-		
+
 		return search_post_grid_images(search_input, images, 16)
 	}, [search_input, images])
 
@@ -92,7 +91,7 @@ export default observer(function Home(props: Props) {
 				tablet: media_query_tablet.matches,
 			})
 		}
-		
+
 		media_query_mobile.addEventListener("change", handleMediaChange)
 		media_query_tablet.addEventListener("change", handleMediaChange)
 

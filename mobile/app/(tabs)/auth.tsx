@@ -1,6 +1,6 @@
 import { useLocalSearchParams } from "expo-router"
 import { useEffect } from "react"
-import { Text } from "react-native"
+import { Button, Text } from "react-native"
 import * as SecureStore from "expo-secure-store"
 
 export default function AuthRoute() {
@@ -19,6 +19,12 @@ export default function AuthRoute() {
 	return (
 		<>
 			<Text>Auth</Text>
+			<Button
+				title="Login"
+				onPress={() => {
+					//
+				}}
+			/>
 		</>
 	)
 }
