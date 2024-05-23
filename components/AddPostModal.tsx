@@ -24,15 +24,15 @@ export default observer(function AddPostModal(props: Props) {
 		uploadingPost: false,
 		foodCategories: [
 			"Sushi",
-			"Breakfast",
 			"Smoothie",
 			"Vegan",
+			"Pizza",
+			"Burger",
 			"Pasta",
 			"Salad",
-			"Healthy",
-			"Steak",
-			"Cocktail",
+			"Tacos",
 			"Soup",
+			"Steak",
 			"Coffee",
 		],
 		categories: [] as string[],
@@ -131,6 +131,11 @@ export default observer(function AddPostModal(props: Props) {
 													// TODO: type well
 													// @ts-ignore
 													local.aiDescription.set(resp.data)
+
+													const categories = await fetch(
+														`http://158.160.90.161:8000/suggest-categories/?text=${encodeURIComponent(local.aiDescription.get())}&k=2`,
+													)
+													console.log(categories, "categories")
 												}
 												local.aiDescriptionLoading.set(false)
 											} catch (err) {
