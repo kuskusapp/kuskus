@@ -58,6 +58,7 @@ const recommendedPlaces = [
 export default function Places() {
 	const [inputFocused, setInputFocused] = react.useState(false)
 	const [isModalOpen, setIsModalOpen] = react.useState<{} | null>(null)
+	const [activeSlide, setActiveSlide] = react.useState(0)
 
 	const [hovered, setHovered] = react.useState("")
 
@@ -86,17 +87,18 @@ export default function Places() {
 						</div>
 						<Swiper
 							className="mt-5 w-full"
-							spaceBetween={4}
+							spaceBetween={8}
 							slidesPerView={5}
-							onSlideChange={() => {}}
+							// onSlideChange={() => {}}
 							onSwiper={(swiper) => {}}
+							onSlideChange={(swiper) => setActiveSlide(swiper.activeIndex)}
 						>
 							{recommendedPlaces.map((place, index) => (
 								<SwiperSlide key={place.id}>
 									<div
 										onMouseEnter={() => setHovered(place.id)}
 										onMouseLeave={() => setHovered(place.id)}
-										className=" w-full min-h-[500px] relative"
+										className={`w-full min-h-[500px] relative ${index < activeSlide ? "opacity-40" : "opacity-1"}`}
 										onClick={() => setIsModalOpen(index)}
 									>
 										<AnimatePresence>
@@ -138,7 +140,7 @@ export default function Places() {
 						</div>
 						<Swiper
 							className="mt-5 w-full"
-							spaceBetween={4}
+							spaceBetween={8}
 							slidesPerView={5}
 							onSlideChange={() => {}}
 							onSwiper={(swiper) => {}}
@@ -190,7 +192,7 @@ export default function Places() {
 						</div>
 						<Swiper
 							className="mt-5 w-full"
-							spaceBetween={4}
+							spaceBetween={8}
 							slidesPerView={5}
 							onSlideChange={() => {}}
 							onSwiper={(swiper) => {}}
