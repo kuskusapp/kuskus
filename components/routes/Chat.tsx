@@ -1,8 +1,7 @@
 "use client"
 import { relevantPlacesAction } from "@/app/actions"
-import { openai } from "@ai-sdk/openai"
 import { observer, useObservable } from "@legendapp/state/react"
-import { CoreMessage, generateText, streamText } from "ai"
+import { CoreMessage } from "ai"
 import { z } from "zod"
 
 export default observer(function Chat() {

@@ -140,7 +140,11 @@ export const relevantPlacesQuery = e.params(
 			),
 			name: true,
 			displayName: true,
-			profilePhoto: true,
+			location: true,
+			profileImageUrl: true,
+			bio: true,
+			category: true,
+			googleMapsUrl: true,
 		}))
 	},
 )

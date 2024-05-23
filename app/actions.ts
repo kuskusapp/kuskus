@@ -147,9 +147,8 @@ export const relevantPlacesAction = actionClient
 		const session = auth.getSession()
 		const client = session.client
 		const res = await relevantPlacesQuery.run(client, { location, category })
-		console.log(res, "res")
 		try {
-			return "ok"
+			return res
 		} catch (err) {
 			return { failure: "EdgeDB error", errorDetails: err.message }
 		}
