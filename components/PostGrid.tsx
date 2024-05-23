@@ -64,8 +64,8 @@ const LazyImage = observer(function LazyImage(props: {
 		loaded: false,
 		hovered: false,
 		info: {
-			description: "great restaurant there were bugs tho very lively 6/10",
-			date: "3 months ago",
+			// description: props.description,
+			// date: props.date,
 		},
 	})
 
@@ -80,7 +80,7 @@ const LazyImage = observer(function LazyImage(props: {
 			onMouseLeave={() => {
 				local.hovered.set(false)
 			}}
-			className="relative overflow-hidden flex justify-center items-center bg-black"
+			className="relative overflow-hidden flex justify-center items-center bg-black cursor-pointer"
 			style={{ aspectRatio: `${props.image.width}/${props.image.height}` }}
 		>
 			<AnimatePresence>
@@ -91,10 +91,10 @@ const LazyImage = observer(function LazyImage(props: {
 						exit={{ opacity: 0 }}
 						className="absolute bottom-0 left-0 p-2 text-white z-20"
 					>
-						<div>{local.info.get().description}</div>
-						<div className="opacity-50 text-[14px]">
+						{/* <div>{local.info.get().description}</div> */}
+						{/* <div className="opacity-50 text-[14px]">
 							{local.info.get().date}
-						</div>
+						</div> */}
 					</motion.div>
 				) : null}
 			</AnimatePresence>

@@ -52,33 +52,27 @@ export default function ViewPost(props: Props) {
 				<div className="w-2/5 h-full bg-neutral-950 flex flex-col justify-between rounded-lg shadow-xl">
 					<div className="flex flex-col gap-[4px] p-[20px] py-[30px]">
 						<div className="flex pb-[10px] text-[18px]">
-							<div className="w-[38px] flex items-center">
+							{/* <div className="w-[38px] flex items-center">
 								<div className="bg-neutral-200 h-[28px] w-[28px] rounded-full"></div>
-							</div>
-							molly
+							</div> */}
 						</div>
 						<div className="flex flex-col text-[14px] text-white/70">
-							<p className="text-primaryText flex">
-								Lorem ipsum dolor sit amet consectetur adipisicing elit.
-								Numquam, repudiandae impedit. Quisquam ipsa sunt, ducimus maxime
-								dolores consequuntur. Ad, quaerat? Esse aut facere blanditiis
-								quod veritatis corporis accusamus eos unde.
-							</p>
+							<p className="text-primaryText flex"></p>
 							<div className="flex-col pt-2 space-y-1">
-								<p>japanese</p>
-								<div className="flex-row">
+								{/* <p>japanese</p> */}
+								{/* <div className="flex-row">
 									<Icons name="Tag" size={[22, 22]} />
 									<p className="pl-1">tags</p>
-								</div>
+								</div> */}
 							</div>
 						</div>
 					</div>
-					<div className="p-[20px] border-y border-white/10 h-full">
+					{/* <div className="p-[20px] border-y border-white/10 h-full">
 						comments
-					</div>
-					<button className="w-fit m-[20px] h-[60px] self-end flex-center px-5 py-1 rounded-2xl bg-yellow-600 hover:bg-yellow-700">
+					</div> */}
+					{/* <button className="w-fit m-[20px] h-[60px] self-end flex-center px-5 py-1 rounded-2xl bg-yellow-600 hover:bg-yellow-700">
 						Signup
-					</button>
+					</button> */}
 				</div>
 			</div>
 			<div className="w-[100px] p-[20px] flex justify-center"></div>
