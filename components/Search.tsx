@@ -9,7 +9,7 @@ import { PostGridImage } from "./PostGrid"
  * (insertions, deletions, or substitutions)               \
  * required to change one word into another.               \
  * It's a good choice for spell checking or auto-correct features.
- * 
+ *
  * @returns the Levenshtein distance between the two strings:
  * - 0 if the strings are equal
  * - a positive integer if the strings are different
@@ -28,13 +28,13 @@ export function levenshtein_distance(a: string, b: string): number {
 
 	for (let i = 1; i <= b.length; i += 1) {
 		for (let j = 1; j <= a.length; j += 1) {
-			if (b[i-1] == a[j-1]) {
-				mat[i][j] = mat[i-1][j-1]
+			if (b[i - 1] == a[j - 1]) {
+				mat[i][j] = mat[i - 1][j - 1]
 			} else {
 				mat[i][j] = Math.min(
-					mat[i-1][j-1] + 1, // substitution
-					mat[i  ][j-1] + 1, // insertion
-					mat[i-1][j  ] + 1, // deletion
+					mat[i - 1][j - 1] + 1, // substitution
+					mat[i][j - 1] + 1, // insertion
+					mat[i - 1][j] + 1, // deletion
 				)
 			}
 		}
@@ -44,12 +44,12 @@ export function levenshtein_distance(a: string, b: string): number {
 }
 
 export function search_by_levenshtein_distance(
-	query:       string,
-	strings:     string[],
+	query: string,
+	strings: string[],
 	max_results: number,
 ): number[] {
 	let indexes: number[] = new Array(max_results)
-	let scores : number[] = new Array(max_results)
+	let scores: number[] = new Array(max_results)
 	let len = 0
 
 	strings_loop: for (let str_idx = 0; str_idx < strings.length; str_idx += 1) {
@@ -60,18 +60,18 @@ export function search_by_levenshtein_distance(
 			if (score < scores[i]) {
 				// shift to the right
 				for (let j = len; j > i; j -= 1) {
-					indexes[j] = indexes[j-1]
-					scores [j] = scores [j-1]
+					indexes[j] = indexes[j - 1]
+					scores[j] = scores[j - 1]
 				}
 
-				scores [i] = score
+				scores[i] = score
 				indexes[i] = str_idx
 				continue strings_loop
 			}
 		}
 
 		if (len < max_results) {
-			scores [len] = score
+			scores[len] = score
 			indexes[len] = str_idx
 			len += 1
 		}
@@ -85,17 +85,17 @@ export function search_by_levenshtein_distance(
 }
 
 export function search_post_grid_images(
-	query:  string,
+	query: string,
 	images: PostGridImage[],
 	max_results: number,
 ): PostGridImage[] {
 	let results = search_by_levenshtein_distance(
 		query,
-		images.map(image => image.alt),
+		images.map((image) => image.alt),
 		max_results,
 	)
 
-	return results.map(result => images[result])
+	return results.map((result) => images[result])
 }
 
 export type SearchProps = {

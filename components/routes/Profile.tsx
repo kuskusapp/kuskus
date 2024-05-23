@@ -111,7 +111,12 @@ export default observer(function Profile(props: Props) {
 						}}
 					/>
 				)}
-				<Sidebar />
+				<Sidebar
+					prettyName={authData.displayName.get()}
+					username={authData.name.get()}
+					description={authData.bio.get()}
+					profileImageUrl={authData.profilePhotoUrl.get()}
+				/>
 				<div className="md:ml-[380px] m-0 min-h-full flex">
 					<ImageGrid
 						columns={local.windowSize.get() < 768 ? 3 : 1}
@@ -127,24 +132,31 @@ export default observer(function Profile(props: Props) {
 	)
 })
 
-function Sidebar() {
-	// const local = useObservable({
-	// 	hoveredSidebarTab: "Following",
-	// })
+function Sidebar({
+	prettyName,
+	username,
+	description,
+	profileImageUrl,
+}: {
+	prettyName: string
+	username: string
+	description?: string
+	profileImageUrl?: string
+}) {
 	return (
 		<div className="md:fixed static left-0 md:w-[380px] w-full top-0 h-screen bg-secondary">
-			<div className="w-full h-3/5 bg-substitute">Profile</div>
+			<img className="w-full h-3/5 bg-substitute" src={profileImageUrl}></img>
 			<div className="p-[24px] pt-[34px] flex flex-col justify-between h-2/5">
 				<div className="flex flex-col gap-[2px]">
-					<div className="text-[30px] font-bold">Molly</div>
-					<div>@molly - she/her</div>
-					<div>description</div>
+					<div className="text-[30px] font-bold">{prettyName}</div>
+					<div>@{username}</div>
+					<div>{description}</div>
 				</div>
-				<div className="flex gap-[10px] mt-[20px] self-center z-10 [&>*]:z-[30] [&>*]:rounded-[8px] [&>*]:w-[95px] [&>*]:flex [&>*]:justify-center [&>*]:p-1">
-					<motion.div className="hover:bg-zinc-300">Photos</motion.div>
+				{/* <div className="flex gap-[10px] mt-[20px] self-center z-10 [&>*]:z-[30] [&>*]:rounded-[8px] [&>*]:w-[95px] [&>*]:flex [&>*]:justify-center [&>*]:p-1">
+					<motion.div className="hover:bg-zinc-300 bold">Photos</motion.div>
 					<motion.div className="hover:bg-zinc-300">Following</motion.div>
 					<motion.div className="hover:bg-zinc-300">Followers</motion.div>
-				</div>
+				</div> */}
 			</div>
 		</div>
 	)

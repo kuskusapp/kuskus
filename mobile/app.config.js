@@ -40,7 +40,8 @@ const getAppId = () => {
 	return `${APP_ID_PREFIX}.app`
 }
 
-export default {
+/** @type {import('expo/config').ExpoConfig} */
+export const expoConfig = {
 	expo: {
 		name: getName(),
 		slug: "kuskus",
@@ -148,3 +149,5 @@ export default {
 		},
 	},
 }
+
+export default expoConfig
