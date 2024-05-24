@@ -25,15 +25,9 @@ export default function AuthRoute() {
 			<Button
 				title="Login"
 				onPress={() => {
-					console.log("runs..")
-					fetch("http://localhost:3001/mobile-auth")
-						.then((response) => response.json())
-						.then((data) => {
-							console.log("Success:", data)
-						})
-						.catch((error) => {
-							console.error("Error:", error)
-						})
+					// TODO: figure out how to do auth flow
+					// https://docs.expo.dev/versions/latest/sdk/auth-session/
+					// https://docs.expo.dev/versions/latest/sdk/webbrowser/
 				}}
 			/>
 		</>
