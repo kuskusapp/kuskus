@@ -1,10 +1,8 @@
 "use client"
-// import { relevantPlacesAction } from "@/app/actions"
 import { observer, useObservable } from "@legendapp/state/react"
 import { CoreMessage } from "ai"
 import { useEffect } from "react"
 import PlaceCard from "../PlaceCard"
-import ActionBar from "../ActionBar"
 
 interface RelevantPlace {
 	name: string
@@ -25,29 +23,29 @@ export default observer(function Chat() {
 	})
 
 	// used for testing the ui
-	useEffect(() => {
-		local.questionAndAnswer.set([
-			{
-				question: "Great coffee places in Warsaw",
-				relevantPlaces: [
-					{
-						name: "sklep-z-kawa-i-kawiarnia",
-						displayName: "Sklep z Kawą i Kawiarnia",
-						imageUrl:
-							"https://lh5.googleusercontent.com/p/AF1QipPB8FL_x-CQbk9z4ZYLkaqyrHNfkhnFhJ5-T0Qw=w408-h271-k-no",
-						category: "coffee",
-					},
-					{
-						name: "wazaap",
-						displayName: "Wazaap",
-						imageUrl:
-							"https://lh5.googleusercontent.com/p/AF1QipPBtbz87EZ9HGIia9bkRT2szr99d5Bg9PRvLKvc=w408-h306-k-no",
-						category: "coffee",
-					},
-				],
-			},
-		])
-	}, [])
+	// useEffect(() => {
+	// 	local.questionAndAnswer.set([
+	// 		{
+	// 			question: "Great coffee places in Warsaw",
+	// 			relevantPlaces: [
+	// 				{
+	// 					name: "sklep-z-kawa-i-kawiarnia",
+	// 					displayName: "Sklep z Kawą i Kawiarnia",
+	// 					imageUrl:
+	// 						"https://lh5.googleusercontent.com/p/AF1QipPB8FL_x-CQbk9z4ZYLkaqyrHNfkhnFhJ5-T0Qw=w408-h271-k-no",
+	// 					category: "coffee",
+	// 				},
+	// 				{
+	// 					name: "wazaap",
+	// 					displayName: "Wazaap",
+	// 					imageUrl:
+	// 						"https://lh5.googleusercontent.com/p/AF1QipPBtbz87EZ9HGIia9bkRT2szr99d5Bg9PRvLKvc=w408-h306-k-no",
+	// 					category: "coffee",
+	// 				},
+	// 			],
+	// 		},
+	// 	])
+	// }, [])
 
 	return (
 		<>
@@ -90,11 +88,26 @@ export default observer(function Chat() {
 						<form
 							onSubmit={async (e) => {
 								e.preventDefault()
-								// const places = await relevantPlacesAction({
-								// 	location: "Warsaw",
-								// 	category: "coffee",
-								// })
-								// console.log(places.data, "places")
+
+								local.questionAndAnswer.push({
+									question: local.query.get(),
+									relevantPlaces: [
+										{
+											name: "sklep-z-kawa-i-kawiarnia",
+											displayName: "Sklep z Kawą i Kawiarnia",
+											imageUrl:
+												"https://lh5.googleusercontent.com/p/AF1QipPB8FL_x-CQbk9z4ZYLkaqyrHNfkhnFhJ5-T0Qw=w408-h271-k-no",
+											category: "coffee",
+										},
+										{
+											name: "wazaap",
+											displayName: "Wazaap",
+											imageUrl:
+												"https://lh5.googleusercontent.com/p/AF1QipPBtbz87EZ9HGIia9bkRT2szr99d5Bg9PRvLKvc=w408-h306-k-no",
+											category: "coffee",
+										},
+									],
+								})
 							}}
 						>
 							<div className="absolute left-1/2 bottom-0 transform -translate-x-1/2 bg-[#09090b] px-5 py-10 border border-zinc-700 rounded-md">
@@ -114,6 +127,25 @@ export default observer(function Chat() {
 		</>
 	)
 })
+
+// process.env.OPENAI_API_KEY =
+// 	process.env.NEXT_PUBLIC_OPENAI_API_KEY
+// local.messages.push({
+// 	role: "user",
+// 	content: local.query.get(),
+// })
+// const result = await generateText({
+// 	model: openai("gpt-4o"),
+// 	tools: { guessPlaces },
+// 	system: `You are a helpful, respectful and honest assistant.`,
+// 	messages: local.messages.get(),
+// })
+// console.log(result, "result")
+// const places = await relevantPlacesAction({
+// 	location: "Warsaw",
+// 	category: "coffee",
+// })
+// console.log(places.data, "places")
 
 // process.env.OPENAI_API_KEY =
 // 	process.env.NEXT_PUBLIC_OPENAI_API_KEY

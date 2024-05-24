@@ -1,5 +1,9 @@
 "use client"
-import { describeImageAction, uploadPostAction } from "@/app/actions"
+import {
+	describeImageAction,
+	suggestCategoriesAction,
+	uploadPostAction,
+} from "@/app/actions"
 import { observer, useObservable } from "@legendapp/state/react"
 import { useRouter } from "next/navigation"
 import React from "react"
@@ -125,9 +129,13 @@ export default observer(function AddPostModal(props: Props) {
 													// @ts-ignore
 													local.aiDescription.set(resp.data)
 
-													const categories = await fetch(
-														`http://158.160.90.161:8000/suggest-categories/?text=${encodeURIComponent(local.aiDescription.get())}&k=2`,
-													)
+													const categories = await suggestCategoriesAction({
+														foodDescription: local.aiDescription.get(),
+													})
+
+													// const categories = await fetch(
+													// 	`http://158.160.90.161:8000/suggest-categories/?text=${encodeURIComponent(local.aiDescription.get())}&k=2`,
+													// )
 													console.log(categories, "categories")
 												}
 												local.aiDescriptionLoading.set(false)

@@ -7,7 +7,6 @@ import {
 	relevantPlacesQuery,
 } from "@/edgedb/crud/queries"
 import { actionClient } from "@/lib/safe-action"
-import OpenAI from "openai"
 import { create } from "ronin"
 import { z } from "zod"
 import { zfd } from "zod-form-data"
@@ -165,6 +164,26 @@ export const deletePostAction = actionClient
 		const res = await deletePost.run(client, { imageUrl })
 		try {
 			return res
+		} catch (err) {
+			return { failure: "EdgeDB error", errorDetails: err.message }
+		}
+	})
+
+const suggestCategoriesSchema = z.object({
+	foodDescription: z.string(),
+})
+export const suggestCategoriesAction = actionClient
+	.schema(suggestCategoriesSchema)
+	.action(async ({ parsedInput: { foodDescription } }) => {
+		try {
+			const session = auth.getSession()
+			if (session) {
+				const categories = await fetch(
+					`http://158.160.90.161:8000/suggest-categories/?text=${encodeURIComponent(foodDescription)}&k=2`,
+				)
+				console.log(await categories.json())
+				return "ok"
+			}
 		} catch (err) {
 			return { failure: "EdgeDB error", errorDetails: err.message }
 		}
