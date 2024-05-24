@@ -108,6 +108,12 @@ export default observer(function Profile(props: Props) {
 						closeModal={() => {
 							local.postViewData.set(null)
 						}}
+						onPostDelete={(postPhotoUrl) => {
+							const updatedPosts = posts.filter(
+								(post) => post.imageUrl !== postPhotoUrl,
+							)
+							authData.createdPosts.set(updatedPosts)
+						}}
 					/>
 				)}
 				<Sidebar

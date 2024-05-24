@@ -28,6 +28,7 @@ export default function AuthRoute() {
 					// TODO: figure out how to do auth flow
 					// https://docs.expo.dev/versions/latest/sdk/auth-session/
 					// https://docs.expo.dev/versions/latest/sdk/webbrowser/
+					// https://github.com/EvanBacon/expo-router-auth-proxy-example
 				}}
 			/>
 		</>

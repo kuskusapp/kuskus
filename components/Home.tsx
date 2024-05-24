@@ -107,6 +107,12 @@ export default observer(function Home(props: Props) {
 				<ViewPost
 					post={local.showViewPost.get()}
 					closeModal={local.showViewPost.set}
+					onPostDelete={(postPhotoUrl) => {
+						const updatedPosts = posts.filter(
+							(post) => post.imageUrl !== postPhotoUrl,
+						)
+						publicData.posts.set(updatedPosts)
+					}}
 				/>
 			)}
 			{authData.get() && (

@@ -1,7 +1,7 @@
 "use server"
 
 import { auth } from "@/edgedb-next-client"
-import { createPost, updateUser } from "@/edgedb/crud/mutations"
+import { createPost, deletePost, updateUser } from "@/edgedb/crud/mutations"
 import {
 	profileLoadMorePosts,
 	relevantPlacesQuery,
@@ -147,6 +147,22 @@ export const relevantPlacesAction = actionClient
 		const session = auth.getSession()
 		const client = session.client
 		const res = await relevantPlacesQuery.run(client, { location, category })
+		try {
+			return res
+		} catch (err) {
+			return { failure: "EdgeDB error", errorDetails: err.message }
+		}
+	})
+
+const deletePostSchema = z.object({
+	imageUrl: z.string(),
+})
+export const deletePostAction = actionClient
+	.schema(deletePostSchema)
+	.action(async ({ parsedInput: { imageUrl } }) => {
+		const session = auth.getSession()
+		const client = session.client
+		const res = await deletePost.run(client, { imageUrl })
 		try {
 			return res
 		} catch (err) {
