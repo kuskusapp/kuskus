@@ -114,17 +114,6 @@ export default function Search(props: SearchProps) {
 		}, 300)
 	}
 
-	const locationPermission = (allow) => {
-		if (allow) {
-			//add logic to get nearby places
-			navigator.geolocation.getCurrentPosition(() => {
-				setShowModal(false)
-			})
-		} else {
-			setShowModal(false)
-		}
-	}
-
 	return (
 		<div className="flex gap-3  w-full">
 			<div className="rounded-2xl flex-between border-neutral-700 border border-opacity-50 bg-neutral-800 bg-opacity-60 w-full p-1">
@@ -146,7 +135,12 @@ export default function Search(props: SearchProps) {
 				</label>
 			</div>
 			<button
-				onMouseDown={nearbyClicked}
+				onMouseDown={() => {
+					navigator.geolocation.getCurrentPosition(() => {
+						// TODO: show nearby places in grid
+						console.log("Location permission granted")
+					})
+				}}
 				style={{
 					backgroundColor: isPressed ? "#dbb289" : "#eec093",
 					boxShadow: isPressed ? "none" : "inset 0 -3px 0px 0px #a97e2a",
@@ -158,7 +152,7 @@ export default function Search(props: SearchProps) {
 				<FaMapPin className="w-5 h-5" />
 				Places nearby
 			</button>
-			{showModal && (
+			{/* {showModal && (
 				<PermissionModal onClose={() => setShowModal(false)}>
 					<p className="text-black text-center">
 						"KusKus" would like to use your current location.
@@ -181,7 +175,7 @@ export default function Search(props: SearchProps) {
 						</button>
 					</div>
 				</PermissionModal>
-			)}
+			)} */}
 		</div>
 	)
 }

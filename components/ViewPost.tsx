@@ -71,7 +71,7 @@ export default observer(function ViewPost(props: Props) {
 						</div>
 					</div>
 					{/* <div className="p-[20px] border-y border-white/10 h-full">
-						comments
+						comment
 					</div> */}
 					<div className="flex justify-end">
 						<div className="flex justify-end items-center p-5">
