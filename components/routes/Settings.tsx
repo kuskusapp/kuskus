@@ -1,15 +1,27 @@
 "use client"
-import { useState } from "react"
+import { observer, useObservable } from "@legendapp/state/react"
+import { useRouter } from "next/navigation"
+import { useEffect } from "react"
 
-export default function setup() {
-	const [settings, setSettings] = useState([
-		"Edit Profile",
-		"Preference",
-		"Notifications",
-		"Sign Out",
-		"Delete Account",
-	])
-	const [selectedSetting, setSelectedSetting] = useState(settings[0])
+interface Props {
+	authenticated: boolean
+}
+export default observer(function Settings(props: Props) {
+	const local = useObservable({
+		settings: [
+			"Edit Profile",
+			// "Preference",
+			// "Notifications",
+			// "Sign Out",
+			// "Delete Account",
+		],
+		selectedSetting: "Edit Profile",
+	})
+	const router = useRouter()
+	// TODO: route in RSC?
+	useEffect(() => {
+		if (!props.authenticated) router.push("/")
+	}, [])
 	return (
 		<div className="w-screen flex z-30 h-screen bg-primary rounded-[20px] overflow-hidden">
 			<div className="border-r border-black/20 h-full w-1/2">
@@ -17,14 +29,14 @@ export default function setup() {
 					Settings
 				</div>
 				<div className="flex flex-col overflow-auto max-h-[calc(100%-80px)] [&::-webkit-scrollbar]:hidden">
-					{settings.map((element, index) => {
+					{local.settings.get().map((element, index) => {
 						return (
 							<div
 								onClick={() => {
-									setSelectedSetting(settings[index])
+									local.selectedSetting.set(local.settings[index])
 								}}
 								className={`p-2 px-5 border-b border-white/10 flex justify-between items-center ${
-									selectedSetting === element ? "bg-white/10" : ""
+									local.selectedSetting.get() === element ? "bg-white/10" : ""
 								}`}
 							>
 								{element}
@@ -35,7 +47,9 @@ export default function setup() {
 			</div>
 			<div className="h-full w-1/2">
 				<div className="h-[80px] p-5 pb-4 justify-between flex items-end border-b border-black/20">
-					<div className="text-[20px] font-semibold">{selectedSetting}</div>
+					<div className="text-[20px] font-semibold">
+						{local.selectedSetting.get()}
+					</div>
 					<button className="bg-black rounded-full h-[34px] flex items-center px-4 py-2 font-semibold text-[12px] text-white hover:text-gray-200 hover:bg-neutral-800">
 						Save
 					</button>
@@ -50,13 +64,14 @@ export default function setup() {
 
 							"Sign Out": <SignOut />,
 							"Delete Account": <DeleteAccount />,
-						}[selectedSetting]
+						}[local.selectedSetting.get()]
 					}
 				</div>
 			</div>
 		</div>
 	)
-}
+})
+
 function EditProfile() {
 	return (
 		<div className="flex flex-col gap-[12px]">
@@ -67,7 +82,7 @@ function EditProfile() {
 			</div>
 			<div className="w-full">
 				<div className="font-light mb-[6px] text-white/50 px-4 text-[12px]">
-					NAME
+					Display Name
 				</div>
 				<input
 					type="text"
@@ -75,42 +90,12 @@ function EditProfile() {
 					className="font-thin text-xs outline-none bg-transparent border-x-0 border-white/20 w-full"
 				/>
 			</div>
-			<div className="w-full ">
-				<div className="font-light mb-[6px]  px-4 text-[12px]">USERNAME</div>
+			<div className="w-full">
+				<div className="font-light mb-[6px]  px-4 text-[12px]">Username *</div>
 				<input
 					type="text"
 					placeholder="Your username..."
 					className="font-thin text-xs outline-none bg-transparent border-x-0 border-white/20 w-full"
-				/>
-			</div>
-			<div className="w-full">
-				<div className="font-light mb-[3px] text-white/50 px-4 text-[12px]">
-					WTF
-				</div>
-				<input
-					type="text"
-					placeholder="Your username..."
-					className="outline-none bg-transparent border-x-0 border-white/20 w-full"
-				/>
-			</div>
-			<div className="w-full">
-				<div className="font-light mb-[6px] text-white/50 px-4 text-[12px]">
-					WTF
-				</div>
-				<input
-					type="text"
-					placeholder="Your username..."
-					className="outline-none bg-transparent border-x-0 border-white/20 w-full"
-				/>
-			</div>
-			<div className="w-full">
-				<div className="font-light mb-[6px] text-black/50 px-4 text-[12px]">
-					????
-				</div>
-				<input
-					type="text"
-					placeholder="Your username..."
-					className="outline-none bg-transparent border-x-0 border-white/20 w-full"
 				/>
 			</div>
 		</div>
@@ -118,17 +103,17 @@ function EditProfile() {
 }
 
 function Preference() {
-	return <div>nothing here yet</div>
+	return <div>comming soon</div>
 }
 
 function Notifications() {
-	return <div>nothing here yet</div>
+	return <div>comming soon</div>
 }
 
 function SignOut() {
-	return <div>nothing here yet</div>
+	return <div>comming soon</div>
 }
 
 function DeleteAccount() {
-	return <div>nothing here yet</div>
+	return <div>comming soon</div>
 }
