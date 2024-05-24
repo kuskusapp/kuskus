@@ -1,0 +1,120 @@
+{
+  "items": [
+    {
+      "name": "Sushi",
+      "description": "A Japanese dish consisting of vinegared rice accompanied by various ingredients such as seafood, vegetables, and occasionally tropical fruits. Sushi is often served with pickled ginger, wasabi, and soy sauce."
+    },
+    {
+      "name": "Smoothie",
+      "description": "A thick, smooth drink made from pureed raw fruit and/or vegetables, typically using a blender. Often includes liquid bases like water, fruit juice, plant milk, or dairy milk, and sometimes yogurt or protein powder."
+    },
+    {
+      "name": "Vegan",
+      "description": "Food that does not contain any animal products or by-products. Vegan dishes are made solely from plant-based ingredients, including vegetables, grains, nuts, seeds, legumes, and fruits."
+    },
+    {
+      "name": "Pizza",
+      "description": "An Italian dish consisting of a usually round, flat base of leavened wheat-based dough topped with tomatoes, cheese, and often various other ingredients (such as anchovies, mushrooms, onions, olives, vegetables, meats, etc.) baked at a high temperature."
+    },
+    {
+      "name": "Burger",
+      "description": "A sandwich consisting of one or more cooked patties of ground meat, usually beef, placed inside a sliced bread roll or bun. Burgers can be made with various meats or plant-based alternatives and are often accompanied by cheese, lettuce, tomato, onions, pickles, bacon, and condiments such as mustard, mayonnaise, ketchup, and relish."
+    },
+    {
+      "name": "Pasta",
+      "description": "An Italian dish made from durum wheat dough that is extruded or stamped into various shapes and typically cooked in boiling water. Pasta can be served with a variety of sauces, such as tomato, pesto, or Alfredo, and often includes meat, vegetables, or cheese."
+    },
+    {
+      "name": "Salad",
+      "description": "A cold dish consisting of a mixture of raw or cooked vegetables, typically seasoned with oil, vinegar, or other dressing. Salads can also include ingredients such as pasta, legumes, grains, meat, cheese, and fruits."
+    },
+    {
+      "name": "Tacos",
+      "description": "A traditional Mexican dish composed of a folded or rolled tortilla filled with various mixtures, such as seasoned meat, beans, lettuce, and tomatoes. Tacos are often garnished with cheese, salsa, guacamole, and sour cream."
+    },
+    {
+      "name": "Soup",
+      "description": "A primarily liquid food, generally served warm or hot, made by combining ingredients such as meat and vegetables with stock, juice, water, or another liquid. Soups are typically categorized into clear soups and thick soups."
+    },
+    {
+      "name": "Steak",
+      "description": "A high-quality beef cut taken from the hindquarters of the animal, typically grilled, pan-fried, or broiled. Steaks can be served with a variety of side dishes, such as potatoes, vegetables, and sauces."
+    },
+    {
+      "name": "Coffee",
+      "description": "A brewed drink prepared from roasted coffee beans, the seeds of berries from certain Coffea species. Coffee can be served hot or cold and is often enjoyed with milk, cream, sugar, or flavored syrups."
+    },
+    {
+      "name": "Tea",
+      "description": "An aromatic beverage commonly prepared by pouring hot or boiling water over cured or fresh leaves of Camellia sinensis, an evergreen shrub native to East Asia. Tea can be served with lemon, milk, or honey, and can be enjoyed hot or iced."
+    },
+    {
+      "name": "Juice",
+      "description": "A drink made from the extraction or pressing of the natural liquid contained in fruit and vegetables. Common juices include orange, apple, and carrot, and they can be enjoyed fresh or pasteurized."
+    },
+    {
+      "name": "Soda",
+      "description": "A carbonated soft drink flavored with various syrups. Popular soda flavors include cola, lemon-lime, root beer, and ginger ale."
+    },
+    {
+      "name": "Beer",
+      "description": "An alcoholic drink made from yeast-fermented malt flavored with hops. Beer can be classified into various types, such as lager, ale, stout, and pilsner, based on the brewing process and ingredients."
+    },
+    {
+      "name": "Wine",
+      "description": "An alcoholic drink made from fermented grapes or other fruits. Wine is typically categorized into red, white, rosé, and sparkling, based on the type of grape and fermentation process."
+    },
+    {
+      "name": "Smoothie",
+      "description": "A thick, smooth drink made from blended raw fruit and/or vegetables, often with a liquid base such as water, juice, or milk. Smoothies can include additional ingredients like yogurt, protein powder, and sweeteners."
+    },
+    {
+      "name": "Milkshake",
+      "description": "A cold drink made by blending milk, ice cream, and flavorings such as chocolate or fruit syrups. Milkshakes are often topped with whipped cream and served with a straw."
+    },
+    {
+      "name": "Cocktail",
+      "description": "An alcoholic mixed drink typically composed of a combination of spirits, liqueurs, fruit juices, syrups, and other flavorings. Popular cocktails include the margarita, martini, and mojito."
+    },
+    {
+      "name": "Water",
+      "description": "A transparent, odorless, and tasteless liquid that is essential for most plant and animal life. Water can be consumed plain or can be infused with flavors such as lemon, cucumber, or mint."
+    },
+    {
+      "name": "Lasagna",
+      "description": "An Italian dish made of stacked layers of thin pasta alternated with fillings such as ragù (ground meats and tomato sauce), vegetables, cheeses (which may include ricotta and Parmesan), and seasonings and spices such as garlic, oregano, and basil."
+    },
+    {
+      "name": "Paella",
+      "description": "A Spanish rice dish originally from Valencia. Paella is made with rice, green beans, meat (such as chicken, rabbit, or duck), white beans, snails, and seasoning such as saffron and rosemary."
+    },
+    {
+      "name": "Ramen",
+      "description": "A Japanese noodle soup. It consists of Chinese-style wheat noodles served in a meat or (occasionally) fish-based broth, often flavored with soy sauce or miso, and uses toppings such as sliced pork (chāshū), nori (dried seaweed), menma (bamboo shoots), and scallions."
+    },
+    {
+      "name": "Falafel",
+      "description": "A deep-fried ball or patty made from ground chickpeas, fava beans, or both. Falafel is a traditional Middle Eastern food commonly served in a pita, which acts as a pocket, or wrapped in a flatbread known as laffa."
+    },
+    {
+      "name": "Cheesecake",
+      "description": "A sweet dessert consisting of one or more layers. The main, and thickest layer, consists of a mixture of soft, fresh cheese, eggs, and sugar. If there is a bottom layer, it often consists of a crust or base made from crushed cookies (or digestive biscuits), graham crackers, pastry, or sponge cake."
+    },
+    {
+      "name": "Curry",
+      "description": "A variety of dishes originating in the Indian subcontinent that use a complex combination of spices or herbs, usually including ground turmeric, cumin, coriander, ginger, and fresh or dried chilies."
+    },
+    {
+      "name": "Dim Sum",
+      "description": "A large range of small Chinese dishes that are traditionally enjoyed in restaurants for brunch. Dim sum dishes include dumplings, buns, wraps, and noodle rolls (often filled with a combination of meat, seafood, and vegetables), as well as desserts and soups."
+    },
+    {
+      "name": "Pancakes",
+      "description": "A flat, round cake prepared from a starch-based batter that may contain eggs, milk, and butter and cooked on a hot surface such as a griddle or frying pan. In some versions, the batter may be fermented. Pancakes are often served with syrup, butter, and various toppings."
+    },
+    {
+      "name": "Brownie",
+      "description": "A square or rectangular chocolate baked confection. Brownies come in a variety of forms and may be either fudgy or cakey, depending on their density. They may include nuts, frosting, cream cheese, chocolate chips, or other ingredients."
+    }
+  ]
+}
