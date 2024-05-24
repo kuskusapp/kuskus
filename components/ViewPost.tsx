@@ -70,9 +70,14 @@ export default function ViewPost(props: Props) {
 					{/* <div className="p-[20px] border-y border-white/10 h-full">
 						comments
 					</div> */}
-					{/* <button className="w-fit m-[20px] h-[60px] self-end flex-center px-5 py-1 rounded-2xl bg-yellow-600 hover:bg-yellow-700">
-						Signup
-					</button> */}
+					<div className="flex-between">
+						<button className="w-fit m-[20px] h-[40px] self-end flex-center px-5 py-1 rounded-lg bg-white text-black hover:bg-red-500 hover:text-white transition-all">
+							delete
+						</button>
+						<button className="w-fit m-[20px] h-[40px] self-end flex-center transition-all px-5 py-1 rounded-lg bg-yellow-500 hover:bg-yellow-700">
+							Signup
+						</button>
+					</div>
 				</div>
 			</div>
 			<div className="w-[100px] p-[20px] flex justify-center"></div>

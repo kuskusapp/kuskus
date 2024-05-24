@@ -61,34 +61,27 @@ export default observer(function AddPostModal(props: Props) {
 	].slice(0, local.initialCount.get())
 
 	return (
-		<div className="fixed inset-0 z-10 overflow-y-auto">
+		<div className="fixed inset-0 z-10 ">
 			<button
 				onClick={() => props.onClose()}
 				className="absolute top-10 left-20 glass-background hover:opacity-40 px-3 py-3 rounded-full z-50"
 			>
 				<IoCloseOutline />
 			</button>
-			<div className="min-h-screen px-2 text-center">
-				<div
-					className="fixed inset-0 bg-neutral-900 opacity-95"
-					style={{ backdropFilter: "blur(30px)" }}
-				/>
+			<div className="h-screen md:px-2 px-0 text-center">
+				<div className="fixed inset-0 bg-neutral-900 backdrop-blur-[30px] opacity-95" />
 				<span className="inline-block h-screen align-middle" aria-hidden="true">
 					&#8203;
 				</span>
-				<div
-					className="inline-block w-full max-w-7xl my-8 overflow-hidden text-left align-middle transition-all transform shadow-xl rounded-2xl"
-					style={{ minHeight: "100%" }}
-				>
+				<div className="inline-block md:w-4/5 w-full my-8 overflow-hidden text-left align-middle transition-all transform shadow-xl rounded-none md:rounded-2xl">
 					<form
-						className="flex"
-						style={{ minHeight: "100%" }}
+						className="flex md:flex-row flex-col"
 						onSubmit={(e) => {
 							e.preventDefault()
 						}}
 					>
 						<div
-							className="w-4/5 flex h-[650px] justify-center items-center m-auto"
+							className="md:w-4/5 w-full flex h-[650px] justify-center items-center m-auto"
 							style={{
 								borderRight: "1px solid #2c2c2c",
 								background: "rgba(0, 0, 0, 0.95)",
