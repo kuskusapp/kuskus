@@ -1,78 +1,106 @@
 "use client"
-import { observer, useObservable } from "@legendapp/state/react"
 import { CoreMessage } from "ai"
-import { useEffect } from "react"
+import * as react from "react"
 import PlaceCard from "../PlaceCard"
 
-interface RelevantPlace {
+type RelevantPlace = {
 	name: string
 	displayName: string
 	imageUrl: string
 	category: string
 }
 
-export default observer(function Chat() {
-	const local = useObservable({
-		query: "",
-		messages: [] as CoreMessage[],
-		questionAndAnswer: [] as {
-			question: string
-			relevantPlaces?: RelevantPlace[]
-			answerAsText?: string
-		}[],
-	})
+enum AnswerKind {Loading, Place, Text}
+type Answer = AnswerLoading | AnswerPlace | AnswerText
 
-	// used for testing the ui
-	// useEffect(() => {
-	// 	local.questionAndAnswer.set([
-	// 		{
-	// 			question: "Great coffee places in Warsaw",
-	// 			relevantPlaces: [
-	// 				{
-	// 					name: "sklep-z-kawa-i-kawiarnia",
-	// 					displayName: "Sklep z Kawą i Kawiarnia",
-	// 					imageUrl:
-	// 						"https://lh5.googleusercontent.com/p/AF1QipPB8FL_x-CQbk9z4ZYLkaqyrHNfkhnFhJ5-T0Qw=w408-h271-k-no",
-	// 					category: "coffee",
-	// 				},
-	// 				{
-	// 					name: "wazaap",
-	// 					displayName: "Wazaap",
-	// 					imageUrl:
-	// 						"https://lh5.googleusercontent.com/p/AF1QipPBtbz87EZ9HGIia9bkRT2szr99d5Bg9PRvLKvc=w408-h306-k-no",
-	// 					category: "coffee",
-	// 				},
-	// 			],
-	// 		},
-	// 	])
-	// }, [])
+type AnswerLoading = {
+	kind: AnswerKind.Loading
+}
+
+type AnswerPlace = {
+	kind: AnswerKind.Place
+	places: RelevantPlace[]
+}
+
+type AnswerText = {
+	kind: AnswerKind.Text
+	text: string
+}
+
+type QuestionAndAnswer = {
+	question: string
+	answer: Answer
+}
+
+let dummy = 0
+
+export default function Chat() {
+	const input_ref = react.useRef<HTMLInputElement>(null)
+
+	const [qas, set_qas] = react.useState<QuestionAndAnswer[]>([])
+
+	const handle_submit = react.useCallback(async (e: react.FormEvent<HTMLFormElement>) => {
+		e.preventDefault()
+		let query = input_ref.current?.value
+		if (!query) return
+		input_ref.current.value = ""
+
+		const qa: QuestionAndAnswer = {
+			question: query,
+			answer: {kind: AnswerKind.Loading},
+		}
+		
+		let qa_idx = 0
+		set_qas(qas => {
+			const qas_copy = [...qas]
+			qa_idx = qas_copy.push(qa) - 1
+			return qas_copy
+		})
+
+		// TODO: fetch an actual answer
+
+		await new Promise((resolve) => setTimeout(resolve, 1000)) // simulate loading
+
+		let answer: Answer
+		if (++dummy % 2 === 0) {
+			answer = {
+				kind: AnswerKind.Text,
+				text: "I don't know",
+			}
+		} else {
+			answer = {
+				kind: AnswerKind.Place,
+				places: [
+					{
+						name: "sklep-z-kawa-i-kawiarnia",
+						displayName: "Sklep z Kawą i Kawiarnia",
+						imageUrl:
+							"https://lh5.googleusercontent.com/p/AF1QipPB8FL_x-CQbk9z4ZYLkaqyrHNfkhnFhJ5-T0Qw=w408-h271-k-no",
+						category: "coffee",
+					},
+					{
+						name: "wazaap",
+						displayName: "Wazaap",
+						imageUrl:
+							"https://lh5.googleusercontent.com/p/AF1QipPBtbz87EZ9HGIia9bkRT2szr99d5Bg9PRvLKvc=w408-h306-k-no",
+						category: "coffee",
+					},
+				],
+			}
+		}
+
+		set_qas(qas => {
+			const qas_copy = [...qas]
+			qas_copy[qa_idx] = {...qa, answer}
+			return qas_copy
+		})
+	}, [])
 
 	return (
 		<>
 			<div className="h-screen w-screen flex">
 				<div className="h-full bg-primary w-full flex flex-col px-[100px] p-2 pt-[50px]">
-					{local.questionAndAnswer.get().map((qa) => {
-						return (
-							<>
-								<div>question: {qa.question}</div>
-								<div>
-									answer:{" "}
-									{qa.relevantPlaces.map((place) => {
-										console.log(place.imageUrl)
-										return (
-											<PlaceCard
-												name={place.name}
-												displayName={place.displayName}
-												imageUrl={place.imageUrl}
-												category={place.category}
-											/>
-										)
-									})}
-								</div>
-							</>
-						)
-					})}
-					{local.questionAndAnswer.get().length === 0 && (
+					{qas.length === 0 && (
 						<div className="flex-col w-[40%] pl-10 absolute left-1/2 top-10 transform -translate-x-1/2 bg-[#09090b] py-8 border border-zinc-700 rounded-md">
 							<p className="text-lg text-left">Welcome to KusKus AI Chat!</p>
 							<p className="text-md w-[80%] text-left pt-5">
@@ -84,38 +112,49 @@ export default observer(function Chat() {
 							</p>
 						</div>
 					)}
-					<div className="h-[10%] p-2 flex items-center justify-center">
-						<form
-							onSubmit={async (e) => {
-								e.preventDefault()
+					{qas.map((qa) => {
+						const question = <div>question: {qa.question}</div>
 
-								local.questionAndAnswer.push({
-									question: local.query.get(),
-									relevantPlaces: [
-										{
-											name: "sklep-z-kawa-i-kawiarnia",
-											displayName: "Sklep z Kawą i Kawiarnia",
-											imageUrl:
-												"https://lh5.googleusercontent.com/p/AF1QipPB8FL_x-CQbk9z4ZYLkaqyrHNfkhnFhJ5-T0Qw=w408-h271-k-no",
-											category: "coffee",
-										},
-										{
-											name: "wazaap",
-											displayName: "Wazaap",
-											imageUrl:
-												"https://lh5.googleusercontent.com/p/AF1QipPBtbz87EZ9HGIia9bkRT2szr99d5Bg9PRvLKvc=w408-h306-k-no",
-											category: "coffee",
-										},
-									],
-								})
-							}}
-						>
+						switch (qa.answer.kind) {
+						case AnswerKind.Loading:
+							return (
+								<>
+									{question}
+									<div>loading...</div>
+								</>
+							)
+						case AnswerKind.Text:
+							return (
+								<>
+									{question}
+									<div>answer: {qa.answer.text}</div>
+								</>
+							)
+						case AnswerKind.Place:
+							return (
+								<>
+									{question}
+									<div>
+										answer:{" "}
+										{qa.answer.places.map((place) => (
+											<PlaceCard
+												name={place.name}
+												displayName={place.displayName}
+												imageUrl={place.imageUrl}
+												category={place.category}
+											/>
+										))}
+									</div>
+								</>
+							)
+						}
+					})}
+					<div className="h-[10%] p-2 flex items-center justify-center">
+						<form onSubmit={handle_submit}>
 							<div className="absolute left-1/2 bottom-0 transform -translate-x-1/2 bg-[#09090b] px-5 py-10 border border-zinc-700 rounded-md">
 								<input
 									placeholder="Send message..."
-									onChange={(e) => {
-										local.query.set(e.target.value)
-									}}
+									ref={input_ref}
 									className="w-[550px] input-placeholder focus:outline-none px-4 py-2 border bg-inherit border-zinc-700/80 focus:border-transparent rounded-md text-zinc-300"
 									type="text"
 								/>
@@ -126,7 +165,7 @@ export default observer(function Chat() {
 			</div>
 		</>
 	)
-})
+}
 
 // process.env.OPENAI_API_KEY =
 // 	process.env.NEXT_PUBLIC_OPENAI_API_KEY
