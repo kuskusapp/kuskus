@@ -2,6 +2,8 @@
 import { relevantPlacesAction } from "@/app/actions"
 import { observer, useObservable } from "@legendapp/state/react"
 import { CoreMessage } from "ai"
+import { useEffect } from "react"
+import PlaceCard from "../PlaceCard"
 
 export default observer(function Chat() {
 	const local = useObservable({
@@ -15,11 +17,42 @@ export default observer(function Chat() {
 		}[],
 	})
 
+	useEffect(() => {
+		local.relevantPlaces.set([
+			{
+				name: "sklep-z-kawa-i-kawiarnia",
+				displayName: "Sklep z Kawą i Kawiarnia",
+				imageUrl:
+					"https://lh5.googleusercontent.com/p/AF1QipPB8FL_x-CQbk9z4ZYLkaqyrHNfkhnFhJ5-T0Qw=w408-h271-k-no",
+				category: "coffee",
+			},
+			{
+				name: "wazaap",
+				displayName: "Wazaap",
+				imageUrl:
+					"https://lh5.googleusercontent.com/p/AF1QipPBtbz87EZ9HGIia9bkRT2szr99d5Bg9PRvLKvc=w408-h306-k-no",
+				category: "coffee",
+			},
+		])
+	}, [])
+
 	return (
 		<>
 			<div className="h-screen w-screen flex ">
 				<div className=" h-full bg-primary w-full flex flex-col px-[100px] p-2 pt-[50px]">
 					<div className="h-[90%]  w-full"></div>
+					{local.relevantPlaces.get().map((place) => {
+						return (
+							<>
+								<PlaceCard
+									name={place.name}
+									displayName={place.displayName}
+									imageUrl={place.imageUrl}
+									category={place.category}
+								/>
+							</>
+						)
+					})}
 					<div className="h-[10%] p-2  flex items-center justify-center">
 						<form
 							onSubmit={async (e) => {
