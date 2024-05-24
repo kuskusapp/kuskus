@@ -61,6 +61,13 @@ body {
 	font-weight: 200;
   font-size: 14px;
 }
+
+.input-placeholder::placeholder {
+	color: "#818182" ;
+	font-weight: 300;
+	font-size: 14px;
+}
+
 .blur-effect {
 	filter: blur(600px);
 }

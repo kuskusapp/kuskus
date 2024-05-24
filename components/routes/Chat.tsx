@@ -1,9 +1,10 @@
 "use client"
-import { relevantPlacesAction } from "@/app/actions"
+// import { relevantPlacesAction } from "@/app/actions"
 import { observer, useObservable } from "@legendapp/state/react"
 import { CoreMessage } from "ai"
 import { useEffect } from "react"
 import PlaceCard from "../PlaceCard"
+import ActionBar from "../ActionBar"
 
 export default observer(function Chat() {
 	const local = useObservable({
@@ -15,6 +16,7 @@ export default observer(function Chat() {
 			imageUrl: string
 			category: string
 		}[],
+		firstQuestionAsked: false,
 	})
 
 	useEffect(() => {
@@ -38,18 +40,29 @@ export default observer(function Chat() {
 
 	return (
 		<>
-			<div className="h-screen w-screen flex ">
-				<div className=" h-full bg-primary w-full flex flex-col px-[100px] p-2 pt-[50px]">
-					<div className="h-[90%]  w-full"></div>
+			{/* {local.firstQuestionAsked.get() && <></>} */}
+			<div className="h-screen w-screen flex">
+				<div className="h-full bg-primary w-full flex flex-col px-[100px] p-2 pt-[50px]">
+					<div className="h-[90%] w-full"></div>
 					{local.relevantPlaces.get().map((place) => {
 						return (
 							<>
-								<PlaceCard
+								<div className="flex-col w-[40%] items-center absolute left-1/2 top-10 transform -translate-x-1/2 bg-[#09090b] py-8 border border-zinc-700 rounded-md">
+									<p className="text-lg">Welcome to KusKus AI Chat!</p>
+									<p className="text-md w-[80%] text-left pt-5>
+										KusKus is your smart companion for discovering the best
+										spots nearby. Just type in the chat, and KusKus will swiftly
+										suggest restaurants, cafes, shops, and more around you. It's
+										all about making your search easy, fast, and perfectly
+										tailored to your needs!
+									</p>
+								</div>
+								{/* <PlaceCard
 									name={place.name}
 									displayName={place.displayName}
 									imageUrl={place.imageUrl}
 									category={place.category}
-								/>
+								/> */}
 							</>
 						)
 					})}
@@ -57,56 +70,23 @@ export default observer(function Chat() {
 						<form
 							onSubmit={async (e) => {
 								e.preventDefault()
-								const places = await relevantPlacesAction({
-									location: "Warsaw",
-									category: "coffee",
-								})
-								console.log(places.data, "places")
-								// process.env.OPENAI_API_KEY =
-								// 	process.env.NEXT_PUBLIC_OPENAI_API_KEY
-								// local.messages.push({ role: "user", content: local.query.get() })
-								// TODO: show places for query
-								// const result = await generateText({
-								// 	model: openai("gpt-4o"),
-								// 	tools: { guessPlaces },
-								// 	system: `You are a helpful, respectful and honest assistant.`,
-								// 	messages: local.messages.get(),
+								// const places = await relevantPlacesAction({
+								// 	location: "Warsaw",
+								// 	category: "coffee",
 								// })
-								// console.log(result, "result")
-
-								// const result = await gpt4Model.doGenerate({
-								// 	inputFormat: "prompt",
-								// 	mode: { type: "regular" },
-								// 	prompt: [
-								// 		{
-								// 			role: "user",
-								// 			content: [{ type: "text", text: local.query.get() }],
-								// 		},
-								// 	],
-								// })
-								// console.log(result, "result")
-
-								// TODO: stream it
-								// const result = await gpt3Model.doStream({
-								// 	inputFormat: "prompt",
-								// 	mode: { type: "regular" },
-								// 	prompt: [
-								// 		{
-								// 			role: "user",
-								// 			content: [{ type: "text", text: local.query.get() }],
-								// 		},
-								// 	],
-								// })
-								// console.log(result, "result")
+								// console.log(places.data, "places")
 							}}
 						>
-							<input
-								onChange={(e) => {
-									local.query.set(e.target.value)
-								}}
-								className="w-full p-4 py-3 border border-slate-400/80 focus:border-transparent rounded-lg text-black"
-								type="text"
-							/>
+							<div className="absolute left-1/2 bottom-0 transform -translate-x-1/2 bg-[#09090b] px-5 py-10 border border-zinc-700 rounded-md">
+								<input
+									placeholder="Send message..."
+									onChange={(e) => {
+										local.query.set(e.target.value)
+									}}
+									className="w-[550px] input-placeholder focus:outline-none px-4 py-2 border bg-inherit border-zinc-700/80 focus:border-transparent rounded-md text-zinc-300"
+									type="text"
+								/>
+							</div>
 						</form>
 					</div>
 				</div>
@@ -114,3 +94,40 @@ export default observer(function Chat() {
 		</>
 	)
 })
+
+// process.env.OPENAI_API_KEY =
+// 	process.env.NEXT_PUBLIC_OPENAI_API_KEY
+// local.messages.push({ role: "user", content: local.query.get() })
+// TODO: show places for query
+// const result = await generateText({
+// 	model: openai("gpt-4o"),
+// 	tools: { guessPlaces },
+// 	system: `You are a helpful, respectful and honest assistant.`,
+// 	messages: local.messages.get(),
+// })
+// console.log(result, "result")
+
+// const result = await gpt4Model.doGenerate({
+// 	inputFormat: "prompt",
+// 	mode: { type: "regular" },
+// 	prompt: [
+// 		{
+// 			role: "user",
+// 			content: [{ type: "text", text: local.query.get() }],
+// 		},
+// 	],
+// })
+// console.log(result, "result")
+
+// TODO: stream it
+// const result = await gpt3Model.doStream({
+// 	inputFormat: "prompt",
+// 	mode: { type: "regular" },
+// 	prompt: [
+// 		{
+// 			role: "user",
+// 			content: [{ type: "text", text: local.query.get() }],
+// 		},
+// 	],
+// })
+// console.log(result, "result")
