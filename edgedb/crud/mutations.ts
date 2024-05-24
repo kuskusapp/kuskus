@@ -144,3 +144,15 @@ export const updateGlobalState = e.params(
 		}))
 	},
 )
+
+// TODO: delete by edgedb uuid
+export const deletePost = e.params(
+	{
+		imageUrl: e.str,
+	},
+	({ imageUrl }) => {
+		return e.delete(e.Post, (post) => ({
+			filter: e.op(post.imageUrl, "=", imageUrl),
+		}))
+	},
+)
