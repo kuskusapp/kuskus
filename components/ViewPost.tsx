@@ -32,7 +32,13 @@ export default observer(function ViewPost(props: Props) {
 			>
 				<IoCloseOutline size={20} />
 			</button>
-			<div className="w-[85%] bg-black h-[80%] flex absolute top-[10%] left-[10%] rounded-lg shadow-xl">
+			<div
+				className="absolute top-0 left-0 w-screen h-screen z-[110]"
+				onClick={() => {
+					props.closeModal(null)
+				}}
+			></div>
+			<div className="w-[85%] bg-black h-[80%] z-[120] flex absolute top-[10%] left-[10%] rounded-lg shadow-xl">
 				<div className="w-3/5 z-20 overflow-hidden relative flex-center h-full">
 					<div
 						style={{
