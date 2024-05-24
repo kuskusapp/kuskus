@@ -1,11 +1,23 @@
 "use client"
-import { useState } from "react"
+import { observer, useObservable } from "@legendapp/state/react"
+import { useEffect } from "react"
 
-export default function MobileAuth() {
-	const [token, setToken] = useState()
-	return (
-		<>
-			<button>Login to Expo</button>
-		</>
-	)
-}
+export default observer(function MobileAuth() {
+	const local = useObservable({
+		token: "",
+		clicked: false,
+	})
+
+	useEffect(() => {
+		const tokenFromCookie = document.cookie
+			.split("; ")
+			.find((row) => row.startsWith("edgedb-session="))
+			?.split("=")[1]
+		local.token.set(tokenFromCookie)
+		window.location.href = `kuskus://auth?token=secret`
+		// if (local.token.get()) {
+		// 	window.location.href = `kuskus://auth?token=${local.token.get()}`
+		// }
+	}, [])
+	return <></>
+})
