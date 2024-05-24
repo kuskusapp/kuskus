@@ -1,17 +1,28 @@
 import Chat from "@/components/routes/Chat"
 import type { PageProps } from "./$types"
+import Image from "next/image"
 
 // const openai = new OpenAI()
 
 export default async function ChatRoute({ params }: PageProps) {
-	// return (
-	// 	<PlaceCard
-	// 		name="Bułka z Masłem Włodkowica"
-	// 		imageUrl="https://lh5.googleusercontent.com/p/AF1QipNc_A88yvJ1uJGvtC8X7MEczd32xFjeVIkWfB3R=w408-h408-k-no"
-	// 	/>
-	// )
+	return (
+		// 	<PlaceCard
+		// 		name="Bułka z Masłem Włodkowica"
+		// 		imageUrl="https://lh5.googleusercontent.com/p/AF1QipNc_A88yvJ1uJGvtC8X7MEczd32xFjeVIkWfB3R=w408-h408-k-no"
+		// 	/>
+		// )
 
-	return <Chat data={""} />
+		<div className="px-5 max-w-sm rounded overflow-hidden shadow-lg text-white">
+			<div className="bg-neutral-600 h-[400px] w-[400px] rounded-lg flex items-end p-4">
+				<div className="items-left">
+					<div className="font-bold text-xl mb-2">Coffee LAB</div>
+					<p className="text-gray-400 text-base">coffee, breakfast, quiet</p>
+				</div>
+			</div>
+		</div>
+	)
+
+	// return <Chat data={""} />
 }
 
 // const sendMessage = (prompt: string) => generateText({
