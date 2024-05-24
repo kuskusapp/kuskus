@@ -18,10 +18,15 @@ fastapi = "^0.111.0"
 six = "^1.16.0"
 numpy = "^1.26.4"
 
-
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.2.0"
 coverage = "^7.5.1"
+
+
+[[tool.poetry.source]]
+name = "pytorch"
+url = "https://download.pytorch.org/whl/cpu"
+priority = "explicit"
 
 [build-system]
 requires = ["poetry-core"]
