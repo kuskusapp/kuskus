@@ -46,27 +46,22 @@ export default observer(function Chat() {
 					<div className="h-[90%] w-full"></div>
 					{local.relevantPlaces.get().map((place) => {
 						return (
-							<>
-								<div className="flex-col w-[40%] items-center absolute left-1/2 top-10 transform -translate-x-1/2 bg-[#09090b] py-8 border border-zinc-700 rounded-md">
-									<p className="text-lg">Welcome to KusKus AI Chat!</p>
-									<p className="text-md w-[80%] text-left pt-5>
-										KusKus is your smart companion for discovering the best
-										spots nearby. Just type in the chat, and KusKus will swiftly
-										suggest restaurants, cafes, shops, and more around you. It's
-										all about making your search easy, fast, and perfectly
-										tailored to your needs!
-									</p>
-								</div>
-								{/* <PlaceCard
-									name={place.name}
-									displayName={place.displayName}
-									imageUrl={place.imageUrl}
-									category={place.category}
-								/> */}
-							</>
+							<div
+								key={place.name}
+								className="flex-col w-[40%] items-center absolute left-1/2 top-10 transform -translate-x-1/2 bg-[#09090b] py-8 border border-zinc-700 rounded-md"
+							>
+								<p className="text-lg">Welcome to KusKus AI Chat!</p>
+								<p className="text-md w-[80%] text-left pt-5">
+									KusKus is your smart companion for discovering the best spots
+									nearby. Just type in the chat, and KusKus will swiftly suggest
+									restaurants, cafes, shops, and more around you. It's all about
+									making your search easy, fast, and perfectly tailored to your
+									needs!
+								</p>
+							</div>
 						)
 					})}
-					<div className="h-[10%] p-2  flex items-center justify-center">
+					<div className="h-[10%] p-2 flex items-center justify-center">
 						<form
 							onSubmit={async (e) => {
 								e.preventDefault()
