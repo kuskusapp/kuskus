@@ -42,8 +42,14 @@ let dummy = 0
 
 export default function Chat() {
 	const input_ref = react.useRef<HTMLInputElement>(null)
-
+	const messagesScroll = react.useRef<HTMLDivElement>(null)
 	const [qas, set_qas] = react.useState<QuestionAndAnswer[]>([])
+
+	react.useEffect(() => {
+		if (messagesScroll.current) {
+			messagesScroll.current.scrollTop = messagesScroll.current.scrollHeight
+		}
+	}, [qas])
 
 	const handle_submit = react.useCallback(
 		async (e: react.FormEvent<HTMLFormElement>) => {
@@ -107,7 +113,7 @@ export default function Chat() {
 
 	return (
 		<>
-			<div className="h-screen w-screen flex">
+			<div className="h-screen w-screen flex overflow-hidden">
 				<div className="h-full bg-primary w-full flex flex-col px-[100px] p-2 pt-[50px]">
 					{qas.length === 0 && (
 						<div className="flex-col w-[40%] pl-10 absolute left-1/2 top-10 transform -translate-x-1/2 bg-[#09090b] py-8 border border-zinc-700 rounded-md">
@@ -121,46 +127,57 @@ export default function Chat() {
 							</p>
 						</div>
 					)}
-					{qas.map((qa, index) => (
-						<div key={index} className="mb-4 flex flex-col items-center w-full">
-							<div className="flex items-center w-full justify-center">
-								<FaUserCircle className="text-white mr-2" />
-								<div className="text-left w-[50%]">
-									<div className="font-bold">{qa.question}</div>
-								</div>
-							</div>
-							<div className="mt-4 w-full flex justify-center">
-								{qa.answer.kind === AnswerKind.Loading && <div>Loading...</div>}
-								{qa.answer.kind === AnswerKind.Text && (
-									<div className="flex items-center w-full justify-center">
-										<TbSquareLetterK className="text-white mr-2" />
-										<div className="text-left w-[50%]">{qa.answer.text}</div>
+					<div
+						className="flex-grow overflow-auto mb-[80px]"
+						ref={messagesScroll}
+					>
+						{qas.map((qa, index) => (
+							<div
+								key={index}
+								className="mb-4 flex flex-col items-center w-full ref={messagesScroll}"
+							>
+								<div className="flex items-center w-full justify-center">
+									<FaUserCircle className="text-white mr-2" />
+									<div className="text-left w-[50%]">
+										<div className="font-bold">{qa.question}</div>
 									</div>
-								)}
-								{qa.answer.kind === AnswerKind.Place && (
-									<div className="w-full flex flex-col items-center">
-										<div className="flex items-center pb-5 w-full justify-center">
+								</div>
+								<div className="mt-4 w-full flex justify-center">
+									{qa.answer.kind === AnswerKind.Loading && (
+										<div>Loading...</div>
+									)}
+									{qa.answer.kind === AnswerKind.Text && (
+										<div className="flex items-center w-full justify-center">
 											<TbSquareLetterK className="text-white mr-2" />
-											<div className="text-left w-[50%]">
-												{" "}
-												Here are the places you are looking for:
+											<div className="text-left w-[50%]">{qa.answer.text}</div>
+										</div>
+									)}
+									{qa.answer.kind === AnswerKind.Place && (
+										<div className="w-full flex flex-col items-center">
+											<div className="flex items-center pb-5 w-full justify-center">
+												<TbSquareLetterK className="text-white mr-2" />
+												<div className="text-left w-[50%]">
+													{" "}
+													Here are the places you are looking for:
+												</div>
+											</div>
+											<div className="flex flex-row justify-center w-full">
+												{qa.answer.places.map((place) => (
+													<PlaceCard
+														name={place.name}
+														displayName={place.displayName}
+														imageUrl={place.imageUrl}
+														category={place.category}
+													/>
+												))}
 											</div>
 										</div>
-										<div className="flex flex-row justify-center w-full">
-											{qa.answer.places.map((place) => (
-												<PlaceCard
-													name={place.name}
-													displayName={place.displayName}
-													imageUrl={place.imageUrl}
-													category={place.category}
-												/>
-											))}
-										</div>
-									</div>
-								)}
+									)}
+								</div>
 							</div>
-						</div>
-					))}
+						))}
+					</div>
+
 					<div className="h-[10%] p-2 flex items-center justify-center">
 						<form onSubmit={handle_submit}>
 							<div className="absolute left-1/2 bottom-0 transform -translate-x-1/2 bg-[#09090b] px-5 py-10 border border-zinc-700 rounded-md">
