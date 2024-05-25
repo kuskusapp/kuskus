@@ -7,6 +7,7 @@ import ActionBar from "../ActionBar"
 import AddPostModal from "../AddPostModal"
 import { ImageGrid } from "../PostGrid"
 import ViewPost from "../ViewPost"
+import { useRouter } from "next/navigation"
 
 let lastId = 0
 interface Props {
@@ -26,6 +27,7 @@ export default observer(function ProfileRoute(props: Props) {
 		showPostViewModal: false,
 		windowSize: null as null | number,
 	})
+	const router = useRouter()
 	const posts = local.createdPosts.get() ?? []
 	const images = useMemo(() => {
 		return posts.map((post) => {
@@ -123,6 +125,9 @@ export default observer(function ProfileRoute(props: Props) {
 					username={local.name.get()}
 					description={local.bio.get()}
 					profileImageUrl={local.profilePhotoUrl.get()}
+					onSettingsClick={() => {
+						router.push("/settings")
+					}}
 				/>
 				<div className="md:ml-[380px] m-0 min-h-full flex">
 					<ImageGrid
@@ -144,16 +149,23 @@ function Sidebar({
 	username,
 	description,
 	profileImageUrl,
+	onSettingsClick,
 }: {
 	prettyName: string
 	username: string
 	description?: string
 	profileImageUrl?: string
+	onSettingsClick?: () => void
 }) {
 	return (
 		<div className="md:fixed left-0 md:w-[380px] w-full top-0 h-screen bg-secondary relative">
 			<button className="z-100 absolute top-2 left-2 hover:opacity-60 transition-opacity duration-300">
-				<SettingsIcon className="color-white w-8 h-8 settings-icon" />
+				<SettingsIcon
+					className="color-white w-8 h-8 settings-icon"
+					onClick={() => {
+						onSettingsClick()
+					}}
+				/>
 			</button>
 			<img className="w-full h-3/5 bg-substitute" src={profileImageUrl}></img>
 			<div className="p-[24px] pt-[34px] flex flex-col justify-between h-2/5">

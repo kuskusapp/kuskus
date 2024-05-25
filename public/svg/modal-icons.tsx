@@ -55,9 +55,14 @@ export const CloseIcon = ({ className }: { className?: string }) => (
 	</svg>
 )
 
-export const SettingsIcon = ({ className }: { className?: string }) => (
+interface Props {
+	className?: string
+	onClick?: () => void
+}
+export const SettingsIcon = (props: Props) => (
 	<svg
-		className={className}
+		className={props.className}
+		onClick={props.onClick}
 		viewBox="0 0 24 24"
 		fill="none"
 		xmlns="http://www.w3.org/2000/svg"
