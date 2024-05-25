@@ -14,7 +14,7 @@ export const homePublic = e.select({
 		imageUrl: true,
 		description: true,
 		aiDescription: true,
-		categories: true,
+		// categories: true,
 		roninId: true,
 		imageWidth: true,
 		imageHeight: true,
