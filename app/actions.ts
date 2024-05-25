@@ -203,7 +203,10 @@ export const updateUserProfileAction = actionClient
 			const session = auth.getSession()
 			const client = session.client
 			if (session) {
-				const res = await updateUser.run(client, {})
+				const res = await updateUser.run(client, {
+					username,
+					displayName,
+				})
 				console.log(res, "res")
 				if (res) {
 					return "ok"

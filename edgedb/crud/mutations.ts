@@ -121,7 +121,7 @@ export const updateUser = e.params(
 		return e.update(user, (u) => ({
 			set: {
 				bio: e.op(bio, "??", u.bio),
-				username: e.op(username, "??", u.name),
+				name: e.op(username, "??", u.name),
 				place: e.op(place, "??", u.place),
 				displayName: e.op(displayName, "??", u.displayName),
 				githubAvatarUrl: e.op(githubAvatarUrl, "??", u.githubAvatarUrl),

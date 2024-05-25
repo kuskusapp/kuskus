@@ -1,6 +1,6 @@
 "use client"
 import { updateUserProfileAction } from "@/app/actions"
-import { updateUser } from "@/edgedb/crud/mutations"
+import Loader from "@/components/Loader"
 import { settingsAuthReturn } from "@/edgedb/crud/queries"
 import { observer, useObservable } from "@legendapp/state/react"
 import { useRouter } from "next/navigation"
@@ -16,6 +16,7 @@ export default observer(function Settings(props: Props) {
 		username: props.authData?.name || "",
 		displayName: props.authData?.displayName || "",
 		touched: false,
+		savingProfile: false,
 	})
 	const router = useRouter()
 
@@ -38,23 +39,28 @@ export default observer(function Settings(props: Props) {
 			<div className="h-full w-1/2">
 				<div className="h-[80px] p-5 pb-4 justify-between flex items-end border-b border-black/20">
 					<div className="text-[20px] font-semibold"></div>
-					<button
-						disabled={!local.username.get()}
-						className={`bg-black rounded-full h-[34px] flex items-center px-4 py-2 font-semibold text-[12px] text-white ${local.username.get() ? "hover:text-gray-200 hover:bg-neutral-800" : "bg-gray-500 cursor-not-allowed"}`}
-						onClick={async () => {
-							const res = await updateUserProfileAction({
-								username: local.username.get(),
-								displayName: local.displayName.get(),
-							})
-							if (!res.serverError) {
-								router.push("/")
-							} else {
-								console.log(res.serverError, "server err")
-							}
-						}}
-					>
-						Save
-					</button>
+					{local.savingProfile.get() && <Loader />}
+					{!local.savingProfile.get() && (
+						<button
+							disabled={!local.username.get()}
+							className={`bg-black rounded-full h-[34px] flex items-center px-4 py-2 font-semibold text-[12px] text-white ${local.username.get() ? "hover:text-gray-200 hover:bg-neutral-800" : "bg-gray-500 cursor-not-allowed"}`}
+							onClick={async () => {
+								local.savingProfile.set(true)
+								const res = await updateUserProfileAction({
+									username: local.username.get(),
+									displayName: local.displayName.get(),
+								})
+								if (!res.serverError) {
+									router.push("/")
+								} else {
+									console.log(res.serverError, "server err")
+									local.savingProfile.set(false)
+								}
+							}}
+						>
+							Save
+						</button>
+					)}
 				</div>
 
 				<div className="overflow-auto max-h-[calc(100%-80px)] [&::-webkit-scrollbar]:hidden cursor-pointer">
