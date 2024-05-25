@@ -2,17 +2,13 @@
 import { observer, useObservable } from "@legendapp/state/react"
 import Image from "next/image"
 import { useEffect, useState } from "react"
-// import Modal from "../Modal"
 import { placesAuthReturn } from "@/edgedb/crud/queries"
 
 interface Props {
 	data: placesAuthReturn
 }
-
-export default observer(function Place(props: Props) {
-	const server$ = useObservable(props.data)
-	// TODO: move all local state here
-	const local$ = useObservable({ following: false, modalOpen: false })
+export default observer(function OldPlaceRoute(props: Props) {
+	const local = useObservable({ following: false, modalOpen: false })
 
 	// const [following, SetFollowing] = useState<boolean>(false)
 	const [modalOpen, setModalOpen] = useState(false)
@@ -36,7 +32,7 @@ export default observer(function Place(props: Props) {
 
 	const followPlace = () => {
 		// SetFollowing(!following)
-		local$.following.set(!local$.following.get())
+		local.following.set(!local.following.get())
 	}
 
 	const commentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -136,13 +132,13 @@ export default observer(function Place(props: Props) {
 						border: "1px solid #ccc",
 					}}
 				>
-					{local$.following.get() ? (
+					{local.following.get() ? (
 						<svg
 							width="24"
 							height="24"
 							fill="none"
 							viewBox="0 0 24 24"
-							style={{ color: local$.following.get() ? "#4F7942" : "black" }}
+							style={{ color: local.following.get() ? "#4F7942" : "black" }}
 						>
 							<path
 								stroke="currentColor"
@@ -186,8 +182,8 @@ export default observer(function Place(props: Props) {
 							/>
 						</svg>
 					)}
-					<span style={{ color: local$.following ? "#4F7942" : "black" }}>
-						{local$.following ? "following" : "follow"}
+					<span style={{ color: local.following ? "#4F7942" : "black" }}>
+						{local.following ? "following" : "follow"}
 					</span>
 				</button>
 				<div className="mt-4">

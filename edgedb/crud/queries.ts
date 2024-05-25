@@ -42,7 +42,7 @@ export type homeAuthReturn = $infer<typeof homeAuth>
 // -- /[username] (user profile)
 export const profilePublic = e.params({ username: e.str }, ({ username }) => {
 	return e.select(e.User, (u) => ({
-		filter: e.op(u.name, "=", username),
+		filter_single: e.op(u.name, "=", username),
 		name: true,
 		bio: true,
 		place: true,
@@ -176,3 +176,21 @@ export const settingsAuth = e.params(
 	},
 )
 export type settingsAuthReturn = $infer<typeof settingsAuth>
+
+// -- /places/[place-name] (place profile)
+export const placesPublic = e.params({ placeName: e.str }, ({ placeName }) => {
+	return e.select(e.Place, (p) => ({
+		filter_single: e.op(p.name, "=", placeName),
+		name: true,
+		displayName: true,
+		location: true,
+		profileImageUrl: true,
+		bio: true,
+		category: true,
+		foodsAndDrinksServed: true,
+		veganFriendly: true,
+		quiet: true,
+		googleMapsUrl: true,
+	}))
+})
+export type placesPublicReturn = $infer<typeof placesPublic>
