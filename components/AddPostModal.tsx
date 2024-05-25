@@ -23,6 +23,7 @@ export default observer(function AddPostModal(props: Props) {
 		uploadedImageAsFile: null as File | null,
 		aiDescription: "",
 		aiDescriptionLoading: false,
+		guessedCategories: [] as string[],
 		aiGuessesCategories: [] as string[],
 		aiCategoriesGuessLoading: false,
 		uploadingPost: false,
@@ -131,10 +132,12 @@ export default observer(function AddPostModal(props: Props) {
 												// @ts-ignore
 												local.aiDescription.set(resp.data)
 
+												console.log(local.aiDescription.get(), "ai description")
 												const categories = await suggestCategoriesAction({
 													foodDescription: local.aiDescription.get(),
 												})
-												console.log(categories.data, "categories")
+												console.log(categories.data)
+												local.guessedCategories.set(categories.data)
 											}
 											local.aiDescriptionLoading.set(false)
 										} catch (err) {
