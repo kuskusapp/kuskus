@@ -8,6 +8,7 @@ import { ImageGrid, PostGridImage } from "./PostGrid"
 import Search, { search_post_grid_images } from "./Search"
 import SignInAndSignUp from "./SignInAndSignUp"
 import ViewPost from "./ViewPost"
+import { useRouter } from "next/navigation"
 
 export type DeviceSize = "mobile" | "tablet" | "desktop"
 export type DeviceSizeMap = Record<DeviceSize, boolean>
@@ -47,6 +48,13 @@ export default observer(function Home(props: Props) {
 		],
 		showViewPost: null as PostGridImage | null,
 	})
+	const router = useRouter()
+
+	react.useEffect(() => {
+		if (!authData.name.get()) {
+			router.push("/settings")
+		}
+	}, [])
 
 	const posts = publicData.posts.get() ?? []
 	const images = react.useMemo(() => {

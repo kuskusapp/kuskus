@@ -67,6 +67,9 @@ export const describeImageAction = actionClient
 	.schema(describeImageSchema)
 	.action(async ({ parsedInput: { image } }) => {
 		try {
+			if (image.imageAsBase64.startsWith("data:image/png;base64,")) {
+				throw new Error("OpenAI does not support png format")
+			}
 			const response = await openai.chat.completions.create({
 				model: "gpt-4o",
 				messages: [

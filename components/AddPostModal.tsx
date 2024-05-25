@@ -131,6 +131,8 @@ export default observer(function AddPostModal(props: Props) {
 											local.aiDescriptionLoading.set(true)
 
 											const data = new FormData()
+											console.log(await fileToBase64(uploadedFile), "base64")
+											// return
 											data.append(
 												"imageAsBase64",
 												await fileToBase64(uploadedFile),
@@ -138,8 +140,7 @@ export default observer(function AddPostModal(props: Props) {
 											const resp = await describeImageAction({
 												image: data,
 											})
-											console.log(resp.serverError, "server error")
-											if (resp.data) {
+											if (resp.serverError !== undefined) {
 												// TODO: type well
 												// @ts-ignore
 												local.aiDescription.set(resp.data)
@@ -150,11 +151,18 @@ export default observer(function AddPostModal(props: Props) {
 												})
 												console.log(categories.data, "categories")
 												local.guessedCategories.set(categories.data)
+											} else {
+												local.aiDescriptionLoading.set(false)
+												console.log(resp, "resp")
+												console.log(
+													resp.serverError,
+													"server error from action",
+												)
 											}
 											local.aiDescriptionLoading.set(false)
 										} catch (err) {
 											local.aiDescriptionLoading.set(false)
-											console.log(err)
+											console.log(err, "error")
 										}
 									}
 								}}
@@ -327,6 +335,60 @@ function fileToBase64(file: Blob): Promise<string> {
 		const reader = new FileReader()
 		reader.onload = () => {
 			resolve(reader.result as string)
+		}
+		reader.onerror = (error) => {
+			reject(error)
+		}
+		reader.readAsDataURL(file)
+	})
+}
+
+function fileToBase64WithConversion(file: Blob): Promise<string> {
+	return new Promise((resolve, reject) => {
+		// Create a file reader
+		const reader = new FileReader()
+		reader.onload = () => {
+			// Create an image element to load the file into
+			const img = new Image()
+			img.onload = () => {
+				// Create a canvas and get the context
+				const canvas = document.createElement("canvas")
+				canvas.width = img.width
+				canvas.height = img.height
+				const ctx = canvas.getContext("2d")
+
+				// Draw the image onto the canvas
+				ctx.drawImage(img, 0, 0)
+
+				// Convert the canvas content to JPEG if the original file is PNG
+				const outputFormat =
+					file.type === "image/png" ? "image/jpeg" : file.type
+				canvas.toBlob(
+					(blob) => {
+						if (blob) {
+							// Read the JPEG blob and convert to Base64
+							const readerJPEG = new FileReader()
+							readerJPEG.onload = () => {
+								const result = readerJPEG.result as string
+								const base64Data = result.split(",")[1] // Strip the data URL prefix
+								resolve(base64Data)
+							}
+							readerJPEG.onerror = (error) => {
+								reject(error)
+							}
+							readerJPEG.readAsDataURL(blob)
+						} else {
+							reject(new Error("Canvas to Blob conversion failed"))
+						}
+					},
+					outputFormat,
+					0.92,
+				) // JPEG quality can be adjusted between 0 and 1
+			}
+			img.onerror = () => {
+				reject(new Error("Image loading failed"))
+			}
+			img.src = reader.result as string
 		}
 		reader.onerror = (error) => {
 			reject(error)
