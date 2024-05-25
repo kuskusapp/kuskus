@@ -17,9 +17,9 @@ export default async function Home() {
 
 	return (
 		<HomeRoute
+			authenticated={authenticated}
 			publicData={publicData}
 			authData={authData}
-			authenticated={authenticated}
 			authBuiltinUiUrl={authBuiltinUiUrl}
 			authBuiltinSignupUrl={autBuiltinSignupUrl}
 		/>

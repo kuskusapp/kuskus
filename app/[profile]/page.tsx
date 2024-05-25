@@ -9,8 +9,8 @@ import ProfileRoute from "@/components/routes/ProfileRoute"
 
 export default async function Profile({ params }: PageProps) {
 	const session = auth.getSession()
-	const client = session.client
 	const authenticated = await session.isSignedIn()
+	const client = session.client
 
 	const publicData = await profilePublic.run(client, {
 		username: params.profile,
@@ -21,9 +21,9 @@ export default async function Profile({ params }: PageProps) {
 	}
 	return (
 		<ProfileRoute
+			authenticated={authenticated}
 			publicData={publicData}
 			authData={authData}
-			authenticated={authenticated}
 		/>
 	)
 }

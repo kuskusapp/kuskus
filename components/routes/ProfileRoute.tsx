@@ -10,9 +10,9 @@ import ViewPost from "../ViewPost"
 
 let lastId = 0
 interface Props {
-	publicData: profilePublicReturn
-	authData: profileAuthReturn
 	authenticated: boolean
+	publicData: profilePublicReturn
+	authData?: profileAuthReturn
 }
 export default observer(function ProfileRoute(props: Props) {
 	const auth = props.authenticated

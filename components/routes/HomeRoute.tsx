@@ -1,7 +1,6 @@
 "use client"
 import { homeAuthReturn, homePublicReturn } from "@/edgedb/crud/queries"
 import { observer, useObservable } from "@legendapp/state/react"
-import * as react from "react"
 import ActionBar from "../ActionBar"
 import AddPostModal from "../AddPostModal"
 import { ImageGrid, PostGridImage } from "../PostGrid"
@@ -9,19 +8,23 @@ import Search, { search_post_grid_images } from "../Search"
 import SignInAndSignUp from "../SignInAndSignUp"
 import ViewPost from "../ViewPost"
 import { useRouter } from "next/navigation"
+import { useEffect, useMemo } from "react"
 
 export type DeviceSize = "mobile" | "tablet" | "desktop"
 export type DeviceSizeMap = Record<DeviceSize, boolean>
 
 interface Props {
+	authenticated: boolean
 	publicData: homePublicReturn
 	authData?: homeAuthReturn
-	authenticated: boolean
 	authBuiltinUiUrl: string
 	authBuiltinSignupUrl: string
 }
 export default observer(function HomeRoute(props: Props) {
+	const auth = props.authenticated
 	const local = useObservable({
+		...props.publicData,
+		...props.authData,
 		inputFocused: false,
 		addPostModalOpen: false,
 		activeItem: null as string | null,
@@ -45,17 +48,23 @@ export default observer(function HomeRoute(props: Props) {
 			"Japanese",
 		],
 		showViewPost: null as PostGridImage | null,
+		searchInput: "",
+		deviceSize: {
+			mobile: false,
+			tablet: false,
+			desktop: true,
+		} as DeviceSizeMap,
 	})
 	const router = useRouter()
 
-	react.useEffect(() => {
-		if (props.authenticated && !authData.name.get()) {
+	useEffect(() => {
+		if (auth && !local.name.get()) {
 			router.push("/settings")
 		}
 	}, [])
 
-	const posts = publicData.posts.get() ?? []
-	const images = react.useMemo(() => {
+	const posts = local.posts.get() ?? []
+	const images = useMemo(() => {
 		return posts.map((post): PostGridImage => {
 			return {
 				id: post.roninId,
@@ -68,31 +77,23 @@ export default observer(function HomeRoute(props: Props) {
 		})
 	}, [posts])
 
-	const [search_input, setSearchInput] = react.useState("")
-
 	// TODO: debounce search
 
-	const searched_images = react.useMemo(() => {
-		if (search_input.length < 2) {
+	const searchedImages = useMemo(() => {
+		if (local.searchInput.get().length < 2) {
 			return images
 		}
 
-		return search_post_grid_images(search_input, images, 16)
-	}, [search_input, images])
+		return search_post_grid_images(local.searchInput.get(), images, 16)
+	}, [local.searchInput.get(), images])
 
-	const [device_size, setDeviceSize] = react.useState<DeviceSizeMap>({
-		mobile: false,
-		tablet: false,
-		desktop: true,
-	})
-
-	react.useEffect(() => {
+	useEffect(() => {
 		const media_query_mobile = window.matchMedia("(max-width: 768px)")
 		const media_query_tablet = window.matchMedia("(max-width: 1024px)")
 
 		function handleMediaChange() {
-			setDeviceSize({
-				...device_size,
+			local.deviceSize.set({
+				...local.deviceSize.get(),
 				mobile: media_query_mobile.matches,
 				tablet: media_query_tablet.matches,
 			})
@@ -117,18 +118,18 @@ export default observer(function HomeRoute(props: Props) {
 						const updatedPosts = posts.filter(
 							(post) => post.imageUrl !== postPhotoUrl,
 						)
-						publicData.posts.set(updatedPosts)
+						local.posts.set(updatedPosts)
 					}}
 				/>
 			)}
-			{authData.get() && (
+			{auth && (
 				<>
 					<ActionBar
 						activeTab="Home"
 						activateAddPost={() => {
 							local.addPostModalOpen.set(true)
 						}}
-						username={authData.name.get()}
+						username={local.name.get()}
 					/>
 					{local.addPostModalOpen.get() ? (
 						<AddPostModal
@@ -139,7 +140,7 @@ export default observer(function HomeRoute(props: Props) {
 					) : null}
 				</>
 			)}
-			{authData.get() === null && (
+			{!auth && (
 				<SignInAndSignUp
 					authBuiltinUiUrl={props.authBuiltinUiUrl}
 					authBuiltinSignupUrl={props.authBuiltinSignupUrl}
@@ -166,13 +167,23 @@ export default observer(function HomeRoute(props: Props) {
 							and share them
 						</p>
 					</div>
-					<Search onInput={setSearchInput} />
+					<Search
+						onInput={(input) => {
+							local.searchInput.set(input)
+						}}
+					/>
 				</div>
 			</main>
 			<div className="flex pt-[160px]">
 				<ImageGrid
-					images={searched_images}
-					columns={device_size.mobile ? 1 : device_size.tablet ? 3 : 4}
+					images={searchedImages}
+					columns={
+						local.deviceSize.get().mobile
+							? 1
+							: local.deviceSize.get().tablet
+								? 3
+								: 4
+					}
 					onClick={(img) => {
 						local.showViewPost.set(img)
 					}}
