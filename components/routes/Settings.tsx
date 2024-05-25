@@ -34,6 +34,13 @@ export default observer(function Settings(props: Props) {
 				<div className="h-[80px] p-5 pb-4 text-[20px] font-semibold flex items-end border-b border-black/20">
 					Settings
 				</div>
+				<div className="flex flex-col overflow-auto max-h-[calc(100%-80px)] [&::-webkit-scrollbar]:hidden">
+					<div
+						className={`p-2 px-5 border-b border-white/10 flex justify-between items-center bg-white/10`}
+					>
+						Edit Profile
+					</div>
+				</div>
 				<div className="flex flex-col overflow-auto max-h-[calc(100%-80px)] [&::-webkit-scrollbar]:hidden"></div>
 			</div>
 			<div className="h-full w-1/2">
@@ -64,8 +71,13 @@ export default observer(function Settings(props: Props) {
 				</div>
 
 				<div className="overflow-auto max-h-[calc(100%-80px)] [&::-webkit-scrollbar]:hidden cursor-pointer">
-					<div className="flex flex-col gap-[12px] mt-2">
+					<div className="flex flex-col gap-[12px]">
 						<div className="w-full">
+							<div className="w-full bg-neutral-800 h-[400px] relative">
+								<button className="absolute bottom-2 left-2 rounded-full w-[50px] h-[50px] bg-neutral-700 bg-opacity-70 hover:bg-opacity-90 flex items-center justify-center">
+									Edit
+								</button>
+							</div>
 							<div className="flex gap-1">
 								{!local.username.get() && (
 									<div className="text-red-500 text-[12px] p-1">
