@@ -149,3 +149,22 @@ export const relevantPlacesQuery = e.params(
 	},
 )
 export type relevantPlacesActionReturn = $infer<typeof relevantPlacesQuery>
+
+// -- /settings
+export const settingsAuth = e.params(
+	{ userId: e.optional(e.uuid) },
+	({ userId }) => {
+		const user = e.op(
+			e.cast(e.User, userId),
+			"if",
+			e.op("exists", userId),
+			"else",
+			e.global.current_user,
+		)
+		return e.select(user, () => ({
+			name: true,
+			displayName: true,
+		}))
+	},
+)
+export type settingsAuthReturn = $infer<typeof settingsAuth>

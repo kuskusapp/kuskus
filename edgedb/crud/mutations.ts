@@ -104,12 +104,13 @@ export const createGlobalState = e.params(
 export const updateUser = e.params(
 	{
 		userId: e.optional(e.uuid),
+		username: e.optional(e.str),
 		bio: e.optional(e.str),
 		place: e.optional(e.str),
 		displayName: e.optional(e.str),
 		githubAvatarUrl: e.optional(e.str),
 	},
-	({ userId, bio, place, displayName, githubAvatarUrl }) => {
+	({ userId, bio, place, displayName, githubAvatarUrl, username }) => {
 		const user = e.op(
 			e.cast(e.User, userId),
 			"if",
@@ -120,6 +121,7 @@ export const updateUser = e.params(
 		return e.update(user, (u) => ({
 			set: {
 				bio: e.op(bio, "??", u.bio),
+				username: e.op(username, "??", u.name),
 				place: e.op(place, "??", u.place),
 				displayName: e.op(displayName, "??", u.displayName),
 				githubAvatarUrl: e.op(githubAvatarUrl, "??", u.githubAvatarUrl),

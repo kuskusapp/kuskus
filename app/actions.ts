@@ -190,3 +190,28 @@ export const suggestCategoriesAction = actionClient
 			return { failure: "EdgeDB error", errorDetails: err.message }
 		}
 	})
+
+export const updateUserProfileAction = actionClient
+	.schema(
+		z.object({
+			username: z.string(),
+			displayName: z.string().optional(),
+		}),
+	)
+	.action(async ({ parsedInput: { username, displayName } }) => {
+		try {
+			const session = auth.getSession()
+			const client = session.client
+			if (session) {
+				const res = await updateUser.run(client, {})
+				console.log(res, "res")
+				if (res) {
+					return "ok"
+				} else {
+					throw new Error("Error updating user profile")
+				}
+			}
+		} catch (err) {
+			return { failure: "EdgeDB error", errorDetails: err.message }
+		}
+	})
