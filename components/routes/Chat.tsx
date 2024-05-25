@@ -72,7 +72,7 @@ export default function Chat() {
 			if (++dummy % 2 === 0) {
 				answer = {
 					kind: AnswerKind.Text,
-					text: "I don't know",
+					text: "Nothing matched your search term, lets try something else!",
 				}
 			} else {
 				answer = {
@@ -115,9 +115,9 @@ export default function Chat() {
 							<p className="text-md w-[80%] text-left pt-5">
 								KusKus is your smart companion for discovering the best spots
 								nearby. Just type in the chat, and KusKus will swiftly suggest
-								restaurants, cafes, shops, and more around you. It's all about
-								making your search easy, fast, and perfectly tailored to your
-								needs!
+								restaurants, cafes, coffeeplaces, and more around you. It's all
+								about making your search easy, fast, and perfectly tailored to
+								your needs!
 							</p>
 						</div>
 					)}
