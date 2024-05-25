@@ -1,10 +1,9 @@
 "use client"
 
+import { deletePostAction } from "@/app/actions"
 import { observer, useObservable } from "@legendapp/state/react"
 import { IoCloseOutline } from "react-icons/io5"
 import Loader from "./Loader"
-import { deletePostAction } from "@/app/actions"
-import { get, Image, RichText } from "react-ronin"
 
 interface Props {
 	post: {

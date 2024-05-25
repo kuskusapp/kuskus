@@ -1,9 +1,8 @@
 "use client"
-import { CoreMessage } from "ai"
 import * as react from "react"
-import PlaceCard from "../PlaceCard"
 import { FaUserCircle } from "react-icons/fa"
 import { TbSquareLetterK } from "react-icons/tb"
+import PlaceCard from "../PlaceCard"
 
 type RelevantPlace = {
 	name: string

@@ -23,7 +23,7 @@ export default observer(function AddPostModal(props: Props) {
 		uploadedImageAsFile: null as File | null,
 		aiDescription: "",
 		aiDescriptionLoading: false,
-		guessedCategories: ["Lasagna", "Ramen"] as string[],
+		guessedCategories: [] as string[],
 		aiGuessesCategories: [] as string[],
 		aiCategoriesGuessLoading: false,
 		uploadingPost: false,
@@ -75,7 +75,6 @@ export default observer(function AddPostModal(props: Props) {
 			.get()
 			.filter((cat) => !local.categories.get().includes(cat)),
 	].slice(0, local.initialCount.get())
-	console.log(sortedCategories)
 
 	return (
 		<div className="fixed top-0 left-0 w-screen h-screen z-10 flex-center">
@@ -139,6 +138,7 @@ export default observer(function AddPostModal(props: Props) {
 											const resp = await describeImageAction({
 												image: data,
 											})
+											console.log(resp.serverError, "server error")
 											if (resp.data) {
 												// TODO: type well
 												// @ts-ignore
@@ -148,7 +148,7 @@ export default observer(function AddPostModal(props: Props) {
 												const categories = await suggestCategoriesAction({
 													foodDescription: local.aiDescription.get(),
 												})
-												console.log(categories.data)
+												console.log(categories.data, "categories")
 												local.guessedCategories.set(categories.data)
 											}
 											local.aiDescriptionLoading.set(false)

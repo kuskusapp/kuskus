@@ -10,10 +10,11 @@ import { actionClient } from "@/lib/safe-action"
 import { create } from "ronin"
 import { z } from "zod"
 import { zfd } from "zod-form-data"
+import OpenAI from "openai"
 
-// const openai = new OpenAI({
-// 	apiKey: process.env.OPENAI_API_KEY,
-// })
+const openai = new OpenAI({
+	apiKey: process.env.OPENAI_API_KEY,
+})
 
 export const logoutAction = actionClient.action(async () => {
 	const { signout } = auth.createServerActions()
@@ -66,29 +67,28 @@ export const describeImageAction = actionClient
 	.schema(describeImageSchema)
 	.action(async ({ parsedInput: { image } }) => {
 		try {
-			// TODO: add back
-			// TODO: uncomment when there is input box with code to guard AI use
-			// const response = await openai.chat.completions.create({
-			// 	model: "gpt-4o",
-			// 	messages: [
-			// 		{
-			// 			role: "user",
-			// 			content: [
-			// 				{ type: "text", text: "What’s in this image?" },
-			// 				{
-			// 					type: "image_url",
-			// 					image_url: {
-			// 						url: image.imageAsBase64,
-			// 					},
-			// 				},
-			// 			],
-			// 		},
-			// 	],
-			// })
-			// await new Promise((resolve) => setTimeout(resolve, 3000))
+			const response = await openai.chat.completions.create({
+				model: "gpt-4o",
+				messages: [
+					{
+						role: "user",
+						content: [
+							{ type: "text", text: "What’s in this image?" },
+							{
+								type: "image_url",
+								image_url: {
+									url: image.imageAsBase64,
+								},
+							},
+						],
+					},
+				],
+			})
+			console.log(response, "response")
+			console.log(response.choices[0].message.content, "description")
+			return response.choices[0].message.content
 			// return `This image shows a bamboo steamer basket containing six dumplings. The steamer is placed on a white plate with a mesh liner inside to prevent the dumplings from sticking. The scene suggests that the dumplings are likely being served at a restaurant. The background shows part of a table and seating, indicating a dining environment.`
-			return `The image shows a web interface with a black background. On the left side, there is a placeholder or icon that typically represents an image, indicating that an image should be here but is currently missing or not loaded. On the right side, there is a section labeled "DESCRIPTION" with a text box that says "Write a description..." and another labeled "Image Description". Below this, there are several categories displayed in oval buttons, including "Sushi", "Breakfast", "Smoothie", "Vegan", "Pasta", "Salad", "Healthy", and "Steak". At the bottom right, there is a yellow button labeled "Share".`
-			// return response.choices[0].message.content
+			// return `The image shows a web interface with a black background. On the left side, there is a placeholder or icon that typically represents an image, indicating that an image should be here but is currently missing or not loaded. On the right side, there is a section labeled "DESCRIPTION" with a text box that says "Write a description..." and another labeled "Image Description". Below this, there are several categories displayed in oval buttons, including "Sushi", "Breakfast", "Smoothie", "Vegan", "Pasta", "Salad", "Healthy", and "Steak". At the bottom right, there is a yellow button labeled "Share".`
 		} catch (err) {
 			return { failure: "Describe image error:", errorDetails: err.message }
 		}
