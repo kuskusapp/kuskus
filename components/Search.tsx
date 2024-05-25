@@ -134,7 +134,8 @@ export default function Search(props: SearchProps) {
 					/>
 				</label>
 			</div>
-			<button
+			{/* TODO: add back if there is time */}
+			{/* <button
 				onMouseDown={() => {
 					navigator.geolocation.getCurrentPosition(() => {
 						// TODO: show nearby places in grid
@@ -151,7 +152,7 @@ export default function Search(props: SearchProps) {
 			>
 				<FaMapPin className="w-5 h-5" />
 				Places nearby
-			</button>
+			</button> */}
 			{/* {showModal && (
 				<PermissionModal onClose={() => setShowModal(false)}>
 					<p className="text-black text-center">

@@ -73,28 +73,25 @@ export const describeImageAction = actionClient
 			if (image.imageAsBase64.startsWith("data:image/png;base64,")) {
 				throw new Error("OpenAI does not support png format")
 			}
-			const response = await openai.chat.completions.create({
-				model: "gpt-4o",
-				messages: [
-					{
-						role: "user",
-						content: [
-							{ type: "text", text: "What’s in this image?" },
-							{
-								type: "image_url",
-								image_url: {
-									url: image.imageAsBase64,
-								},
-							},
-						],
-					},
-				],
-			})
-			console.log(response, "response")
-			console.log(response.choices[0].message.content, "description")
-			return response.choices[0].message.content
-			// return `This image shows a bamboo steamer basket containing six dumplings. The steamer is placed on a white plate with a mesh liner inside to prevent the dumplings from sticking. The scene suggests that the dumplings are likely being served at a restaurant. The background shows part of a table and seating, indicating a dining environment.`
-			// return `The image shows a web interface with a black background. On the left side, there is a placeholder or icon that typically represents an image, indicating that an image should be here but is currently missing or not loaded. On the right side, there is a section labeled "DESCRIPTION" with a text box that says "Write a description..." and another labeled "Image Description". Below this, there are several categories displayed in oval buttons, including "Sushi", "Breakfast", "Smoothie", "Vegan", "Pasta", "Salad", "Healthy", and "Steak". At the bottom right, there is a yellow button labeled "Share".`
+			// const response = await openai.chat.completions.create({
+			// 	model: "gpt-4o",
+			// 	messages: [
+			// 		{
+			// 			role: "user",
+			// 			content: [
+			// 				{ type: "text", text: "What’s in this image?" },
+			// 				{
+			// 					type: "image_url",
+			// 					image_url: {
+			// 						url: image.imageAsBase64,
+			// 					},
+			// 				},
+			// 			],
+			// 		},
+			// 	],
+			// })
+			// return response.choices[0].message.content
+			return `This image shows a bamboo steamer basket containing six dumplings. The steamer is placed on a white plate with a mesh liner inside to prevent the dumplings from sticking. The scene suggests that the dumplings are likely being served at a restaurant. The background shows part of a table and seating, indicating a dining environment.`
 		} catch (err) {
 			return { failure: "Describe image error:", errorDetails: err.message }
 		}
@@ -213,21 +210,30 @@ export const updateUserProfileAction = actionClient
 			if (session) {
 				const profileImageFiles = profileImage.getAll("profileImage")
 				const profileImageFile = profileImageFiles[0]
-				const resRoninUpload = await create.user.with({
-					profilePhotoUrl: profileImageFile,
-				})
-				const resUpdateUser = await updateUser.run(client, {
-					username,
-					displayName,
-					// @ts-ignore
-					roninId: resRoninUpload.id,
-					// @ts-ignore
-					profilePhotoUrl: resRoninUpload.profilePhotoUrl.src,
-				})
-				if (resUpdateUser) {
-					return "ok"
+				console.log(profileImageFile, "profile image file")
+				if (profileImageFile) {
+					const resRoninUpload = await create.user.with({
+						profilePhotoUrl: profileImageFile,
+					})
+					const resUpdateUser = await updateUser.run(client, {
+						username,
+						displayName,
+						// @ts-ignore
+						roninId: resRoninUpload.id,
+						// @ts-ignore
+						profilePhotoUrl: resRoninUpload.profilePhotoUrl.src,
+					})
+					if (resUpdateUser) {
+						return "ok"
+					}
 				} else {
-					throw new Error("Error updating user profile")
+					const resUpdateUser = await updateUser.run(client, {
+						username,
+						displayName,
+					})
+					if (resUpdateUser) {
+						return "ok"
+					}
 				}
 			}
 		} catch (err) {
