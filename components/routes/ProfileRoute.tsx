@@ -38,6 +38,9 @@ export default observer(function ProfileRoute(props: Props) {
 				height: post.imageHeight ?? 1,
 				src: post.imageUrl,
 				preview: post.imagePreviewBase64Hash ?? "",
+				description: post.description,
+				aiDescription: post.aiDescription,
+				categories: post.categories,
 			}
 		})
 	}, [posts])
@@ -76,10 +79,6 @@ export default observer(function ProfileRoute(props: Props) {
 		}
 	})
 
-	// useEffect(() => {
-	// 	console.log(local.postViewData.get(), "post view data")
-	// }, [local.postViewData.get()])
-
 	return (
 		<>
 			{auth && (
@@ -108,6 +107,9 @@ export default observer(function ProfileRoute(props: Props) {
 							id: "",
 							preview: "",
 							src: local.postViewData.get().src,
+							description: local.postViewData.get().description,
+							aiDescription: local.postViewData.get().aiDescription,
+							categories: local.postViewData.get().categories,
 						}}
 						closeModal={() => {
 							local.postViewData.set(null)

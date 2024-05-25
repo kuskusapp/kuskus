@@ -50,6 +50,8 @@ export const profilePublic = e.params({ username: e.str }, ({ username }) => {
 		createdPosts: {
 			imageUrl: true,
 			description: true,
+			aiDescription: true,
+			categories: true,
 		},
 	}))
 })
@@ -82,6 +84,9 @@ export const profileAuth = e.params(
 				imageWidth: true,
 				imageHeight: true,
 				imagePreviewBase64Hash: true,
+				description: true,
+				aiDescription: true,
+				categories: true,
 			})),
 		}))
 	},
