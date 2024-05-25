@@ -51,7 +51,7 @@ export default observer(function Home(props: Props) {
 	const router = useRouter()
 
 	react.useEffect(() => {
-		if (!authData.name.get()) {
+		if (props.authenticated && !authData.name.get()) {
 			router.push("/settings")
 		}
 	}, [])
