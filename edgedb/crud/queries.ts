@@ -164,6 +164,7 @@ export const settingsAuth = e.params(
 		return e.select(user, () => ({
 			name: true,
 			displayName: true,
+			profilePhotoUrl: true,
 		}))
 	},
 )

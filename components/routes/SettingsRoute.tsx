@@ -11,8 +11,9 @@ interface Props {
 	authenticated: boolean
 	authData?: settingsAuthReturn
 }
-export default observer(function Settings(props: Props) {
+export default observer(function SettingsRoute(props: Props) {
 	const local = useObservable({
+		profilePhotoUrl: props.authData?.profilePhotoUrl || "",
 		username: props.authData?.name || "",
 		displayName: props.authData?.displayName || "",
 		touched: false,
@@ -74,8 +75,8 @@ export default observer(function Settings(props: Props) {
 					<div className="flex flex-col gap-[12px]">
 						<div className="w-full">
 							<div className="w-full bg-neutral-800 h-[400px] relative">
-								<button className="absolute bottom-2 left-2 rounded-full w-[50px] h-[50px] bg-neutral-700 bg-opacity-70 hover:bg-opacity-90 flex items-center justify-center">
-									Edit
+								<button className="absolute bottom-2 left-2 rounded-full w-[70px] h-[70px] bg-neutral-700 bg-opacity-70 hover:bg-opacity-90 flex items-center justify-center">
+									{local.profilePhotoUrl.get() ? "Change" : "Add"}
 								</button>
 							</div>
 							<div className="flex gap-1">

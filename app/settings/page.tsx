@@ -1,8 +1,8 @@
-import Settings from "@/components/routes/Settings"
+import SettingsRoute from "@/components/routes/SettingsRoute"
 import { auth } from "@/edgedb-next-client"
 import { settingsAuth, settingsAuthReturn } from "@/edgedb/crud/queries"
 
-export default async function SettingsRoute() {
+export default async function Settings() {
 	const session = auth.getSession()
 	const client = session.client
 	const authenticated = await session.isSignedIn()
@@ -10,5 +10,5 @@ export default async function SettingsRoute() {
 	if (authenticated) {
 		authData = await settingsAuth.run(client, {})
 	}
-	return <Settings authenticated={authenticated} authData={authData} />
+	return <SettingsRoute authenticated={authenticated} authData={authData} />
 }
