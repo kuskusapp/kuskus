@@ -97,6 +97,13 @@ export default function Chat() {
 								"https://lh5.googleusercontent.com/p/AF1QipPBtbz87EZ9HGIia9bkRT2szr99d5Bg9PRvLKvc=w408-h306-k-no",
 							category: "coffee",
 						},
+						{
+							name: "3",
+							displayName: "3",
+							imageUrl:
+								"https://lh5.googleusercontent.com/p/AF1QipPBtbz87EZ9HGIia9bkRT2szr99d5Bg9PRvLKvc=w408-h306-k-no",
+							category: "coffee",
+						},
 					],
 				}
 			}
