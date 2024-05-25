@@ -151,8 +151,8 @@ function Sidebar({
 }) {
 	return (
 		<div className="md:fixed left-0 md:w-[380px] w-full top-0 h-screen bg-secondary relative">
-			<button className="z-100 hover:opacity-60 transition-opacity duration-300">
-				<SettingsIcon className="color-neutral-700 w-6 h-6 settings-icon" />
+			<button className="z-100 absolute top-2 left-2 hover:opacity-60 transition-opacity duration-300">
+				<SettingsIcon className="color-white w-6 h-6 settings-icon" />
 			</button>
 			<img className="w-full h-3/5 bg-substitute" src={profileImageUrl}></img>
 			<div className="p-[24px] pt-[34px] flex flex-col justify-between h-2/5">
