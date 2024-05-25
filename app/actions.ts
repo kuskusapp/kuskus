@@ -181,8 +181,7 @@ export const suggestCategoriesAction = actionClient
 				const categories = await fetch(
 					`http://158.160.90.161:8000/suggest-categories/?text=${encodeURIComponent(foodDescription)}&k=2`,
 				)
-				console.log(await categories.json())
-				return "ok"
+				return await categories.json()
 			}
 		} catch (err) {
 			return { failure: "EdgeDB error", errorDetails: err.message }

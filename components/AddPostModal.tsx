@@ -131,10 +131,10 @@ export default observer(function AddPostModal(props: Props) {
 												// @ts-ignore
 												local.aiDescription.set(resp.data)
 
-												const categories = await fetch(
-													`http://158.160.90.161:8000/suggest-categories/?text=${encodeURIComponent(local.aiDescription.get())}&k=2`,
-												)
-												console.log(categories, "categories")
+												const categories = await suggestCategoriesAction({
+													foodDescription: local.aiDescription.get(),
+												})
+												console.log(categories.data, "categories")
 											}
 											local.aiDescriptionLoading.set(false)
 										} catch (err) {

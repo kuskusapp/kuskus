@@ -8,6 +8,7 @@ export type PostGridImage = {
 	height: number
 	src: string
 	preview: string
+	aiDescription?: string
 }
 
 function getShortestColumn(heights: number[]): number {
