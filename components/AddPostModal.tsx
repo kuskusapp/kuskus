@@ -80,7 +80,7 @@ export default observer(function AddPostModal(props: Props) {
 				}}
 			></div>
 
-			<div className=" z-30 h-fit rounded-lg overflow-hidden md:w-4/5 w-full bg-neutral-900">
+			<div className="relative z-30 h-fit rounded-lg overflow-hidden md:w-4/5 w-full bg-neutral-900">
 				<form
 					className="flex md:flex-row flex-col"
 					onSubmit={(e) => {
@@ -267,14 +267,14 @@ export default observer(function AddPostModal(props: Props) {
 								)} */}
 						</div>
 					</div>
-					<div className="absolute right-4 bottom-4">
+					<div className="absolute right-4 z-50 bottom-4">
 						{local.uploadingPost.get() && <Loader />}
 						{!local.uploadingPost.get() && (
 							<button
 								className={`py-2 px-4 rounded-xl font-semibold ${
 									local.uploadedImageAsFile.get()
 										? "bg-yellow-500 hover:bg-yellow-700 text-black"
-										: "bg-neutral-700 text-neutral-500 opacity-50"
+										: "bg-neutral-700 text-neutral-500 bg-opacity-50"
 								}`}
 								disabled={!local.uploadedImageAsFile.get()}
 								onClick={async () => {
