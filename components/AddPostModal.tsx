@@ -6,7 +6,7 @@ import {
 } from "@/app/actions"
 import { observer, useObservable } from "@legendapp/state/react"
 import { useRouter } from "next/navigation"
-import React from "react"
+import React, { useEffect } from "react"
 import { FaImage } from "react-icons/fa6"
 import { IoCloseOutline } from "react-icons/io5"
 import AiThinking from "./AiThinking"
@@ -23,7 +23,7 @@ export default observer(function AddPostModal(props: Props) {
 		uploadedImageAsFile: null as File | null,
 		aiDescription: "",
 		aiDescriptionLoading: false,
-		guessedCategories: [] as string[],
+		guessedCategories: ["Lasagna", "Ramen"] as string[],
 		aiGuessesCategories: [] as string[],
 		aiCategoriesGuessLoading: false,
 		uploadingPost: false,
@@ -41,22 +41,33 @@ export default observer(function AddPostModal(props: Props) {
 			"Coffee",
 		],
 		categories: [] as string[],
-		initialCount: 6,
+		initialCount: 8,
 	})
 	const router = useRouter()
 
 	const addCategory = (
 		category: string,
-		event: React.MouseEvent<HTMLButtonElement>,
+		event?: React.MouseEvent<HTMLButtonElement>,
 	) => {
-		event.preventDefault()
-		event.stopPropagation()
 		local.categories.set((prevSelected) =>
 			prevSelected.includes(category)
 				? prevSelected.filter((cat) => cat !== category)
 				: [...prevSelected, category],
 		)
 	}
+	useEffect(() => {
+		local.guessedCategories.get().forEach((guessed) => {
+			if (!local.foodCategories.get().includes(guessed)) {
+				local.foodCategories.unshift(guessed)
+			}
+		})
+		local.foodCategories.set([...local.foodCategories.get()])
+		local.guessedCategories.get().forEach((guessed) => {
+			if (!local.categories.get().includes(guessed)) {
+				local.categories.unshift(guessed)
+			}
+		})
+	}, [local.guessedCategories.get()])
 
 	const sortedCategories = [
 		...local.categories.get(),
@@ -64,6 +75,7 @@ export default observer(function AddPostModal(props: Props) {
 			.get()
 			.filter((cat) => !local.categories.get().includes(cat)),
 	].slice(0, local.initialCount.get())
+	console.log(sortedCategories)
 
 	return (
 		<div className="fixed top-0 left-0 w-screen h-screen z-10 flex-center">
@@ -244,10 +256,10 @@ export default observer(function AddPostModal(props: Props) {
 								{sortedCategories.map((category) => (
 									<button
 										key={category}
-										className={`px-3 py-2 text-white font-light text-sm border rounded-full ${
+										className={`px-3 p-1  text-[14px] font-light text-sm border rounded-full ${
 											local.categories.get().includes(category)
-												? "bg-inherit border-yellow-500"
-												: "bg-inherit borer-white hover:border-yellow-200"
+												? "bg-inherit bg-yellow-500 border-yellow-500 text-black"
+												: "bg-inherit borer-white text-white hover:border-yellow-200"
 										}`}
 										onClick={(e) => addCategory(category, e)}
 									>
