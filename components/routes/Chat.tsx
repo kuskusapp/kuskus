@@ -10,7 +10,11 @@ type RelevantPlace = {
 	category: string
 }
 
-enum AnswerKind {Loading, Place, Text}
+enum AnswerKind {
+	Loading,
+	Place,
+	Text,
+}
 type Answer = AnswerLoading | AnswerPlace | AnswerText
 
 type AnswerLoading = {
@@ -39,62 +43,65 @@ export default function Chat() {
 
 	const [qas, set_qas] = react.useState<QuestionAndAnswer[]>([])
 
-	const handle_submit = react.useCallback(async (e: react.FormEvent<HTMLFormElement>) => {
-		e.preventDefault()
-		let query = input_ref.current?.value
-		if (!query) return
-		input_ref.current.value = ""
+	const handle_submit = react.useCallback(
+		async (e: react.FormEvent<HTMLFormElement>) => {
+			e.preventDefault()
+			let query = input_ref.current?.value
+			if (!query) return
+			input_ref.current.value = ""
 
-		const qa: QuestionAndAnswer = {
-			question: query,
-			answer: {kind: AnswerKind.Loading},
-		}
-		
-		let qa_idx = 0
-		set_qas(qas => {
-			const qas_copy = [...qas]
-			qa_idx = qas_copy.push(qa) - 1
-			return qas_copy
-		})
-
-		// TODO: fetch an actual answer
-
-		await new Promise((resolve) => setTimeout(resolve, 1000)) // simulate loading
-
-		let answer: Answer
-		if (++dummy % 2 === 0) {
-			answer = {
-				kind: AnswerKind.Text,
-				text: "I don't know",
+			const qa: QuestionAndAnswer = {
+				question: query,
+				answer: { kind: AnswerKind.Loading },
 			}
-		} else {
-			answer = {
-				kind: AnswerKind.Place,
-				places: [
-					{
-						name: "sklep-z-kawa-i-kawiarnia",
-						displayName: "Sklep z Kawą i Kawiarnia",
-						imageUrl:
-							"https://lh5.googleusercontent.com/p/AF1QipPB8FL_x-CQbk9z4ZYLkaqyrHNfkhnFhJ5-T0Qw=w408-h271-k-no",
-						category: "coffee",
-					},
-					{
-						name: "wazaap",
-						displayName: "Wazaap",
-						imageUrl:
-							"https://lh5.googleusercontent.com/p/AF1QipPBtbz87EZ9HGIia9bkRT2szr99d5Bg9PRvLKvc=w408-h306-k-no",
-						category: "coffee",
-					},
-				],
-			}
-		}
 
-		set_qas(qas => {
-			const qas_copy = [...qas]
-			qas_copy[qa_idx] = {...qa, answer}
-			return qas_copy
-		})
-	}, [])
+			let qa_idx = 0
+			set_qas((qas) => {
+				const qas_copy = [...qas]
+				qa_idx = qas_copy.push(qa) - 1
+				return qas_copy
+			})
+
+			// TODO: fetch an actual answer
+
+			await new Promise((resolve) => setTimeout(resolve, 1000)) // simulate loading
+
+			let answer: Answer
+			if (++dummy % 2 === 0) {
+				answer = {
+					kind: AnswerKind.Text,
+					text: "I don't know",
+				}
+			} else {
+				answer = {
+					kind: AnswerKind.Place,
+					places: [
+						{
+							name: "sklep-z-kawa-i-kawiarnia",
+							displayName: "Sklep z Kawą i Kawiarnia",
+							imageUrl:
+								"https://lh5.googleusercontent.com/p/AF1QipPB8FL_x-CQbk9z4ZYLkaqyrHNfkhnFhJ5-T0Qw=w408-h271-k-no",
+							category: "coffee",
+						},
+						{
+							name: "wazaap",
+							displayName: "Wazaap",
+							imageUrl:
+								"https://lh5.googleusercontent.com/p/AF1QipPBtbz87EZ9HGIia9bkRT2szr99d5Bg9PRvLKvc=w408-h306-k-no",
+							category: "coffee",
+						},
+					],
+				}
+			}
+
+			set_qas((qas) => {
+				const qas_copy = [...qas]
+				qas_copy[qa_idx] = { ...qa, answer }
+				return qas_copy
+			})
+		},
+		[],
+	)
 
 	return (
 		<>
@@ -112,43 +119,37 @@ export default function Chat() {
 							</p>
 						</div>
 					)}
-					{qas.map((qa) => {
-						const question = <div>question: {qa.question}</div>
-
-						switch (qa.answer.kind) {
-						case AnswerKind.Loading:
-							return (
-								<>
-									{question}
-									<div>loading...</div>
-								</>
-							)
-						case AnswerKind.Text:
-							return (
-								<>
-									{question}
-									<div>answer: {qa.answer.text}</div>
-								</>
-							)
-						case AnswerKind.Place:
-							return (
-								<>
-									{question}
+					{qas.map((qa, index) => (
+						<div
+							key={index}
+							className="mb-4 flex flex-col justify-center items-center h-screen"
+						>
+							<div className="font-bold text-center">
+								Question: {qa.question}
+							</div>
+							<div className="mt-4">
+								{qa.answer.kind === AnswerKind.Loading && <div>Loading...</div>}
+								{qa.answer.kind === AnswerKind.Text && (
+									<div>Answer: {qa.answer.text}</div>
+								)}
+								{qa.answer.kind === AnswerKind.Place && (
 									<div>
-										answer:{" "}
-										{qa.answer.places.map((place) => (
-											<PlaceCard
-												name={place.name}
-												displayName={place.displayName}
-												imageUrl={place.imageUrl}
-												category={place.category}
-											/>
-										))}
+										<div>Answer:</div>
+										<div className="flex flex-row justify-center">
+											{qa.answer.places.map((place) => (
+												<PlaceCard
+													name={place.name}
+													displayName={place.displayName}
+													imageUrl={place.imageUrl}
+													category={place.category}
+												/>
+											))}
+										</div>
 									</div>
-								</>
-							)
-						}
-					})}
+								)}
+							</div>
+						</div>
+					))}
 					<div className="h-[10%] p-2 flex items-center justify-center">
 						<form onSubmit={handle_submit}>
 							<div className="absolute left-1/2 bottom-0 transform -translate-x-1/2 bg-[#09090b] px-5 py-10 border border-zinc-700 rounded-md">
@@ -158,6 +159,12 @@ export default function Chat() {
 									className="w-[550px] input-placeholder focus:outline-none px-4 py-2 border bg-inherit border-zinc-700/80 focus:border-transparent rounded-md text-zinc-300"
 									type="text"
 								/>
+								<button
+									type="submit"
+									className="ml-2 p-2 bg-neutral-700 text-white rounded-md"
+								>
+									Send
+								</button>
 							</div>
 						</form>
 					</div>
