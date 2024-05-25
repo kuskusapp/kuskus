@@ -203,19 +203,28 @@ export const updateUserProfileAction = actionClient
 		z.object({
 			username: z.string(),
 			displayName: z.string().optional(),
+			profileImage: z.any(),
 		}),
 	)
-	.action(async ({ parsedInput: { username, displayName } }) => {
+	.action(async ({ parsedInput: { username, displayName, profileImage } }) => {
 		try {
 			const session = auth.getSession()
 			const client = session.client
 			if (session) {
-				const res = await updateUser.run(client, {
+				const profileImageFiles = profileImage.getAll("profileImage")
+				const profileImageFile = profileImageFiles[0]
+				const resRoninUpload = await create.user.with({
+					profilePhotoUrl: profileImageFile,
+				})
+				const resUpdateUser = await updateUser.run(client, {
 					username,
 					displayName,
+					// @ts-ignore
+					roninId: resRoninUpload.id,
+					// @ts-ignore
+					profilePhotoUrl: resRoninUpload.profilePhotoUrl.src,
 				})
-				console.log(res, "res")
-				if (res) {
+				if (resUpdateUser) {
 					return "ok"
 				} else {
 					throw new Error("Error updating user profile")
@@ -223,40 +232,5 @@ export const updateUserProfileAction = actionClient
 			}
 		} catch (err) {
 			return { failure: "EdgeDB error", errorDetails: err.message }
-		}
-	})
-
-export const updateUserProfileImageAction = actionClient
-	.schema(
-		z.object({
-			profileImage: z.any(),
-		}),
-	)
-	.action(async ({ parsedInput: { profileImage } }) => {
-		try {
-			const session = auth.getSession()
-			const client = session.client
-			if (session) {
-				const profileImageFiles = profileImage.getAll("profileImage")
-				const profileImageFile = profileImageFiles[0]
-				let res = await create.user.with({
-					profilePhotoUrl: profileImageFile,
-				})
-				if (res) {
-					res = await updateUser.run(client, {
-						// @ts-ignore
-						roninId: res.id,
-						// @ts-ignore
-						profilePhotoUrl: res.profilePhotoUrl.src,
-					})
-					if (res) {
-						return "ok"
-					} else {
-						throw new Error("Error updating user profile image")
-					}
-				}
-			}
-		} catch (err) {
-			return { failure: "Error", errorDetails: err.message }
 		}
 	})

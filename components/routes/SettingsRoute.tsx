@@ -58,16 +58,29 @@ export default observer(function SettingsRoute(props: Props) {
 							className={`bg-black rounded-full h-[34px] flex items-center px-4 py-2 font-semibold text-[12px] text-white ${local.username.get() ? "hover:text-gray-200 hover:bg-neutral-800" : "bg-gray-500 cursor-not-allowed"}`}
 							onClick={async () => {
 								local.savingProfile.set(true)
-								const res = await updateUserProfileAction({
-									username: local.username.get(),
-									displayName: local.displayName.get(),
-								})
-								if (!res.serverError) {
+								const formData = new FormData()
+								formData.append(
+									"profileImage",
+									// @ts-ignore
+									local.uploadedProfileImageAsFile.get(),
+								)
+								const resUpdateUserProfileAction =
+									await updateUserProfileAction({
+										username: local.username.get(),
+										displayName: local.displayName.get(),
+										profileImage: formData,
+									})
+								console.log(resUpdateUserProfileAction, "res")
+								console.log(
+									resUpdateUserProfileAction.serverError,
+									"server error",
+								)
+								if (!resUpdateUserProfileAction.serverError) {
 									router.push("/")
 								} else {
-									console.log(res.serverError, "server err")
 									local.savingProfile.set(false)
 								}
+								local.savingProfile.set(false)
 							}}
 						>
 							Save
@@ -103,13 +116,7 @@ export default observer(function SettingsRoute(props: Props) {
 											try {
 												const uploadedFile = e.target.files[0]
 												local.uploadedProfileImageAsFile.set(uploadedFile)
-												const data = new FormData()
-												data.append("profileImage", uploadedFile)
-												let res = await updateUserProfileImageAction({
-													profileImage: data,
-												})
-												console.log(res, "res")
-												console.log(res.serverError, "server error")
+												local.profilePhotoUrl.set("")
 											} catch (err) {
 												console.log(err)
 											}
