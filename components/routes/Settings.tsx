@@ -87,11 +87,11 @@ function EditProfile() {
 
 	return (
 		<div className="flex flex-col gap-[12px]">
-			<div className="w-full bg-neutral-800 h-[400px] relative">
+			{/* <div className="w-full bg-neutral-800 h-[400px] relative">
 				<button className="absolute bottom-2 left-2 rounded-full w-[50px] h-[50px] bg-neutral-700 bg-opacity-70 hover:bg-opacity-90 flex items-center justify-center">
 					Edit
 				</button>
-			</div>
+			</div> */}
 			<div className="w-full">
 				<div className="font-light mb-[6px] text-white/50 px-4 text-[12px]">
 					Display Name
