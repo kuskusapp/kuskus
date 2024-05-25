@@ -1,9 +1,9 @@
 "use client"
-import { updateUserProfileAction } from "@/app/actions"
-import { incrementNumberAction } from "@/app/new-actions"
+import { updateUserAction } from "@/app/actions"
 import Loader from "@/components/Loader"
 import { settingsAuthReturn } from "@/edgedb/crud/queries"
 import { observer, useObservable } from "@legendapp/state/react"
+import { exec } from "child_process"
 import { useRouter } from "next/navigation"
 import { useEffect } from "react"
 import { useServerAction } from "zsa-react"
@@ -23,7 +23,6 @@ export default observer(function SettingsRoute(props: Props) {
 		uploadedProfileImageAsFile: null as File | null,
 	})
 	const router = useRouter()
-	const { isPending, execute, data } = useServerAction(incrementNumberAction)
 
 	const handleBlur = () => {
 		local.touched.set(true)
@@ -57,10 +56,9 @@ export default observer(function SettingsRoute(props: Props) {
 							disabled={!local.username.get()}
 							className={`bg-black rounded-full h-[34px] flex items-center px-4 py-2 font-semibold text-[12px] text-white ${local.username.get() ? "hover:text-gray-200 hover:bg-neutral-800" : "bg-gray-500 cursor-not-allowed"}`}
 							onClick={async () => {
-								const [data, err] = await execute({ number: 5 })
-								console.log(data)
-
-								return
+								// const [data, err] = await execute({ number: 5 })
+								// console.log(data)
+								// return
 								local.savingProfile.set(true)
 								const formData = new FormData()
 								formData.append(
@@ -68,21 +66,23 @@ export default observer(function SettingsRoute(props: Props) {
 									// @ts-ignore
 									local.uploadedProfileImageAsFile.get(),
 								)
-								const resUpdateUserProfileAction =
-									await updateUserProfileAction({
-										username: local.username.get(),
-										displayName: local.displayName.get(),
-										profileImage: formData,
-									})
-								if (!resUpdateUserProfileAction.serverError) {
-									router.push("/")
-								} else {
-									// TODO: show in toast
-									console.log(
-										resUpdateUserProfileAction.serverError,
-										"server error",
-									)
-								}
+
+								// const res = await updateUserAction()
+								// const resUpdateUserProfileAction =
+								// 	await updateUserProfileAction({
+								// 		username: local.username.get(),
+								// 		displayName: local.displayName.get(),
+								// 		profileImage: formData,
+								// 	})
+								// if (!resUpdateUserProfileAction.serverError) {
+								// 	router.push("/")
+								// } else {
+								// 	// TODO: show in toast
+								// 	console.log(
+								// 		resUpdateUserProfileAction.serverError,
+								// 		"server error",
+								// 	)
+								// }
 								local.savingProfile.set(false)
 							}}
 						>
