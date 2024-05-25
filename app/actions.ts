@@ -21,13 +21,14 @@ export const logoutAction = actionClient.action(async () => {
 	signout()
 })
 
-const updateUserSchema = z.object({
-	bio: z.string().optional(),
-	place: z.string().optional(),
-	displayName: z.string().optional(),
-})
 export const updateUserAction = actionClient
-	.schema(updateUserSchema)
+	.schema(
+		z.object({
+			bio: z.string().optional(),
+			place: z.string().optional(),
+			displayName: z.string().optional(),
+		}),
+	)
 	.action(async ({ parsedInput: { bio, place, displayName } }) => {
 		const session = auth.getSession()
 		const client = session.client
@@ -38,12 +39,13 @@ export const updateUserAction = actionClient
 		}
 	})
 
-const profileLoadMostPostsSchema = z.object({
-	username: z.string(),
-	pageNumber: z.number(),
-})
 export const profileLoadMostPostsAction = actionClient
-	.schema(profileLoadMostPostsSchema)
+	.schema(
+		z.object({
+			username: z.string(),
+			pageNumber: z.number(),
+		}),
+	)
 	.action(async ({ parsedInput: { username, pageNumber } }) => {
 		const session = auth.getSession()
 		const client = session.client
@@ -58,13 +60,14 @@ export const profileLoadMostPostsAction = actionClient
 		}
 	})
 
-const describeImageSchema = z.object({
-	image: zfd.formData({
-		imageAsBase64: z.string(),
-	}),
-})
 export const describeImageAction = actionClient
-	.schema(describeImageSchema)
+	.schema(
+		z.object({
+			image: zfd.formData({
+				imageAsBase64: z.string(),
+			}),
+		}),
+	)
 	.action(async ({ parsedInput: { image } }) => {
 		try {
 			if (image.imageAsBase64.startsWith("data:image/png;base64,")) {
@@ -97,16 +100,17 @@ export const describeImageAction = actionClient
 		}
 	})
 
-const uploadPostSchema = z.object({
-	imageFile: zfd.formData({
-		image: zfd.file(),
-	}),
-	aiDescription: z.string(),
-	description: z.string(),
-	categories: z.optional(z.array(z.string())),
-})
 export const uploadPostAction = actionClient
-	.schema(uploadPostSchema)
+	.schema(
+		z.object({
+			imageFile: zfd.formData({
+				image: zfd.file(),
+			}),
+			aiDescription: z.string(),
+			description: z.string(),
+			categories: z.optional(z.array(z.string())),
+		}),
+	)
 	.action(
 		async ({
 			parsedInput: { imageFile, aiDescription, categories, description },
@@ -139,12 +143,13 @@ export const uploadPostAction = actionClient
 	)
 
 // extend to more categories in future
-const relevantPlacesSchema = z.object({
-	location: z.string(),
-	category: z.string(),
-})
 export const relevantPlacesAction = actionClient
-	.schema(relevantPlacesSchema)
+	.schema(
+		z.object({
+			location: z.string(),
+			category: z.string(),
+		}),
+	)
 	.action(async ({ parsedInput: { location, category } }) => {
 		const session = auth.getSession()
 		const client = session.client
@@ -156,11 +161,12 @@ export const relevantPlacesAction = actionClient
 		}
 	})
 
-const deletePostSchema = z.object({
-	imageUrl: z.string(),
-})
 export const deletePostAction = actionClient
-	.schema(deletePostSchema)
+	.schema(
+		z.object({
+			imageUrl: z.string(),
+		}),
+	)
 	.action(async ({ parsedInput: { imageUrl } }) => {
 		const session = auth.getSession()
 		const client = session.client
@@ -172,11 +178,12 @@ export const deletePostAction = actionClient
 		}
 	})
 
-const suggestCategoriesSchema = z.object({
-	foodDescription: z.string(),
-})
 export const suggestCategoriesAction = actionClient
-	.schema(suggestCategoriesSchema)
+	.schema(
+		z.object({
+			foodDescription: z.string(),
+		}),
+	)
 	.action(async ({ parsedInput: { foodDescription } }) => {
 		try {
 			const session = auth.getSession()
