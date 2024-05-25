@@ -1,7 +1,6 @@
 "use client"
 import Header from "@/components/Header"
 import Search from "@/components/Search"
-import ViewPost from "@/components/ViewPost"
 import { AnimatePresence, motion } from "framer-motion"
 import Image from "next/image"
 import * as react from "react"

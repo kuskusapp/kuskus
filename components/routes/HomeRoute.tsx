@@ -2,12 +2,12 @@
 import { homeAuthReturn, homePublicReturn } from "@/edgedb/crud/queries"
 import { observer, useObservable } from "@legendapp/state/react"
 import * as react from "react"
-import ActionBar from "./ActionBar"
-import AddPostModal from "./AddPostModal"
-import { ImageGrid, PostGridImage } from "./PostGrid"
-import Search, { search_post_grid_images } from "./Search"
-import SignInAndSignUp from "./SignInAndSignUp"
-import ViewPost from "./ViewPost"
+import ActionBar from "../ActionBar"
+import AddPostModal from "../AddPostModal"
+import { ImageGrid, PostGridImage } from "../PostGrid"
+import Search, { search_post_grid_images } from "../Search"
+import SignInAndSignUp from "../SignInAndSignUp"
+import ViewPost from "../ViewPost"
 import { useRouter } from "next/navigation"
 
 export type DeviceSize = "mobile" | "tablet" | "desktop"
@@ -20,7 +20,7 @@ interface Props {
 	authBuiltinUiUrl: string
 	authBuiltinSignupUrl: string
 }
-export default observer(function Home(props: Props) {
+export default observer(function HomeRoute(props: Props) {
 	const publicData = useObservable(props.publicData)
 	const authData = useObservable(props.authData)
 	const local = useObservable({

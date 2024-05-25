@@ -14,7 +14,7 @@ let lastId = 0
 interface Props {
 	authData: profileAuthReturn
 }
-export default observer(function Profile(props: Props) {
+export default observer(function ProfileRoute(props: Props) {
 	const authData = useObservable(props.authData)
 	const local = useObservable({
 		addPostModalOpen: false,

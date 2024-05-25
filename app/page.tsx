@@ -1,8 +1,8 @@
-import Home from "@/components/Home"
+import HomeRoute from "@/components/routes/HomeRoute"
 import { auth } from "@/edgedb-next-client"
 import { homeAuth, homeAuthReturn, homePublic } from "@/edgedb/crud/queries"
 
-export default async function HomeRoute() {
+export default async function Home() {
 	const session = auth.getSession()
 	const client = session.client
 	const authenticated = await session.isSignedIn()
@@ -16,7 +16,7 @@ export default async function HomeRoute() {
 	}
 
 	return (
-		<Home
+		<HomeRoute
 			publicData={publicData}
 			authData={authData}
 			authenticated={authenticated}

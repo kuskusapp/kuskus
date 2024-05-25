@@ -1,8 +1,5 @@
 "use client"
-import {
-	updateUserProfileAction,
-	updateUserProfileImageAction,
-} from "@/app/actions"
+import { updateUserProfileAction } from "@/app/actions"
 import Loader from "@/components/Loader"
 import { settingsAuthReturn } from "@/edgedb/crud/queries"
 import { observer, useObservable } from "@legendapp/state/react"
@@ -70,15 +67,14 @@ export default observer(function SettingsRoute(props: Props) {
 										displayName: local.displayName.get(),
 										profileImage: formData,
 									})
-								console.log(resUpdateUserProfileAction, "res")
-								console.log(
-									resUpdateUserProfileAction.serverError,
-									"server error",
-								)
 								if (!resUpdateUserProfileAction.serverError) {
 									router.push("/")
 								} else {
-									local.savingProfile.set(false)
+									// TODO: show in toast
+									console.log(
+										resUpdateUserProfileAction.serverError,
+										"server error",
+									)
 								}
 								local.savingProfile.set(false)
 							}}
