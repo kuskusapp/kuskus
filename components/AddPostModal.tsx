@@ -131,7 +131,6 @@ export default observer(function AddPostModal(props: Props) {
 											local.aiDescriptionLoading.set(true)
 
 											const data = new FormData()
-											console.log(await fileToBase64(uploadedFile), "base64")
 											// return
 											data.append(
 												"imageAsBase64",
@@ -140,10 +139,10 @@ export default observer(function AddPostModal(props: Props) {
 											const resp = await describeImageAction({
 												image: data,
 											})
-											if (resp.serverError !== undefined) {
+											if (resp.serverError === undefined) {
 												// @ts-ignore
 												local.aiDescription.set(resp.data)
-												llocal.aiDescriptionLoading.set(false)
+												local.aiDescriptionLoading.set(false)
 												console.log(local.aiDescription.get(), "ai description")
 
 												const categories = await suggestCategoriesAction({
