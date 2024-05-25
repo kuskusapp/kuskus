@@ -1,22 +1,24 @@
 "use client"
-import { profileLoadMostPostsAction } from "@/app/actions"
-import { profileAuthReturn } from "@/edgedb/crud/queries"
-import { isEmpty } from "@legendapp/state"
+import { profileAuthReturn, profilePublicReturn } from "@/edgedb/crud/queries"
 import { observer, useObservable } from "@legendapp/state/react"
 import { useEffect, useMemo } from "react"
+import { SettingsIcon } from "../../public/svg/modal-icons"
 import ActionBar from "../ActionBar"
 import AddPostModal from "../AddPostModal"
 import { ImageGrid } from "../PostGrid"
 import ViewPost from "../ViewPost"
-import { SettingsIcon } from "../../public/svg/modal-icons"
 
 let lastId = 0
 interface Props {
+	publicData: profilePublicReturn
 	authData: profileAuthReturn
+	authenticated: boolean
 }
 export default observer(function ProfileRoute(props: Props) {
-	const authData = useObservable(props.authData)
+	const auth = props.authenticated
 	const local = useObservable({
+		...props.publicData,
+		...props.authData,
 		addPostModalOpen: false,
 		showSettingsModal: false,
 		pageNumber: 0,
@@ -24,7 +26,7 @@ export default observer(function ProfileRoute(props: Props) {
 		showPostViewModal: false,
 		windowSize: null as null | number,
 	})
-	const posts = authData.createdPosts.get() ?? []
+	const posts = local.createdPosts.get() ?? []
 	const images = useMemo(() => {
 		return posts.map((post) => {
 			return {
@@ -46,11 +48,10 @@ export default observer(function ProfileRoute(props: Props) {
 				document.body.offsetHeight
 			) {
 				local.pageNumber.set(local.pageNumber.get() + 1)
-
-				const posts = await profileLoadMostPostsAction({
-					username: "nikiv",
-					pageNumber: local.pageNumber.get(),
-				})
+				// const posts = await profileLoadMostPostsAction({
+				// 	username: "nikiv",
+				// 	pageNumber: local.pageNumber.get(),
+				// })
 
 				// authData.createdPosts.set([
 				// 	...(authData.createdPosts.get() ?? []),
@@ -79,13 +80,13 @@ export default observer(function ProfileRoute(props: Props) {
 
 	return (
 		<>
-			{!isEmpty(authData.get()) && (
+			{auth && (
 				<ActionBar
 					activeTab="Profile"
 					activateAddPost={() => {
 						local.addPostModalOpen.set(true)
 					}}
-					username={authData.name.get()}
+					username={local.name.get()}
 				/>
 			)}
 			{local.addPostModalOpen.get() ? (
@@ -113,15 +114,15 @@ export default observer(function ProfileRoute(props: Props) {
 							const updatedPosts = posts.filter(
 								(post) => post.imageUrl !== postPhotoUrl,
 							)
-							authData.createdPosts.set(updatedPosts)
+							local.createdPosts.set(updatedPosts)
 						}}
 					/>
 				)}
 				<Sidebar
-					prettyName={authData.displayName.get()}
-					username={authData.name.get()}
-					description={authData.bio.get()}
-					profileImageUrl={authData.profilePhotoUrl.get()}
+					prettyName={local.displayName.get()}
+					username={local.name.get()}
+					description={local.bio.get()}
+					profileImageUrl={local.profilePhotoUrl.get()}
 				/>
 				<div className="md:ml-[380px] m-0 min-h-full flex">
 					<ImageGrid

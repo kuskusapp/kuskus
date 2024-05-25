@@ -21,8 +21,6 @@ interface Props {
 	authBuiltinSignupUrl: string
 }
 export default observer(function HomeRoute(props: Props) {
-	const publicData = useObservable(props.publicData)
-	const authData = useObservable(props.authData)
 	const local = useObservable({
 		inputFocused: false,
 		addPostModalOpen: false,
