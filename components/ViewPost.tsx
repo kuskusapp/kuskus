@@ -13,9 +13,13 @@ interface Props {
 		height: number
 		src: string
 		preview: string
+		userProfilePhotoUrl?: string
+		description?: string
+		aiDescription?: string
+		categories?: string[]
 	}
 	closeModal: (value: {} | null) => void
-	onPostDelete: (postPhotoUrl: string) => void
+	onPostDelete?: (postPhotoUrl: string) => void
 }
 export default observer(function ViewPost(props: Props) {
 	const local = useObservable({
@@ -24,7 +28,7 @@ export default observer(function ViewPost(props: Props) {
 	return (
 		<div className="fixed bg-neutral-900 bg-opacity-95 w-screen z-[100] h-screen flex [&::-webkit-scrollbar]:hidden backdrop-blur-sm">
 			<button
-				className="absolute cursor-pointer top-10 left-20 glass-background hover:opacity-40 px-3 py-3 rounded-full z-50"
+				className="absolute cursor-pointer top-10 left-20 glass-background hover:opacity-40 px-3 py-3 rounded-full z-[115]"
 				onClick={() => {
 					props.closeModal(null)
 				}}
@@ -68,10 +72,11 @@ export default observer(function ViewPost(props: Props) {
 						<div className="flex flex-col text-[14px] text-white/70">
 							<p className="text-primaryText flex"></p>
 							<div className="flex-col pt-2 space-y-1 text-white">
-								<p>japanese</p>
+								<p>{props.post.description}</p>
+								<p>{props.post.aiDescription}</p>
 								<div className="flex-row">
 									{/* <Icons name="Tag" size={[22, 22]} /> */}
-									<p className="pl-1">tags</p>
+									<p className="pl-1">{props.post.categories}</p>
 								</div>
 							</div>
 						</div>
@@ -83,7 +88,7 @@ export default observer(function ViewPost(props: Props) {
 						<div className="flex justify-end items-center p-5">
 							{local.deletingPost.get() && <Loader color="red" />}
 						</div>
-						{!local.deletingPost.get() && (
+						{props.onPostDelete && !local.deletingPost.get() && (
 							<button
 								onClick={async () => {
 									const res = await deletePostAction({

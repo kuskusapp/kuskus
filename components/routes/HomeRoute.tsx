@@ -45,7 +45,6 @@ export default observer(function HomeRoute(props: Props) {
 			"Mexican",
 			"Indian",
 			"Chinese",
-			"Japanese",
 		],
 		showViewPost: null as PostGridImage | null,
 		searchInput: "",
@@ -73,6 +72,9 @@ export default observer(function HomeRoute(props: Props) {
 				height: post.imageHeight,
 				src: post.imageUrl,
 				preview: post.imagePreviewBase64Hash,
+				aiDescription: post.aiDescription,
+				description: post.description,
+				categories: post.categories,
 			}
 		})
 	}, [posts])
@@ -114,12 +116,6 @@ export default observer(function HomeRoute(props: Props) {
 				<ViewPost
 					post={local.showViewPost.get()}
 					closeModal={local.showViewPost.set}
-					onPostDelete={(postPhotoUrl) => {
-						const updatedPosts = posts.filter(
-							(post) => post.imageUrl !== postPhotoUrl,
-						)
-						local.posts.set(updatedPosts)
-					}}
 				/>
 			)}
 			{auth && (

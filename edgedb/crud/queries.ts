@@ -12,7 +12,9 @@ export const homePublic = e.select({
 	),
 	posts: e.select(e.Post, () => ({
 		imageUrl: true,
+		description: true,
 		aiDescription: true,
+		categories: true,
 		roninId: true,
 		imageWidth: true,
 		imageHeight: true,
