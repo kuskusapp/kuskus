@@ -2,6 +2,8 @@
 import { CoreMessage } from "ai"
 import * as react from "react"
 import PlaceCard from "../PlaceCard"
+import { FaUserCircle } from "react-icons/fa"
+import { TbSquareLetterK } from "react-icons/tb"
 
 type RelevantPlace = {
 	name: string
@@ -120,22 +122,31 @@ export default function Chat() {
 						</div>
 					)}
 					{qas.map((qa, index) => (
-						<div
-							key={index}
-							className="mb-4 flex flex-col justify-center items-center h-screen"
-						>
-							<div className="font-bold text-center">
-								Question: {qa.question}
+						<div key={index} className="mb-4 flex flex-col items-center w-full">
+							<div className="flex items-center w-full justify-center">
+								<FaUserCircle className="text-white mr-2" />
+								<div className="text-left w-[50%]">
+									<div className="font-bold">{qa.question}</div>
+								</div>
 							</div>
-							<div className="mt-4">
+							<div className="mt-4 w-full flex justify-center">
 								{qa.answer.kind === AnswerKind.Loading && <div>Loading...</div>}
 								{qa.answer.kind === AnswerKind.Text && (
-									<div>Answer: {qa.answer.text}</div>
+									<div className="flex items-center w-full justify-center">
+										<TbSquareLetterK className="text-white mr-2" />
+										<div className="text-left w-[50%]">{qa.answer.text}</div>
+									</div>
 								)}
 								{qa.answer.kind === AnswerKind.Place && (
-									<div>
-										<div>Answer:</div>
-										<div className="flex flex-row justify-center">
+									<div className="w-full flex flex-col items-center">
+										<div className="flex items-center pb-5 w-full justify-center">
+											<TbSquareLetterK className="text-white mr-2" />
+											<div className="text-left w-[50%]">
+												{" "}
+												Here are the places you are looking for:
+											</div>
+										</div>
+										<div className="flex flex-row justify-center w-full">
 											{qa.answer.places.map((place) => (
 												<PlaceCard
 													name={place.name}
