@@ -26,7 +26,6 @@ export default observer(function AddPostModal(props: Props) {
 		aiDescription: "",
 		aiDescriptionLoading: false,
 		guessedCategories: [] as string[],
-		aiGuessesCategories: [] as string[],
 		aiCategoriesGuessLoading: false,
 		uploadingPost: false,
 		foodCategories: [
@@ -202,7 +201,7 @@ export default observer(function AddPostModal(props: Props) {
 										resize: "none",
 										overflow: "auto",
 									}}
-									className="bg-inherit mt-1 block w-full px-3 text-white border-none sm:text-sm textarea-placeholder"
+									className="bg-inherit mt-1 block w-full px-3 text-white border-none sm:text-sm textarea-placeholder focus:ring-transparent"
 								/>
 							</div>
 							<div
@@ -270,12 +269,13 @@ export default observer(function AddPostModal(props: Props) {
 									{sortedCategories.map((category) => (
 										<button
 											key={category}
-											className={`px-3 p-1  text-[14px] font-light text-sm border rounded-full ${
+											className={`px-3 p-1 text-[14px] font-light text-sm border rounded-full ${
 												local.categories.get().includes(category)
 													? "bg-inherit bg-yellow-500 border-yellow-500 text-black"
-													: "bg-inherit borer-white text-white hover:border-yellow-200"
+													: `bg-inherit borer-white text-white ${local.uploadedImageAsFile.get() ? "hover:border-yellow-200" : "cursor-not-allowed"}`
 											}`}
 											onClick={(e) => addCategory(category, e)}
+											disabled={local.uploadedImageAsFile.get() ? false : true}
 										>
 											{category}
 										</button>
@@ -312,16 +312,19 @@ export default observer(function AddPostModal(props: Props) {
 										data.append("image", local.uploadedImageAsFile.get())
 										const resp = await uploadPostAction({
 											imageFile: data,
-											aiDescription: "delete after",
+											aiDescription: local.aiDescription.get(),
 											description: local.description.get(),
+											categories: local.categories.get(),
 										})
 										if (resp.data) {
 											// TODO: redirect
 											local.uploadingPost.set(false)
-											router.push("/nikita")
+											props.onClose()
 										} else {
-											// TODO: show toast with error
 											local.uploadingPost.set(false)
+											errorToast(
+												"Issue uploading post with unknown error. Can try again with different image.",
+											)
 										}
 									}}
 								>

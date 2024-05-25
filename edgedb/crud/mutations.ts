@@ -7,9 +7,11 @@ export const createPost = e.params(
 		imageWidth: e.optional(e.int16),
 		imageHeight: e.optional(e.int16),
 		imagePreviewBase64Hash: e.optional(e.str),
+		description: e.optional(e.str),
 		aiDescription: e.optional(e.str),
 		imageFileNameFromImport: e.optional(e.str),
 		userId: e.optional(e.uuid),
+		categories: e.optional(e.array(e.str)),
 	},
 	({
 		imageUrl,
@@ -17,9 +19,11 @@ export const createPost = e.params(
 		imageWidth,
 		imageHeight,
 		imagePreviewBase64Hash,
+		description,
 		aiDescription,
 		imageFileNameFromImport,
 		userId,
+		categories,
 	}) => {
 		const user = e.op(
 			e.cast(e.User, userId),
@@ -34,8 +38,12 @@ export const createPost = e.params(
 			imageWidth,
 			imageHeight,
 			imagePreviewBase64Hash,
+			description,
 			aiDescription,
 			imageFileNameFromImport,
+			categories: e.array_unpack(
+				e.op(categories, "??", e.cast(e.array(e.str), e.set())),
+			),
 			created_by: user,
 		})
 	},

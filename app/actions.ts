@@ -90,8 +90,9 @@ export const describeImageAction = actionClient
 			// 		},
 			// 	],
 			// })
+			// console.log(response, "resp")
 			// return response.choices[0].message.content
-			return `This image shows a bamboo steamer basket containing six dumplings. The steamer is placed on a white plate with a mesh liner inside to prevent the dumplings from sticking. The scene suggests that the dumplings are likely being served at a restaurant. The background shows part of a table and seating, indicating a dining environment.`
+			return `This image shows a hand holding a cup of coffee with latte art in the shape of a heart on top. The background is an outdoor pavement area, and part of a person's shoes can be seen at the bottom of the image.`
 		} catch (err) {
 			return { failure: "Describe image error:", errorDetails: err.message }
 		}
@@ -130,6 +131,8 @@ export const uploadPostAction = actionClient
 						"height" in roninPost.photo.meta ? roninPost.photo.meta.height : 0,
 					imagePreviewBase64Hash: roninPost.photo.placeholder.base64,
 					aiDescription: aiDescription,
+					description: description,
+					categories: categories,
 				})
 				console.log(dbPost, "db post")
 				return "success"
@@ -186,7 +189,7 @@ export const suggestCategoriesAction = actionClient
 			const session = auth.getSession()
 			if (session) {
 				const categories = await fetch(
-					`http://158.160.90.161:8000/suggest-categories/?text=${encodeURIComponent(foodDescription)}&k=2`,
+					`http://158.160.90.161:8000/suggest-categories/?text=${encodeURIComponent(foodDescription)}&k=1`,
 				)
 				return await categories.json()
 			}

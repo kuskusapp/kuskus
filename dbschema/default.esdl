@@ -100,6 +100,9 @@ module default {
       embedding_model := 'text-embedding-3-small'
     ) on (.aiDescription);
 
+    # labels for the post
+    multi categories: str;
+
     required created_by: User {
       default := global current_user;
     }
