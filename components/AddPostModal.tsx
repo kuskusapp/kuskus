@@ -11,6 +11,7 @@ import { FaImage } from "react-icons/fa6"
 import { IoCloseOutline } from "react-icons/io5"
 import AiThinking from "./AiThinking"
 import Loader from "./Loader"
+import { fileToBase64 } from "@/src/utils"
 
 interface Props {
 	onClose: () => void
@@ -131,7 +132,6 @@ export default observer(function AddPostModal(props: Props) {
 											local.aiDescriptionLoading.set(true)
 
 											const data = new FormData()
-											// return
 											data.append(
 												"imageAsBase64",
 												await fileToBase64(uploadedFile),
@@ -325,71 +325,3 @@ export default observer(function AddPostModal(props: Props) {
 		</div>
 	)
 })
-
-// TODO: move to utils, maybe do this logic on server
-function fileToBase64(file: Blob): Promise<string> {
-	return new Promise((resolve, reject) => {
-		const reader = new FileReader()
-		reader.onload = () => {
-			resolve(reader.result as string)
-		}
-		reader.onerror = (error) => {
-			reject(error)
-		}
-		reader.readAsDataURL(file)
-	})
-}
-
-function fileToBase64WithConversion(file: Blob): Promise<string> {
-	return new Promise((resolve, reject) => {
-		// Create a file reader
-		const reader = new FileReader()
-		reader.onload = () => {
-			// Create an image element to load the file into
-			const img = new Image()
-			img.onload = () => {
-				// Create a canvas and get the context
-				const canvas = document.createElement("canvas")
-				canvas.width = img.width
-				canvas.height = img.height
-				const ctx = canvas.getContext("2d")
-
-				// Draw the image onto the canvas
-				ctx.drawImage(img, 0, 0)
-
-				// Convert the canvas content to JPEG if the original file is PNG
-				const outputFormat =
-					file.type === "image/png" ? "image/jpeg" : file.type
-				canvas.toBlob(
-					(blob) => {
-						if (blob) {
-							// Read the JPEG blob and convert to Base64
-							const readerJPEG = new FileReader()
-							readerJPEG.onload = () => {
-								const result = readerJPEG.result as string
-								const base64Data = result.split(",")[1] // Strip the data URL prefix
-								resolve(base64Data)
-							}
-							readerJPEG.onerror = (error) => {
-								reject(error)
-							}
-							readerJPEG.readAsDataURL(blob)
-						} else {
-							reject(new Error("Canvas to Blob conversion failed"))
-						}
-					},
-					outputFormat,
-					0.92,
-				) // JPEG quality can be adjusted between 0 and 1
-			}
-			img.onerror = () => {
-				reject(new Error("Image loading failed"))
-			}
-			img.src = reader.result as string
-		}
-		reader.onerror = (error) => {
-			reject(error)
-		}
-		reader.readAsDataURL(file)
-	})
-}

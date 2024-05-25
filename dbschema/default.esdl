@@ -25,6 +25,8 @@ module default {
     bio: str;
     # ronin url with image
     profilePhotoUrl: str;
+    # ronin id for image
+    roninId: str;
     # city or country
     place: str;
 

@@ -225,3 +225,38 @@ export const updateUserProfileAction = actionClient
 			return { failure: "EdgeDB error", errorDetails: err.message }
 		}
 	})
+
+export const updateUserProfileImageAction = actionClient
+	.schema(
+		z.object({
+			profileImage: z.any(),
+		}),
+	)
+	.action(async ({ parsedInput: { profileImage } }) => {
+		try {
+			const session = auth.getSession()
+			const client = session.client
+			if (session) {
+				const profileImageFiles = profileImage.getAll("profileImage")
+				const profileImageFile = profileImageFiles[0]
+				let res = await create.user.with({
+					profilePhotoUrl: profileImageFile,
+				})
+				if (res) {
+					res = await updateUser.run(client, {
+						// @ts-ignore
+						roninId: res.id,
+						// @ts-ignore
+						profilePhotoUrl: res.profilePhotoUrl.src,
+					})
+					if (res) {
+						return "ok"
+					} else {
+						throw new Error("Error updating user profile image")
+					}
+				}
+			}
+		} catch (err) {
+			return { failure: "Error", errorDetails: err.message }
+		}
+	})

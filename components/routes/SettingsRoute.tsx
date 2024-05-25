@@ -1,5 +1,8 @@
 "use client"
-import { updateUserProfileAction } from "@/app/actions"
+import {
+	updateUserProfileAction,
+	updateUserProfileImageAction,
+} from "@/app/actions"
 import Loader from "@/components/Loader"
 import { settingsAuthReturn } from "@/edgedb/crud/queries"
 import { observer, useObservable } from "@legendapp/state/react"
@@ -18,6 +21,7 @@ export default observer(function SettingsRoute(props: Props) {
 		displayName: props.authData?.displayName || "",
 		touched: false,
 		savingProfile: false,
+		uploadedProfileImageAsFile: null as File | null,
 	})
 	const router = useRouter()
 
@@ -75,7 +79,49 @@ export default observer(function SettingsRoute(props: Props) {
 					<div className="flex flex-col gap-[12px]">
 						<div className="w-full">
 							<div className="w-full bg-neutral-800 h-[400px] relative">
-								<button className="absolute bottom-2 left-2 rounded-full w-[70px] h-[70px] bg-neutral-700 bg-opacity-70 hover:bg-opacity-90 flex items-center justify-center">
+								{local.uploadedProfileImageAsFile.get() && (
+									<img
+										src={URL.createObjectURL(
+											// @ts-ignore
+											local.uploadedProfileImageAsFile.get(),
+										)}
+										className="max-w-full max-h-full"
+									/>
+								)}
+								{local.profilePhotoUrl.get() && (
+									<img
+										src={local.profilePhotoUrl.get()}
+										className="max-w-full max-h-full"
+									/>
+								)}
+								<input
+									type="file"
+									id="profilePhotoUpload"
+									style={{ display: "none" }}
+									onChange={async (e: React.ChangeEvent<HTMLInputElement>) => {
+										if (e.target.files && e.target.files[0]) {
+											try {
+												const uploadedFile = e.target.files[0]
+												local.uploadedProfileImageAsFile.set(uploadedFile)
+												const data = new FormData()
+												data.append("profileImage", uploadedFile)
+												let res = await updateUserProfileImageAction({
+													profileImage: data,
+												})
+												console.log(res, "res")
+												console.log(res.serverError, "server error")
+											} catch (err) {
+												console.log(err)
+											}
+										}
+									}}
+								/>
+								<button
+									onClick={() =>
+										document.getElementById("profilePhotoUpload").click()
+									}
+									className="absolute bottom-2 left-2 rounded-full w-[70px] h-[70px] bg-neutral-700 bg-opacity-70 hover:bg-opacity-90 flex items-center justify-center"
+								>
 									{local.profilePhotoUrl.get() ? "Change" : "Add"}
 								</button>
 							</div>
