@@ -141,16 +141,16 @@ export default observer(function AddPostModal(props: Props) {
 												image: data,
 											})
 											if (resp.serverError !== undefined) {
-												// TODO: type well
 												// @ts-ignore
 												local.aiDescription.set(resp.data)
-
+												llocal.aiDescriptionLoading.set(false)
 												console.log(local.aiDescription.get(), "ai description")
+
 												const categories = await suggestCategoriesAction({
 													foodDescription: local.aiDescription.get(),
 												})
-												console.log(categories.data, "categories")
 												local.guessedCategories.set(categories.data)
+												console.log(categories.data, "categories guessed")
 											} else {
 												local.aiDescriptionLoading.set(false)
 												console.log(resp, "resp")
@@ -159,9 +159,7 @@ export default observer(function AddPostModal(props: Props) {
 													"server error from action",
 												)
 											}
-											local.aiDescriptionLoading.set(false)
 										} catch (err) {
-											local.aiDescriptionLoading.set(false)
 											console.log(err, "error")
 										}
 									}
