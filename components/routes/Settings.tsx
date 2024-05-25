@@ -1,7 +1,7 @@
 "use client"
 import { observer, useObservable } from "@legendapp/state/react"
 import { useRouter } from "next/navigation"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 
 interface Props {
 	authenticated: boolean
@@ -18,10 +18,12 @@ export default observer(function Settings(props: Props) {
 		selectedSetting: "Edit Profile",
 	})
 	const router = useRouter()
+
 	// TODO: route in RSC?
 	useEffect(() => {
 		if (!props.authenticated) router.push("/")
 	}, [])
+
 	return (
 		<div className="w-screen flex z-30 h-screen bg-primary rounded-[20px] overflow-hidden">
 			<div className="border-r border-black/20 h-full w-1/2">
@@ -73,6 +75,16 @@ export default observer(function Settings(props: Props) {
 })
 
 function EditProfile() {
+	const [username, setUsername] = useState("")
+	const [isTouched, setIsTouched] = useState(false)
+	const handleBlur = () => {
+		setIsTouched(true)
+	}
+
+	const handleChange = (e) => {
+		setUsername(e.target.value)
+	}
+
 	return (
 		<div className="flex flex-col gap-[12px]">
 			<div className="w-full bg-neutral-800 h-[400px] relative">
@@ -91,11 +103,21 @@ function EditProfile() {
 				/>
 			</div>
 			<div className="w-full">
-				<div className="font-light mb-[6px]  px-4 text-[12px]">Username *</div>
+				<div className="flex gap-1">
+					<div className="font-light mb-[6px]  px-4 text-[12px]">
+						Username *
+					</div>
+					{isTouched && !username ? (
+						<div className="text-red-500 text-[12px]">Username Required</div>
+					) : null}
+				</div>
 				<input
 					type="text"
 					placeholder="Your username..."
-					className="font-thin text-xs outline-none bg-transparent border-x-0 border-white/20 w-full"
+					className={`font-thin text-xs outline-none bg-transparent border-x-0 border-white/20 w-full ${isTouched && !username ? "border-red-500" : ""}`}
+					value={username}
+					onChange={handleChange}
+					onBlur={handleBlur}
 				/>
 			</div>
 		</div>
