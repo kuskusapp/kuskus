@@ -16,5 +16,4 @@ export function fileToBase64(file: Blob): Promise<string> {
 		reader.readAsDataURL(file)
 	})
 }
-export const errorToast = (msg: string) =>
-	toast(`⚠️ Post upload failed. Due to ${msg}`)
+export const errorToast = (msg: string) => toast(`⚠️ ${msg}`)

@@ -142,7 +142,9 @@ export default observer(function AddPostModal(props: Props) {
 												const resp = await describeImageAction({
 													image: data,
 												})
-												if (resp.serverError === undefined) {
+												// TODO: issue with https://github.com/TheEdoRan/next-safe-action
+												// @ts-ignore
+												if (!resp.data?.failure || resp.serverError) {
 													// @ts-ignore
 													local.aiDescription.set(resp.data)
 													local.aiDescriptionLoading.set(false)
@@ -150,18 +152,19 @@ export default observer(function AddPostModal(props: Props) {
 														local.aiDescription.get(),
 														"ai description",
 													)
-
 													const categories = await suggestCategoriesAction({
 														foodDescription: local.aiDescription.get(),
 													})
 													local.guessedCategories.set(categories.data)
 													console.log(categories.data, "categories guessed")
 												} else {
-													local.aiDescriptionLoading.set(false)
-													console.log(resp, "resp")
 													console.log(
 														resp.serverError,
 														"server error from action",
+													)
+													local.aiDescriptionLoading.set(false)
+													errorToast(
+														"Cannot describe image. .png files are not suppored due to OpenAI 😿",
 													)
 												}
 											} catch (err) {
