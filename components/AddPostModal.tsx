@@ -1,9 +1,4 @@
 "use client"
-import {
-	describeImageAction,
-	suggestCategoriesAction,
-	uploadPostAction,
-} from "@/app/actions"
 import { observer, useObservable } from "@legendapp/state/react"
 import { useRouter } from "next/navigation"
 import React, { useEffect } from "react"
@@ -11,8 +6,9 @@ import { FaImage } from "react-icons/fa6"
 import { IoCloseOutline } from "react-icons/io5"
 import AiThinking from "./AiThinking"
 import Loader from "./Loader"
-import { errorToast, fileToBase64 } from "@/src/utils"
+import { errorToast } from "@/src/utils"
 import { Toaster } from "react-hot-toast"
+import { describeImageAction } from "@/app/actions"
 
 interface Props {
 	onClose: () => void
@@ -133,17 +129,10 @@ export default observer(function AddPostModal(props: Props) {
 												local.uploadedImageAsFile.set(uploadedFile)
 												local.aiDescriptionLoading.set(true)
 
-												const data = new FormData()
-												data.append(
-													"imageAsBase64",
-													await fileToBase64(uploadedFile),
-												)
-												const resp = await describeImageAction({
-													image: data,
-												})
-												// TODO: issue with https://github.com/TheEdoRan/next-safe-action
-												// @ts-ignore
-												if (!resp.data?.failure || resp.serverError) {
+												const formData = new FormData()
+												formData.append("image", uploadedFile)
+												const [data, err] = await describeImageAction(formData)
+												if (data) {
 													// @ts-ignore
 													local.aiDescription.set(resp.data)
 													local.aiDescriptionLoading.set(false)
@@ -151,20 +140,18 @@ export default observer(function AddPostModal(props: Props) {
 														local.aiDescription.get(),
 														"ai description",
 													)
-													const categories = await suggestCategoriesAction({
-														foodDescription: local.aiDescription.get(),
-													})
-													local.guessedCategories.set(categories.data)
-													console.log(categories.data, "categories guessed")
+													// const categories = await suggestCategoriesAction({
+													// 	foodDescription: local.aiDescription.get(),
+													// })
+													// local.guessedCategories.set(categories.data)
+													// console.log(categories.data, "categories guessed")
 												} else {
-													console.log(
-														resp.serverError,
-														"server error from action",
-													)
+													console.log(err)
+													errorToast(JSON.stringify(err))
 													local.aiDescriptionLoading.set(false)
-													errorToast(
-														"Cannot describe image. .png files are not suppored due to OpenAI 😿",
-													)
+													// errorToast(
+													// 	"Cannot describe image. .png files are not suppored due to OpenAI 😿",
+													// )
 												}
 											} catch (err) {
 												console.log(err, "error")

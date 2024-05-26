@@ -73,26 +73,26 @@ export const describeImageAction = actionClient
 			if (image.imageAsBase64.startsWith("data:image/png;base64,")) {
 				throw new Error("OpenAI does not support png format")
 			}
-			// const response = await openai.chat.completions.create({
-			// 	model: "gpt-4o",
-			// 	messages: [
-			// 		{
-			// 			role: "user",
-			// 			content: [
-			// 				{ type: "text", text: "What’s in this image?" },
-			// 				{
-			// 					type: "image_url",
-			// 					image_url: {
-			// 						url: image.imageAsBase64,
-			// 					},
-			// 				},
-			// 			],
-			// 		},
-			// 	],
-			// })
-			// console.log(response, "resp")
-			// return response.choices[0].message.content
-			return `This image shows a hand holding a cup of coffee with latte art in the shape of a heart on top. The background is an outdoor pavement area, and part of a person's shoes can be seen at the bottom of the image.`
+			const response = await openai.chat.completions.create({
+				model: "gpt-4o",
+				messages: [
+					{
+						role: "user",
+						content: [
+							{ type: "text", text: "What’s in this image?" },
+							{
+								type: "image_url",
+								image_url: {
+									url: image.imageAsBase64,
+								},
+							},
+						],
+					},
+				],
+			})
+			console.log(response, "resp")
+			return response.choices[0].message.content
+			// return `This image shows a hand holding a cup of coffee with latte art in the shape of a heart on top. The background is an outdoor pavement area, and part of a person's shoes can be seen at the bottom of the image.`
 		} catch (err) {
 			return { failure: "Describe image error:", errorDetails: err.message }
 		}
