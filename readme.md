@@ -2,6 +2,8 @@
 
 Started from [Next.js + EdgeDB + EdgeDB Auth template](https://github.com/edgedb/nextjs-edgedb-auth-template).
 
+Project was started for [EdgeDB hackathon](https://hackathon.edgedb.com). The [video](https://www.youtube.com/watch?v=w4gWZb7fTGY) gives an overview of it.
+
 ## Setup
 
 [Bun](https://bun.sh) is used to run/install things.
