@@ -13,9 +13,6 @@ import { FaImage } from "react-icons/fa6"
 import { IoCloseOutline } from "react-icons/io5"
 import AiThinking from "./AiThinking"
 import Loader from "./Loader"
-import { generateText } from "ai"
-import { openai } from "@ai-sdk/openai"
-import { checkIfFoodOrDrinkByDescription } from "@/app/ai"
 
 interface Props {
 	user: string
@@ -158,7 +155,7 @@ export default observer(function AddPostModal(props: Props) {
 												})
 											if (err2) {
 												console.log(err2, "error checking if food/drink")
-												errorToast(err.data)
+												errorToast(err2.data)
 												return
 											}
 											console.log(foodOrDrink)
