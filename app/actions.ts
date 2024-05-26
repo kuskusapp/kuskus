@@ -37,6 +37,7 @@ export const updateUserProfileAction = authAction
 	.handler(async ({ input, ctx }) => {
 		const { username, displayName, profileImage } = input
 		const client = ctx.client
+		console.log(profileImage, "profile image")
 		if (profileImage) {
 			const resRoninUpload = await create.user.with({
 				profilePhotoUrl: profileImage,
@@ -47,19 +48,18 @@ export const updateUserProfileAction = authAction
 				roninId: resRoninUpload.id,
 				profilePhotoUrl: resRoninUpload.profilePhotoUrl.src,
 			})
-			if (resUpdateUser) {
-				return "ok"
-			}
+			console.log("this?")
+			if (resUpdateUser) return
 		} else {
 			const resUpdateUser = await updateUser.run(client, {
 				username,
 				displayName,
 			})
-			if (resUpdateUser) {
-				return "ok"
-			}
+			console.log("should hit this")
+			if (resUpdateUser) return
 		}
-		throw new Error("Error updating user profile")
+		console.log("really?")
+		throw "Error updating user profile"
 	})
 
 export const describeImageAction = authAction
@@ -70,6 +70,9 @@ export const describeImageAction = authAction
 	)
 	.handler(async ({ input }) => {
 		const { imageAsBase64 } = input
+		if (imageAsBase64.includes("data:image/png;base64,")) {
+			throw "Error describing image as .png files are not supported by OpenAI 😿"
+		}
 		// const response = await openai.chat.completions.create({
 		// 	model: "gpt-4o",
 		// 	messages: [
@@ -87,7 +90,7 @@ export const describeImageAction = authAction
 		// 		},
 		// 	],
 		// })
-		// if (!response) throw new Error("Error describing image")
+		// if (!response) throw Error("Error describing image")
 		// return response.choices[0].message.content
 		return `This image shows a hand holding a cup of coffee with latte art on the surface. The latte art appears to be shaped like a heart. The background consists of a paved pathway and some greenery on the side.`
 	})

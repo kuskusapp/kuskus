@@ -128,41 +128,26 @@ export default observer(function AddPostModal(props: Props) {
 									id="image"
 									onChange={async (e: React.ChangeEvent<HTMLInputElement>) => {
 										if (e.target.files && e.target.files[0]) {
-											try {
-												const uploadedFile = e.target.files[0]
-												local.uploadedImageAsFile.set(uploadedFile)
-												local.aiDescriptionLoading.set(true)
+											const uploadedFile = e.target.files[0]
+											local.uploadedImageAsFile.set(uploadedFile)
+											local.aiDescriptionLoading.set(true)
 
-												const [imageDescription, err] =
-													await describeImageAction({
-														imageAsBase64: await fileToBase64(uploadedFile),
-													})
-												if (imageDescription) {
-													console.log(imageDescription, "data")
-													// @ts-ignore
-													local.aiDescription.set(imageDescription)
-													local.aiDescriptionLoading.set(false)
-													console.log(
-														local.aiDescription.get(),
-														"ai description",
-													)
+											const [imageDescription, err] = await describeImageAction(
+												{
+													imageAsBase64: await fileToBase64(uploadedFile),
+												},
+											)
+											local.aiDescriptionLoading.set(false)
+											if (err) errorToast(err.data)
+											// @ts-ignore
+											local.aiDescription.set(imageDescription)
 
-													// const [categories, err] =
-													// 	await suggestCategoriesAction({
-													// 		foodDescription: local.aiDescription.get(),
-													// 	})
-													// local.guessedCategories.set(categories)
-													// console.log(categories, "categories")
-												} else {
-													errorToast(
-														"Cannot describe image. .png files are not supported by OpenAI 😿",
-													)
-													local.aiDescriptionLoading.set(false)
-													// errorToast(JSON.stringify(err))
-												}
-											} catch (err) {
-												console.log(err, "error")
-											}
+											// const [categories, err] =
+											// 	await suggestCategoriesAction({
+											// 		foodDescription: local.aiDescription.get(),
+											// 	})
+											// local.guessedCategories.set(categories)
+											// console.log(categories, "categories")
 										}
 									}}
 									className="hidden"

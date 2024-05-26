@@ -69,12 +69,15 @@ export default observer(function SettingsRoute(props: Props) {
 										username: local.username.get(),
 										displayName: local.displayName.get(),
 									})
-									if (data) {
-										router.push("/")
-									} else {
-										errorToast(JSON.stringify(err))
-									}
 									local.savingProfile.set(false)
+									console.log(data, "data")
+									console.log(err, "err")
+									if (err) {
+										console.log(err.data, "err.data")
+										errorToast(err.data)
+									} else {
+										router.push("/")
+									}
 								}}
 							>
 								Save
