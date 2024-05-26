@@ -1,5 +1,8 @@
 "use client"
-import { updateUserProfileAction } from "@/app/actions"
+import {
+	updateUserProfileAction,
+	updateUserProfileActionWithImage,
+} from "@/app/actions"
 import Loader from "@/components/Loader"
 import { settingsAuthReturn } from "@/edgedb/crud/queries"
 import { errorToast } from "@/src/react-utils"
@@ -59,25 +62,38 @@ export default observer(function SettingsRoute(props: Props) {
 								className={`bg-black rounded-full h-[34px] flex items-center px-4 py-2 font-semibold text-[12px] text-white ${local.username.get() ? "hover:text-gray-200 hover:bg-neutral-800" : "bg-gray-500 cursor-not-allowed"}`}
 								onClick={async () => {
 									local.savingProfile.set(true)
-									const formData = new FormData()
-									formData.append(
-										"profileImage",
-										// @ts-ignore
-										local.uploadedProfileImageAsFile.get(),
-									)
-									const [data, err] = await updateUserProfileAction(formData, {
-										username: local.username.get(),
-										displayName: local.displayName.get(),
-									})
-									local.savingProfile.set(false)
-									console.log(data, "data")
-									console.log(err, "err")
-									if (err) {
-										console.log(err.data, "err.data")
-										errorToast(err.data)
+									if (local.uploadedProfileImageAsFile.get()) {
+										const formData = new FormData()
+										formData.append(
+											"profileImage",
+											// @ts-ignore
+											local.uploadedProfileImageAsFile.get(),
+										)
+										const [, err] = await updateUserProfileActionWithImage(
+											formData,
+											{
+												username: local.username.get(),
+												displayName: local.displayName.get(),
+											},
+										)
+										if (err) {
+											local.savingProfile.set(false)
+											errorToast(err.data)
+											return
+										}
 									} else {
-										router.push("/")
+										const [, err] = await updateUserProfileAction({
+											username: local.username.get(),
+											displayName: local.displayName.get(),
+										})
+										if (err) {
+											local.savingProfile.set(false)
+											errorToast(err.data)
+											return
+										}
 									}
+									local.savingProfile.set(false)
+									// router.push("/")
 								}}
 							>
 								Save

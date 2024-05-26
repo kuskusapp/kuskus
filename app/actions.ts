@@ -30,6 +30,24 @@ export const updateUserProfileAction = authAction
 		z.object({
 			username: z.string(),
 			displayName: z.string().optional(),
+		}),
+	)
+	.handler(async ({ input, ctx }) => {
+		const { username, displayName } = input
+		const client = ctx.client
+		const resUpdateUser = await updateUser.run(client, {
+			username,
+			displayName,
+		})
+		if (resUpdateUser) return
+		throw "Error updating user profile"
+	})
+
+export const updateUserProfileActionWithImage = authAction
+	.input(
+		z.object({
+			username: z.string(),
+			displayName: z.string().optional(),
 			profileImage: z.custom<File>((file) => file instanceof File),
 		}),
 		{ type: "formData" },
@@ -37,28 +55,16 @@ export const updateUserProfileAction = authAction
 	.handler(async ({ input, ctx }) => {
 		const { username, displayName, profileImage } = input
 		const client = ctx.client
-		console.log(profileImage, "profile image")
-		if (profileImage) {
-			const resRoninUpload = await create.user.with({
-				profilePhotoUrl: profileImage,
-			})
-			const resUpdateUser = await updateUser.run(client, {
-				username,
-				displayName,
-				roninId: resRoninUpload.id,
-				profilePhotoUrl: resRoninUpload.profilePhotoUrl.src,
-			})
-			console.log("this?")
-			if (resUpdateUser) return
-		} else {
-			const resUpdateUser = await updateUser.run(client, {
-				username,
-				displayName,
-			})
-			console.log("should hit this")
-			if (resUpdateUser) return
-		}
-		console.log("really?")
+		const resRoninUpload = await create.user.with({
+			profilePhotoUrl: profileImage,
+		})
+		const resUpdateUser = await updateUser.run(client, {
+			username,
+			displayName,
+			roninId: resRoninUpload.id,
+			profilePhotoUrl: resRoninUpload.profilePhotoUrl.src,
+		})
+		if (resUpdateUser) return
 		throw "Error updating user profile"
 	})
 
