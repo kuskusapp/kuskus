@@ -9,6 +9,9 @@ import { FaImage } from "react-icons/fa6"
 import { IoCloseOutline } from "react-icons/io5"
 import AiThinking from "./AiThinking"
 import Loader from "./Loader"
+import { generateText } from "ai"
+import { openai } from "@ai-sdk/openai"
+import { checkIfFoodOrDrinkByDescription } from "@/app/ai"
 
 interface Props {
 	user: string
@@ -25,7 +28,7 @@ export default observer(function AddPostModal(props: Props) {
 		guessedCategories: [] as string[],
 		aiCategoriesGuessLoading: false,
 		uploadingPost: false,
-		imageIsFoodOrDrink: true,
+		imageIsFoodOrDrink: false,
 		foodCategories: [
 			"Sushi",
 			"Smoothie",
@@ -141,22 +144,23 @@ export default observer(function AddPostModal(props: Props) {
 											// @ts-ignore
 											local.aiDescription.set(imageDescription)
 
-											// process.env.OPENAI_API_KEY =
-											// 	process.env.NEXT_PUBLIC_OPENAI_API_KEY
-											// const result = await generateText({
-											// 	model: openai("gpt-4o"),
-											// 	tools: { checkIfFoodOrDrinkByDescription },
-											// 	system: `You have to answer if image description provided is food or drink and be precise. It has to be precise image of food or drink, otherwise return false.`,
-											// 	messages: [
-											// 		{ role: "user", content: local.aiDescription.get() },
-											// 	],
-											// })
-											// const foodOrDrink = result.toolCalls[0].args.foodOrDrink
-											// if (!foodOrDrink) {
-											// 	errorToast("Please upload an image of food or drink")
-											// }
-											// local.imageIsFoodOrDrink.set(foodOrDrink)
+											process.env.OPENAI_API_KEY =
+												process.env.NEXT_PUBLIC_OPENAI_API_KEY
+											const result = await generateText({
+												model: openai("gpt-4o"),
+												tools: { checkIfFoodOrDrinkByDescription },
+												system: `You have to answer if image description provided is food or drink and be precise. It has to be precise image of food or drink, otherwise return false.`,
+												messages: [
+													{ role: "user", content: local.aiDescription.get() },
+												],
+											})
+											const foodOrDrink = result.toolCalls[0].args.foodOrDrink
+											if (!foodOrDrink) {
+												errorToast("Please upload an image of food or drink")
+											}
+											local.imageIsFoodOrDrink.set(foodOrDrink)
 
+											// TODO: add back
 											// const [categories, err] =
 											// 	await suggestCategoriesAction({
 											// 		foodDescription: local.aiDescription.get(),
