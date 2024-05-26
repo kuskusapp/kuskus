@@ -80,26 +80,26 @@ export const describeImageAction = authAction
 		if (imageAsBase64.includes("data:image/png;base64,")) {
 			throw "Error describing image as .png files are not supported by OpenAI 😿"
 		}
-		// const response = await openai.chat.completions.create({
-		// 	model: "gpt-4o",
-		// 	messages: [
-		// 		{
-		// 			role: "user",
-		// 			content: [
-		// 				{ type: "text", text: "What’s in this image?" },
-		// 				{
-		// 					type: "image_url",
-		// 					image_url: {
-		// 						url: imageAsBase64,
-		// 					},
-		// 				},
-		// 			],
-		// 		},
-		// 	],
-		// })
-		// if (!response) throw Error("Error describing image")
-		// return response.choices[0].message.content
-		return `The image shows a dark brown dog with a white muzzle sitting on a concrete surface. The background features green fields, trees, and a cloudy sky. The dog appears to be looking slightly to the side.`
+		const response = await openai.chat.completions.create({
+			model: "gpt-4o",
+			messages: [
+				{
+					role: "user",
+					content: [
+						{ type: "text", text: "What’s in this image?" },
+						{
+							type: "image_url",
+							image_url: {
+								url: imageAsBase64,
+							},
+						},
+					],
+				},
+			],
+		})
+		if (!response) throw Error("Error describing image")
+		return response.choices[0].message.content
+		// return `The image shows a dark brown dog with a white muzzle sitting on a concrete surface. The background features green fields, trees, and a cloudy sky. The dog appears to be looking slightly to the side.`
 	})
 
 export const suggestCategoriesAction = authAction
