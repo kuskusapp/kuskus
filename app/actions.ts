@@ -12,7 +12,7 @@ import { create } from "ronin"
 import z from "zod"
 import { createServerActionProcedure } from "zsa"
 import { openai as vercelOpenai } from "@ai-sdk/openai"
-import { checkIfFoodOrDrinkByDescription } from "./ai"
+import { checkIfFoodOrDrinkByDescription, guessPlaces } from "./ai"
 
 const publicAction = createServerActionProcedure()
 	.handler(async () => {
@@ -180,21 +180,6 @@ export const deletePostAction = authAction
 		return "ok"
 	})
 
-export const relevantPlacesAction = authAction
-	.input(
-		z.object({
-			location: z.string(),
-			category: z.string(),
-		}),
-	)
-	.handler(async ({ input, ctx }) => {
-		const { location, category } = input
-		const client = ctx.client
-		const places = await relevantPlacesQuery.run(client, { location, category })
-		if (!places) throw "Error fetching relevant places"
-		return places
-	})
-
 export const profileLoadMoreMostsAction = publicAction
 	.input(
 		z.object({
@@ -232,4 +217,33 @@ export const checkIfFoodOrDrinkByDescriptionAction = authAction
 			throw "Please upload an image of food or drink"
 		}
 		return foodOrDrink
+	})
+
+export const guessPlacesAction = authAction
+	.input(
+		z.object({
+			query: z.string(),
+		}),
+	)
+	.handler(async ({ input, ctx }) => {
+		const { query } = input
+		const client = ctx.client
+		const result = await generateText({
+			model: vercelOpenai("gpt-4o"),
+			tools: { guessPlaces },
+			system: `You are a helpful, respectful and honest assistant.`,
+			messages: [{ role: "user", content: query }],
+		})
+		if (result.toolCalls.length === 0) {
+			throw "Nothing matched your search term, lets try something else!"
+		}
+		const location = result.toolCalls[0].args.location
+		console.log(location, "location")
+		const category = result.toolCalls[0].args.category
+		console.log(category, "category")
+
+		const places = await relevantPlacesQuery.run(client, { location, category })
+		console.log(places, "places")
+		if (!places) throw "Error fetching relevant places"
+		return places
 	})

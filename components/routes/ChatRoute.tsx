@@ -1,15 +1,11 @@
 "use client"
-import { guessPlacesAction, relevantPlacesAction } from "@/app/actions"
-import { guessPlaces } from "@/app/ai"
-import { openai } from "@ai-sdk/openai"
+import { guessPlacesAction } from "@/app/actions"
 import { observer, useObservable } from "@legendapp/state/react"
-import { generateText } from "ai"
 import { useRouter } from "next/navigation"
 import { FormEvent, useCallback, useEffect, useRef } from "react"
 import { FaUserCircle } from "react-icons/fa"
 import { TbSquareLetterK } from "react-icons/tb"
 import PlaceCard from "../PlaceCard"
-import { errorToast } from "@/src/react-utils"
 
 type RelevantPlace = {
 	name: string

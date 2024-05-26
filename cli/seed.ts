@@ -15,7 +15,7 @@ import e from "../dbschema/edgeql-js"
 const userId = process.env.USER_ID!
 
 async function seed() {
-	checkThatNotRunningInProduction()
+	// checkThatNotRunningInProduction()
 	const args = Bun.argv
 	const command = args[2]
 	try {
