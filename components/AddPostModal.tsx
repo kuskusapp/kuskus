@@ -7,7 +7,11 @@ import { IoCloseOutline } from "react-icons/io5"
 import AiThinking from "./AiThinking"
 import Loader from "./Loader"
 import { Toaster } from "react-hot-toast"
-import { describeImageAction } from "@/app/actions"
+import {
+	createPostAction,
+	describeImageAction,
+	suggestCategoriesAction,
+} from "@/app/actions"
 import { errorToast, fileToBase64 } from "@/src/react-utils"
 
 interface Props {
@@ -129,30 +133,32 @@ export default observer(function AddPostModal(props: Props) {
 												local.uploadedImageAsFile.set(uploadedFile)
 												local.aiDescriptionLoading.set(true)
 
-												const [data, err] = await describeImageAction({
-													imageAsBase64: await fileToBase64(uploadedFile),
-												})
-												if (data) {
-													console.log(data, "data")
+												const [imageDescription, err] =
+													await describeImageAction({
+														imageAsBase64: await fileToBase64(uploadedFile),
+													})
+												if (imageDescription) {
+													console.log(imageDescription, "data")
 													// @ts-ignore
-													local.aiDescription.set(data)
+													local.aiDescription.set(imageDescription)
 													local.aiDescriptionLoading.set(false)
 													console.log(
 														local.aiDescription.get(),
 														"ai description",
 													)
-													// const categories = await suggestCategoriesAction({
-													// 	foodDescription: local.aiDescription.get(),
-													// })
-													// local.guessedCategories.set(categories.data)
-													// console.log(categories.data, "categories guessed")
+
+													// const [categories, err] =
+													// 	await suggestCategoriesAction({
+													// 		foodDescription: local.aiDescription.get(),
+													// 	})
+													// local.guessedCategories.set(categories)
+													// console.log(categories, "categories")
 												} else {
-													console.log(err)
-													errorToast(JSON.stringify(err))
+													errorToast(
+														"Cannot describe image. .png files are not supported by OpenAI 😿",
+													)
 													local.aiDescriptionLoading.set(false)
-													// errorToast(
-													// 	"Cannot describe image. .png files are not suppored due to OpenAI 😿",
-													// )
+													// errorToast(JSON.stringify(err))
 												}
 											} catch (err) {
 												console.log(err, "error")
@@ -294,26 +300,28 @@ export default observer(function AddPostModal(props: Props) {
 									onClick={async () => {
 										if (!local.uploadedImageAsFile.get()) return
 										local.uploadingPost.set(true)
-										const data = new FormData()
-										// TODO: issue with legend state https://discord.com/channels/1241991273322119250/1241992660776914948/1242475348134858853
-										// @ts-ignore
-										data.append("image", local.uploadedImageAsFile.get())
-										// const resp = await uploadPostAction({
-										// 	imageFile: data,
-										// 	aiDescription: local.aiDescription.get(),
-										// 	description: local.description.get(),
-										// 	categories: local.categories.get(),
-										// })
-										// if (resp.data) {
-										// 	// TODO: redirect
-										// 	local.uploadingPost.set(false)
-										// 	props.onClose()
-										// } else {
-										// 	local.uploadingPost.set(false)
-										// 	errorToast(
-										// 		"Issue uploading post with unknown error. Can try again with different image.",
-										// 	)
-										// }
+										const formData = new FormData()
+										formData.append(
+											"postImage",
+											// @ts-ignore
+											local.uploadedImageAsFile.get(),
+										)
+										const [uploadedImage, err] = await createPostAction(
+											formData,
+											{
+												aiDescription: local.aiDescription.get(),
+												description: local.description.get(),
+												categories: local.categories.get(),
+											},
+										)
+										if (uploadedImage) {
+											console.log(uploadedImage, "uploaded image")
+											router.push("/")
+										} else {
+											errorToast(
+												"Issue uploading post with unknown error. Can try again with different image.",
+											)
+										}
 									}}
 								>
 									Share
