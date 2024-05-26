@@ -299,6 +299,7 @@ export default observer(function AddPostModal(props: Props) {
 									disabled={!local.imageIsFoodOrDrink.get()}
 									onClick={async () => {
 										if (!local.imageIsFoodOrDrink.get()) return
+										local.uploadingPost.set(true)
 										const formData = new FormData()
 										formData.append(
 											"postImage",
@@ -311,6 +312,7 @@ export default observer(function AddPostModal(props: Props) {
 											categories: local.categories.get(),
 										})
 										if (err) {
+											local.uploadingPost.set(false)
 											errorToast(err.data)
 											return
 										}

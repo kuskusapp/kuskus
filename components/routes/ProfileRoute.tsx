@@ -124,6 +124,7 @@ export default observer(function ProfileRoute(props: Props) {
 					/>
 				)}
 				<Sidebar
+					authenticated={auth}
 					prettyName={local.displayName.get()}
 					username={local.name.get()}
 					description={local.bio.get()}
@@ -148,12 +149,14 @@ export default observer(function ProfileRoute(props: Props) {
 })
 
 function Sidebar({
+	authenticated,
 	prettyName,
 	username,
 	description,
 	profileImageUrl,
 	onSettingsClick,
 }: {
+	authenticated: boolean
 	prettyName: string
 	username: string
 	description?: string
@@ -162,14 +165,16 @@ function Sidebar({
 }) {
 	return (
 		<div className="md:fixed left-0 md:w-[380px] w-full top-0 h-screen bg-secondary relative">
-			<button className="z-100 absolute top-2 left-2 hover:opacity-60 transition-opacity duration-300">
-				<SettingsIcon
-					className="color-white w-8 h-8 settings-icon"
-					onClick={() => {
-						onSettingsClick()
-					}}
-				/>
-			</button>
+			{authenticated && (
+				<button className="z-100 absolute top-2 left-2 hover:opacity-60 transition-opacity duration-300">
+					<SettingsIcon
+						className="color-white w-8 h-8 settings-icon"
+						onClick={() => {
+							onSettingsClick()
+						}}
+					/>
+				</button>
+			)}
 			<img className="w-full h-3/5 bg-substitute" src={profileImageUrl}></img>
 			<div className="p-[24px] pt-[34px] flex flex-col justify-between h-2/5">
 				<div className="flex flex-col gap-[2px]">
