@@ -31,7 +31,7 @@ export default observer(function AddPostModal(props: Props) {
 		uploadingPost: false,
 		imageIsFoodOrDrink: false,
 		foodCategories: [
-			"Sushi",
+			"Coffee",
 			"Smoothie",
 			"Vegan",
 			"Pizza",
@@ -40,7 +40,6 @@ export default observer(function AddPostModal(props: Props) {
 			"Salad",
 			"Tacos",
 			"Soup",
-			"Steak",
 			"Coffee",
 		],
 		categories: [] as string[],
