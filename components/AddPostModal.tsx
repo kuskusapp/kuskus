@@ -160,21 +160,6 @@ export default observer(function AddPostModal(props: Props) {
 											}
 											console.log(foodOrDrink)
 											local.imageIsFoodOrDrink.set(foodOrDrink)
-											// process.env.OPENAI_API_KEY =
-											// 	process.env.NEXT_PUBLIC_OPENAI_API_KEY
-											// const result = await generateText({
-											// 	model: openai("gpt-4o"),
-											// 	tools: { checkIfFoodOrDrinkByDescription },
-											// 	system: `You have to answer if image description provided is food or drink and be precise. It has to be precise image of food or drink, otherwise return false.`,
-											// 	messages: [
-											// 		{ role: "user", content: local.aiDescription.get() },
-											// 	],
-											// })
-											// const foodOrDrink = result.toolCalls[0].args.foodOrDrink
-											// if (!foodOrDrink) {
-											// 	errorToast("Please upload an image of food or drink")
-											// }
-											// local.imageIsFoodOrDrink.set(foodOrDrink)
 
 											// TODO: add back
 											// const [categories, err] =

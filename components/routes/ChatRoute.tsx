@@ -1,5 +1,5 @@
 "use client"
-import { relevantPlacesAction } from "@/app/actions"
+import { guessPlacesAction, relevantPlacesAction } from "@/app/actions"
 import { guessPlaces } from "@/app/ai"
 import { openai } from "@ai-sdk/openai"
 import { observer, useObservable } from "@legendapp/state/react"
@@ -9,6 +9,7 @@ import { FormEvent, useCallback, useEffect, useRef } from "react"
 import { FaUserCircle } from "react-icons/fa"
 import { TbSquareLetterK } from "react-icons/tb"
 import PlaceCard from "../PlaceCard"
+import { errorToast } from "@/src/react-utils"
 
 type RelevantPlace = {
 	name: string
@@ -87,31 +88,13 @@ export default observer(function ChatRoute(props: Props) {
 		})
 
 		let answer: Answer
-		process.env.OPENAI_API_KEY = process.env.NEXT_PUBLIC_OPENAI_API_KEY
-		const result = await generateText({
-			model: openai("gpt-4o"),
-			tools: { guessPlaces },
-			system: `You are a helpful, respectful and honest assistant.`,
-			messages: [{ role: "user", content: query }],
-		})
-		if (result.toolCalls.length === 0) {
-			answer = {
-				kind: AnswerKind.Text,
-				text: "Nothing matched your search term, lets try something else!",
-			}
-			return
-		}
-		const location = result.toolCalls[0].args.location
-		const category = result.toolCalls[0].args.category
-		const [places, err] = await relevantPlacesAction({
-			location: location,
-			category: category,
+		const [places, err] = await guessPlacesAction({
+			query: query,
 		})
 		if (err) {
-			console.log(err, "err")
 			answer = {
 				kind: AnswerKind.Text,
-				text: "Nothing matched your search term, lets try something else!",
+				text: err.data,
 			}
 			return
 		}
