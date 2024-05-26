@@ -2,7 +2,7 @@
 import { updateUserProfileAction } from "@/app/actions"
 import Loader from "@/components/Loader"
 import { settingsAuthReturn } from "@/edgedb/crud/queries"
-import { errorToast } from "@/src/utils"
+import { errorToast } from "@/src/react-utils"
 import { observer, useObservable } from "@legendapp/state/react"
 import { useRouter } from "next/navigation"
 import { useEffect } from "react"

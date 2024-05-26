@@ -8,9 +8,9 @@ import {
 	BuildingStorefrontIcon,
 	UserCircleIcon,
 } from "@heroicons/react/24/outline"
-import { classNames } from "../src/utils"
 import { useRouter } from "next/navigation"
 import Link from "next/link"
+import { classNames } from "@/src/react-utils"
 
 const navigation = [
 	{ name: "Dashboard", href: "/dashboard", current: true },

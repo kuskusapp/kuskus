@@ -6,9 +6,9 @@ import { FaImage } from "react-icons/fa6"
 import { IoCloseOutline } from "react-icons/io5"
 import AiThinking from "./AiThinking"
 import Loader from "./Loader"
-import { errorToast } from "@/src/utils"
 import { Toaster } from "react-hot-toast"
 import { describeImageAction } from "@/app/actions"
+import { errorToast, fileToBase64 } from "@/src/react-utils"
 
 interface Props {
 	onClose: () => void
@@ -129,12 +129,13 @@ export default observer(function AddPostModal(props: Props) {
 												local.uploadedImageAsFile.set(uploadedFile)
 												local.aiDescriptionLoading.set(true)
 
-												const formData = new FormData()
-												formData.append("image", uploadedFile)
-												const [data, err] = await describeImageAction(formData)
+												const [data, err] = await describeImageAction({
+													imageAsBase64: await fileToBase64(uploadedFile),
+												})
 												if (data) {
+													console.log(data, "data")
 													// @ts-ignore
-													local.aiDescription.set(resp.data)
+													local.aiDescription.set(data)
 													local.aiDescriptionLoading.set(false)
 													console.log(
 														local.aiDescription.get(),
@@ -297,22 +298,22 @@ export default observer(function AddPostModal(props: Props) {
 										// TODO: issue with legend state https://discord.com/channels/1241991273322119250/1241992660776914948/1242475348134858853
 										// @ts-ignore
 										data.append("image", local.uploadedImageAsFile.get())
-										const resp = await uploadPostAction({
-											imageFile: data,
-											aiDescription: local.aiDescription.get(),
-											description: local.description.get(),
-											categories: local.categories.get(),
-										})
-										if (resp.data) {
-											// TODO: redirect
-											local.uploadingPost.set(false)
-											props.onClose()
-										} else {
-											local.uploadingPost.set(false)
-											errorToast(
-												"Issue uploading post with unknown error. Can try again with different image.",
-											)
-										}
+										// const resp = await uploadPostAction({
+										// 	imageFile: data,
+										// 	aiDescription: local.aiDescription.get(),
+										// 	description: local.description.get(),
+										// 	categories: local.categories.get(),
+										// })
+										// if (resp.data) {
+										// 	// TODO: redirect
+										// 	local.uploadingPost.set(false)
+										// 	props.onClose()
+										// } else {
+										// 	local.uploadingPost.set(false)
+										// 	errorToast(
+										// 		"Issue uploading post with unknown error. Can try again with different image.",
+										// 	)
+										// }
 									}}
 								>
 									Share

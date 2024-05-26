@@ -1,12 +1,12 @@
 "use server"
 
-import { createServerAction, createServerActionProcedure } from "zsa"
-import z from "zod"
-import OpenAI from "openai"
 import { auth } from "@/edgedb-next-client"
 import { updateUser } from "@/edgedb/crud/mutations"
+import OpenAI from "openai"
 import { create } from "ronin"
-import { fileToBase64 } from "@/src/server-utils"
+import z from "zod"
+import { createServerAction, createServerActionProcedure } from "zsa"
+import fs from "fs"
 
 const publicAction = createServerAction()
 const authAction = createServerActionProcedure()
@@ -66,34 +66,29 @@ export const updateUserProfileAction = authAction
 export const describeImageAction = authAction
 	.input(
 		z.object({
-			image: z.custom<File>((file) => file instanceof File),
+			imageAsBase64: z.string(),
 		}),
-		{ type: "formData" },
 	)
 	.handler(async ({ input }) => {
-		const { image } = input
-		console.log(image, "image")
-		const imageAsBase64 = await fileToBase64(image)
-		console.log(imageAsBase64, "image as base64")
-		if (image) {
-			const response = await openai.chat.completions.create({
-				model: "gpt-4o",
-				messages: [
-					{
-						role: "user",
-						content: [
-							{ type: "text", text: "What’s in this image?" },
-							{
-								type: "image_url",
-								image_url: {
-									url: imageAsBase64,
-								},
+		const { imageAsBase64 } = input
+		const response = await openai.chat.completions.create({
+			model: "gpt-4o",
+			messages: [
+				{
+					role: "user",
+					content: [
+						{ type: "text", text: "What’s in this image?" },
+						{
+							type: "image_url",
+							image_url: {
+								url: imageAsBase64,
 							},
-						],
-					},
-				],
-			})
-			return response.choices[0].message.content
-		}
+						},
+					],
+				},
+			],
+		})
+		return response.choices[0].message.content
+
 		throw new Error("Error describing image")
 	})
