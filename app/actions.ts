@@ -6,10 +6,13 @@ import {
 	profileLoadMorePosts,
 	relevantPlacesQuery,
 } from "@/edgedb/crud/queries"
+import { generateText } from "ai"
 import OpenAI from "openai"
 import { create } from "ronin"
 import z from "zod"
 import { createServerActionProcedure } from "zsa"
+import { openai as vercelOpenai } from "@ai-sdk/openai"
+import { checkIfFoodOrDrinkByDescription } from "./ai"
 
 const publicAction = createServerActionProcedure()
 	.handler(async () => {
@@ -208,4 +211,25 @@ export const profileLoadMoreMostsAction = publicAction
 		})
 		if (!posts) throw "Error fetching more posts"
 		return posts
+	})
+
+export const checkIfFoodOrDrinkByDescriptionAction = authAction
+	.input(
+		z.object({
+			description: z.string(),
+		}),
+	)
+	.handler(async ({ input, ctx }) => {
+		const { description } = input
+		const result = await generateText({
+			model: vercelOpenai("gpt-4o"),
+			tools: { checkIfFoodOrDrinkByDescription },
+			system: `You have to answer if image description provided is food or drink and be precise. It has to be precise image of food or drink, otherwise return false.`,
+			messages: [{ role: "user", content: description }],
+		})
+		const foodOrDrink = result.toolCalls[0].args.foodOrDrink
+		if (!foodOrDrink) {
+			throw "Please upload an image of food or drink"
+		}
+		return foodOrDrink
 	})
