@@ -75,7 +75,7 @@ export const profileAuth = e.params(
 			profilePhotoUrl: true,
 			createdPosts: e.select(u.createdPosts, (p) => ({
 				offset: 0,
-				limit: 6,
+				limit: 8,
 				order_by: {
 					expression: p.created,
 					direction: e.DESC,

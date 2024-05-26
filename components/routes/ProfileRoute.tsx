@@ -8,6 +8,8 @@ import AddPostModal from "../AddPostModal"
 import { ImageGrid } from "../PostGrid"
 import ViewPost from "../ViewPost"
 import { useRouter } from "next/navigation"
+import { profileLoadMoreMostsAction } from "@/app/actions"
+import { errorToast } from "@/src/react-utils"
 
 let lastId = 0
 interface Props {
@@ -52,16 +54,22 @@ export default observer(function ProfileRoute(props: Props) {
 				window.innerHeight + window.scrollY + FETCH_THRESHOLD >=
 				document.body.offsetHeight
 			) {
-				local.pageNumber.set(local.pageNumber.get() + 1)
-				// const posts = await profileLoadMostPostsAction({
-				// 	username: "nikiv",
+				// local.pageNumber.set(local.pageNumber.get() + 1)
+				// const [posts, err] = await profileLoadMoreMostsAction({
+				// 	username: local.name.get(),
 				// 	pageNumber: local.pageNumber.get(),
 				// })
-
-				// authData.createdPosts.set([
-				// 	...(authData.createdPosts.get() ?? []),
-				// 	...posts.data[0].createdPosts,
-				// ])
+				// if (err) {
+				// 	console.log(err.data)
+				// 	// errorToast(err.data)
+				// 	return
+				// }
+				// if (posts && posts.length > 0 && posts[0].createdPosts) {
+				// 	local.createdPosts.set([
+				// 		...(local.createdPosts.get() ?? []),
+				// 		...posts[0].createdPosts,
+				// 	])
+				// }
 			}
 		}
 

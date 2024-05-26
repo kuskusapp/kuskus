@@ -2,23 +2,32 @@
 
 import { auth } from "@/edgedb-next-client"
 import { createPost, deletePost, updateUser } from "@/edgedb/crud/mutations"
-import { relevantPlacesQuery } from "@/edgedb/crud/queries"
+import {
+	profileLoadMorePosts,
+	relevantPlacesQuery,
+} from "@/edgedb/crud/queries"
 import OpenAI from "openai"
 import { create } from "ronin"
 import z from "zod"
-import { createServerAction, createServerActionProcedure } from "zsa"
+import { createServerActionProcedure } from "zsa"
 
-const publicAction = createServerAction()
+const publicAction = createServerActionProcedure()
+	.handler(async () => {
+		const session = auth.getSession()
+		const client = session.client
+		return {
+			client,
+		}
+	})
+	.createServerAction()
 const authAction = createServerActionProcedure()
 	.handler(async () => {
-		try {
-			const session = auth.getSession()
-			const client = session.client
-			return {
-				client,
-			}
-		} catch {
-			throw new Error("User not authenticated")
+		const session = auth.getSession()
+		const client = session.client
+		const authenticated = await session.isSignedIn()
+		if (!authenticated) throw "User not authenticated"
+		return {
+			client,
 		}
 	})
 	.createServerAction()
@@ -80,26 +89,26 @@ export const describeImageAction = authAction
 		if (imageAsBase64.includes("data:image/png;base64,")) {
 			throw "Error describing image as .png files are not supported by OpenAI 😿"
 		}
-		const response = await openai.chat.completions.create({
-			model: "gpt-4o",
-			messages: [
-				{
-					role: "user",
-					content: [
-						{ type: "text", text: "What’s in this image?" },
-						{
-							type: "image_url",
-							image_url: {
-								url: imageAsBase64,
-							},
-						},
-					],
-				},
-			],
-		})
-		if (!response) throw Error("Error describing image")
-		return response.choices[0].message.content
-		// return `The image shows a dark brown dog with a white muzzle sitting on a concrete surface. The background features green fields, trees, and a cloudy sky. The dog appears to be looking slightly to the side.`
+		// const response = await openai.chat.completions.create({
+		// 	model: "gpt-4o",
+		// 	messages: [
+		// 		{
+		// 			role: "user",
+		// 			content: [
+		// 				{ type: "text", text: "What’s in this image?" },
+		// 				{
+		// 					type: "image_url",
+		// 					image_url: {
+		// 						url: imageAsBase64,
+		// 					},
+		// 				},
+		// 			],
+		// 		},
+		// 	],
+		// })
+		// if (!response) throw Error("Error describing image")
+		// return response.choices[0].message.content
+		return `The image shows a dark brown dog with a white muzzle sitting on a concrete surface. The background features green fields, trees, and a cloudy sky. The dog appears to be looking slightly to the side.`
 	})
 
 export const suggestCategoriesAction = authAction
@@ -181,4 +190,22 @@ export const relevantPlacesAction = authAction
 		const places = await relevantPlacesQuery.run(client, { location, category })
 		if (!places) throw "Error fetching relevant places"
 		return places
+	})
+
+export const profileLoadMoreMostsAction = publicAction
+	.input(
+		z.object({
+			username: z.string(),
+			pageNumber: z.number(),
+		}),
+	)
+	.handler(async ({ input, ctx }) => {
+		const { username, pageNumber } = input
+		const client = ctx.client
+		const posts = await profileLoadMorePosts.run(client, {
+			username,
+			pageNumber,
+		})
+		if (!posts) throw "Error fetching more posts"
+		return posts
 	})
