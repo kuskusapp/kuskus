@@ -6,6 +6,7 @@ import { IoCloseOutline } from "react-icons/io5"
 import Loader from "./Loader"
 import { errorToast } from "@/src/react-utils"
 import { Toaster } from "react-hot-toast"
+import { useEffect } from "react"
 
 interface Props {
 	post: {
@@ -27,6 +28,7 @@ export default observer(function ViewPost(props: Props) {
 	const local = useObservable({
 		deletingPost: false,
 	})
+
 	return (
 		<>
 			<Toaster />
@@ -66,112 +68,117 @@ export default observer(function ViewPost(props: Props) {
 						/>
 					</div>
 					<div className="flex w-full flex-col glass-background">
-						<div>
-							<label
-								htmlFor="description"
-								className="block text-xs font-normal text-white text-opacity-60 py-2 mb-2"
-								style={{
-									borderBottom: "1px solid #2c2c2c",
-									width: "100%",
-									paddingLeft: "1rem",
-								}}
-							>
-								Description
-							</label>
-							<div
-								id="description"
-								style={{
-									height: "150px",
-									outline: "none",
-									textAlign: "left",
-									color: "white",
-									resize: "none",
-									overflow: "auto",
-								}}
-								className="bg-inherit mt-1 block w-full px-3 text-white border-none sm:text-sm textarea-placeholder focus:ring-transparent"
-							>
-								{props.post.description}
+						{props.post.description && (
+							<div>
+								<label
+									htmlFor="description"
+									className="block text-xs font-normal text-white text-opacity-60 py-2 mb-2"
+									style={{
+										borderBottom: "1px solid #2c2c2c",
+										width: "100%",
+										paddingLeft: "1rem",
+									}}
+								>
+									Description
+								</label>
+								<div
+									id="description"
+									style={{
+										height: "150px",
+										outline: "none",
+										textAlign: "left",
+										color: "white",
+										resize: "none",
+										overflow: "auto",
+									}}
+									className="bg-inherit mt-1 block w-full px-3 text-white border-none sm:text-sm textarea-placeholder focus:ring-transparent"
+								>
+									{props.post.description}
+								</div>
 							</div>
-						</div>
-						<div
-							style={{
-								minHeight: "220px",
-								height: "220px",
-							}}
-						>
-							<label
-								className="block text-xs font-normal text-white text-opacity-60 pb-2"
-								style={{
-									borderBottom: "1px solid #2c2c2c",
-									width: "100%",
-									paddingLeft: "1rem",
-								}}
-							>
-								Image Description
-							</label>
-							<p className="font-thin text-white text-sm pl-4"></p>
+						)}
+						{props.post.aiDescription && (
 							<div
 								style={{
-									display: "flex",
-									flexDirection: "row",
-									width: "100%",
-									marginTop: "10px",
-								}}
-							></div>
-							<div
-								className="p-0 text-xs bg-inherit text-white px-2"
-								style={{
-									overflowWrap: "break-word",
+									minHeight: "220px",
+									height: "220px",
 								}}
 							>
-								{props.post.aiDescription}
+								<label
+									className="block text-xs font-normal text-white text-opacity-60 pb-2"
+									style={{
+										borderBottom: "1px solid #2c2c2c",
+										width: "100%",
+										paddingLeft: "1rem",
+									}}
+								>
+									Image Description
+								</label>
+								<p className="font-thin text-white text-sm pl-4"></p>
+								<div
+									style={{
+										display: "flex",
+										flexDirection: "row",
+										width: "100%",
+										marginTop: "10px",
+									}}
+								></div>
+								<div
+									className="p-0 text-xs bg-inherit text-white px-2"
+									style={{
+										overflowWrap: "break-word",
+									}}
+								>
+									{props.post.aiDescription}
+								</div>
 							</div>
-						</div>
+						)}
+						{props.post.categories.length > 0 && (
+							<div
+								style={{
+									height: "100px",
+									position: "relative",
+								}}
+							>
+								<label
+									className="block text-xs font-normal text-white text-opacity-60 pb-2 mb-2"
+									style={{
+										borderBottom: "1px solid #2c2c2c",
 
-						<div
-							style={{
-								height: "100px",
-								position: "relative",
-							}}
-						>
-							<label
-								className="block text-xs font-normal text-white text-opacity-60 pb-2 mb-2"
-								style={{
-									borderBottom: "1px solid #2c2c2c",
-
-									marginBottom: "10px",
-									paddingLeft: "1rem",
-								}}
-							>
-								Categories
-							</label>
-							{/* TODO: add back when there is more categories */}
-							{/* <input
-									placeholder="Search categories..."
-									className="mt-1 block w-full px-3 bg-inherit font-normal text-white border-none sm:text-sm textarea-placeholder"
-								/> */}
-							<div className="flex flex-wrap gap-3 pl-2 mt-2">
-								{props.post.categories &&
-									props.post.categories.map((category) => (
-										<button
-											key={category}
-											className={`px-3 p-1 text-[14px] font-light text-sm border rounded-full`}
-										>
-											{category}
-										</button>
-									))}
+										marginBottom: "10px",
+										paddingLeft: "1rem",
+									}}
+								>
+									Categories
+								</label>
+								{/* TODO: add back when there is more categories */}
+								{/* <input
+								placeholder="Search categories..."
+								className="mt-1 block w-full px-3 bg-inherit font-normal text-white border-none sm:text-sm textarea-placeholder"
+							/> */}
+								<div className="flex flex-wrap gap-3 pl-2 mt-2">
+									{props.post.categories &&
+										props.post.categories.map((category) => (
+											<button
+												key={category}
+												className={`px-3 p-1 text-[14px] font-light text-sm border rounded-full`}
+											>
+												{category}
+											</button>
+										))}
+								</div>
+								{/* TODO: add back when there is more categories */}
+								{/* {local.initialCount.get() <
+								local.foodCategories.get().length && (
+								<button
+									className="mt-2 ml-4 text-white text-xs font-thin cursor-pointer"
+									onClick={viewMore}
+								>
+									view more
+								</button>
+							)} */}
 							</div>
-							{/* TODO: add back when there is more categories */}
-							{/* {local.initialCount.get() <
-									local.foodCategories.get().length && (
-									<button
-										className="mt-2 ml-4 text-white text-xs font-thin cursor-pointer"
-										onClick={viewMore}
-									>
-										view more
-									</button>
-								)} */}
-						</div>
+						)}
 						<div className="flex justify-end absolute bottom-2 right-2">
 							<div className="flex justify-end items-center p-5">
 								{local.deletingPost.get() && <Loader color="red" />}

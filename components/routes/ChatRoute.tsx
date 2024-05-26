@@ -1,16 +1,20 @@
 "use client"
+import { relevantPlacesAction } from "@/app/actions"
+import { guessPlaces } from "@/app/ai"
+import { openai } from "@ai-sdk/openai"
+import { observer, useObservable } from "@legendapp/state/react"
+import { generateText } from "ai"
+import { useRouter } from "next/navigation"
+import { FormEvent, useCallback, useEffect, useRef } from "react"
 import { FaUserCircle } from "react-icons/fa"
 import { TbSquareLetterK } from "react-icons/tb"
 import PlaceCard from "../PlaceCard"
-import { observer, useObservable } from "@legendapp/state/react"
-import { FormEvent, useCallback, useEffect, useRef } from "react"
-import { useRouter } from "next/navigation"
 
 type RelevantPlace = {
 	name: string
-	displayName: string
-	imageUrl: string
-	category: string
+	displayName?: string
+	profileImageUrl?: string
+	category?: string
 }
 
 enum AnswerKind {
@@ -38,8 +42,6 @@ type QuestionAndAnswer = {
 	question: string
 	answer: Answer
 }
-
-let dummy = 0
 
 interface Props {
 	authenticated: boolean
@@ -84,43 +86,40 @@ export default observer(function ChatRoute(props: Props) {
 			return qas_copy
 		})
 
-		// TODO: fetch an actual answer
-
-		await new Promise((resolve) => setTimeout(resolve, 1000)) // simulate loading
-
 		let answer: Answer
-		if (++dummy % 2 === 0) {
+		process.env.OPENAI_API_KEY = process.env.NEXT_PUBLIC_OPENAI_API_KEY
+		const result = await generateText({
+			model: openai("gpt-4o"),
+			tools: { guessPlaces },
+			system: `You are a helpful, respectful and honest assistant.`,
+			messages: [{ role: "user", content: query }],
+		})
+		console.log(result, "result")
+		if (result.toolCalls.length === 0) {
 			answer = {
 				kind: AnswerKind.Text,
 				text: "Nothing matched your search term, lets try something else!",
 			}
-		} else {
+			return
+		}
+		const location = result.toolCalls[0].args.location
+		const category = result.toolCalls[0].args.category
+		const [places, err] = await relevantPlacesAction({
+			location: location,
+			category: category,
+		})
+		if (err) {
+			console.log(err, "err")
 			answer = {
-				kind: AnswerKind.Place,
-				places: [
-					{
-						name: "sklep-z-kawa-i-kawiarnia",
-						displayName: "Sklep z Kawą i Kawiarnia",
-						imageUrl:
-							"https://lh5.googleusercontent.com/p/AF1QipPB8FL_x-CQbk9z4ZYLkaqyrHNfkhnFhJ5-T0Qw=w408-h271-k-no",
-						category: "Coffee",
-					},
-					{
-						name: "wazaap",
-						displayName: "Wazaap",
-						imageUrl:
-							"https://lh5.googleusercontent.com/p/AF1QipPBtbz87EZ9HGIia9bkRT2szr99d5Bg9PRvLKvc=w408-h306-k-no",
-						category: "Coffee",
-					},
-					{
-						name: "starbucks",
-						displayName: "Starbucks",
-						imageUrl:
-							"https://lh5.googleusercontent.com/p/AF1QipMs99XwZW19PZEqHjkFfkkGRIxGfbJcvcHQOLPM=w408-h306-k-no",
-						category: "Coffee",
-					},
-				],
+				kind: AnswerKind.Text,
+				text: "Nothing matched your search term, lets try something else!",
 			}
+			return
+		}
+
+		answer = {
+			kind: AnswerKind.Place,
+			places: [...places],
 		}
 
 		local.qas.set((qas) => {
@@ -185,7 +184,7 @@ export default observer(function ChatRoute(props: Props) {
 													<PlaceCard
 														name={place.name}
 														displayName={place.displayName}
-														imageUrl={place.imageUrl}
+														imageUrl={place.profileImageUrl}
 														category={place.category}
 													/>
 												))}
@@ -220,59 +219,3 @@ export default observer(function ChatRoute(props: Props) {
 		</>
 	)
 })
-
-// process.env.OPENAI_API_KEY =
-// 	process.env.NEXT_PUBLIC_OPENAI_API_KEY
-// local.messages.push({
-// 	role: "user",
-// 	content: local.query.get(),
-// })
-// const result = await generateText({
-// 	model: openai("gpt-4o"),
-// 	tools: { guessPlaces },
-// 	system: `You are a helpful, respectful and honest assistant.`,
-// 	messages: local.messages.get(),
-// })
-// console.log(result, "result")
-// const places = await relevantPlacesAction({
-// 	location: "Warsaw",
-// 	category: "coffee",
-// })
-// console.log(places.data, "places")
-
-// process.env.OPENAI_API_KEY =
-// 	process.env.NEXT_PUBLIC_OPENAI_API_KEY
-// local.messages.push({ role: "user", content: local.query.get() })
-// TODO: show places for query
-// const result = await generateText({
-// 	model: openai("gpt-4o"),
-// 	tools: { guessPlaces },
-// 	system: `You are a helpful, respectful and honest assistant.`,
-// 	messages: local.messages.get(),
-// })
-// console.log(result, "result")
-
-// const result = await gpt4Model.doGenerate({
-// 	inputFormat: "prompt",
-// 	mode: { type: "regular" },
-// 	prompt: [
-// 		{
-// 			role: "user",
-// 			content: [{ type: "text", text: local.query.get() }],
-// 		},
-// 	],
-// })
-// console.log(result, "result")
-
-// TODO: stream it
-// const result = await gpt3Model.doStream({
-// 	inputFormat: "prompt",
-// 	mode: { type: "regular" },
-// 	prompt: [
-// 		{
-// 			role: "user",
-// 			content: [{ type: "text", text: local.query.get() }],
-// 		},
-// 	],
-// })
-// console.log(result, "result")

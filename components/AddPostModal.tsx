@@ -300,7 +300,7 @@ export default observer(function AddPostModal(props: Props) {
 											},
 										)
 										if (uploadedImage) {
-											console.log(uploadedImage, "uploaded image")
+											props.onClose()
 											router.push("/")
 										} else {
 											errorToast(

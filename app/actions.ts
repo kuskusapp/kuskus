@@ -2,6 +2,7 @@
 
 import { auth } from "@/edgedb-next-client"
 import { createPost, deletePost, updateUser } from "@/edgedb/crud/mutations"
+import { relevantPlacesQuery } from "@/edgedb/crud/queries"
 import OpenAI from "openai"
 import { create } from "ronin"
 import z from "zod"
@@ -101,6 +102,39 @@ export const describeImageAction = authAction
 		return `This image shows a hand holding a cup of coffee with latte art on the surface. The latte art appears to be shaped like a heart. The background consists of a paved pathway and some greenery on the side.`
 	})
 
+export const checkIfFoodOrDrink = authAction
+	.input(
+		z.object({
+			imageAsBase64: z.string(),
+		}),
+	)
+	.handler(async ({ input }) => {
+		const { imageAsBase64 } = input
+		if (imageAsBase64.includes("data:image/png;base64,")) {
+			throw "Error describing image as .png files are not supported by OpenAI 😿"
+		}
+		// const response = await openai.chat.completions.create({
+		// 	model: "gpt-4o",
+		// 	messages: [
+		// 		{
+		// 			role: "user",
+		// 			content: [
+		// 				{ type: "text", text: "What’s in this image?" },
+		// 				{
+		// 					type: "image_url",
+		// 					image_url: {
+		// 						url: imageAsBase64,
+		// 					},
+		// 				},
+		// 			],
+		// 		},
+		// 	],
+		// })
+		// if (!response) throw Error("Error describing image")
+		// return response.choices[0].message.content
+		return `This image shows a hand holding a cup of coffee with latte art on the surface. The latte art appears to be shaped like a heart. The background consists of a paved pathway and some greenery on the side.`
+	})
+
 export const suggestCategoriesAction = authAction
 	.input(
 		z.object({
@@ -165,4 +199,19 @@ export const deletePostAction = authAction
 		const res = await deletePost.run(client, { imageUrl })
 		if (!res) throw new Error("Error deleting post")
 		return "ok"
+	})
+
+export const relevantPlacesAction = authAction
+	.input(
+		z.object({
+			location: z.string(),
+			category: z.string(),
+		}),
+	)
+	.handler(async ({ input, ctx }) => {
+		const { location, category } = input
+		const client = ctx.client
+		const places = await relevantPlacesQuery.run(client, { location, category })
+		if (!places) throw "Error fetching relevant places"
+		return places
 	})
