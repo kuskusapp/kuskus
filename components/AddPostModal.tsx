@@ -157,6 +157,7 @@ export default observer(function AddPostModal(props: Props) {
 													description: local.aiDescription.get(),
 												})
 											if (err2) {
+												console.log(err2, "error checking if food/drink")
 												errorToast(err.data)
 												return
 											}
