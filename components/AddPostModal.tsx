@@ -139,6 +139,10 @@ export default observer(function AddPostModal(props: Props) {
 													imageAsBase64: await fileToBase64(uploadedFile),
 												},
 											)
+											if (err) {
+												errorToast(err.data)
+												return
+											}
 											local.aiDescriptionLoading.set(false)
 											if (err) errorToast(err.data)
 											// @ts-ignore
