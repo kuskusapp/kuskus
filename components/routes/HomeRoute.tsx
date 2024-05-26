@@ -129,6 +129,7 @@ export default observer(function HomeRoute(props: Props) {
 					/>
 					{local.addPostModalOpen.get() ? (
 						<AddPostModal
+							user={local.name.get()}
 							onClose={() => {
 								local.addPostModalOpen.set(false)
 							}}

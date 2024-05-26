@@ -1,5 +1,4 @@
 import { z } from "zod"
-import { relevantPlacesAction } from "./actions"
 
 export const guessPlaces = {
 	description: "Get relevant places in a location",
@@ -15,5 +14,16 @@ export const guessPlaces = {
 		category: string
 	}) => {
 		return { location, category }
+	},
+}
+
+export const checkIfFoodOrDrinkByDescription = {
+	description:
+		"Return true if given description is of a food or drink. Return false otherwise.",
+	parameters: z.object({
+		foodOrDrink: z.boolean().describe("Is the description of a food or drink?"),
+	}),
+	execute: async ({ foodOrDrink }: { foodOrDrink: boolean }) => {
+		return { foodOrDrink }
 	},
 }

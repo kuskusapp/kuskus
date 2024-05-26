@@ -1,20 +1,17 @@
 "use client"
+import { createPostAction, describeImageAction } from "@/app/actions"
+import { errorToast, fileToBase64 } from "@/src/react-utils"
 import { observer, useObservable } from "@legendapp/state/react"
 import { useRouter } from "next/navigation"
 import React, { useEffect } from "react"
+import { Toaster } from "react-hot-toast"
 import { FaImage } from "react-icons/fa6"
 import { IoCloseOutline } from "react-icons/io5"
 import AiThinking from "./AiThinking"
 import Loader from "./Loader"
-import { Toaster } from "react-hot-toast"
-import {
-	createPostAction,
-	describeImageAction,
-	suggestCategoriesAction,
-} from "@/app/actions"
-import { errorToast, fileToBase64 } from "@/src/react-utils"
 
 interface Props {
+	user: string
 	onClose: () => void
 }
 
@@ -28,6 +25,7 @@ export default observer(function AddPostModal(props: Props) {
 		guessedCategories: [] as string[],
 		aiCategoriesGuessLoading: false,
 		uploadingPost: false,
+		imageIsFoodOrDrink: false,
 		foodCategories: [
 			"Sushi",
 			"Smoothie",
@@ -128,6 +126,7 @@ export default observer(function AddPostModal(props: Props) {
 									id="image"
 									onChange={async (e: React.ChangeEvent<HTMLInputElement>) => {
 										if (e.target.files && e.target.files[0]) {
+											local.aiDescription.set("")
 											const uploadedFile = e.target.files[0]
 											local.uploadedImageAsFile.set(uploadedFile)
 											local.aiDescriptionLoading.set(true)
@@ -141,6 +140,22 @@ export default observer(function AddPostModal(props: Props) {
 											if (err) errorToast(err.data)
 											// @ts-ignore
 											local.aiDescription.set(imageDescription)
+
+											// process.env.OPENAI_API_KEY =
+											// 	process.env.NEXT_PUBLIC_OPENAI_API_KEY
+											// const result = await generateText({
+											// 	model: openai("gpt-4o"),
+											// 	tools: { checkIfFoodOrDrinkByDescription },
+											// 	system: `You have to answer if image description provided is food or drink and be precise. It has to be precise image of food or drink, otherwise return false.`,
+											// 	messages: [
+											// 		{ role: "user", content: local.aiDescription.get() },
+											// 	],
+											// })
+											// const foodOrDrink = result.toolCalls[0].args.foodOrDrink
+											// if (!foodOrDrink) {
+											// 	errorToast("Please upload an image of food or drink")
+											// }
+											// local.imageIsFoodOrDrink.set(foodOrDrink)
 
 											// const [categories, err] =
 											// 	await suggestCategoriesAction({
@@ -251,10 +266,10 @@ export default observer(function AddPostModal(props: Props) {
 											className={`px-3 p-1 text-[14px] font-light text-sm border rounded-full ${
 												local.categories.get().includes(category)
 													? "bg-inherit bg-yellow-500 border-yellow-500 text-black"
-													: `bg-inherit borer-white text-white ${local.uploadedImageAsFile.get() ? "hover:border-yellow-200" : "cursor-not-allowed"}`
+													: `bg-inherit borer-white text-white ${local.imageIsFoodOrDrink.get() ? "hover:border-yellow-200" : "cursor-not-allowed"}`
 											}`}
 											onClick={(e) => addCategory(category, e)}
-											disabled={local.uploadedImageAsFile.get() ? false : true}
+											disabled={local.imageIsFoodOrDrink.get() ? false : true}
 										>
 											{category}
 										</button>
@@ -277,36 +292,30 @@ export default observer(function AddPostModal(props: Props) {
 							{!local.uploadingPost.get() && (
 								<button
 									className={`py-2 px-4 rounded-xl font-semibold ${
-										local.uploadedImageAsFile.get()
+										local.imageIsFoodOrDrink.get()
 											? "bg-yellow-500 hover:bg-yellow-700 text-black"
 											: "bg-neutral-700 text-neutral-500 bg-opacity-50"
 									}`}
-									disabled={!local.uploadedImageAsFile.get()}
+									disabled={!local.imageIsFoodOrDrink.get()}
 									onClick={async () => {
-										if (!local.uploadedImageAsFile.get()) return
-										local.uploadingPost.set(true)
+										if (!local.imageIsFoodOrDrink.get()) return
 										const formData = new FormData()
 										formData.append(
 											"postImage",
 											// @ts-ignore
 											local.uploadedImageAsFile.get(),
 										)
-										const [uploadedImage, err] = await createPostAction(
-											formData,
-											{
-												aiDescription: local.aiDescription.get(),
-												description: local.description.get(),
-												categories: local.categories.get(),
-											},
-										)
-										if (uploadedImage) {
-											props.onClose()
-											router.push("/")
-										} else {
-											errorToast(
-												"Issue uploading post with unknown error. Can try again with different image.",
-											)
+										const [, err] = await createPostAction(formData, {
+											aiDescription: local.aiDescription.get(),
+											description: local.description.get(),
+											categories: local.categories.get(),
+										})
+										if (err) {
+											errorToast(err.data)
+											return
 										}
+										props.onClose()
+										router.push(`/${props.user}`)
 									}}
 								>
 									Share

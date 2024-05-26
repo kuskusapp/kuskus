@@ -94,7 +94,6 @@ export default observer(function ChatRoute(props: Props) {
 			system: `You are a helpful, respectful and honest assistant.`,
 			messages: [{ role: "user", content: query }],
 		})
-		console.log(result, "result")
 		if (result.toolCalls.length === 0) {
 			answer = {
 				kind: AnswerKind.Text,

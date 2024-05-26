@@ -92,6 +92,7 @@ export default observer(function ProfileRoute(props: Props) {
 			)}
 			{local.addPostModalOpen.get() ? (
 				<AddPostModal
+					user={local.name.get()}
 					onClose={() => {
 						local.addPostModalOpen.set(false)
 					}}

@@ -168,7 +168,6 @@ export const settingsAuth = e.params(
 			name: true,
 			displayName: true,
 			profilePhotoUrl: true,
-			category: true,
 		}))
 	},
 )
