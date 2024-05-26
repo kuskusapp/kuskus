@@ -93,7 +93,7 @@ export default observer(function SettingsRoute(props: Props) {
 										}
 									}
 									local.savingProfile.set(false)
-									// router.push("/")
+									router.push("/")
 								}}
 							>
 								Save
