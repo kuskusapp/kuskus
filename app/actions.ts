@@ -1,7 +1,7 @@
 "use server"
 
 import { auth } from "@/edgedb-next-client"
-import { createPost, updateUser } from "@/edgedb/crud/mutations"
+import { createPost, deletePost, updateUser } from "@/edgedb/crud/mutations"
 import OpenAI from "openai"
 import { create } from "ronin"
 import z from "zod"
@@ -141,5 +141,19 @@ export const createPostAction = authAction
 			categories: categories,
 		})
 		if (!dbPost) throw new Error("Error creating post")
+		return "ok"
+	})
+
+export const deletePostAction = authAction
+	.input(
+		z.object({
+			imageUrl: z.string(),
+		}),
+	)
+	.handler(async ({ input, ctx }) => {
+		const { imageUrl } = input
+		const client = ctx.client
+		const res = await deletePost.run(client, { imageUrl })
+		if (!res) throw new Error("Error deleting post")
 		return "ok"
 	})
