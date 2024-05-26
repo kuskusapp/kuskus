@@ -25,7 +25,7 @@ export default observer(function AddPostModal(props: Props) {
 		guessedCategories: [] as string[],
 		aiCategoriesGuessLoading: false,
 		uploadingPost: false,
-		imageIsFoodOrDrink: false,
+		imageIsFoodOrDrink: true,
 		foodCategories: [
 			"Sushi",
 			"Smoothie",
