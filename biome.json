@@ -1,0 +1,24 @@
+{
+	"linter": {
+		"rules": {
+			"suspicious": {
+				"noAssignInExpressions": "off",
+				"noExplicitAny": "warn"
+			},
+			"style": {
+				"noNonNullAssertion": "off"
+			},
+			"a11y": {
+				"noSvgWithoutTitle": "off"
+			}
+		}
+	},
+	"javascript": {
+		"formatter": {
+			"semicolons": "asNeeded"
+		}
+	},
+	"files": {
+		"ignore": ["src/routeTree.gen.ts", "src/styles/app.css"]
+	}
+}
